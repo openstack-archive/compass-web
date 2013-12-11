@@ -1,0 +1,46 @@
+.ui-progressbar {
+    position: relative;
+}
+.progress-label {
+    position: absolute;
+    font-size: 12px;
+    left: 5px;
+    top: -1px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+.node {
+  cursor: pointer;
+}
+.node text {
+  font: 10px sans-serif;
+}
+.link {
+  fill: none;
+  stroke: #999;
+  stroke-width: 1.5px;
+}
+#progress-graph {
+  text-align: center;
+}
+.dashboard-link {
+  background-image: linear-gradient(to bottom, #8D92FB 0%, #3236A2 100%);
+  border: 1px solid #A0A0A0;
+  border-radius: 5px 5px 5px 5px;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 3px 10px;
+}
+.dashboard-link:hover {
+  background-image: linear-gradient(to bottom, #3236A2 0%, #8D92FB 100%);
+}
+.dashboard-link.disabled {
+    background-image: none;
+    background-color: #8D92FB;
+    box-shadow: none;
+    cursor: default;
+    opacity: 0.65;
+}

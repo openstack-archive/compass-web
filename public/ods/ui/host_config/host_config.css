@@ -1,0 +1,7 @@
+.tab_panel{
+  display: none;
+}
+
+.tab_panel_active {
+  display: block;
+}

@@ -1,0 +1,67 @@
+<h2>Specify credentials you want to use for your OpenStack system</h2>
+
+<div class="rounded" style="padding-top: 0; padding-bottom: 5px">
+  <h3>OpenStack server credentials</h3>
+  <div class="rounded gradient">
+    The default administrator user name and password for each server<br>
+    <table>
+      <tr>
+        <td>User name:</td>
+        <td><input type="input" class="rounded" id="server_uname" value="root"></td>
+        <td></td><td></td><td id="server_uname_err"></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" class="rounded" id="server_pwd" value=""></td>
+        <td>Confirm:</td>
+        <td><input type="password" class="rounded" id="server_confirm" value=""></td>
+        <td id="server_pwd_err"><img src="../img/yellow_arrow_left_16px.png"></img><span class="italic">  requires password</span></td>
+      </tr>
+    </table>
+  </div>
+  <h3>OpenStack services credentials</h3>
+  <div class="rounded gradient">
+    User name and password for all of the OpenStack services such as management database, queue server, etc.<br>
+    <table>
+      <tr>
+        <td>User name:</td>
+        <td><input type="input" class="rounded" id="service_uname" value="service"></td>
+        <td></td><td></td><td id="service_uname_err"></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" class="rounded" id="service_pwd" value=""></td>
+        <td>Confirm:</td>
+        <td><input type="password" class="rounded" id="service_confirm" value=""></td>
+        <td id="service_pwd_err"><img src="../img/yellow_arrow_left_16px.png"></img><span class="italic">  requires password</span></td>
+      </tr>
+    </table>
+
+  </div>              
+  <h3>OpenStack management console credentials</h3>
+  <div class="rounded gradient">
+    The default administrator user name and password for the OpenStack management console.<br>
+    <table>
+      <tr>
+        <td>User name:</td>
+        <td><input type="input" class="rounded" id="console_uname" value="console"></td>
+        <td></td><td></td><td id="console_uname_err"></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" class="rounded" id="console_pwd" value=""></td>
+        <td>Confirm:</td>
+        <td><input type="password" class="rounded" id="console_confirm" value=""></td>
+        <td id="console_pwd_err"><img src="../img/yellow_arrow_left_16px.png"></img><span class="italic">  requires password</span></td>
+      </tr>
+    </table>
+  </div>
+  <br>
+</div>
+
+<div class="continue"><center>
+  <a href="#" class="go-back security-back" >Go back</a>
+  <a href="#" class="btn_continue security-finish">Continue</a>
+  <img id="continuing" class="loading" src="../img/ajax_loader.gif" height="30px" width="30px"></img><br>
+  <div id="security_continue_err" style="display:none;padding-top:10px"></div>
+</center></div>

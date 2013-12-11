@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>host_config Widget Unit Test</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../../../css/style.css" />
+  </head>
+  <body>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div id="host_config-test">  </div>
+      </div>
+    </div>
+    <script type='text/javascript' src='../../../steal/steal.js'></script>
+    <script type='text/javascript'>
+      steal('jquery/dom/route', 'ods/fixtures','ods/ui/host_config').then(function($) {
+
+        var config = [];
+
+        var server1 = {
+          clusterhost_id: 100,
+          hostname: "",
+          id: 10,
+          mac: "28:6e:31:47:c8:6c",
+          port: "1",
+          server_ip: "10.2.172.9",
+          switch_ip: "172.29.8.40",
+          vlan: "1"
+        };
+
+        var server2 = {
+          clusterhost_id: 100,
+          hostname: "",
+          id: 10,
+          mac: "28:6e:31:34:fd:28",
+          port: "2",
+          server_ip: "10.2.172.9",
+          switch_ip: "172.29.8.40",
+          vlan: "2"
+        };
+
+        if (config["172.29.8.40"] == undefined) {
+            config["172.29.8.40"] = [server1];
+            config["172.29.8.40"].push(server2);
+        } else {
+            config["172.29.8.40"].push(server1);
+            config["172.29.8.40"].push(server2);
+        }
+
+        var odsState = {
+          networking: null,
+          servers: [],
+          servers_config: null,
+          cluster_id: null,
+          security: null,
+          partition: null,
+          feature: null,
+          machines: [],
+          switches: [],
+          snmp: 1
+        };
+
+        var state  = new $.Observe(odsState);
+
+        state.servers_config = config;
+        state.cluster_id = 1;
+
+        $('#host_config-test').ods_ui_host_config({ "odsState" : state });
+
+      }); 
+    </script>
+  </body>
+</html>
+

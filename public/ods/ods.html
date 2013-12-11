@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Huawei - Compass</title>
+	
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+    <script type='text/javascript' src='../lib/d3.min.js'></script>
+
+    <!--[if IE 7]>
+    	<link rel="stylesheet" type="text/css" href="/css/style-ie.css">
+    <![endif]-->	
+
+  </head>
+
+  <body>
+    <div id="header">
+      <div id="bound">
+        <div id="logo">
+          <img src="../img/hw_000353.jpg" title="Huawei Compass homepage"></img>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="menu">
+      <div id="title" style="float:left">
+	     Compass
+      </div>
+
+      <div id="nav" style="float:left">
+
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="main-box">
+      </div>
+    </div>
+	
+    <script>
+        var result = {};
+        if (window.location.search)
+        {
+            // split up the query string and store in an associative array
+            var params = window.location.search.slice(1).split("&");
+            for (var i = 0; i < params.length; i++)
+            {
+                var tmp = params[i].split("=");
+                result[tmp[0]] = unescape(tmp[1]);
+            }
+        }
+        
+        if(result.production == "true") {
+            var library = document.createElement("script");
+            library.setAttribute("src", "../steal/steal.production.js?ods");
+            document.body.appendChild(library);
+        }
+        else {
+            var library = document.createElement("script");
+            library.setAttribute("src", "../steal/steal.js?ods");
+            document.body.appendChild(library);
+        }
+
+    </script>
+
+  </body>
+</html>	

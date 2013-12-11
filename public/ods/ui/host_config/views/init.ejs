@@ -1,0 +1,78 @@
+<h2>Configure host names of the servers you just selected</h2>
+<p>
+  Enter host names and IP addresses for each of the servers attached to the network switches and ports listed.
+</p>
+<div class="rounded" style="padding-top: 10; padding-bottom: 5px">
+  <div class="float_left">Switch IP</div>
+  <div class="float_right">
+    <a href="#" id="auto_fill" style="padding-right:20px">Auto-fill values</a>
+    <a href="#">Clear</a>
+  </div>
+  <div class="clear"> </div>
+  <div id="dialog-confirm" title="Auto fill values">
+    <p>
+      Host name pattern:
+      <select id="pattern">
+        <option>Switch IP</option>
+        <option>Switch alias</option>
+        <option>Host</option>
+      </select>
+      <span class="ui-icon ui-icon-info" style="float: right; margin: 6px 19px 4px 7px;" data-geo="info-ico">
+    </p>
+  </div>
+  <div class="">
+    <div class="float_left switch-navs" style="padding-top: 20px;">
+
+    </div>
+    <div class="rounded float_left server-panels">
+      <div id="tab1" class="tab_panel_active">
+        <table id="hostconfig-table">
+          <thead>
+            <tr>
+              <th>Port</th>
+              <th>Host name</th>
+              <th>IP address</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+</div>
+
+<br>
+<div class="rounded partition-div" style="padding-top:10px;">
+  <p>
+    Logical Volume Partition (Total partition percentage should not exceed 100%)
+  </p>
+  <div class="float_left" style="width: 18%">
+    tmp: <input id="tmp" class="rounded integer non-empty-value" onkeypress="return isNumber(event)" value="10" style="width: 80px">%
+  </div>
+  <div class="float_left" style="width: 18%">
+    var: <input id="var" class="rounded integer non-empty-value" value="30" style="width: 80px">%
+  </div>
+  <div class="float_left" style="width: 18%">
+    home: <input id="home" class="rounded integer non-empty-value" value="20" style="width: 80px">%
+  </div>
+  <div class="float_left" style="width: 18%">
+    spare: <input id="spare" class="rounded" value="40" style="width: 80px; background-color: lightGrey" disabled="true">%
+  </div>
+  <div class="float_left" style="width: 28%">
+    <div class="errhint" style="display: none">
+      The spare value should be greater than 30%.
+    </div>
+  </div>
+  <div class="clear"></div>
+
+</div>
+<div class="continue"><center>
+  <a href="#" class="go-back hostconfig-back" >Go back</a>
+  <a href="/web/install_review/" class="btn_continue hostconfig-finish">Continue</a>
+  <img id="continuing" class="loading" src="../img/ajax_loader.gif" height="30px" width="30px"></img><br>
+  <div id="hostconfig_continue_err" style="display:none;padding-top:10px"></div>
+</center></div> 

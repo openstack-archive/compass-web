@@ -1,0 +1,90 @@
+<h2>Ready to deploy OpenStack</h2>
+<p style="margin: 0; padding-left: 20px;">Review the configuration shown above and if corrent, click deploy to begin the OpenStack deployment.</p>
+<div class="left-side">
+  <div class="inside">
+    <h3>IP Pool</h3>
+    <div class="rounded" style="padding-top: 5px; padding-bottom: 8px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Network IP range</th>
+            <th>Start</th>
+            <th>End</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Management</td>
+            <td id="mgt_start"></td>
+            <td id="mgt_end"></td>
+          </tr>
+          <tr>
+            <td>Tenant</td>
+            <td id="vnw_start"></td>
+            <td id="vnw_end"></td>
+          </tr>
+          <tr>
+            <td>Public</td>
+            <td id="float_start"></td>
+            <td id="float_end"></td>
+          </tr>
+          <tr>
+            <td>Storage</td>
+            <td id="storage_start"></td>
+            <td id="storage_end"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Logical Volume Partition</h3>
+    <div class="rounded" style="padding-top: 8px; padding-bottom: 5px;">
+      <div class="float_left" style="padding-right:20px">tmp: <span id="tmp"></span></div>
+      <div class="float_left" style="padding-right:20px">var: <span id="var"></span></div>
+      <div class="float_left" style="padding-right:20px">home: <span id="home"></span></div>
+      <div class="clear"></div>
+    </div>
+    <h3>System Credentials </h3>
+    <div class="rounded" style="padding-top: 0; padding-bottom: 5px;">
+      <table>
+        <tr>
+          <th colspan="2" style="width:33%">Hypervisor</th>
+          <th colspan="2" style="width:33%">OpenStack Services</th>
+          <th colspan="2" style="width:33%">OpenStack Management Console</th>
+        </tr>
+        <tr>
+          <td>User name: </td><td id="server_uname"></td>
+          <td>User name: </td><td id="service_uname"></td>
+          <td>User name: </td><td id="console_uname"></td>
+        </tr>
+        <tr>
+          <td>Password: </td><td id="server_pwd"></td>
+          <td>Password: </td><td id="service_pwd"></td>
+          <td>Password: </td><td id="console_pwd"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="right-side">
+  <h3>OpenStack Servers</h3>
+  <div class="">
+    <table id="tb_server_review" cellpadding="0" cellspacing="0" border="0" class="display">
+      <thead>
+        <tr>
+          <th>Host name</th>
+          <th>MAC Addr</th>
+          <th>Server IP</th>
+          <th>Switch IP</th>
+          <th>Port</th>
+        </tr>
+      </thead>
+      <tbody> </tbody>
+    </table>
+  </div>
+</div>
+<div class="clear"></div>
+<div class="continue"><center>
+  <a href="#" class="go-back review-back" >Go back</a>
+  <a href="/web/install/" class="btn_continue">Deploy</a>
+  <img id="continuing" class="loading" src="../img/ajax_loader.gif" height="30px" width="30px"></img>
+</center></div>

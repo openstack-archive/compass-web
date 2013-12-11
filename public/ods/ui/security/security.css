@@ -1,0 +1,15 @@
+.error {
+  background-color: #FFE6E6;
+  border-color: red !important;
+}
+
+.errhint {
+  border: 1px solid red;
+  padding: 4px 8px;
+  background-color: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  color: red;
+  font-weight: bold;
+}
