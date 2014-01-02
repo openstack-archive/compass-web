@@ -161,6 +161,7 @@ steal(
                             "adapter_id": 1
                         }
                     }, this.proxy('onClusterCreated'), this.proxy('onClusterCreatedErr'));
+                    this.options.odsState.adapter_id = 1;
                 } else {
                     // replace all hosts in current cluster
                     var cluster_id = this.options.odsState.cluster_id;
@@ -556,10 +557,10 @@ steal(
             $("#server_continue_err").hide();
 
             if (xhr.status == 200) { // OK
-                // Assume the machine orders are same in returned data (data.clusterHosts) 
+                // Assume the machine orders are same in returned data (data.cluster_hosts) 
                 // and cached data (this.options.odsState.servers)
-                for (var i = 0; i < data.clusterHosts.length; i++) {
-                    this.options.odsState.servers[i]['clusterhost_id'] = data.clusterHosts[i].id;
+                for (var i = 0; i < data.cluster_hosts.length; i++) {
+                    this.options.odsState.servers[i]['clusterhost_id'] = data.cluster_hosts[i].id;
                 }
                 $("#continuing").css("opacity", 0);
                 this.options.nav.gotoStep("3");

@@ -18,7 +18,8 @@ steal(
             feature: null,
             machines: [],
             switches: [],
-            snmp: 1
+            snmp: 1,
+            adapter_id: null
         };
 
         var state  = new $.Observe(odsState);

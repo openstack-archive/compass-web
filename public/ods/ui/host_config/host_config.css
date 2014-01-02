@@ -1,7 +1,18 @@
-.tab_panel{
+.tab_panel {
   display: none;
 }
 
 .tab_panel_active {
   display: block;
+}
+
+.roles {
+  width: 150px;
+
+}
+
+.ms-choice {
+    border: 1px solid #C0C0C0;
+    border-radius: 6px;
+    box-shadow: 0 0 5px 0 rgba(215, 211, 207, 0.75) inset;
 }

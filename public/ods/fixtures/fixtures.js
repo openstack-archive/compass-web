@@ -211,7 +211,7 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
             steal.dev.log("fixture cluster action hostIds : ", hostIds);
             var returnData = {
                 "status": "OK",
-                "clusterHosts": []
+                "cluster_hosts": []
             };
 
             for(var i = 0; i<hostIds.length; i++) {
@@ -220,7 +220,7 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
                     "id": hostIds[i]*10
                 }
 
-                returnData.clusterHosts.push(tmp);
+                returnData.cluster_hosts.push(tmp);
             }
             return returnData;            
         }
@@ -273,23 +273,28 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         return returnData;
     });
 
-/*
-    // used on Install Review Page
-    $.fixture('GET /api/logicpartition', function() {
-        return self.partition_data;
+    $.fixture('GET /api/adapters/{id}/roles', function(data) {
+        var returnData = {
+            "status": "OK",
+            "roles": [{
+                "name": "role1",
+                "description": "desc1"
+            }, {
+                "name": "role2",
+                "description": "desc2"
+            }, {
+                "name": "role3",
+                "description": "desc3"
+            }, {
+                "name": "role4",
+                "description": "desc4"
+            }, {
+                "name": "role5",
+                "description": "desc5"
+            }]
+        };
+        return returnData;
     });
-
-    // used on Install Review Page
-    $.fixture('GET /api/security', function() {
-        return self.security_data;
-    });
-
-    // used on Install Review Page
-    $.fixture('GET /api/networking', function(data) {
-        //console.log(data);
-        return self.networking_data;
-    });
-*/
 
     $.fixture('POST /api/triggerinstall/', function(data) {
         console.log(data);

@@ -9,7 +9,9 @@ steal(
     'ods/models/cluster.js',
     'lib/jquery-ui-1.10.3.custom.css',
     'lib/jquery-ui-1.10.3.custom.js',
-    'lib/jquery.numeric.js'
+    'lib/jquery.numeric.js',
+    'lib/jquery.multiple.select.js',
+    'lib/multiple-select.css'
 ).then(function($) {
     $.Controller('Ods.Ui.host_config', {}, {
         init: function() {
@@ -61,9 +63,46 @@ steal(
                 this.focus();
             });
 
-            this.filloutTabs();
+            // get adapter roles
+            this.adapterRoles = [];
+            Ods.Adapter.getRoles(this.options.odsState.adapter_id, this.proxy('onGetRoles'), this.proxy('onGetRolesErr'));
 
             this.server_count = this.options.odsState.servers.length;
+        },
+
+        onGetRoles: function(data, textStatus, xhr) {
+            steal.dev.log(" *** onGetRoles data *** ", data);
+            steal.dev.log(" *** onGetRoles textStatus *** ", textStatus);
+            steal.dev.log(" *** onGetRoles xhr *** ", xhr);
+            if (xhr.status == 200) {
+                this.adapterRoles = data.roles;
+                this.filloutTabs();
+            }
+        },
+
+        onGetRolesErr: function(xhr, status, statusText) {
+            steal.dev.log(" *** onGetRoleErr xhr *** ", xhr);
+            steal.dev.log(" *** onGetRoleErr status *** ", status);
+            steal.dev.log(" *** onGetRoleErr statusText *** ", xhr);
+            this.adapterRoles = [];
+            this.filloutTabs();
+
+            $('.roles').multipleSelect({
+                placeholder: "No roles available",
+                selectAll: false
+            });
+
+        },
+
+        fillRolesDropdowns: function(el, selectedRoles) {
+            for (var i = 0; i < this.adapterRoles.length; i++) {
+                el.append("<option value=" + this.adapterRoles[i].name + ">" + this.adapterRoles[i].description + "</option>");
+            }
+            el.multipleSelect({
+                placeholder: "auto",
+                selectAll: false
+            });
+            el.multipleSelect("setSelects", selectedRoles);
         },
 
         fillHostnameBySwitchIp: function() {
@@ -130,7 +169,13 @@ steal(
             var serverData = this.options.odsState.servers_config;
             var servers = serverData[switchIp];
             for (var i = 0; i < servers.length; i++) {
-                $('#tab1 table tbody').append(this.view('server_row', servers[i]));
+                $('#hostconfig-table tbody').append(this.view('server_row', servers[i]));
+                var roles = servers[i].roles;
+                var rolesDropdown = $("#hostconfig-table tbody tr").eq(i).find(".roles");
+                if(!roles) {
+                    roles = [];
+                }
+                this.fillRolesDropdowns(rolesDropdown, roles);
             }
         },
 
@@ -143,6 +188,11 @@ steal(
             for (var i = 0; i < this.options.odsState.servers_config[currentSwitch].length; i++) {
                 this.options.odsState.servers_config[currentSwitch][i].hostname = $("#hostconfig-table tbody tr").eq(i).find(".hostname").val();
                 this.options.odsState.servers_config[currentSwitch][i].server_ip = $("#hostconfig-table tbody tr").eq(i).find(".serverIp").val();
+                var roles = $("#hostconfig-table tbody tr").eq(i).find(".roles").val();
+                if(!roles) {
+                    roles = [];
+                }
+                this.options.odsState.servers_config[currentSwitch][i].roles = roles;
             }
         },
 
@@ -198,6 +248,7 @@ steal(
                     var clusterhost_id = servers[i]['clusterhost_id'];
                     var hostname = servers[i]['hostname'];
                     var server_ip = servers[i]['server_ip'];
+                    var roles = servers[i]['roles'];
 
                     var clusterhostConfigData = {
                         "hostname": hostname,
@@ -207,7 +258,8 @@ steal(
                                     "ip": server_ip
                                 }
                             }
-                        }
+                        },
+                        "roles": roles
                     };
 
                     Ods.ClusterHost.update(clusterhost_id, clusterhostConfigData, this.proxy('onHostconfigData'), this.proxy('onHostconfigDataErr'));

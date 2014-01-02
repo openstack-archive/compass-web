@@ -47,8 +47,22 @@
         if (config["172.29.8.40"] == undefined) {
             config["172.29.8.40"] = [server1];
             config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
         } else {
             config["172.29.8.40"].push(server1);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
+            config["172.29.8.40"].push(server2);
             config["172.29.8.40"].push(server2);
         }
 
@@ -68,6 +82,7 @@
         var state  = new $.Observe(odsState);
         state.servers_config = config;
         state.cluster_id = 1;
+        state.servers = [{},{},{},{},{},{},{},{},{}];
 
         $('#install_review-test').ods_ui_install_review({ "odsState" : state });
 

@@ -28,7 +28,8 @@
           port: "1",
           server_ip: "10.2.172.9",
           switch_ip: "172.29.8.40",
-          vlan: "1"
+          vlan: "1",
+          roles: []
         };
 
         var server2 = {
@@ -39,7 +40,8 @@
           port: "2",
           server_ip: "10.2.172.9",
           switch_ip: "172.29.8.40",
-          vlan: "2"
+          vlan: "2",
+          roles: []
         };
 
         if (config["172.29.8.40"] == undefined) {
@@ -60,7 +62,8 @@
           feature: null,
           machines: [],
           switches: [],
-          snmp: 1
+          snmp: 1,
+          adapter_id: 1
         };
 
         var state  = new $.Observe(odsState);

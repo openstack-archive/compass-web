@@ -162,6 +162,7 @@ steal(
 
                         if (!isConfiged) {
                             server['hostname'] = '';
+                            server['roles'] = [];
                         }
 
                         server['server_ip'] = this.startPrefix + (parseInt(this.startLastDigit) + i);

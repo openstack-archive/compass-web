@@ -1,5 +1,15 @@
 <tr data-hostid="<%= clusterhost_id %>">
-  <td><%= port %></td>
-  <td><input class="rounded hostname non-empty-value" name="hostname" value="<%= hostname  %>"></td>
-  <td><input class="rounded serverIp non-empty-value" name="serverIp" value="<%= server_ip  %>"></td> 
+  <td>
+    <%= port %>
+  </td>
+  <td>
+    <input class="rounded hostname non-empty-value" name="hostname" value="<%= hostname  %>">
+  </td>
+  <td>
+    <input class="rounded serverIp non-empty-value" name="serverIp" value="<%= server_ip  %>">
+  </td>
+  <td>
+    <select multiple="multiple" class="roles" name="roles">
+    </select>
+  </td> 
 </tr>

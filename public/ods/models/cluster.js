@@ -85,4 +85,15 @@ steal("jquery/model", "jquery/lang/json",
             }
         }, {});
 
+        $.Model('Ods.Adapter', {
+            getRoles: function(id, success, error) {
+                $.ajax({
+                    url: '/api/adapters/' + id + '/roles',
+                    type: 'get',
+                    success: success,
+                    error: error
+                });
+            }
+        }, {});
+
     });

@@ -350,7 +350,7 @@ steal(
                     "background": "#0000ff",
                     "opacity": 0.5
                 });
-                this.totalProgressLabel.text(total * 100 + "%");
+                this.totalProgressLabel.text(Math.round(total * 100) + "%");
                 this.totalProgressbarValue.css({
                     "width": total * this.totalProgressbar.width()
                 });
@@ -411,9 +411,15 @@ steal(
                     right: 120,
                     bottom: 0,
                     left: 130
-                },
-                    width = 1000 - margin.right - margin.left,
-                    height = 500 - margin.top - margin.bottom;
+                };
+
+                var serversHeight = this.options.odsState.servers.length * 68;
+                if (serversHeight < 500) {
+                    serversHeight = 500;
+                }
+
+                var width = 1000 - margin.right - margin.left,
+                    height = serversHeight - margin.top - margin.bottom;
 
                 imgWidth = 163;
                 imgHeight = 32;
