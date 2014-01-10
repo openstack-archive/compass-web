@@ -12,7 +12,10 @@
             <th>Switch IP</th>
             <th id="snmpTitle">SNMP Version</th>
             <th id="communityTitle">Community</th>
-            <th><input id="useSNMP" type="checkbox" checked> Use SNMP</th>
+            <th><!--<input id="useSNMP" type="checkbox" checked> Use SNMP-->
+              <input type="radio" id="useSNMP" name="snmp" value="snmp" checked> Use SNMP <br>
+              <input type="radio" id="useSSH" name="snmp" value="ssh"> Use SSH
+            </th>
           </tr>
         </thead>
         <tbody>

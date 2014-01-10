@@ -54,7 +54,10 @@ steal(
                 state.switches = config.switches;
                 state.security = config.security;
                 state.networking = config.networking;
-            }
+            } else if (result.config == "demo") {
+	        state.switches = config_demo.switches;
+                state.security = config_demo.security;
+                state.networking = config_demo.networking;
+	    }
         }
-
     })

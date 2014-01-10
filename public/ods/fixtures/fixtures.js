@@ -375,8 +375,8 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
 
         var res = {
             "status": "OK",
-            "type": "clusterlinks",
-            "clusterlinks": {
+            "type": "dashboardlinks",
+            "dashboardlinks": {
                 "os-single-controller": "http://10.145.88.232"
             }
         };

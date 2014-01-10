@@ -57,7 +57,7 @@ steal(
                 if (this.options.odsState.snmp) {
                     $('#useSNMP').prop('checked', true);
                 } else {
-                    $('#useSNMP').prop('checked', false);
+                    $('#useSSH').prop('checked', true);
                 }
 
                 for (var i = 0; i < oldSwitchesData.length; i++) {
@@ -115,6 +115,9 @@ steal(
                 "aoColumnDefs": [{
                     bSortable: false,
                     aTargets: [0, 1, 3]
+                }, {
+                    bSearchable: false,
+                    aTargets: [ 0 ]
                 }],
                 "aaSorting": [
                     [2, "asc"],
@@ -127,8 +130,8 @@ steal(
             $('.dataTables_filter input').addClass('rounded');
         },
 
-        '#useSNMP click': function(el, ev) {
-            if ($("#useSNMP:checked").val()) {
+        'input[name="snmp"] click': function(el, ev) {
+            if (el.val() == "snmp") {
                 $("#snmpTitle").html("SNMP Version");
                 $("#communityTitle").html("Community");
                 $(".snmp").show();
@@ -479,16 +482,13 @@ steal(
             this.pendingCount--;
 
             if (xhr.status == 200) { //OK
-                if (data.
-                    switch.state === "under_monitoring") {
+                if (data.switch.state === "under_monitoring") {
                     this.element.find('div.right-side').show();
                     this.dataTable.fnClearTable();
 
-                    this.getServersBySwitch(data.
-                        switch.id);
+                    this.getServersBySwitch(data.switch.id);
                 } else {
-                    this.pendingSwitchList.push(data.
-                        switch.id);
+                    this.pendingSwitchList.push(data.switch.id);
                 }
             }
 
