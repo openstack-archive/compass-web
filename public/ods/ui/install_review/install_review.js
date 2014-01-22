@@ -129,18 +129,14 @@ steal(
                 $("#continuing").css("opacity", 1);
 
                 var cluster_id = this.options.odsState.cluster_id;
-                Ods.Cluster.action(
-		    cluster_id, {
-			"deploy": ""
-                    },
-		    this.proxy('onTriggerDeploy'),
-		    this.proxy('onTriggerDeployErr'));
+                Ods.Cluster.action(cluster_id, {"deploy": []},
+                                   this.proxy('onTriggerDeploy'),
+                                   this.proxy('onTriggerDeployErr'));
             },
 
             onTriggerDeploy: function(data, textStatus, xhr) {
                 steal.dev.log(" *** onTriggerDeploy data *** ", data);
-                steal.dev.log(" *** onTriggerDeploy textStatus *** ",
-			      textStatus);
+                steal.dev.log(" *** onTriggerDeploy textStatus *** ", textStatus);
                 steal.dev.log(" *** onTriggerDeploy xhr *** ", xhr);
 
                 if (xhr.status == 202) { // accepted
@@ -155,8 +151,7 @@ steal(
             onTriggerDeployErr: function(xhr, status, statusText) {
                 steal.dev.log(" *** onTriggerDeployErr xhr *** ", xhr);
                 steal.dev.log(" *** onTriggerDeployErr status *** ", status);
-                steal.dev.log(" *** onTriggerDeployErr statusText *** ",
-			      statusText);
+                steal.dev.log(" *** onTriggerDeployErr statusText *** ", statusText);
             },
 
             initProgressbars: function() {
@@ -186,8 +181,7 @@ steal(
                         switchjson.children.push(serverjson);
 
                         // initiate list based progress bars
-                        this.initListProgressbar(servers[i].clusterhost_id,
-						 servers[i].hostname);
+                        this.initListProgressbar(servers[i].clusterhost_id, servers[i].hostname);
                     }
                     this.serverTreeJson.children.push(switchjson);
                 }
@@ -202,10 +196,8 @@ steal(
                 this.totalProgressbar.progressbar({
                     value: false
                 });
-                this.totalProgressLabel = this.totalProgressbar.children(
-		    ".progress-label");
-                this.totalProgressbarValue = this.totalProgressbar.find(
-		    ".ui-progressbar-value");
+                this.totalProgressLabel = this.totalProgressbar.children(".progress-label");
+                this.totalProgressbarValue = this.totalProgressbar.find(".ui-progressbar-value");
             },
 
             initListProgressbar: function(hostid, hostname) {
@@ -214,8 +206,7 @@ steal(
                     "hostid": hostid,
                     "message": "Waiting..."
                 }
-                $("#tabs-2 table tbody").append(this.view('progress_row',
-							  initPData));
+                $("#tabs-2 table tbody").append(this.view('progress_row', initPData));
 
                 var pbar = $('div[data-hostid="' + hostid + '"]');
                 pbar.progressbar({
@@ -247,10 +238,7 @@ steal(
                 this.pendingHostList = [];
 
                 for (var i = 0; i < count; i++) {
-                    Ods.ClusterHost.progress(
-			hosts[i],
-			this.proxy('updateProgressBar'),
-			this.proxy('updateProgressBarErr'));
+                    Ods.ClusterHost.progress(hosts[i], this.proxy('updateProgressBar'), this.proxy('updateProgressBarErr'));
                 }
             },
 
@@ -263,12 +251,12 @@ steal(
                 steal.dev.log(" *** onUpdateProgressBar textStatus *** ", textStatus);
                 steal.dev.log(" *** onUpdateProgressBar xhr *** ", xhr);
 
-                this.pendingHostCount --;
+                this.pendingHostCount--;
 
                 var progressData = data.progress;
 
 
-                if(progressData.percentage < 1) {
+                if (progressData.percentage < 1) {
                     this.pendingHostList.push(progressData.id);
                 }
 
@@ -289,8 +277,7 @@ steal(
             updateProgressBarErr: function(xhr, status, statusText) {
                 steal.dev.log(" *** updateProgressBarErr xhr *** ", xhr);
                 steal.dev.log(" *** updateProgressBarErr status *** ", status);
-                steal.dev.log(" *** updateProgressBarErr statusText *** ",
-			      xhr);
+                steal.dev.log(" *** updateProgressBarErr statusText *** ", xhr);
                 //TODO
             },
 
@@ -311,16 +298,13 @@ steal(
                 }
 
                 // update graph-based progress bar
-                if ($('rect[data-hostid="' + progressData.id + '"]')) {
-		    // check if the node is expanded
+                if ($('rect[data-hostid="' + progressData.id + '"]')) { // check if the node is expanded
                     if (progressData.percentage > 1.0) {
                         progressData.percentage = 1.0;
                     }
-                    $('rect[data-hostid="' + progressData.id + '"]')
-			.attr("width", imgWidth * progressData.percentage);
+                    $('rect[data-hostid="' + progressData.id + '"]').attr("width", imgWidth * progressData.percentage);
 
-                    $('text[data-hostid="' + progressData.id + '"]')
-			.text(progressData.message);
+                    $('text[data-hostid="' + progressData.id + '"]').text(progressData.message);
                 }
             },
 
@@ -360,17 +344,14 @@ steal(
                             "background": "#5BB75B"
                         });
                     } else {
-                        pbar.progressbar(
-			    "value", progressData.percentage * 100)
+                        pbar.progressbar("value", progressData.percentage * 100)
                     }
                 }
             },
 
             updateTotalBar: function(data) {
-                if(this.pendingHostCount == 0) {
-                    Ods.Cluster.progress(this.options.odsState.cluster_id,
-					 this.proxy('onTotalProgressData'),
-					 this.proxy('onTotalProgressDataErr'));
+                if (this.pendingHostCount == 0) {
+                    Ods.Cluster.progress(this.options.odsState.cluster_id, this.proxy('onTotalProgressData'), this.proxy('onTotalProgressDataErr'));
                 }
             },
 
@@ -379,8 +360,7 @@ steal(
             /********************************************/
             onTotalProgressData: function(data, textStatus, xhr) {
                 steal.dev.log(" *** onTotalProgressData data *** ", data);
-                steal.dev.log(" *** onTotalProgressData textStatus *** ",
-			      textStatus);
+                steal.dev.log(" *** onTotalProgressData textStatus *** ", textStatus);
                 steal.dev.log(" *** onTotalProgressData xhr *** ", xhr);
 
                 var total = data.progress.percentage;
@@ -397,9 +377,7 @@ steal(
                     setTimeout(this.proxy('getProgressData'), 3000);
                 } else {
                     this.totalProgressbar.progressbar("value", 100);
-                    Ods.DashboardLink.findOne(
-			this.options.odsState.cluster_id,
-			this.proxy('onFindDashboardLink'));
+                    Ods.DashboardLink.findOne(this.options.odsState.cluster_id, this.proxy('onFindDashboardLink'));
                 }
             },
 
@@ -408,23 +386,18 @@ steal(
             /********************************************/
             onTotalProgressDataErr: function(xhr, status, statusText) {
                 steal.dev.log(" *** onTotalProgressDataErr xhr *** ", xhr);
-                steal.dev.log(" *** onTotalProgressDataErr status *** ",
-			      status);
-                steal.dev.log(" *** onTotalProgressDataErr statusText *** ",
-			      xhr);
+                steal.dev.log(" *** onTotalProgressDataErr status *** ", status);
+                steal.dev.log(" *** onTotalProgressDataErr statusText *** ", xhr);
                 //TODO
             },
 
             onFindDashboardLink: function(data, textStatus, xhr) {
                 steal.dev.log(" *** onFindDashboardLink data *** ", data);
-                steal.dev.log(" *** onFindDashboardLink textStatus *** ",
-			      textStatus);
+                steal.dev.log(" *** onFindDashboardLink textStatus *** ", textStatus);
                 steal.dev.log(" *** onFindDashboardLink xhr *** ", xhr);
 
                 if (data.status == "OK") {
-                    $(".dashboard-link").attr(
-			"href",
-			data.dashboardlinks["os-single-controller"]);
+                    $(".dashboard-link").attr("href", data.dashboardlinks["os-single-controller"]);
                     $(".dashboard-link").attr("target", "_blank");
                     $(".dashboard-link").removeClass("disabled");
                 }
@@ -432,7 +405,7 @@ steal(
 
             '.ui-tabs-nav click': function(el, ev) {
                 if ($("#tabs-2").is(":visible")) {
-		    var children = this.serverTreeJson.children;
+                    var children = this.serverTreeJson.children;
                     for (var sw in children) {
                         var servers = children[sw]._children;
                         if (servers == null) {
@@ -486,8 +459,7 @@ steal(
                     .attr("width", width + margin.right + margin.left)
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
-                    .attr("transform",
-			  "translate(" + margin.left + "," + margin.top + ")");
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
                 root = this.serverTreeJson;
                 root.x0 = height / 2;

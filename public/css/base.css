@@ -119,8 +119,9 @@
   color:#ffffff;
   font-family:arial;
   font-size:12px;
-  padding: 3px 20px;
+  padding: 5px 20px;
   text-decoration:none;
+  width: 120px
 }
 .btn_find:hover { 
   background: rgba(50,54,162,1);
@@ -131,6 +132,19 @@
   background: -ms-linear-gradient(top, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
   background: linear-gradient(to bottom, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3236a2', endColorstr='#8d92fb', GradientType=0 );
+  cursor: pointer;
+}
+.btn_find[disabled] {
+  background: rgba(50,54,162,1);
+  background: -moz-linear-gradient(top, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(50,54,162,1)), color-stop(100%, rgba(141,146,251,1)));
+  background: -webkit-linear-gradient(top, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
+  background: -o-linear-gradient(top, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
+  background: -ms-linear-gradient(top, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
+  background: linear-gradient(to bottom, rgba(50,54,162,1) 0%, rgba(141,146,251,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3236a2', endColorstr='#8d92fb', GradientType=0 );
+  opacity: 0.5;
+  cursor: default;
 }
 
 .btn_find_inactive {

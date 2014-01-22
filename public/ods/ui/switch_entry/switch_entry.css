@@ -1,0 +1,51 @@
+.switch-status {
+  width: 16px;
+  height: 16px;
+}
+
+.switch-refresh {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+}
+
+.switch-refresh img {
+  cursor: hand; 
+  cursor: pointer; 
+}
+
+img.err:hover {
+  cursor: pointer;
+}
+
+.add {
+  width: 16px;
+  height: 16px;
+  background-image: url("../../../img/add_button_16px.png");
+  cursor: hand; 
+  cursor: pointer; 
+  float: left;
+}
+
+.remove {
+  width: 16px;
+  height: 16px;
+  background-image: url("../../../img/remove_button_16px.png");
+  cursor: hand; 
+  cursor: pointer; 
+  float: left;  
+}
+
+.switch_row input {
+  width: 100px;
+}
+
+.server-result {
+  min-height: 200px;
+}
+
+.server-g-num {
+  padding: 1px 10px;
+  margin-top: 2px;
+}
+

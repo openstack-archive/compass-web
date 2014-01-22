@@ -7,20 +7,20 @@ steal(
     './servers.css',
     './views/init.ejs',
     'lib/jquery.dataTables.js',
-    './views/switch_row.ejs',
+    //'lib/jquery.dataTables.dataSourcePlugins.js',
     'ods/models/servers.js',
-    'ods/models/cluster.js'
+    'ods/models/cluster.js',
+    'ods/ui/switch_entry'
 ).then(function($) {
     $.Controller('Ods.Ui.servers', {}, {
         init: function() {
             this.element.html(this.view('init'));
 
-            this.pendingSwitchList = [];
-
             // we query up to 10 times. Report an error if any of the switches
             // remains in not_reached status.
             this.queryCount = 0;
 
+            this.displayNodes = [];
             this.initServerTable();
 
             this.checked_num = 0;
@@ -50,10 +50,8 @@ steal(
 
 
             var oldSwitchesData = this.options.odsState.switches;
-
+            var tbody = $(".switchtable tbody");
             if (oldSwitchesData.length > 0) {
-                var tbody = $(".switchtable tbody");
-
                 if (this.options.odsState.snmp) {
                     $('#useSNMP').prop('checked', true);
                 } else {
@@ -61,39 +59,31 @@ steal(
                 }
 
                 for (var i = 0; i < oldSwitchesData.length; i++) {
-                    if (i > 0) {
-                        tbody.append(this.view('switch_row'));
-                    }
-                    if (this.options.odsState.snmp) {
-                        $("#snmpTitle").html("SNMP Version");
-                        $("#communityTitle").html("Community");
-                        $(".switch_row").find(".snmp").show();
-                        $(".switch_row").find(".community").show();
-                        $(".switch_row").find(".username").hide();
-                        $(".switch_row").find(".password").hide();
-                    } else {
-                        $("#snmpTitle").html("Username");
-                        $("#communityTitle").html("Password");
-                        $(".switch_row").find(".snmp").hide();
-                        $(".switch_row").find(".community").hide();
-                        $(".switch_row").find(".username").show();
-                        $(".switch_row").find(".password").show();
-                    }
-
-                    if (this.options.odsState.snmp) {
-                        $(".switch_row").eq(i).find(".switchIp").val(oldSwitchesData[i].switch.ip);
-                        $(".switch_row").eq(i).find(".snmp").val(oldSwitchesData[i].switch.credential.version);
-                        $(".switch_row").eq(i).find(".community").val(oldSwitchesData[i].switch.credential.community);
-                    } else {
-                        $(".switch_row").eq(i).find(".switchIp").val(oldSwitchesData[i].switch.ip);
-                        $(".switch_row").eq(i).find(".username").val(oldSwitchesData[i].switch.credential.username);
-                        $(".switch_row").eq(i).find(".password").val(oldSwitchesData[i].switch.credential.password);
-                    }
+                    tbody.append("<tr class=\"switch_row\"></tr>");
+                    var tr = tbody.find("tr:last");
+                    tr.ods_ui_switch_entry({
+                        "odsState": this.options.odsState,
+                        "switchData": oldSwitchesData[i].switch,
+                        "first": i == 0,
+                        "serverControl": this
+                    });
                 }
+            } else {
+                tbody.append("<tr class=\"switch_row\"></tr>");
+                var tr = tbody.find("tr:last");
+                tr.ods_ui_switch_entry({
+                    "odsState": this.options.odsState,
+                    "switchData": null,
+                    "first": true,
+                    "serverControl": this
+                });
             }
+
         },
 
         initServerTable: function() {
+            var currNode = [];
+            var self = this;
             this.dataTable = $('#tb_server_select').dataTable({
                 "sScrollY": "200px",
                 "bPaginate": false,
@@ -117,12 +107,24 @@ steal(
                     aTargets: [0, 1, 3]
                 }, {
                     bSearchable: false,
-                    aTargets: [ 0 ]
+                    aTargets: [0]
                 }],
                 "aaSorting": [
                     [2, "asc"],
                     [4, "asc"]
-                ]
+                ],
+                "fnPreDrawCallback": function(oSettings) {
+                    /* reset currNode before each draw*/
+                    currNode = [];
+                },
+                "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    /* push this row of data to currNode array*/
+                    currNode.push(nRow);
+                },
+                "fnDrawCallback": function(oSettings) {
+                    /* can now access sorted node array*/
+                    self.displayNodes = currNode;
+                }
             });
 
             $('.dataTables_info').remove();
@@ -130,21 +132,30 @@ steal(
             $('.dataTables_filter input').addClass('rounded');
         },
 
+        removeServersBySwitch: function(switchIp) {
+            var servers = this.dataTable.fnGetData();
+            var serversCount = servers.length;
+            var i = 0;
+            while (i < serversCount) {
+                if (servers[i].switch_ip == switchIp) {
+                    this.dataTable.fnDeleteRow(i);
+                    servers = this.dataTable.fnGetData();
+                    serversCount = servers.length;
+                } else {
+                    i++;
+                }
+            }
+        },
+
         'input[name="snmp"] click': function(el, ev) {
+            this.options.odsState.attr("snmp", el.val() == "snmp");
+
             if (el.val() == "snmp") {
                 $("#snmpTitle").html("SNMP Version");
                 $("#communityTitle").html("Community");
-                $(".snmp").show();
-                $(".community").show();
-                $(".username").hide();
-                $(".password").hide();
             } else {
                 $("#snmpTitle").html("Username");
                 $("#communityTitle").html("Password");
-                $(".snmp").hide();
-                $(".community").hide();
-                $(".username").show();
-                $(".password").show();
             }
         },
 
@@ -203,22 +214,23 @@ steal(
         },
 
         'getSelectedServers': function() {
-            selectedServers = [];
+            console.log("displayNodes ", this.displayNodes);
+            var selectedServers = [];
 
             this.options.odsState.servers = [];
             this.options.odsState.servers_config = [];
 
             // loop through dataTable nodes to find selected servers
-            for (var i = 0; i < this.dataTable.fnGetNodes().length; i++) {
-                var ckboxTd = $('td', this.dataTable.fnGetNodes()[i])[0];
+            for (var i = 0; i < this.displayNodes.length; i++) {
+                var ckboxTd = $('td', this.displayNodes[i])[0];
                 var server_ckbox = $('input', ckboxTd)[0];
 
                 if (server_ckbox.checked == true) {
-                    var checkTd = $('td', this.dataTable.fnGetNodes()[i])[1];
-                    var macTd = $('td', this.dataTable.fnGetNodes()[i])[1];
-                    var switchIpTd = $('td', this.dataTable.fnGetNodes()[i])[2];
-                    var vlanTd = $('td', this.dataTable.fnGetNodes()[i])[3];
-                    var portTd = $('td', this.dataTable.fnGetNodes()[i])[4];
+                    var checkTd = $('td', this.displayNodes[i])[1];
+                    var macTd = $('td', this.displayNodes[i])[1];
+                    var switchIpTd = $('td', this.displayNodes[i])[2];
+                    var vlanTd = $('td', this.displayNodes[i])[3];
+                    var portTd = $('td', this.displayNodes[i])[4];
 
                     var mac = macTd.textContent || macTd.innerText;
                     var switch_ip = switchIpTd.textContent || switchIpTd.innerText;
@@ -242,29 +254,25 @@ steal(
 
         'div.add click': function(el, ev) {
             var tbody = el.closest('tbody');
-            tbody.append(this.view('switch_row'));
 
-            if (!$("#useSNMP:checked").val()) {
-                $(".switch_row").last().find(".snmp").hide();
-                $(".switch_row").last().find(".community").hide();
-                $(".switch_row").last().find(".username").show();
-                $(".switch_row").last().find(".password").show();
-            }
+            tbody.append("<tr class=\"switch_row\"></tr>");
+            var tr = tbody.find("tr:last");
+            tr.ods_ui_switch_entry({
+                "odsState": this.options.odsState,
+                "switchData": null
+            });
         },
 
-        'div.remove click': function(el, ev) {
-            var row = el.closest('tr');
-            row.remove();
-        },
-
-        'a.find_server click': function(el, ev) {
+        '.find_server click': function(el, ev) {
             // remove the error class within the el
             $('.switchtable').find('.error').removeClass('error');
             $(".switchesErr").hide();
 
+            this.dataTable.fnClearTable();
+
             var self = this;
             var hasError = false;
-            this.pendingSwitchList.length = 0;
+
             this.queryCount = 0;
 
             // return if the switch_ip/community or username/password input is empty
@@ -273,6 +281,7 @@ steal(
                     hasError = true;
                 }
             });
+            // return if the ip format is not correct
             $('.switchtable').find('.switchIp').each(function(index, value) {
                 var isValid = self.validateIpFormat($(value).val());
                 if (!isValid) {
@@ -287,267 +296,42 @@ steal(
             }
 
             $("#finding-servers").css("opacity", 1);
+            $('.find_server').attr("disabled", true);
+            $('.find_server').html("Finding...");
 
-            var switch_count = $(".switch_row").length;
-            this.pendingCount = switch_count;
-            this.switches = [];
+            $('.switchtable').find('tr.switch_row').each(function(index, value) {
+                $(value).controller().findServers();
+            });
 
-            // loop through switch rows to create new switches
-            for (i = 0; i < switch_count; i++) {
-                var switch_ip = $(".switch_row").eq(i).find(".switchIp");
-                var snmp_version = null,
-                    community = null;
-                var username = null,
-                    password = null;
-                var switchData = {};
 
-                if ($("#useSNMP:checked").val()) {
-                    this.options.odsState.snmp = 1;
-                    snmp_version = $(".switch_row").eq(i).find(".snmp");
-                    community = $(".switch_row").eq(i).find(".community");
-                    switchData = {
-                        "switch": {
-                            "ip": switch_ip.val(),
-                            "credential": {
-                                'version': snmp_version.val(),
-                                'community': community.val()
-                            }
-                        }
-                    };
-                } else {
-                    this.options.odsState.snmp = 0;
-                    username = $(".switch_row").eq(i).find(".username");
-                    password = $(".switch_row").eq(i).find(".password");
-                    switchData = {
-                        "switch": {
-                            "ip": switch_ip.val(),
-                            "credential": {
-                                "username": username.val(),
-                                "password": password.val()
-                            }
-                        }
-                    };
+            setTimeout(this.proxy('checkSwitchesStatus'), 2000);
+        },
+
+        checkSwitchesStatus: function() {
+            var switchesFinished = true;
+            $('.switchtable').find('tr.switch_row').each(function(index, value) {
+                var status = $(value).controller().getSwitchStatus();
+                if(status.status == 1) {
+                    switchesFinished = false;
                 }
-
-                this.switches.push(switchData);
-
-                Ods.Switch.create(switchData, this.proxy('onSwitchCreated', i), this.proxy('onSwitchCreateErr', i));
-            }
-            this.options.odsState.switches = this.switches;
-
-        },
-
-        'input.switchIp keyup': function(el, ev) {
-            var isValid = this.validateIpFormat(el.val());
-            if (!isValid) {
-                el.addClass("error");
-            } else {
-                el.removeClass("error");
-            }
-        },
-
-        validateIpFormat: function(value) {
-            var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-            if (value.match(ipformat)) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-
-        /************************************/
-        // switch create success callback
-        /************************************/
-        onSwitchCreated: function(switchIndex, data, textStatus, xhr) {
-            steal.dev.log(" *** onSwitchCreated data *** ", data);
-            steal.dev.log(" *** onSwitchCreated textStatus *** ", textStatus);
-            steal.dev.log(" *** onSwitchCreated xhr *** ", xhr);
-
-            this.pendingCount--;
-            if (xhr.status == 202) { // accepted
-                var switchId = data.
-                switch.id;
-                this.pendingSwitchList.push(switchId);
-            }
-
-            if (this.pendingCount == 0) {
-                this.checkSwitchState();
-            }
-        },
-
-        /************************************/
-        // switch create error callback
-        /************************************/
-        onSwitchCreateErr: function(switchIndex, xhr, status, statusText) {
-            steal.dev.log(" *** onSwitchCreatErr xhr *** ", xhr);
-            steal.dev.log(" *** onSwitchCreatErr status *** ", status);
-            steal.dev.log(" *** onSwitchCreatErr statusText *** ", xhr);
-
-            $("#finding-servers").css("opacity", 0);
-
-            if (xhr.status == 409) { // duplicate
-                var failedSwitchId = 0;
-                if ($.fixture.on == true) {
-                    failedSwitchId = statusText.failedSwitch;
-                } else {
-                    failedSwitchId = JSON.parse(xhr.responseText).failedSwitch;
-                }
-                steal.dev.log(" *** failed Switch Id *** ", failedSwitchId);
-                // PUT switches
-                Ods.Switch.update(failedSwitchId, this.switches[switchIndex],
-                    this.proxy('onSwitchUpdated', switchIndex), this.proxy('onSwitchUpdateErr'));
-
-            } else if (xhr.status == 400) { //bad request
-                $(".switchesErr").html("Switch post error code: 400");
-                $(".switchesErr").show();
-            } else if (xhr.status == 500) { // internal server error
-                $(".switchesErr").html("Switch post error code: 500");
-                $(".switchesErr").show();
-            }
-
-        },
-
-        /************************************/
-        // switch update success callback
-        /************************************/
-        onSwitchUpdated: function(switchIndex, data, textStatus, xhr) {
-            steal.dev.log(" *** onSwitchUpdated data *** ", data);
-            steal.dev.log(" *** onSwitchUpdated textStatus *** ", textStatus);
-            steal.dev.log(" *** onSwitchUpdated xhr *** ", xhr);
-
-            this.pendingCount--;
-
-            if (xhr.status == 202 || xhr.status == 200) { // accepted or OK
-                var switchId = data.
-                switch.id;
-                this.pendingSwitchList.push(switchId);
-            }
-
-            if (this.pendingCount == 0) {
-                this.checkSwitchState();
-            }
-
-        },
-
-        /************************************/
-        // switch create error callback
-        /************************************/
-        onSwitchUpdateErr: function(xhr, status, statusText) {
-            steal.dev.log(" *** onSwitchUpdateErr xhr *** ", xhr);
-            steal.dev.log(" *** onSwitchUpdateErr status *** ", status);
-            steal.dev.log(" *** onSwitchUpdateErr statusText *** ", statusText);
-
-            $("#finding-servers").css("opacity", 0);
-
-            if (xhr.status == 404) { // not found
-                $(".switchesErr").html("Switch update error code: 404");
-                $(".switchesErr").show();
-            } else if (xhr.status == 400) { // bad request
-                $(".switchesErr").html("Switch update error code: 400");
-                $(".switchesErr").show();
-            } else if (xhr.status == 500) { // internal server error
-                $(".switchesErr").html("Switch update error code: 500");
-                $(".switchesErr").show();
-            }
-
-        },
-
-        checkSwitchState: function() {
-            this.queryCount++;
-            this.pendingCount = this.pendingSwitchList.length;
-
-            if (this.queryCount > 10) {
-                $(".switchesErr").html("There is(are) " + this.pendingCount + " switch(es) not responding now. Please try again later.")
-                $(".switchesErr").show();
+            })
+            if (switchesFinished) {
                 $("#finding-servers").css("opacity", 0);
-                return;
-            }
-
-            var switches = this.pendingSwitchList;
-            this.pendingSwitchList = [];
-            var count = this.pendingCount;
-            for (var i = 0; i < count; i++) {
-                Ods.Switch.findOne(switches[i], this.proxy('onFindOneSwitch'), this.proxy('onFindOneSwitchErr'));
+                $('.find_server').attr("disabled", false);
+                $('.find_server').html("Find Servers");
+            } else {
+                setTimeout(this.proxy('checkSwitchesStatus'), 2000);
             }
         },
 
-        /************************************/
-        // find one switch success callback
-        /************************************/
-        onFindOneSwitch: function(data, textStatus, xhr) {
-            steal.dev.log(" *** onFindOneSwitch data *** ", data);
-            steal.dev.log(" *** onFindOneSwitch textStatus *** ", textStatus);
-            steal.dev.log(" *** onFindOneSwitch xhr *** ", xhr);
 
-            this.pendingCount--;
-
-            if (xhr.status == 200) { //OK
-                if (data.switch.state === "under_monitoring") {
-                    this.element.find('div.right-side').show();
-                    this.dataTable.fnClearTable();
-
-                    this.getServersBySwitch(data.switch.id);
-                } else {
-                    this.pendingSwitchList.push(data.switch.id);
-                }
-            }
-
-            if (this.pendingCount == 0) {
-                setTimeout(this.proxy('checkSwitchState'), 2000);
-            }
-        },
-
-        /************************************/
-        // find one switch error callback
-        /************************************/
-        onFindOneSwitchErr: function(xhr, status, statusText) {
-            steal.dev.log(" *** onFindOneSwitchErr xhr *** ", xhr);
-            steal.dev.log(" *** onFindOneSwitchErr status *** ", status);
-            steal.dev.log(" *** onFindOneSwitchErr statusText *** ", statusText);
-
-            $("#finding-servers").css("opacity", 0);
-            if (xhr.status == 404) { // not found
-                $(".switchesErr").html("Find switch error code: 404");
-                $(".switchesErr").show();
-            } else if (xhr.status == 500) {
-                $(".switchesErr").html("Find switch error code: 500");
-                $(".switchesErr").show();
-            }
-
-        },
-
-        getServersBySwitch: function(id) {
-            Ods.Server.findAll({
-                switchId: id
-            }, this.proxy('onFindAllServers'));
-        },
-
-        /************************************/
-        // find all servers success callback
-        /************************************/
-        onFindAllServers: function(data, textStatus, xhr) {
-            steal.dev.log(" *** onFindAllServers data *** ", data);
-            steal.dev.log(" *** onFindAllServers textStatus *** ", textStatus);
-            steal.dev.log(" *** onFindAllServers xhr *** ", xhr);
-
-            this.dataTable.fnAddData(data.machines);
-
-            this.machines = this.machines.concat(data.machines);
-
-            if (this.pendingCount == 0 && this.pendingSwitchList.length == 0) {
-                steal.dev.log("loading finished");
-                $("#finding-servers").css("opacity", 0);
+        onNewMachines: function(machines) {
+            this.element.find('div.right-side').show();
+            if (machines.length > 0) {
+                this.dataTable.fnAddData(machines);
+                this.machines = this.machines.concat(machines);
                 this.options.odsState.machines = this.machines;
             }
-        },
-
-        checkNonEmpty: function(el) {
-            var value = el.val();
-            if (!value) {
-                el.addClass('error');
-                return false;
-            }
-            return true;
         },
 
         /************************************/
@@ -619,6 +403,33 @@ steal(
 
         '.serverFilter keyup': function(el, ev) {
             this.countCheckedServers();
+        },
+
+        'input.switchIp keyup': function(el, ev) {
+            var isValid = this.validateIpFormat(el.val());
+            if (!isValid) {
+                el.addClass("error");
+            } else {
+                el.removeClass("error");
+            }
+        },
+
+        validateIpFormat: function(value) {
+            var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            if (value.match(ipformat)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        
+        checkNonEmpty: function(el) {
+            var value = el.val();
+            if (!value) {
+                el.addClass('error');
+                return false;
+            }
+            return true;
         },
 
         show: function() {

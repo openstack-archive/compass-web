@@ -1,0 +1,27 @@
+<td><input type="input" class="switchIp non-empty-value rounded" placeholder="Switch IP"> </td>
+<td>
+  <select class="snmp">
+    <option>v1</option>
+    <option selected>v2c</option>
+  </select>
+  <input type="input" class="username non-empty-value rounded" placeholder="Username" style="display:none">
+</td>
+<td>
+  <input type="password" class="community non-empty-value rounded" placeholder="Community">
+  <input type="password" class="password non-empty-value rounded" placeholder="Password" style="display:none">
+</td>
+<td>
+  <div class='add'></div>
+  <% if (!first) { %> <div class='remove'></div> <% } %>
+
+  <span class="status"></span>
+  <div class="switch-refresh float_right">
+    <img class="refresh" src="../img/blue_refresh_16px.png" style="display:none;">
+  </div>
+  <div class="switch-status float_right">
+    <img class="waiting" src="../img/waiting_16px.gif" style="display:none;">
+    <img class="ok" src="../img/green_check_16px.png" style="display:none;">
+    <img class="err" src="../img/red_cross_16px.png" style="display:none;">
+  </div>
+</td>
+

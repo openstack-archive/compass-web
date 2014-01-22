@@ -26,12 +26,12 @@
             <option>eth3</option>
             <option>eth4</option>
           </select>
-          <div id="mgt_nic_err" class="nicHint float_left"></div>
+          <div id="mgt_nic_err" class="nicHint float_left" ><i>  (This selection should be consistent with your networking plan.)</i></div>
         </td>
       </tr>
       <tr>
         <td>Promisc Mode</td>
-        <td><input id="mgt_promisc" type="checkbox"> The interface running in promisc mode will receive all packages in network. </td>
+        <td><input id="mgt_promisc" type="checkbox"><i> (The interface running in promisc mode will receive and pass all the trafic.)</i></td>
       </tr>
     </table>
   </div>
@@ -65,7 +65,7 @@
       </tr>  
       <tr>
         <td>Promisc Mode</td>
-        <td><input id="vnw_promisc" type="checkbox"> The interface running in promisc mode will receive all packages in network. </td>
+        <td><input id="vnw_promisc" type="checkbox"><i> (The interface running in promisc mode will receive and pass all the trafic.)</i> </td>
       </tr>
     </table>
   </div>
@@ -105,7 +105,7 @@
       </tr>
       <tr>
         <td>Promisc Mode</td>
-        <td><input id="float_promisc" type="checkbox"> The interface running in promisc mode will receive all packages in network. </td>
+        <td><input id="float_promisc" type="checkbox"><i> (The interface running in promisc mode will receive and pass all the trafic.)</i></td>
       </tr>
     </table>
   </div>
@@ -141,7 +141,7 @@
       </tr>
       <tr>
         <td>Promisc Mode</td>
-        <td><input id="storage_promisc" type="checkbox"> The interface running in promisc mode will receive all packages in network. </td>
+        <td><input id="storage_promisc" type="checkbox"><i> (The interface running in promisc mode will receive and pass all the trafic.)</i></td>
       </tr>
     </table>
   </div>
@@ -150,23 +150,23 @@
     <table>
       <tr>
         <td>Nameserver</td>
-        <td><input id="global_nameservers" type="input" class="rounded non-empty-value" value="">e.g. "[compass server ip]"</td>
+        <td><input id="global_nameservers" type="input" class="rounded non-empty-value" value=""></td>
       </tr>
       <tr>
         <td>Search Path</td>
-        <td><input id="global_searchpath" type="input" class="rounded non-empty-value" value="">e.g. "ods.com"</td>
+        <td><input id="global_searchpath" type="input" class="rounded non-empty-value" value=""></td>
       </tr>
       <tr>
         <td>Gateway</td>
-        <td><input id="global_gateway" type="input" class="rounded non-empty-value" value="">e.g. "[compass server gateway ip]"</td>
+        <td><input id="global_gateway" type="input" class="rounded non-empty-value" value=""></td>
       </tr>
       <tr>
         <td>Proxy (optional)</td>
-        <td><input id="global_proxy" type="input" class="rounded" value="">e.g. "http://[compass server ip]:3128"</td>
+        <td><input id="global_proxy" type="input" class="rounded" value=""></td>
       </tr>
       <tr>
         <td>NTP Server (optional)</td>
-        <td><input id="global_ntpserver" type="input" class="rounded" value="">e.g. "[compass server ip]"</td>
+        <td><input id="global_ntpserver" type="input" class="rounded" value=""></td>
       </tr>
     </table>
   </div>

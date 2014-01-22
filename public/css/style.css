@@ -8,7 +8,7 @@ body {
 
 #header { 
   height: 60px;
-  min-width: 1150px;
+  min-width: 1200px;
   background-color: rgb(248, 248, 248);
   background-image: url("../img/hw_000469.jpg");
   border-bottom: 1px solid rgb(255, 255, 255);
@@ -30,7 +30,7 @@ body {
 
 #menu {
   height: 46px;
-  min-width: 1150px;
+  min-width: 1200px;
   overflow: hidden;
   width: auto !important;
   margin: 0px auto;
@@ -106,7 +106,7 @@ h2 {
 }
 
 #content {
-  min-width: 1150px;
+  min-width: 1200px;
   min-height: 200px; 
   overflow-x: hidden;
   position: relative; 

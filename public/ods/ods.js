@@ -18,7 +18,7 @@ steal(
             feature: null,
             machines: [],
             switches: [],
-            snmp: 1,
+            snmp: true,
             adapter_id: null
         };
 

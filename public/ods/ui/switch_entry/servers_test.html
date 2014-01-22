@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>servers Widget Unit Test</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../../../css/style.css" />
+
+  </head>
+  <body>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <table><tbody id="servers-test"> </tbody></table>
+      </div>
+
+      <button class="b">Click Me </button>
+    </div>
+
+    <script type='text/javascript' src='../../../steal/steal.js'></script>
+    <script type='text/javascript'>
+      steal('jquery/dom/route', 'ods/fixtures', 'ods/ui/switch_entry').then(function($) {
+
+        var odsState = {
+          credential: "snmp",
+          networking: null,
+          servers: [],
+          servers_config: null,
+          cluster_id: null,
+          security: null,
+          partition: null,
+          feature: null,
+          machines: [],
+          switches: [],
+          snmp: 1
+        };
+        var state = new $.Observe(odsState);
+
+
+
+/*      $("button.b").click(function() { console.log("clicked ....."); state.attr("credential", "ssh");}); */
+
+        $("button.b").click(function() {
+          $('#servers-test').ods_ui_switch_entry("findServers");
+        });
+        $('#servers-test').ods_ui_switch_entry({
+          "odsState": state
+        });
+
+      }); 
+    </script>
+  </body>
+</html>
+

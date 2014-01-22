@@ -165,7 +165,7 @@ steal(
                             server['roles'] = [];
                         }
 
-                        server['server_ip'] = this.startPrefix + (parseInt(this.startLastDigit) + i);
+                        //server['server_ip'] = this.startPrefix + (parseInt(this.startLastDigit) + i);
 
                         var switchIp = server.switch_ip;
                         if (this.serverData[switchIp] == undefined) {
@@ -175,6 +175,16 @@ steal(
                         }
                     }
                     this.options.odsState.servers_config = this.serverData;
+
+                    var j = 0;
+                    var serverData = this.options.odsState.servers_config;
+                    for (var key in serverData) {
+                        var servers = serverData[key];
+                        for (var i = 0; i < servers.length; i++) {
+                            serverData[key][i]['server_ip'] = this.startPrefix + (parseInt(this.startLastDigit) + j);
+                            j++;
+                        }
+                    }
 
                     var networkingData = {
                         "networking": {

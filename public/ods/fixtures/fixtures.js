@@ -15,17 +15,18 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         var manage_ip = JSON.parse(original.data).switch.ip;
         var switchId = 1;
 
-        if(manage_ip == "172.29.8.40") {
+        if (manage_ip == "172.29.8.40") {
             switchId = 1;
-        }
-        else if(manage_ip == "172.29.8.41"){
+        } else if (manage_ip == "172.29.8.41") {
             switchId = 2;
+        } else if (manage_ip == "172.29.8.42") {
+            switchId = 3;
         }
 
         var returnData = {
             "status": "accepted",
             "switch": {
-                "state": "not_reached",
+                "state": "initialized",
                 "link": {
                     "href": "/switches/"+switchId+"/", 
                     "rel": "self"
@@ -41,12 +42,15 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         };
         //var xhr = {responseText: JSON.stringify(duplicateErr), status: 409};
 
-        if(switchId == 1) {
-            return [202, "accepted", returnData, {} ];
+        if (switchId == 1) {
+            return [202, "accepted", returnData, {}];
             //return [202, returnData ];
-        }
-        else if(switchId == 2) {
+        } else if (switchId == 2) {
             return [409, duplicateErr];
+            //return [202, "accepted", returnData, {} ];
+        } else if (switchId == 3) {
+            //return [409, duplicateErr];
+            return [202, "accepted", returnData, {} ];
         }
         
     });
@@ -57,7 +61,7 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         var returnData = {
             "status": "accepted",
             "switch": {
-                "state": "not_reached",
+                "state": "repulling",
                 "link": {
                     "href": "/switches/"+switchId+"/", 
                     "rel": "self"
@@ -76,7 +80,8 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         var returnData = {
             "status": "OK",
             "switch": {
-                "state": switchId == 10 ? "not_reached" : "under_monitoring",
+                "state": switchId == 10 ? "initialized" : "under_monitoring",
+                "err-msg": "error message",
                 "link": {
                     "href": settings.url, 
                     "rel": "self"
@@ -179,6 +184,36 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
                         "port": 3,
                         "switch_ip": "172.29.8.41"
                     }                                           
+                ]
+            };
+            return returnData;            
+        }
+        else if(switchId == 3) {
+            var returnData = {
+                "status": "OK",
+                "machines": [
+                    {
+                        "mac": "28:e5:ee:23:14:92", 
+                        "vlan": 3, 
+                        "link": {
+                            "href": "/api/machines/80", 
+                            "rel": "self"
+                        }, 
+                        "id": 80, 
+                        "port": 1,
+                        "switch_ip": "172.29.8.42"
+                    }, 
+                    {
+                        "mac": "28:22:77:c2:46:4a", 
+                        "vlan": 3, 
+                        "link": {
+                            "href": "/api/machines/90", 
+                            "rel": "self"
+                        }, 
+                        "id": 90, 
+                        "port": 2,
+                        "switch_ip": "172.29.8.42"
+                    }                                         
                 ]
             };
             return returnData;            

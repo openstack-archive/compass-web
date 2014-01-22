@@ -19,26 +19,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="switch_row">
-            <td><input type="input" class="switchIp non-empty-value rounded" placeholder="Switch IP" value=""> </td>
-            <td style="width:110px">
-              <select class="snmp">
-                <option>v1</option>
-                <option selected>v2c</option>
-              </select>
-              <input type="input" class="username non-empty-value rounded" placeholder="Username" value="" style="display:none">
-            </td>
-            <td>
-              <input type="password" class="community non-empty-value rounded" placeholder="Community" value="">
-              <input type="password" class="password non-empty-value rounded" placeholder="Password" value="" style="display:none;">
-            </td>
-            <td width="120px"><div class="add"> </div></td>
-          </tr>
+
         </tbody>
       </table>
       <div class="continue">
         <center>
-          <a href="javascript:void(0)" class="find_server btn_find"> Find Servers </a>
+          <button class="find_server btn_find"> Find Servers </button>
           <img id="finding-servers" class="loading" src="../img/ajax_loader.gif" height="30px" width="30px"></img>
         </center>
         <center class="switchesErr errhint" style="margin-top:10px;display:none;">

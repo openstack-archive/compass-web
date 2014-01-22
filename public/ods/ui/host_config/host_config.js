@@ -48,7 +48,7 @@ steal(
                 }
             });
 
-            $(document).tooltip({
+            $(".pattern-tip").tooltip({
                 items: "[data-geo], [title]",
                 content: function() {
                     var element = $(this);
