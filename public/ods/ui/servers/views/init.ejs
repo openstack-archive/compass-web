@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<div class="right-side" style="display:none">
+<div class="right-side" style="display:none; min-height: 540px;">
   <h3>Select servers onto which to deploy OpenStack</h3>
   <div class="server-result">
     <table id="tb_server_select" cellpadding="0" cellspacing="0" border="0" class="display">
@@ -53,15 +53,17 @@
 
       </tbody>
     </table>
-  </div>
-  <div class='float_right rounded server-selection-num'>
-    <span id="selected_num">0</span> items selected
-  </div>
-  <div class="clear"></div>
+    <br>
+    <div class='float_right rounded server-selection-num'>
+      <span id="selected_num">0</span> items selected
+    </div>
 
-  <div class="continue"><center>
-    <a href="javascript: void(0)" class="btn_continue server-finish">Continue</a>
-    <img id="continuing" class="loading" src="../img/ajax_loader.gif" height="30px" width="30px"></img><br>
-    <div id="server_continue_err" style="display:none;padding-top:10px"></div>
-  </center></div> 
+    <div class="clear"></div>
+
+    <div class="continue"><center>
+      <a href="javascript: void(0)" class="btn_continue server-finish">Continue</a>
+      <img id="continuing" class="loading" src="../img/ajax_loader.gif" height="30px" width="30px"></img><br>
+      <div id="server_continue_err" style="display:none;padding-top:10px"></div>
+    </center></div>
+  </div>
 </div>

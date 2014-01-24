@@ -242,6 +242,7 @@ input.rounded:focus {
   font-size:12px;
   padding: 1px 5px;
   text-decoration:none;
+  width: 90px;
 }
 
 .tab_nav:hover { 
