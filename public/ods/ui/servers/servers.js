@@ -133,10 +133,12 @@ steal(
         },
 
         removeServersBySwitch: function(switchIp) {
+            // remove servers from datatable
             var servers = this.dataTable.fnGetData();
             var serversCount = servers.length;
             var i = 0;
             while (i < serversCount) {
+
                 if (servers[i].switch_ip == switchIp) {
                     this.dataTable.fnDeleteRow(i);
                     servers = this.dataTable.fnGetData();
@@ -166,6 +168,7 @@ steal(
                 alert("Please select at least one server");
             } else {
                 $("#continuing").css("opacity", 1);
+                this.options.odsState.machines = this.dataTable.fnGetData();
 
                 if (this.initServerStep) {
                     // create cluster
@@ -299,10 +302,11 @@ steal(
             $('.find_server').attr("disabled", true);
             $('.find_server').html("Finding...");
 
+
+            this.options.odsState.switches = [];
             $('.switchtable').find('tr.switch_row').each(function(index, value) {
                 $(value).controller().findServers();
             });
-
 
             setTimeout(this.proxy('checkSwitchesStatus'), 2000);
         },
@@ -327,9 +331,11 @@ steal(
 
         onNewMachines: function(machines) {
             this.element.find('div.right-side').show();
-            if (machines.length > 0) {
+            if ( machines.length > 0) {
                 this.dataTable.fnAddData(machines);
                 this.machines = this.machines.concat(machines);
+                //this.machines = this.options.odsState.machines;
+                //this.machines = this.machines.concat(machines);
                 this.options.odsState.machines = this.machines;
             }
         },
