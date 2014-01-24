@@ -259,7 +259,9 @@ steal(
             var tr = tbody.find("tr:last");
             tr.ods_ui_switch_entry({
                 "odsState": this.options.odsState,
-                "switchData": null
+                "switchData": null,
+                "first": false,
+                "serverControl": this
             });
         },
 
