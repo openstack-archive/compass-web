@@ -10,6 +10,8 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
 
     self.port = 0;
 
+    self.num =0;
+
 
     $.fixture('POST /api/switches',  function(original, settings, headers) {
         var manage_ip = JSON.parse(original.data).switch.ip;
@@ -61,7 +63,7 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         var returnData = {
             "status": "accepted",
             "switch": {
-                "state": "repulling",
+                "state": "repolling",
                 "link": {
                     "href": "/switches/"+switchId+"/", 
                     "rel": "self"
@@ -76,12 +78,13 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
 
     $.fixture('GET /api/switches/{id}', function(original, settings, headers) {
         var switchId = settings.url.substring(14,15);
+        self.num ++;
 
         var returnData = {
             "status": "OK",
             "switch": {
-                "state": switchId == 10 ? "initialized" : "under_monitoring",
-                "err-msg": "error message",
+                "state": switchId == 1 ? (self.num < 5 ? "initialized" : "unreachable") : "under_monitoring",
+                "err_msg": "error message",
                 "link": {
                     "href": settings.url, 
                     "rel": "self"

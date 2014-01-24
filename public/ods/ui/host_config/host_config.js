@@ -154,9 +154,13 @@ steal(
 
         filloutTabs: function() {
             var serverData = this.options.odsState.servers_config;
+            var count = 0;
             for (var key in serverData) {
                 $(".switch-navs").append('<div data-switchIp="' + key + '" class="tab_nav">' + key + '</div><br>');
+                count ++;
             }
+            var panel_minheight = $(".tab_nav").height() * count + 50;
+            $(".tab_panel_active").css("min-height", panel_minheight);
             this.tabSelected($(".switch-navs .tab_nav:first-child"));
         },
 

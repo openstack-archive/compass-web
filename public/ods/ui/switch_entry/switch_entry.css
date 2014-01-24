@@ -36,16 +36,3 @@ img.err:hover {
   float: left;  
 }
 
-.switch_row input {
-  width: 100px;
-}
-
-.server-result {
-  min-height: 200px;
-}
-
-.server-g-num {
-  padding: 1px 10px;
-  margin-top: 2px;
-}
-
