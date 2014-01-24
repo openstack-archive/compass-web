@@ -16,32 +16,44 @@ steal(
             this.element.html(this.view('init', {
                 "first": this.options.first
             }));
-            this.switchId = 0;
             this.switchStatus = {
                 "status": 0,
-                "message": ""
+                "message": "none"
             };
             this.queryCount = 0;
             this.displaySnmp(this.options.odsState.snmp);
-            var switchData = this.options.switchData;
+            var _switchData = this.options.switchData;
+            this.switchData = {"switch" : _switchData};
 
-            if (switchData) {
+            if (_switchData) {
                 if (this.options.odsState.snmp) {
-                    this.find(".switchIp").val(switchData.ip);
-                    this.find(".snmp").val(switchData.credential.version);
-                    this.find(".community").val(switchData.credential.community);
+                    this.find(".switchIp").val(_switchData.ip);
+                    this.find(".snmp").val(_switchData.credential.version);
+                    this.find(".community").val(_switchData.credential.community);
                 } else {
-                    this.find(".switchIp").val(switchData.ip);
-                    this.find(".username").val(switchData.credential.username);
-                    this.find(".password").val(switchData.credential.password);
+                    this.find(".switchIp").val(_switchData.ip);
+                    this.find(".username").val(_switchData.credential.username);
+                    this.find(".password").val(_switchData.credential.password);
                 }
+            }
+            if (_switchData && _switchData.status) {
+                this.setSwitchStatus(_switchData.status.status, _switchData.status.message);
+            } else {
+                this.setSwitchStatus(0, "none");
+            }
+            if (_switchData && _switchData.id) {
+                this.setSwitchId(_switchData.id);
+            } else {
+                this.setSwitchId(0);
             }
         },
 
         findServers: function() {
             this.setSwitchStatus(1, "waiting");
-            var switchData = this.getSwitchData();
-            Ods.Switch.create(switchData, this.proxy('onSwitchCreated'), this.proxy('onSwitchCreateErr'));
+            this.switchData = this.getSwitchData();
+
+            this.options.odsState.switches.push(this.switchData);
+            Ods.Switch.create(this.switchData, this.proxy('onSwitchCreated'), this.proxy('onSwitchCreateErr'));
         },
 
         getSwitchData: function() {
@@ -54,8 +66,8 @@ steal(
             var ip = this.find('.switchIp').val();
 
             if ($("#useSNMP:checked").val()) {
-                snmp_version = $(".switch_row").eq(i).find(".snmp");
-                community = $(".switch_row").eq(i).find(".community");
+                snmp_version = this.find(".snmp");
+                community = this.find(".community");
                 switchData = {
                     "switch": {
                         "ip": ip,
@@ -84,14 +96,29 @@ steal(
         'div.switch-refresh img click': function(el, ev) {
             //remove previously found servers in the data table
             var oldSwitchStatus = this.getSwitchStatus().status;
-            if(oldSwitchStatus == 2) {
-                var switchIp = this.getSwitchData().switch.ip;
+            if (oldSwitchStatus == 2) {
+                var switchIp = this.switchData.switch.ip;
                 this.options.serverControl.removeServersBySwitch(switchIp);
             }
 
             this.setSwitchStatus(1, "waiting");
             this.queryCount = 0;
-            this.checkSwitchState();
+
+            // PUT switches
+            Ods.Switch.update(this.switchId, this.switchData,
+                this.proxy('onSwitchUpdated'),
+                this.proxy('onSwitchUpdateErr'));
+        },
+
+        findSwitchDataFromOdsState : function() {
+            var ip = this.getSwitchData().switch.ip;
+            var switches = this.options.odsState.switches;
+            for (var i = 0; i < switches.length; i++) {
+                if (ip == switches[i].switch.ip) {
+                    return switches[i];
+                }
+            }
+            return null;
         },
 
         /************************************/
@@ -102,13 +129,11 @@ steal(
             steal.dev.log(" *** onSwitchCreated textStatus *** ", textStatus);
             steal.dev.log(" *** onSwitchCreated xhr *** ", xhr);
 
-
             if (xhr.status == 202) { // accepted
-                this.switchId = data.switch.id;
+                this.setSwitchId(data.switch.id);
                 this.checkSwitchState();
             }
         },
-
         /************************************/
         // switch create error callback
         /************************************/
@@ -124,10 +149,10 @@ steal(
                 } else {
                     failedSwitchId = JSON.parse(xhr.responseText).failedSwitch;
                 }
+                this.setSwitchId(failedSwitchId);
                 steal.dev.log(" *** failed Switch Id *** ", failedSwitchId);
                 // PUT switches
-                var switchData = this.getSwitchData();
-                Ods.Switch.update(failedSwitchId, switchData,
+                Ods.Switch.update(failedSwitchId, this.switchData,
                     this.proxy('onSwitchUpdated'),
                     this.proxy('onSwitchUpdateErr'));
             } else {
@@ -154,7 +179,7 @@ steal(
             steal.dev.log(" *** onSwitchUpdated xhr *** ", xhr);
 
             if (xhr.status == 202 || xhr.status == 200) { // accepted or OK
-                this.switchId = data.switch.id;
+                this.setSwitchId(data.switch.id);
                 this.checkSwitchState();
             }
         },
@@ -168,7 +193,6 @@ steal(
             steal.dev.log(" *** onSwitchUpdateErr statusText *** ", statusText);
 
             this.setSwitchStatus(3, "PUT switch API error");
-
             if (xhr.status == 404) { // not found
                 $(".switchesErr").html("Switch update error code: 404");
                 $(".switchesErr").show();
@@ -182,11 +206,11 @@ steal(
         },
 
         checkSwitchState: function() {
-            this.queryCount++;
+            /*this.queryCount++;
             if (this.queryCount > 5) {
                 this.setSwitchStatus(3, "Timed out in connecting to switch");
                 return;
-            }
+            }*/
             Ods.Switch.findOne(this.switchId, this.proxy('onFindOneSwitch'), this.proxy('onFindOneSwitchErr'));
         },
 
@@ -203,13 +227,9 @@ steal(
                     this.element.find('div.right-side').show();
                     this.getServersBySwitch(data.switch.id);
                     this.setSwitchStatus(2, "The switch is under monitoring");
-                } else if (data.switch.state === "unreachable"){
-                    this.element.find('div.right-side').show();
-                    this.getServersBySwitch(data.switch.id);
-                    this.setSwitchStatus(3, data.switch.err_msg);
-                } else if (data.switch.state === "initialized" || data.switch.state === "repulling") {
+                } else if (data.switch.state === "initialized" || data.switch.state === "repolling") {
                     setTimeout(this.proxy('checkSwitchState'), 2000);
-                } else if (data.switch.state === "notsupported") {
+                } else {
                     this.setSwitchStatus(3, data.switch.err_msg);
                 }
             }
@@ -249,7 +269,6 @@ steal(
             steal.dev.log(" *** onFindAllServers textStatus *** ", textStatus);
             steal.dev.log(" *** onFindAllServers xhr *** ", xhr);
 
-            this.setSwitchStatus(2, "The switch is under monitoring");
             this.options.serverControl.onNewMachines(data.machines);
         },
 
@@ -275,6 +294,23 @@ steal(
             }
         },
 
+        getSwitchId: function() {
+            return this.switchId;
+        },
+
+        setSwitchId: function(id) {
+            this.switchId = id;
+            // Update odsState with switch Id.
+            var switchObject = this.findSwitchDataFromOdsState();
+            if (switchObject) {
+               switchObject.switch.id = id;
+            } /*else {
+                var swData = this.switchData;
+                swData.switch.id = id;
+                this.options.odsState.switches.push(swData);
+            }*/
+        },
+
         getSwitchStatus: function() {
             return this.switchStatus;
         },
@@ -282,8 +318,20 @@ steal(
         setSwitchStatus: function(status, message) {
             this.switchStatus.status = status;
             this.switchStatus.message = message;
+            this.switchStatus.id = this.switchId;
             this.displaySwitchStatus(this.switchStatus);
 
+            var switchObject = this.findSwitchDataFromOdsState();
+            if (switchObject) {
+                switchObject.switch.status = {
+                    "status": status,
+                    "message": message
+                };
+            } /*else {
+                var swData = this.switchData;
+                swData.switch.id = this.getSwitchId();
+                this.options.odsState.switches.push(swData);
+            }*/
         },
 
         displaySwitchStatus: function(swStatus) {
@@ -293,7 +341,7 @@ steal(
                     this.find(".ok").hide();
                     this.find(".err").hide();
                     this.find(".refresh").hide();
-                    break;                
+                    break;
                 case 1: //waiting
                     this.find(".waiting").show();
                     this.find(".ok").hide();
