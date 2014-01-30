@@ -87,7 +87,7 @@ steal(
 
             initServerTable: function() {
                 this.dataTable = $('#tb_server_review').dataTable({
-                    "sScrollY": "200px",
+                    "sScrollY": "450px",
                     "bPaginate": false,
                     "bScrollCollapse": true,
                     "aoColumns": [{
@@ -95,19 +95,32 @@ steal(
                     }, {
                         "mData": "mac"
                     }, {
-                        "mData": "server_ip"
+                        "mData": "management_ip"
+                    }, {
+                        "mData": "tenant_ip"
                     }, {
                         "mData": "switch_ip"
                     }, {
                         "mData": "port"
+                    }, {
+                        "mData": "roles",
+                        "mRender": function(data, type, full) {
+                            if (data.length == 0) {
+                                return "auto";
+                            } else if (data.toString().length <=10) {
+                                return data;
+                            } else {
+                                return data.toString().substring(0, 10) + " ...";
+                            }
+                        }
                     }],
                     "aoColumnDefs": [{
                         bSortable: false,
-                        aTargets: [0, 1, 2]
+                        aTargets: [0, 1, 2, 3, 6]
                     }],
                     "aaSorting": [
-                        [3, "asc"],
-                        [4, "asc"]
+                        [4, "asc"],
+                        [5, "asc"]
                     ]
                 });
                 $('.dataTables_info').remove();

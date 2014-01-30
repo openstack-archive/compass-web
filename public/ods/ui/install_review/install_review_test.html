@@ -28,9 +28,11 @@
           id: 10,
           mac: "28:6e:31:47:c8:6c",
           port: "1",
-          server_ip: "10.2.172.9",
+          management_ip: "10.2.172.9",
+          tenant_ip: "192.168.100.101",
           switch_ip: "172.29.8.40",
-          vlan: "1"
+          vlan: "1",
+          roles: ["role1", "role2", "role3", "role4", "role5", "role6", "role7"]
         };
 
         var server2 = {
@@ -39,9 +41,11 @@
           id: 20,
           mac: "28:6e:31:34:fd:28",
           port: "2",
-          server_ip: "10.2.172.9",
+          management_ip: "10.2.172.10",
+          tenant_ip: "192.168.100.102",
           switch_ip: "172.29.8.40",
-          vlan: "2"
+          vlan: "2",
+          roles: ["role2"]
         };
 
         if (config["172.29.8.40"] == undefined) {

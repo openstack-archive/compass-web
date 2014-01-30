@@ -217,7 +217,7 @@ steal(
         },
 
         'getSelectedServers': function() {
-            console.log("displayNodes ", this.displayNodes);
+            this.dataTable.fnFilter('');
             var selectedServers = [];
 
             this.options.odsState.servers = [];

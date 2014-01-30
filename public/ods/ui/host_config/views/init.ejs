@@ -5,18 +5,22 @@
 <div class="rounded" style="padding-top: 10; padding-bottom: 5px">
   <div class="float_left">Switch IP</div>
   <div class="float_right">
-    <a href="#" id="auto_fill" style="padding-right:20px">Auto-fill values</a>
-    <a href="#">Clear</a>
+    <a href="javascript: void(0)" id="auto_fill" style="padding-right:20px">Auto-fill values</a>
+    <a id="clear-hostconfig" href="javascript: void(0)">Clear</a>
   </div>
   <div class="clear"> </div>
   <div id="dialog-confirm" title="Auto fill values">
     <p>
-      Host name pattern:
-      <select id="pattern">
-        <option>Switch IP</option>
-        <option>Switch alias</option>
-        <option>Host</option>
-      </select>
+      <div class="float_left" id="test">Host name pattern:</div>
+      <div class="float_left">
+        <select id="pattern">
+          <option value="Host">Host</option>
+          <option value="Switch IP">Switch IP</option>
+          <option value="Switch alias">Switch alias</option>
+          <option value="Custom">Custom</option>
+        </select><br>
+        <input id="custom-pattern" class="rounded non-empty-value" style="display:none; margin-top:10px; width:255px">
+      </div>
       <span class="pattern-tip ui-icon ui-icon-info" style="float: right; margin: 6px 19px 4px 7px;" data-geo="info-ico">
     </p>
   </div>
@@ -31,7 +35,8 @@
             <tr>
               <th>Port</th>
               <th>Host name</th>
-              <th>IP address</th>
+              <th>Management IP</th>
+              <th>Tenant IP</th>
               <th>Roles</th>
             </tr>
           </thead>

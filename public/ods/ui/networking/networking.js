@@ -137,9 +137,24 @@ steal(
 
             // verify IP range
             if (!$(".ipaddress").hasClass("error") && this.nicErr == 0) {
-                this.verifyIpRange(mgt_ipstart, mgt_ipend, this.options.odsState.servers.length);
-                if (!this.ipRangeValid) {
+                var mgtIpRangeValid = this.verifyIpRange(mgt_ipstart, mgt_ipend, this.options.odsState.servers.length);
+                var tenantIpRangeValid = this.verifyIpRange(tenant_ipstart, tenant_ipend, this.options.odsState.servers.length);
+
+                var mindex = mgt_ipstart.lastIndexOf('.') + 1;
+                var mgtIpPrefix = mgt_ipstart.substring(0, mindex);
+                var mgtIpStartLastDigit = mgt_ipstart.substring(mindex);
+                var mgtIpEndLastDigit = mgt_ipend.substring(mindex);
+
+                var tindex = tenant_ipstart.lastIndexOf('.') + 1;
+                var tenantIpPrefix = tenant_ipstart.substring(0, tindex);
+                var tenantIpStartLastDigit = tenant_ipstart.substring(tindex);
+                var tenantIpEndLastDigit = tenant_ipend.substring(tindex);
+
+
+                if (!mgtIpRangeValid) {
                     alert("The management IP range is not valid.");
+                } else if (!tenantIpRangeValid) {
+                    alert("The tenant IP range is not valid.");
                 } else {
                     // config server ip
                     var server_count = this.options.odsState.servers.length;
@@ -181,7 +196,8 @@ steal(
                     for (var key in serverData) {
                         var servers = serverData[key];
                         for (var i = 0; i < servers.length; i++) {
-                            serverData[key][i]['server_ip'] = this.startPrefix + (parseInt(this.startLastDigit) + j);
+                            serverData[key][i]['management_ip'] = mgtIpPrefix + (parseInt(mgtIpStartLastDigit) + j);
+                            serverData[key][i]['tenant_ip'] = tenantIpPrefix + (parseInt(tenantIpStartLastDigit) + j);
                             j++;
                         }
                     }
@@ -355,20 +371,18 @@ steal(
         },
 
         verifyIpRange: function(start, end, minCount) {
-            this.ipRangeValid = false;
-
             var rindex = start.lastIndexOf('.') + 1;
-            this.startPrefix = start.substring(0, rindex);
-            this.endPrefix = end.substring(0, rindex);
-            this.startLastDigit = start.substring(rindex);
-            this.endLastDigit = end.substring(rindex);
+            var startPrefix = start.substring(0, rindex);
+            var endPrefix = end.substring(0, rindex);
+            var startLastDigit = start.substring(rindex);
+            var endLastDigit = end.substring(rindex);
 
-            if (this.startPrefix != this.endPrefix) {
-                this.ipRangeValid = false;
-            } else if (parseInt(this.endLastDigit) - parseInt(this.startLastDigit) < minCount) {
-                this.ipRangeValid = false;
+            if (startPrefix != endPrefix) {
+                return false;
+            } else if (parseInt(endLastDigit) - parseInt(startLastDigit) < minCount) {
+                return false;
             } else {
-                this.ipRangeValid = true;
+                return true;
             }
         },
 
