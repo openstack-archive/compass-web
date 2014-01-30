@@ -17,17 +17,26 @@ steal(
         init: function() {
             this.element.html(this.view('init'));
 
-            $("#clear").click(function() {
-                $(".config_hostname input").val("");
-            });
-
             var self = this;
+
+            $("#pattern").change(function() {
+                var pattern = $("#pattern").val();
+                if (pattern == "Switch IP") {
+                    $("#custom-pattern").hide();
+                } else if (pattern == "Switch alias") {
+                    $("#custom-pattern").hide();
+                } else if (pattern == "Host") {
+                    $("#custom-pattern").hide();
+                } else if (pattern == "Custom") {
+                    $("#custom-pattern").show();
+                }
+            });
 
             $("#dialog-confirm").dialog({
                 autoOpen: false,
                 resizable: false,
                 height: 200,
-                width: 400,
+                width: 500,
                 modal: true,
                 buttons: {
                     "Fill values": function() {
@@ -38,6 +47,8 @@ steal(
                             self.fillHostnameBySwitchAlias();
                         } else if (pattern == "Host") {
                             self.fillHostnameByServer();
+                        } else if (pattern == "Custom") {
+                            self.fillHostnameByCustomStr();
                         }
 
                         $(this).dialog("close");
@@ -48,12 +59,25 @@ steal(
                 }
             });
 
+            $("#pattern").bind("default.click", function(ev) {
+                alert("change");
+            });
+
             $(".pattern-tip").tooltip({
                 items: "[data-geo], [title]",
                 content: function() {
                     var element = $(this);
                     if (element.is("[data-geo]")) {
-                        return "<div><strong>Switch IP: </strong>" + "Use the IP address and port for the switch to which the host is attached </div>" + "<div><strong>Switch alias: </strong>Use the switch alias for the switch and port to which the host is attached</div>" + "<div><strong>Server: </strong>Auto-increment integer value based on the last generated value</div>";
+                        return "<div><strong>Switch IP: </strong>"
+                        + "Use the IP address and port for the switch to which the host is attached </div>"
+                        + "<div><strong>Switch alias: </strong>"
+                        + "Use the switch alias for the switch and port to which the host is attached</div>"
+                        + "<div><strong>Server: </strong>"
+                        + "Auto-increment integer value based on the last generated value</div>"
+                        + "<div><strong>Custom: </strong>"
+                        + "Pre-defined patterns include {switchIp}, {port}, {d.1}, {d.2}, {d.3}, {d.4}, "
+                        + "{mgtIpPart1}, {mgtIpPart2}, {mgtIpPart3}, {mgtIpPart4}, "
+                        + "{tntIpPart1}, {tntIpPart2}, {tntIpPart3}, {tntIpPart4}</div>";
                     }
                 }
             });
@@ -68,6 +92,12 @@ steal(
             Ods.Adapter.getRoles(this.options.odsState.adapter_id, this.proxy('onGetRoles'), this.proxy('onGetRolesErr'));
 
             this.server_count = this.options.odsState.servers.length;
+        },
+
+        '#clear-hostconfig click': function(el, ev) {
+            ev.preventDefault();
+            $(".server-panels input").val("");
+            $(".server-panels select").multipleSelect("uncheckAll");
         },
 
         onGetRoles: function(data, textStatus, xhr) {
@@ -107,13 +137,11 @@ steal(
 
         fillHostnameBySwitchIp: function() {
             var serverData = this.options.odsState.servers_config;
-            this.server_count = 0;
             for (var key in serverData) {
                 var servers = serverData[key];
                 for (var i = 0; i < servers.length; i++) {
                     servers[i]['hostname'] = key.replace(/\./g, "-") + '-p' + servers[i].port;
                     serverData[key][i]['hostname'] = servers[i]['hostname'];
-                    this.server_count++;
                 }
             }
             this.options.odsState.servers_config = serverData;
@@ -123,14 +151,12 @@ steal(
         fillHostnameBySwitchAlias: function() {
             var serverData = this.options.odsState.servers_config;
             var key_index = 1;
-            this.server_count = 0;
             for (var key in serverData) {
                 var servers = serverData[key];
                 for (var i = 0; i < servers.length; i++) {
                     servers[i]['hostname'] = "switch" + key_index + '-p' + servers[i].port;
                 }
                 key_index++;
-                this.server_count++;
             }
             this.options.odsState.servers_config = serverData;
             this.tabSelected($(".tab_nav_active"));
@@ -139,13 +165,112 @@ steal(
         fillHostnameByServer: function() {
             var serverData = this.options.odsState.servers_config;
             var server_index = 1;
-            this.server_count = 0;
             for (var key in serverData) {
                 var servers = serverData[key];
                 for (var i = 0; i < servers.length; i++) {
                     servers[i]['hostname'] = "server" + server_index;
                     server_index++;
-                    this.server_count++;
+                }
+            }
+            this.options.odsState.servers_config = serverData;
+            this.tabSelected($(".tab_nav_active"));
+        },
+
+        fillHostnameByCustomStr: function() {
+            var preDefinedPatterns = ["{switchIp}", "{port}",
+                "{d.1}", "{d.2}", "{d.3}", "{d.4}",
+                "{mgtIpPart1}", "{mgtIpPart2}", "{mgtIpPart3}", "{mgtIpPart4}",
+                "{tntIpPart1}", "{tntIpPart2}", "{tntIpPart3}", "{tntIpPart4}"
+            ];
+            var customStr = $("#custom-pattern").val();
+            var serverData = this.options.odsState.servers_config;
+            var server_index = 1;
+            var customHostname = "";
+
+            for (var key in serverData) {
+                var servers = serverData[key];
+                for (var i = 0; i < servers.length; i++) {
+                    customStr = $("#custom-pattern").val();
+                    for (var patternIndex = 0; patternIndex < preDefinedPatterns.length; patternIndex++) {
+                        if (customStr.indexOf(preDefinedPatterns[patternIndex]) != -1) {
+                            switch (patternIndex) {
+                                case 0: //{switchIp}
+                                    customHostname = customStr.replace("{switchIp}", key.replace(/\./g, "-"));
+                                    break;
+                                case 1: //{port}
+                                    customHostname = customStr.replace("{port}", servers[i].port);
+                                    break;
+                                case 2: //{d.1}
+                                    customHostname = customStr.replace("{d.1}", server_index);
+                                    break;
+                                case 3: //{d.2}
+                                    if (server_index < 10) {
+                                        customHostname = customStr.replace("{d.2}", "0" + server_index);
+                                    } else {
+                                        customHostname = customStr.replace("{d.2}", server_index);
+                                    }
+                                    break;
+                                case 4: //{d.3}
+                                    if (server_index < 10) {
+                                        customHostname = customStr.replace("{d.3}", "00" + server_index);
+                                    } else if (server_index < 100) {
+                                        customHostname = customStr.replace("{d.3}", "0" + server_index);
+                                    } else {
+                                        customHostname = customStr.replace("{d.3}", server_index);
+                                    }
+                                    break;
+                                case 5: //{d.4}
+                                    if (server_index < 10) {
+                                        customHostname = customStr.replace("{d.4}", "000" + server_index);
+                                    } else if (server_index < 100) {
+                                        customHostname = customStr.replace("{d.4}", "00" + server_index);
+                                    } else if (server_index < 1000) {
+                                        customHostname = customStr.replace("{d.4}", "0" + server_index);
+                                    } else {
+                                        customHostname = customStr.replace("{d.4}", server_index);
+                                    }
+                                    break;
+                                case 6: //{mgtIpPart1}
+                                    var mgtIpPart1 = servers[i].management_ip.split(".")[0];
+                                    customHostname = customStr.replace("{mgtIpPart1}", mgtIpPart1);
+                                    break;
+                                case 7: //{mgtIpPart2}
+                                    var mgtIpPart2 = servers[i].management_ip.split(".")[1];
+                                    customHostname = customStr.replace("{mgtIpPart2}", mgtIpPart2);
+                                    break;
+                                case 8: //{mgtIpPart3}
+                                    var mgtIpPart3 = servers[i].management_ip.split(".")[2];
+                                    customHostname = customStr.replace("{mgtIpPart3}", mgtIpPart3);
+                                    break;
+                                case 9: //{mgtIpPart4}
+                                    var mgtIpPart4 = servers[i].management_ip.split(".")[3];
+                                    customHostname = customStr.replace("{mgtIpPart4}", mgtIpPart4);
+                                    break;
+                                case 10: //{tntIpPart1}
+                                    var tntIpPart1 = servers[i].tenant_ip.split(".")[0];
+                                    customHostname = customStr.replace("{tntIpPart1}", tntIpPart1);
+                                    break;
+                                case 11: //{tntIpPart2}
+                                    var tntIpPart2 = servers[i].tenant_ip.split(".")[1];
+                                    customHostname = customStr.replace("{tntIpPart2}", tntIpPart2);
+                                    break;
+                                case 12: //{tntIpPart3}
+                                    var tntIpPart3 = servers[i].tenant_ip.split(".")[2];
+                                    customHostname = customStr.replace("{tntIpPart3}", tntIpPart3);
+                                    break;
+                                case 13: //{tntIpPart4}
+                                    var tntIpPart4 = servers[i].tenant_ip.split(".")[3];
+                                    customHostname = customStr.replace("{tntIpPart4}", tntIpPart4);
+                                    break;
+                                default:
+                                    customHostname = "";
+                                    break;
+                            }
+                            customStr = customHostname;
+                        } // end of if
+                    } //end of preDefinedPatterns for loop
+                    servers[i]['hostname'] = customHostname;
+                    server_index++;
                 }
             }
             this.options.odsState.servers_config = serverData;
@@ -157,7 +282,7 @@ steal(
             var count = 0;
             for (var key in serverData) {
                 $(".switch-navs").append('<div data-switchIp="' + key + '" class="tab_nav">' + key + '</div><br>');
-                count ++;
+                count++;
             }
             var panel_minheight = $(".tab_nav").height() * count + 50;
             $(".tab_panel_active").css("min-height", panel_minheight);
@@ -191,7 +316,8 @@ steal(
             var currentSwitch = $(".tab_nav_active").data('switchip');
             for (var i = 0; i < this.options.odsState.servers_config[currentSwitch].length; i++) {
                 this.options.odsState.servers_config[currentSwitch][i].hostname = $("#hostconfig-table tbody tr").eq(i).find(".hostname").val();
-                this.options.odsState.servers_config[currentSwitch][i].server_ip = $("#hostconfig-table tbody tr").eq(i).find(".serverIp").val();
+                this.options.odsState.servers_config[currentSwitch][i].management_ip = $("#hostconfig-table tbody tr").eq(i).find(".managenetIp").val();
+                this.options.odsState.servers_config[currentSwitch][i].tenant_ip = $("#hostconfig-table tbody tr").eq(i).find(".tenantIp").val();
                 var roles = $("#hostconfig-table tbody tr").eq(i).find(".roles").val();
                 if(!roles) {
                     roles = [];
@@ -251,7 +377,9 @@ steal(
                     //var server_id = servers[i]['server_id'];
                     var clusterhost_id = servers[i]['clusterhost_id'];
                     var hostname = servers[i]['hostname'];
-                    var server_ip = servers[i]['server_ip'];
+                    //var server_ip = servers[i]['server_ip'];
+                    var management_ip = servers[i]['management_ip'];
+                    var tenant_ip = servers[i]['tenant_ip'];
                     var roles = servers[i]['roles'];
 
                     var clusterhostConfigData = {
@@ -259,7 +387,10 @@ steal(
                         "networking": {
                             "interfaces": {
                                 "management": {
-                                    "ip": server_ip
+                                    "ip": management_ip
+                                },
+                                "tenant": {
+                                    "ip": tenant_ip
                                 }
                             }
                         },
