@@ -17,16 +17,22 @@ steal(
     function($) {
         $.Controller('Ods.Ui.install_review', {}, {
             init: function() {
-                this.element.html(this.view('init'));
-
                 this.totalProgress = 0;
+                if(this.options.installStep == "progress") {
+                    this.element.html(this.view('pending_clusters'));
+                    Ods.Cluster.get("installing",
+                        this.proxy('onGetInstallingCluster'),
+                        this.proxy('onGetInstallingClusterErr'));
 
-                this.initServerTable();
+                } else {
+                    this.element.html(this.view('init'));
 
-                this.onSecurityData(this.options.odsState.security);
-                this.onNetworkingData(this.options.odsState.networking);
-                this.onLogicPartitionData(this.options.odsState.partition);
+                    this.initServerTable();
 
+                    this.onSecurityData(this.options.odsState.security);
+                    this.onNetworkingData(this.options.odsState.networking);
+                    this.onLogicPartitionData(this.options.odsState.partition);                    
+                }
             },
 
             '.review-back click': function(el, ev) {
@@ -137,7 +143,7 @@ steal(
                 }
             },
 
-            'a.btn_continue click': function(el, ev) {
+            '#begin-deploy click': function(el, ev) {
                 ev.preventDefault();
                 $("#continuing").css("opacity", 1);
 
@@ -165,6 +171,70 @@ steal(
                 steal.dev.log(" *** onTriggerDeployErr xhr *** ", xhr);
                 steal.dev.log(" *** onTriggerDeployErr status *** ", status);
                 steal.dev.log(" *** onTriggerDeployErr statusText *** ", statusText);
+            },
+
+            '#retrieve-progress click': function(el, ev) {
+                var selectedCluster = $("input[name='clusterRadio']:checked");
+                if (!selectedCluster.val()) {
+                    alert("Please select a cluster");
+                } else {
+                    this.options.odsState.cluster_id = selectedCluster.data('hostid');
+                    this.element.html(this.view('install'));
+                    $("#install_tabs").tabs();
+
+                    //get clusterhosts by clustername
+                    Ods.ClusterHost.get(selectedCluster.val(),
+                        this.proxy('onGetClusterHosts'),
+                        this.proxy('onGetClusterHostsErr'));
+                }
+            },
+
+            onGetInstallingCluster: function(data, textStatus, xhr) {
+                steal.dev.log(" *** onGetInstallingCluster data *** ", data);
+                steal.dev.log(" *** onGetInstallingCluster textStatus *** ", textStatus);
+                steal.dev.log(" *** onGetInstallingCluster xhr *** ", xhr);
+                if (xhr.status == 200) {
+                    for (index in data.clusters) {
+                        $("table.cluster tbody").append(this.view('cluster_row', data.clusters[index]));
+                    }
+                }
+            },
+
+            onGetInstallingClusterErr: function(xhr, status, statusText) {
+                steal.dev.log(" *** onGetInstallingClusterErr xhr *** ", xhr);
+                steal.dev.log(" *** onGetInstallingClusterErr status *** ", status);
+                steal.dev.log(" *** onGetInstallingClusterErr statusText *** ", statusText);
+            },
+
+            onGetClusterHosts: function(data, textStatus, xhr) {
+                steal.dev.log(" *** onGetClusterHosts data *** ", data);
+                steal.dev.log(" *** onGetClusterHosts textStatus *** ", textStatus);
+                steal.dev.log(" *** onGetClusterHosts xhr *** ", xhr);
+                if (xhr.status == 200) {
+                    var serverConfig = [];
+                    for (index in data.cluster_hosts) {
+                        var server = {
+                            "hostname": data.cluster_hosts[index].hostname,
+                            "clusterhost_id": data.cluster_hosts[index].id,
+                            "switch_ip": data.cluster_hosts[index].switch_ip
+                        };
+                        var switchIp = server.switch_ip;
+                        if (serverConfig[switchIp] == undefined) {
+                            serverConfig[switchIp] = [server];
+                        } else {
+                            serverConfig[switchIp].push(server);
+                        }
+                    }
+                    this.options.odsState.servers_config = serverConfig;
+
+                    this.initProgressbars();
+                }
+            },
+
+            onGetClusterHostsErr: function(xhr, status, statusText) {
+                steal.dev.log(" *** onGetClusterHostsErr xhr *** ", xhr);
+                steal.dev.log(" *** onGetClusterHostsErr status *** ", status);
+                steal.dev.log(" *** onGetClusterHostsErr statusText *** ", statusText);
             },
 
             initProgressbars: function() {

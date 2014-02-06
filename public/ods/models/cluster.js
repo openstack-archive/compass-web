@@ -30,7 +30,18 @@ steal("jquery/model", "jquery/lang/json",
                     url: '/api/clusters/' + id + '/' + resource,
                     type: 'put',
                     dataType: 'json',
-                    data: $.toJSON(params),
+                    data: params,
+                    contentType: "application/json",
+                    success: success,
+                    error: error
+                });
+            },
+
+            get: function(state, success, error) {
+                $.ajax({
+                    url: '/api/clusters?state=' + state,
+                    type: 'get',
+                    dataType: 'json',
                     contentType: "application/json",
                     success: success,
                     error: error
@@ -65,6 +76,15 @@ steal("jquery/model", "jquery/lang/json",
                     url: '/api/clusterhosts/' + id + '/progress',
                     type: 'GET',
                     dataType: 'json',
+                    success: success,
+                    error: error
+                });
+            },
+
+            get: function(clustername, success, error) {
+                $.ajax({
+                    url: '/api/clusterhosts?clustername=' + clustername,
+                    type: 'GET',
                     success: success,
                     error: error
                 });

@@ -26,9 +26,6 @@ steal(
 
         $('#nav').ods_ui_nav({"mainBox" : mainBox, "odsState" : state});
 
-        mainBox.ods_ui_welcome({ nav: $('#nav').controller(), "mainBox" : mainBox, "odsState" : state });
-
-
         if (!window.location.host) {
             $.fixture.on = true;
             state.switches = config.switches;
@@ -55,9 +52,22 @@ steal(
                 state.security = config.security;
                 state.networking = config.networking;
             } else if (result.config == "demo") {
-	        state.switches = config_demo.switches;
+                state.switches = config_demo.switches;
                 state.security = config_demo.security;
                 state.networking = config_demo.networking;
-	    }
+            }
         }
+
+        if (window.location.hash == "#progress") {
+            mainBox.ods_ui_install_review({
+                nav: $('#nav').controller(),
+                "mainBox": mainBox,
+                "odsState": state,
+                "installStep": "progress"
+            });
+        } else {
+            mainBox.ods_ui_welcome({ nav: $('#nav').controller(), "mainBox" : mainBox, "odsState" : state });
+        }
+
+
     })

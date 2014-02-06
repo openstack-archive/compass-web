@@ -62,3 +62,7 @@ table.display thead th {
   background: #C3C7DD;
 
 }
+
+table.cluster {
+  text-align: center;
+}

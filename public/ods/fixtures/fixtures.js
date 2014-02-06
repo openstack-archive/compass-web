@@ -239,6 +239,35 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         return returnData;
     });
 
+    $.fixture('GET /api/clusters?state={state}', function(original, settings, headers) {
+        var returnData = {
+            "status": "OK",
+            "clusters": [{
+                "id": 1,
+                "clusterName": "cluster_01",
+                "link": {
+                    "href": "/clusters/1",
+                    "rel": "self"
+                }
+            }, {
+                "id": 2,
+                "clusterName": "cluster_02",
+                "link": {
+                    "href": "/clusters/2",
+                    "rel": "self"
+                }
+            }, {
+                "id": 3,
+                "clusterName": "cluster_03",
+                "link": {
+                    "href": "/clusters/3",
+                    "rel": "self"
+                }
+            }]
+        };
+        return returnData;
+    });
+
 
     $.fixture('POST /api/clusters/{id}/action',  function(original, settings, headers) { 
         var hostIds = JSON.parse(original.data).addHosts;
@@ -389,6 +418,41 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         };
 
         return res;
+    });
+
+    $.fixture('GET /api/clusterhosts?clustername={clustername}', function(original, settings, headers) {
+        var returnData = {
+            "status": "OK",
+            "cluster_hosts": [{
+                "hostname": "host_01",
+                "id": 100,
+                "switch_ip": "172.29.8.40",
+                "mutable": true,
+                "link": {
+                    "href": "/clusterhosts/1",
+                    "rel": "self"
+                }
+            }, {
+                "hostname": "host_02",
+                "id": 200,
+                "switch_ip": "172.29.8.40",
+                "mutable": true,
+                "link": {
+                    "href": "/clusterhosts/2",
+                    "rel": "self"
+                }
+            }, {
+                "hostname": "host_03",
+                "id": 300,
+                "switch_ip": "172.29.8.41",
+                "mutable": true,
+                "link": {
+                    "href": "/clusterhosts/3",
+                    "rel": "self"
+                }
+            }]
+        };
+        return returnData;
     });
 
     $.fixture('GET /api/clusters/{id}/progress', function(original, settings, headers) {
