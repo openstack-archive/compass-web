@@ -26,8 +26,8 @@
           id: 10,
           mac: "28:6e:31:47:c8:6c",
           port: "1",
-          management_ip: "10.2.172.9",
-          tenant_ip: "192.168.100.100",
+          management_ip: "",
+          tenant_ip: "",
           switch_ip: "172.29.8.40",
           vlan: "1",
           roles: []
@@ -39,8 +39,8 @@
           id: 10,
           mac: "28:6e:31:34:fd:28",
           port: "2",
-          management_ip: "10.2.172.10",
-          tenant_ip: "192.168.100.101",
+          management_ip: "",
+          tenant_ip: "",
           switch_ip: "172.29.8.40",
           vlan: "2",
           roles: []
@@ -72,6 +72,42 @@
 
         state.servers_config = config;
         state.cluster_id = 1;
+        state.networking = {
+          "interfaces": {
+            "management": {
+              "ip_start": "255.255.250.1",
+              "ip_end": "10.10.10.255",
+              "netmask": "255.255.255.0",
+              "gateway": "10.10.10.1",
+              "nic": "eth0",
+              "promisc": 0
+            },
+            "tenant": {
+              "ip_start": "192.168.100.100",
+              "ip_end": "192.168.100.200",
+              "netmask": "255.255.255.0",
+              "gateway": "192.168.100.1",
+              "nic": "eth0",
+              "promisc": 0
+            },
+            "public": {
+              "ip_start": "172.29.3.100",
+              "ip_end": "172.29.3.200",
+              "netmask": "255.255.255.0",
+              "gateway": "172.29.3.1",
+              "nic": "eth1",
+              "promisc": 1
+            },
+            "storage": {
+              "ip_start": "172.16.128.10",
+              "ip_end": "172.16.128.200",
+              "netmask": "255.255.255.0",
+              "gateway": "172.16.128.1",
+              "nic": "eth0",
+              "promisc": 0
+            }
+          }
+        };
 
         $('#host_config-test').ods_ui_host_config({ "odsState" : state });
 

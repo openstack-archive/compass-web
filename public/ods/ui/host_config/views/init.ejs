@@ -5,26 +5,73 @@
 <div class="rounded" style="padding-top: 10; padding-bottom: 5px">
   <div class="float_left">Switch IP</div>
   <div class="float_right">
-    <a href="javascript: void(0)" id="auto_fill" style="padding-right:20px">Auto-fill values</a>
+    <a href="javascript: void(0)" id="auto_fill" style="padding-right:20px">Fill values</a>
     <a id="clear-hostconfig" href="javascript: void(0)">Clear</a>
   </div>
   <div class="clear"> </div>
-  <div id="dialog-confirm" title="Auto fill values">
-    <p>
-      <div class="float_left" id="test">Host name pattern:</div>
-      <div class="float_left">
-        <select id="pattern">
-          <option value="Host">Host</option>
-          <option value="Switch IP">Switch IP</option>
-          <option value="Switch alias">Switch alias</option>
-          <option value="Custom">Custom</option>
-        </select><br>
-        <input id="custom-pattern" class="rounded non-empty-value" style="display:none; margin-top:10px; width:255px">
+  <div id="dialog-confirm" title="Fill values">
+
+    <div>
+      <input type="radio" name="fillType" value="autofill" checked> <span class="radioText">Auto fill</span>
+      <div id="autofill-panel">
+        <div class="float_left">
+          <p>Management IP</p>
+          <p>Tenant IP</p>
+          <p>Host name</p>
+        </div>
+        <div class="float_left" style="padding-left:10px">
+          <p>
+            <select id="management-auto">
+              <option value="1">Increase by 1</option>
+              <option value="2">Increase by 2</option>
+              <option value="3">Increase by 3</option>
+              <option value="4">Increase by 4</option>
+              <option value="5">Increase by 5</option>
+            </select>
+          </p>
+          <p>
+            <select id="tenant-auto">
+              <option value="1">Increase by 1</option>
+              <option value="2">Increase by 2</option>
+              <option value="3">Increase by 3</option>
+              <option value="4">Increase by 4</option>
+              <option value="5">Increase by 5</option>
+            </select>
+          </p>
+          <p>
+            <select id="hostname-auto">
+              <option value="Host">Host</option>
+              <option value="Switch IP">Switch IP</option>
+              <option value="Switch alias">Switch alias</option>
+            </select>
+          </p>
+        </div>
       </div>
-      <span class="pattern-tip ui-icon ui-icon-info" style="float: right; margin: 6px 19px 4px 7px;" data-geo="info-ico">
-    </p>
+      <div class="clear"></div>
+      <input type="radio" name="fillType" value="customize"> <span class="radioText">Customize</span>
+      <div id="customize-panel" style="display:none">
+        <div class="float_left">
+          <p>Management IP</p>
+          <p>Tenant IP</p>
+          <p>Host name</p>
+        </div>
+        <div class="float_left" style="padding-left:10px">
+          <p>
+            <input id="management-customize" class="rounded" value="[{port}*2]" placeholder="eg: [{port}*2]">
+          </p>
+          <p>
+            <input id="tenant-customize" class="rounded" value="[{port}*2+1]" placeholder="eg: [{port}*2+1]">
+          </p>
+          <p>
+            <input id="hostname-customize" class="rounded" value="sv-[{mgtIpPart4}*2+3].3" placeholder="eg: sv-[{mgtIpPart4}*2+3].3">
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--<span class="pattern-tip ui-icon ui-icon-info" style="float: right; margin: 6px 19px 4px 7px;" data-geo="info-ico">-->
   </div>
-  <div class="">
+
+  <div>
     <div class="float_left switch-navs" style="padding-top: 20px;">
 
     </div>

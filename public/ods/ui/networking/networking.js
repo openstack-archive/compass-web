@@ -139,7 +139,7 @@ steal(
             if (!$(".ipaddress").hasClass("error") && this.nicErr == 0) {
                 var mgtIpRangeValid = this.verifyIpRange(mgt_ipstart, mgt_ipend, this.options.odsState.servers.length);
                 var tenantIpRangeValid = this.verifyIpRange(tenant_ipstart, tenant_ipend, this.options.odsState.servers.length);
-
+/*
                 var mindex = mgt_ipstart.lastIndexOf('.') + 1;
                 var mgtIpPrefix = mgt_ipstart.substring(0, mindex);
                 var mgtIpStartLastDigit = mgt_ipstart.substring(mindex);
@@ -149,7 +149,7 @@ steal(
                 var tenantIpPrefix = tenant_ipstart.substring(0, tindex);
                 var tenantIpStartLastDigit = tenant_ipstart.substring(tindex);
                 var tenantIpEndLastDigit = tenant_ipend.substring(tindex);
-
+*/
 
                 if (!mgtIpRangeValid) {
                     alert("The management IP range is not valid.");
@@ -178,6 +178,8 @@ steal(
                         if (!isConfiged) {
                             server['hostname'] = '';
                             server['roles'] = [];
+                            server['management_ip'] = '';
+                            server['tenant_ip'] = '';
                         }
 
                         //server['server_ip'] = this.startPrefix + (parseInt(this.startLastDigit) + i);
@@ -190,7 +192,7 @@ steal(
                         }
                     }
                     this.options.odsState.servers_config = this.serverData;
-
+/*
                     var j = 0;
                     var serverData = this.options.odsState.servers_config;
                     for (var key in serverData) {
@@ -201,7 +203,7 @@ steal(
                             j++;
                         }
                     }
-
+*/
                     var networkingData = {
                         "networking": {
                             "interfaces": {

@@ -33,25 +33,54 @@ steal(
                 }
             });
 
+            $("input:radio[name='fillType']").change(function() {
+                var fillType = $("input:radio[name='fillType']:checked").val();
+                if(fillType == "autofill") {
+                    $("#autofill-panel").show(500);
+                    $("#customize-panel").hide(500);
+                } else {
+                    $("#autofill-panel").hide(500);
+                    $("#customize-panel").show(500);
+                }
+            });
+
             $("#dialog-confirm").dialog({
                 autoOpen: false,
                 resizable: false,
-                height: 200,
-                width: 500,
+                height: 350,
+                width: 550,
                 modal: true,
                 buttons: {
                     "Fill values": function() {
-                        var pattern = $("#pattern").val();
-                        if (pattern == "Switch IP") {
-                            self.fillHostnameBySwitchIp();
-                        } else if (pattern == "Switch alias") {
-                            self.fillHostnameBySwitchAlias();
-                        } else if (pattern == "Host") {
-                            self.fillHostnameByServer();
-                        } else if (pattern == "Custom") {
-                            self.fillHostnameByCustomStr();
+                        var fillType = $("input:radio[name='fillType']:checked").val();
+                        
+                        if(fillType == "autofill") {
+                            var management_auto = $("#management-auto").val();
+                            var tenant_auto = $("#tenant-auto").val();
+                            var hostname_auto = $("#hostname-auto").val();
+
+                            if (hostname_auto == "Switch IP") {
+                                self.fillHostnameBySwitchIp();
+                            } else if (hostname_auto == "Switch alias") {
+                                self.fillHostnameBySwitchAlias();
+                            } else if (hostname_auto == "Host") {
+                                self.fillHostnameByServer();
+                            }
+
+                            self.fillMgtIpBySequence(parseInt(management_auto));
+                            self.fillTntIpBySequence(parseInt(tenant_auto));
+                        } else { //customize
+                            var management_cust = $("#management-customize").val();
+                            var tenant_cust = $("#tenant-customize").val();
+                            var hostname_cust = $("#hostname-customize").val();
+
+
+                            self.fillMgtIpByCustomStr(management_cust);
+                            self.fillTntIpByCustomStr(tenant_cust);
+                            self.fillHostnameByCustomStr(hostname_cust);
                         }
 
+                        self.tabSelected($(".tab_nav_active"));
                         $(this).dialog("close");
                     },
                     Cancel: function() {
@@ -133,7 +162,6 @@ steal(
                 }
             }
             this.options.odsState.servers_config = serverData;
-            this.tabSelected($(".tab_nav_active"));
         },
 
         fillHostnameBySwitchAlias: function() {
@@ -147,7 +175,6 @@ steal(
                 key_index++;
             }
             this.options.odsState.servers_config = serverData;
-            this.tabSelected($(".tab_nav_active"));
         },
 
         fillHostnameByServer: function() {
@@ -161,108 +188,279 @@ steal(
                 }
             }
             this.options.odsState.servers_config = serverData;
-            this.tabSelected($(".tab_nav_active"));
         },
 
-        fillHostnameByCustomStr: function() {
-            var preDefinedPatterns = ["{switchIp}", "{port}",
-                "{d.1}", "{d.2}", "{d.3}", "{d.4}",
+        fillHostnameByCustomStr: function(customStr) {
+            var preDefinedPatterns = ["{swIpPart1}", "{swIpPart2}", "{swIpPart3}", "{swIpPart4}", "{port}",
                 "{mgtIpPart1}", "{mgtIpPart2}", "{mgtIpPart3}", "{mgtIpPart4}",
                 "{tntIpPart1}", "{tntIpPart2}", "{tntIpPart3}", "{tntIpPart4}"
             ];
-            var customStr = $("#custom-pattern").val();
-            var serverData = this.options.odsState.servers_config;
-            var server_index = 1;
-            var customHostname = "";
+            var swIpPart1 = 0,
+                swIpPart2 = 0,
+                swIpPart3 = 0,
+                swIpPart4 = 0,
+                port = 0,
+                mgtIpPart1 = 0,
+                mgtIpPart2 = 0,
+                mgtIpPart3 = 0,
+                mgtIpPart4 = 0,
+                tntIpPart1 = 0,
+                tntIpPart2 = 0,
+                tntIpPart3 = 0,
+                tntIpPart4 = 0;
+                digitNum = 0,
+                customCalculation = 0;
 
+            var regExp = /\[([^)]+\].(\d+))/;
+            var originalCustomStr = customStr;
+            var replaceStr = "";
+
+            customCalculation = regExp.exec(customStr);
+            if (customCalculation) {
+                replaceStr = customCalculation[0];
+                digitNum = parseInt(customCalculation[2]);
+                customCalculation = customCalculation[1].split("].")[0];
+            } else {
+                regExp = /\[([^)]+)\]/;
+                customCalculation = regExp.exec(customStr);
+                if(customCalculation) {
+                    replaceStr = customCalculation[0];
+                    customCalculation = customCalculation[1];
+                }
+            }
+
+            if (!customCalculation) {
+                alert("Invalid host name customization");
+            } else {
+                customCalculation = customCalculation.replace(preDefinedPatterns[0], "swIpPart1");
+                customCalculation = customCalculation.replace(preDefinedPatterns[1], "swIpPart2");
+                customCalculation = customCalculation.replace(preDefinedPatterns[2], "swIpPart3");
+                customCalculation = customCalculation.replace(preDefinedPatterns[3], "swIpPart4");
+                customCalculation = customCalculation.replace(preDefinedPatterns[4], "port");
+                customCalculation = customCalculation.replace(preDefinedPatterns[5], "mgtIpPart1");
+                customCalculation = customCalculation.replace(preDefinedPatterns[6], "mgtIpPart2");
+                customCalculation = customCalculation.replace(preDefinedPatterns[7], "mgtIpPart3");
+                customCalculation = customCalculation.replace(preDefinedPatterns[8], "mgtIpPart4");
+                customCalculation = customCalculation.replace(preDefinedPatterns[9], "tntIpPart1");
+                customCalculation = customCalculation.replace(preDefinedPatterns[10], "tntIpPart2");
+                customCalculation = customCalculation.replace(preDefinedPatterns[11], "tntIpPartt3");
+                customCalculation = customCalculation.replace(preDefinedPatterns[12], "tntIpPart4");
+
+                var serverData = this.options.odsState.servers_config;
+                var originalCustomCalculation = customCalculation;
+                for (var key in serverData) {
+                    var swIpParts = key.split(".");
+                    swIpPart1 = swIpParts[0];
+                    swIpPart2 = swIpParts[1];
+                    swIpPart3 = swIpParts[2];
+                    swIpPart4 = swIpParts[3];
+
+                    var servers = serverData[key];
+                    for (var i = 0; i < servers.length; i++) {
+                        port = servers[i].port;
+                        var mgtIpParts = servers[i].management_ip.split(".");
+                        mgtIpPart1 = mgtIpParts[0];
+                        mgtIpPart2 = mgtIpParts[1];
+                        mgtIpPart3 = mgtIpParts[2];
+                        mgtIpPart4 = mgtIpParts[3];
+                        var tntIpParts = servers[i].tenant_ip.split(".");
+                        tntIpPart1 = tntIpParts[0];
+                        tntIpPart2 = tntIpParts[1];
+                        tntIpPart3 = tntIpParts[2];
+                        tntIpPart4 = tntIpParts[3];
+
+                        try {
+                            customCalculation = eval(customCalculation);
+                            if(digitNum > 1) {
+                                customCalculation = this.leftPad(customCalculation, digitNum);
+                            }
+                            serverData[key][i]['hostname'] = originalCustomStr.replace(replaceStr, customCalculation);
+                        } catch (err) {
+                            serverData[key][i]['hostname'] = "";
+                        }
+                        customCalculation = originalCustomCalculation;
+                    }
+                }
+                this.options.odsState.servers_config = serverData;
+            }
+        },
+
+        leftPad: function(number, targetLength) {
+            var output = number + '';
+            while (output.length < targetLength) {
+                output = '0' + output;
+            }
+            return output;
+        },
+
+        fillMgtIpBySequence: function(interval) {
+            var mgtIpStart = this.options.odsState.networking.interfaces.management.ip_start;
+            var mgtIpEnd = this.options.odsState.networking.interfaces.management.ip_end;
+
+            var mgtIpStartParts = mgtIpStart.split(".");
+            var mgtIpEndParts = mgtIpEnd.split(".");
+
+            var mgtIpParts = [parseInt(mgtIpStartParts[0]), parseInt(mgtIpStartParts[1]), parseInt(mgtIpStartParts[2]), parseInt(mgtIpStartParts[3])];
+
+            var serverData = this.options.odsState.servers_config;
             for (var key in serverData) {
                 var servers = serverData[key];
                 for (var i = 0; i < servers.length; i++) {
-                    customStr = $("#custom-pattern").val();
-                    for (var patternIndex = 0; patternIndex < preDefinedPatterns.length; patternIndex++) {
-                        if (customStr.indexOf(preDefinedPatterns[patternIndex]) != -1) {
-                            switch (patternIndex) {
-                                case 0: //{switchIp}
-                                    customHostname = customStr.replace("{switchIp}", key.replace(/\./g, "-"));
-                                    break;
-                                case 1: //{port}
-                                    customHostname = customStr.replace("{port}", servers[i].port);
-                                    break;
-                                case 2: //{d.1}
-                                    customHostname = customStr.replace("{d.1}", server_index);
-                                    break;
-                                case 3: //{d.2}
-                                    if (server_index < 10) {
-                                        customHostname = customStr.replace("{d.2}", "0" + server_index);
-                                    } else {
-                                        customHostname = customStr.replace("{d.2}", server_index);
-                                    }
-                                    break;
-                                case 4: //{d.3}
-                                    if (server_index < 10) {
-                                        customHostname = customStr.replace("{d.3}", "00" + server_index);
-                                    } else if (server_index < 100) {
-                                        customHostname = customStr.replace("{d.3}", "0" + server_index);
-                                    } else {
-                                        customHostname = customStr.replace("{d.3}", server_index);
-                                    }
-                                    break;
-                                case 5: //{d.4}
-                                    if (server_index < 10) {
-                                        customHostname = customStr.replace("{d.4}", "000" + server_index);
-                                    } else if (server_index < 100) {
-                                        customHostname = customStr.replace("{d.4}", "00" + server_index);
-                                    } else if (server_index < 1000) {
-                                        customHostname = customStr.replace("{d.4}", "0" + server_index);
-                                    } else {
-                                        customHostname = customStr.replace("{d.4}", server_index);
-                                    }
-                                    break;
-                                case 6: //{mgtIpPart1}
-                                    var mgtIpPart1 = servers[i].management_ip.split(".")[0];
-                                    customHostname = customStr.replace("{mgtIpPart1}", mgtIpPart1);
-                                    break;
-                                case 7: //{mgtIpPart2}
-                                    var mgtIpPart2 = servers[i].management_ip.split(".")[1];
-                                    customHostname = customStr.replace("{mgtIpPart2}", mgtIpPart2);
-                                    break;
-                                case 8: //{mgtIpPart3}
-                                    var mgtIpPart3 = servers[i].management_ip.split(".")[2];
-                                    customHostname = customStr.replace("{mgtIpPart3}", mgtIpPart3);
-                                    break;
-                                case 9: //{mgtIpPart4}
-                                    var mgtIpPart4 = servers[i].management_ip.split(".")[3];
-                                    customHostname = customStr.replace("{mgtIpPart4}", mgtIpPart4);
-                                    break;
-                                case 10: //{tntIpPart1}
-                                    var tntIpPart1 = servers[i].tenant_ip.split(".")[0];
-                                    customHostname = customStr.replace("{tntIpPart1}", tntIpPart1);
-                                    break;
-                                case 11: //{tntIpPart2}
-                                    var tntIpPart2 = servers[i].tenant_ip.split(".")[1];
-                                    customHostname = customStr.replace("{tntIpPart2}", tntIpPart2);
-                                    break;
-                                case 12: //{tntIpPart3}
-                                    var tntIpPart3 = servers[i].tenant_ip.split(".")[2];
-                                    customHostname = customStr.replace("{tntIpPart3}", tntIpPart3);
-                                    break;
-                                case 13: //{tntIpPart4}
-                                    var tntIpPart4 = servers[i].tenant_ip.split(".")[3];
-                                    customHostname = customStr.replace("{tntIpPart4}", tntIpPart4);
-                                    break;
-                                default:
-                                    customHostname = "";
-                                    break;
-                            }
-                            customStr = customHostname;
-                        } // end of if
-                    } //end of preDefinedPatterns for loop
-                    servers[i]['hostname'] = customHostname;
-                    server_index++;
+                    if (mgtIpParts[3] > 255) {
+                        mgtIpParts[3] = mgtIpParts[3] - 256;
+                        mgtIpParts[2]++;
+                    }
+                    if (mgtIpParts[2] > 255) {
+                        mgtIpParts[2] = mgtIpParts[2] - 256;
+                        mgtIpParts[1]++;
+                    }
+                    if (mgtIpParts[1] > 255) {
+                        mgtIpParts[1] = mgtIpParts[1] - 256;
+                        mgtIpParts[0]++;
+                    }
+                    if (mgtIpParts[0] > 255) {
+                        alert("Management IP range is not enough. Please update management IP start and end on Networking page.");
+                        serverData[key][i]['management_ip'] = "";
+                        return;
+                    }
+                    serverData[key][i]['management_ip'] = mgtIpParts[0] + "." + mgtIpParts[1] + "." + mgtIpParts[2] + "." + mgtIpParts[3];
+                    mgtIpParts[3] = mgtIpParts[3] + interval;
                 }
             }
             this.options.odsState.servers_config = serverData;
-            this.tabSelected($(".tab_nav_active"));
+        },
+
+        fillTntIpBySequence: function(interval) {
+            var tntIpStart = this.options.odsState.networking.interfaces.tenant.ip_start;
+            var tntIpEnd = this.options.odsState.networking.interfaces.tenant.ip_end;
+
+            var tntIpStartParts = tntIpStart.split(".");
+            var tntIpEndParts = tntIpEnd.split(".");
+
+            var tntIpParts = [parseInt(tntIpStartParts[0]), parseInt(tntIpStartParts[1]), parseInt(tntIpStartParts[2]), parseInt(tntIpStartParts[3])];
+
+            var serverData = this.options.odsState.servers_config;
+            for (var key in serverData) {
+                var servers = serverData[key];
+                for (var i = 0; i < servers.length; i++) {
+                    if (tntIpParts[3] > 255) {
+                        tntIpParts[3] = tntIpParts[3] - 256;
+                        tntIpParts[2]++;
+                    }
+                    if (tntIpParts[2] > 255) {
+                        tntIpParts[2] = tntIpParts[2] - 256;
+                        tntIpParts[1]++;
+                    }
+                    if (tntIpParts[1] > 255) {
+                        tntIpParts[1] = tntIpParts[1] - 256;
+                        tntIpParts[0]++;
+                    }
+                    if (tntIpParts[0] > 255) {
+                        alert("Tenent IP range is not enough. Please update tenant IP start and end on Networking page.");
+                        serverData[key][i]['management_ip'] = "";
+                        return;
+                    }
+                    serverData[key][i]['tenant_ip'] = tntIpParts[0] + "." + tntIpParts[1] + "." + tntIpParts[2] + "." + tntIpParts[3];
+                    tntIpParts[3] = tntIpParts[3] + interval;
+                }
+            }
+            this.options.odsState.servers_config = serverData;
+        },
+
+        fillMgtIpByCustomStr: function(customStr) {
+            var preDefinedPatterns = ["{swIpPart1}", "{swIpPart2}", "{swIpPart3}", "{swIpPart4}", "{port}"];
+            var swIpPart1 = 0,
+                swIpPart2 = 0,
+                swIpPart3 = 0,
+                swIpPart4 = 0,
+                port = 0;
+            var regExp = /\[([^)]+)\]/;
+            customStr = regExp.exec(customStr);
+            if (!customStr) {
+                alert("Invalid management IP customization");
+            } else {
+                customStr = customStr[1];
+                customStr = customStr.replace(preDefinedPatterns[0], "swIpPart1");
+                customStr = customStr.replace(preDefinedPatterns[1], "swIpPart2");
+                customStr = customStr.replace(preDefinedPatterns[2], "swIpPart3");
+                customStr = customStr.replace(preDefinedPatterns[3], "swIpPart4");
+                customStr = customStr.replace(preDefinedPatterns[4], "port");
+
+                var mgtIpStart = this.options.odsState.networking.interfaces.management.ip_start;
+                var mgtIpEnd = this.options.odsState.networking.interfaces.management.ip_end;
+                var mgtIpStartParts = mgtIpStart.split(".");
+                var mgtIpEndParts = mgtIpEnd.split(".");
+                var mgtIpParts = [parseInt(mgtIpStartParts[0]), parseInt(mgtIpStartParts[1]), parseInt(mgtIpStartParts[2]), parseInt(mgtIpStartParts[3])];
+
+                var serverData = this.options.odsState.servers_config;
+                for (var key in serverData) {
+                    var swIpParts = key.split(".");
+                    swIpPart1 = swIpParts[0];
+                    swIpPart2 = swIpParts[1];
+                    swIpPart3 = swIpParts[2];
+                    swIpPart4 = swIpParts[3];
+
+                    var servers = serverData[key];
+                    for (var i = 0; i < servers.length; i++) {
+                        port = servers[i].port;
+                        try {
+                            mgtIpParts[3] = eval(customStr);
+                            serverData[key][i]['management_ip'] = mgtIpParts[0] + "." + mgtIpParts[1] + "." + mgtIpParts[2] + "." + mgtIpParts[3];
+                        } catch (err) {
+                            serverData[key][i]['management_ip'] = "";
+                        }
+                    }
+                }
+                this.options.odsState.servers_config = serverData;
+            }
+        },
+
+        fillTntIpByCustomStr: function(customStr) {
+            var preDefinedPatterns = ["{swIpPart1}", "{swIpPart2}", "{swIpPart3}", "{swIpPart4}", "{port}"];
+            var swIpPart1 = 0,
+                swIpPart2 = 0,
+                swIpPart3 = 0,
+                swIpPart4 = 0,
+                port = 0;
+            var regExp = /\[([^)]+)\]/;
+            customStr = regExp.exec(customStr);
+            if (!customStr) {
+                alert("Invalid tenant IP customization");
+            } else {
+                customStr = customStr[1];
+                customStr = customStr.replace(preDefinedPatterns[0], "swIpPart1");
+                customStr = customStr.replace(preDefinedPatterns[1], "swIpPart2");
+                customStr = customStr.replace(preDefinedPatterns[2], "swIpPart3");
+                customStr = customStr.replace(preDefinedPatterns[3], "swIpPart4");
+                customStr = customStr.replace(preDefinedPatterns[4], "port");
+
+                var tntIpStart = this.options.odsState.networking.interfaces.tenant.ip_start;
+                var tntIpEnd = this.options.odsState.networking.interfaces.tenant.ip_end;
+                var tntIpStartParts = tntIpStart.split(".");
+                var tntIpEndParts = tntIpEnd.split(".");
+                var tntIpParts = [parseInt(tntIpStartParts[0]), parseInt(tntIpStartParts[1]), parseInt(tntIpStartParts[2]), parseInt(tntIpStartParts[3])];
+
+                var serverData = this.options.odsState.servers_config;
+                for (var key in serverData) {
+                    var swIpParts = key.split(".");
+                    swIpPart1 = swIpParts[0];
+                    swIpPart2 = swIpParts[1];
+                    swIpPart3 = swIpParts[2];
+                    swIpPart4 = swIpParts[3];
+
+                    var servers = serverData[key];
+                    for (var i = 0; i < servers.length; i++) {
+                        port = servers[i].port;
+                        try {
+                            tntIpParts[3] = eval(customStr);
+                            serverData[key][i]['tenant_ip'] = tntIpParts[0] + "." + tntIpParts[1] + "." + tntIpParts[2] + "." + tntIpParts[3];
+                        } catch (err) {
+                            serverData[key][i]['tenant_ip'] = "";
+                        }
+                    }
+                }
+                this.options.odsState.servers_config = serverData;
+            }
         },
 
         filloutTabs: function() {
