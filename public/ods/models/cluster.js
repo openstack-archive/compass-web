@@ -30,7 +30,7 @@ steal("jquery/model", "jquery/lang/json",
                     url: '/api/clusters/' + id + '/' + resource,
                     type: 'put',
                     dataType: 'json',
-                    data: params,
+                    data: $.toJSON(params),
                     contentType: "application/json",
                     success: success,
                     error: error
