@@ -88,7 +88,7 @@ steal(
                     }
                 }
             });
-
+/*
             $(".pattern-tip").tooltip({
                 items: "[data-geo], [title]",
                 content: function() {
@@ -98,6 +98,8 @@ steal(
                     }
                 }
             });
+*/
+            $( document ).tooltip();
 
             $(".integer").numeric(false, function() {
                 this.value = "";
@@ -138,7 +140,6 @@ steal(
                 placeholder: "No roles available",
                 selectAll: false
             });
-
         },
 
         fillRolesDropdowns: function(el, selectedRoles) {
@@ -211,7 +212,8 @@ steal(
                 digitNum = 0,
                 customCalculation = 0;
 
-            var regExp = /\[([^)]+\].(\d+))/;
+            //var regExp = /\[([^)]+\].(\d+))/;
+            var regExp = /\[(.*?)\].(\d+)/;
             var originalCustomStr = customStr;
             var replaceStr = "";
 
@@ -221,7 +223,7 @@ steal(
                 digitNum = parseInt(customCalculation[2]);
                 customCalculation = customCalculation[1].split("].")[0];
             } else {
-                regExp = /\[([^)]+)\]/;
+                regExp = /\[(.*?)\]/;
                 customCalculation = regExp.exec(customStr);
                 if(customCalculation) {
                     replaceStr = customCalculation[0];
@@ -232,42 +234,68 @@ steal(
             if (!customCalculation) {
                 alert("Invalid host name customization");
             } else {
-                customCalculation = customCalculation.replace(preDefinedPatterns[0], "swIpPart1");
-                customCalculation = customCalculation.replace(preDefinedPatterns[1], "swIpPart2");
-                customCalculation = customCalculation.replace(preDefinedPatterns[2], "swIpPart3");
-                customCalculation = customCalculation.replace(preDefinedPatterns[3], "swIpPart4");
-                customCalculation = customCalculation.replace(preDefinedPatterns[4], "port");
-                customCalculation = customCalculation.replace(preDefinedPatterns[5], "mgtIpPart1");
-                customCalculation = customCalculation.replace(preDefinedPatterns[6], "mgtIpPart2");
-                customCalculation = customCalculation.replace(preDefinedPatterns[7], "mgtIpPart3");
-                customCalculation = customCalculation.replace(preDefinedPatterns[8], "mgtIpPart4");
-                customCalculation = customCalculation.replace(preDefinedPatterns[9], "tntIpPart1");
-                customCalculation = customCalculation.replace(preDefinedPatterns[10], "tntIpPart2");
-                customCalculation = customCalculation.replace(preDefinedPatterns[11], "tntIpPartt3");
-                customCalculation = customCalculation.replace(preDefinedPatterns[12], "tntIpPart4");
+                while (customCalculation.indexOf(preDefinedPatterns[0]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[0], "swIpPart1");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[1]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[1], "swIpPart2");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[2]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[2], "swIpPart3");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[3]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[3], "swIpPart4");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[4]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[4], "port");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[5]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[5], "mgtIpPart1");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[6]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[6], "mgtIpPart2");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[7]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[7], "mgtIpPart3");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[8]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[8], "mgtIpPart4");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[9]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[9], "tntIpPart1");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[10]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[10], "tntIpPart2");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[11]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[11], "tntIpPartt3");
+                }
+                while (customCalculation.indexOf(preDefinedPatterns[12]) != -1) {
+                    customCalculation = customCalculation.replace(preDefinedPatterns[12], "tntIpPart4");
+                }
 
                 var serverData = this.options.odsState.servers_config;
                 var originalCustomCalculation = customCalculation;
                 for (var key in serverData) {
                     var swIpParts = key.split(".");
-                    swIpPart1 = swIpParts[0];
-                    swIpPart2 = swIpParts[1];
-                    swIpPart3 = swIpParts[2];
-                    swIpPart4 = swIpParts[3];
+                    swIpPart1 = parseInt(swIpParts[0]);
+                    swIpPart2 = parseInt(swIpParts[1]);
+                    swIpPart3 = parseInt(swIpParts[2]);
+                    swIpPart4 = parseInt(swIpParts[3]);
 
                     var servers = serverData[key];
                     for (var i = 0; i < servers.length; i++) {
-                        port = servers[i].port;
+                        port = parseInt(servers[i].port);
                         var mgtIpParts = servers[i].management_ip.split(".");
-                        mgtIpPart1 = mgtIpParts[0];
-                        mgtIpPart2 = mgtIpParts[1];
-                        mgtIpPart3 = mgtIpParts[2];
-                        mgtIpPart4 = mgtIpParts[3];
+                        mgtIpPart1 = parseInt(mgtIpParts[0]);
+                        mgtIpPart2 = parseInt(mgtIpParts[1]);
+                        mgtIpPart3 = parseInt(mgtIpParts[2]);
+                        mgtIpPart4 = parseInt(mgtIpParts[3]);
                         var tntIpParts = servers[i].tenant_ip.split(".");
-                        tntIpPart1 = tntIpParts[0];
-                        tntIpPart2 = tntIpParts[1];
-                        tntIpPart3 = tntIpParts[2];
-                        tntIpPart4 = tntIpParts[3];
+                        tntIpPart1 = parseInt(tntIpParts[0]);
+                        tntIpPart2 = parseInt(tntIpParts[1]);
+                        tntIpPart3 = parseInt(tntIpParts[2]);
+                        tntIpPart4 = parseInt(tntIpParts[3]);
 
                         try {
                             customCalculation = eval(customCalculation);
@@ -374,18 +402,27 @@ steal(
                 swIpPart3 = 0,
                 swIpPart4 = 0,
                 port = 0;
-            var regExp = /\[([^)]+)\]/;
+            var regExp = /\[(.*?)\]/;
             customStr = regExp.exec(customStr);
             if (!customStr) {
                 alert("Invalid management IP customization");
             } else {
                 customStr = customStr[1];
-                customStr = customStr.replace(preDefinedPatterns[0], "swIpPart1");
-                customStr = customStr.replace(preDefinedPatterns[1], "swIpPart2");
-                customStr = customStr.replace(preDefinedPatterns[2], "swIpPart3");
-                customStr = customStr.replace(preDefinedPatterns[3], "swIpPart4");
-                customStr = customStr.replace(preDefinedPatterns[4], "port");
-
+                while (customStr.indexOf(preDefinedPatterns[0]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[0], "swIpPart1");
+                }
+                while (customStr.indexOf(preDefinedPatterns[1]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[1], "swIpPart2");
+                }
+                while (customStr.indexOf(preDefinedPatterns[2]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[2], "swIpPart3");
+                }
+                while (customStr.indexOf(preDefinedPatterns[3]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[3], "swIpPart4");
+                }
+                while (customStr.indexOf(preDefinedPatterns[4]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[4], "port");
+                }
                 var mgtIpStart = this.options.odsState.networking.interfaces.management.ip_start;
                 var mgtIpEnd = this.options.odsState.networking.interfaces.management.ip_end;
                 var mgtIpStartParts = mgtIpStart.split(".");
@@ -395,14 +432,14 @@ steal(
                 var serverData = this.options.odsState.servers_config;
                 for (var key in serverData) {
                     var swIpParts = key.split(".");
-                    swIpPart1 = swIpParts[0];
-                    swIpPart2 = swIpParts[1];
-                    swIpPart3 = swIpParts[2];
-                    swIpPart4 = swIpParts[3];
+                    swIpPart1 = parseInt(swIpParts[0]);
+                    swIpPart2 = parseInt(swIpParts[1]);
+                    swIpPart3 = parseInt(swIpParts[2]);
+                    swIpPart4 = parseInt(swIpParts[3]);
 
                     var servers = serverData[key];
                     for (var i = 0; i < servers.length; i++) {
-                        port = servers[i].port;
+                        port = parseInt(servers[i].port);
                         try {
                             mgtIpParts[3] = eval(customStr);
                             serverData[key][i]['management_ip'] = mgtIpParts[0] + "." + mgtIpParts[1] + "." + mgtIpParts[2] + "." + mgtIpParts[3];
@@ -422,17 +459,27 @@ steal(
                 swIpPart3 = 0,
                 swIpPart4 = 0,
                 port = 0;
-            var regExp = /\[([^)]+)\]/;
+            var regExp = /\[(.*?)\]/;
             customStr = regExp.exec(customStr);
             if (!customStr) {
                 alert("Invalid tenant IP customization");
             } else {
                 customStr = customStr[1];
-                customStr = customStr.replace(preDefinedPatterns[0], "swIpPart1");
-                customStr = customStr.replace(preDefinedPatterns[1], "swIpPart2");
-                customStr = customStr.replace(preDefinedPatterns[2], "swIpPart3");
-                customStr = customStr.replace(preDefinedPatterns[3], "swIpPart4");
-                customStr = customStr.replace(preDefinedPatterns[4], "port");
+                while (customStr.indexOf(preDefinedPatterns[0]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[0], "swIpPart1");
+                }
+                while (customStr.indexOf(preDefinedPatterns[1]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[1], "swIpPart2");
+                }
+                while (customStr.indexOf(preDefinedPatterns[2]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[2], "swIpPart3");
+                }
+                while (customStr.indexOf(preDefinedPatterns[3]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[3], "swIpPart4");
+                }
+                while (customStr.indexOf(preDefinedPatterns[4]) != -1) {
+                    customStr = customStr.replace(preDefinedPatterns[4], "port");
+                }
 
                 var tntIpStart = this.options.odsState.networking.interfaces.tenant.ip_start;
                 var tntIpEnd = this.options.odsState.networking.interfaces.tenant.ip_end;
@@ -443,14 +490,14 @@ steal(
                 var serverData = this.options.odsState.servers_config;
                 for (var key in serverData) {
                     var swIpParts = key.split(".");
-                    swIpPart1 = swIpParts[0];
-                    swIpPart2 = swIpParts[1];
-                    swIpPart3 = swIpParts[2];
-                    swIpPart4 = swIpParts[3];
+                    swIpPart1 = parseInt(swIpParts[0]);
+                    swIpPart2 = parseInt(swIpParts[1]);
+                    swIpPart3 = parseInt(swIpParts[2]);
+                    swIpPart4 = parseInt(swIpParts[3]);
 
                     var servers = serverData[key];
                     for (var i = 0; i < servers.length; i++) {
-                        port = servers[i].port;
+                        port = parseInt(servers[i].port);
                         try {
                             tntIpParts[3] = eval(customStr);
                             serverData[key][i]['tenant_ip'] = tntIpParts[0] + "." + tntIpParts[1] + "." + tntIpParts[2] + "." + tntIpParts[3];
