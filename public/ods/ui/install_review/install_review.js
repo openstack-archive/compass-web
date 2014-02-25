@@ -26,7 +26,7 @@ steal(
 
                 } else {
                     this.element.html(this.view('init'));
-
+                    this.dataTableIpAddrSort();
                     this.initServerTable();
 
                     this.onSecurityData(this.options.odsState.security);
@@ -91,6 +91,36 @@ steal(
                 $("#storage_end").html(data.interfaces.storage.ip_end);
             },
 
+            dataTableIpAddrSort: function() {
+                jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+                    "ip-address-pre": function(a) {
+                        var m = a.split("."),
+                            x = "";
+
+                        for (var i = 0; i < m.length; i++) {
+                            var item = m[i];
+                            if (item.length == 1) {
+                                x += "00" + item;
+                            } else if (item.length == 2) {
+                                x += "0" + item;
+                            } else {
+                                x += item;
+                            }
+                        }
+
+                        return x;
+                    },
+
+                    "ip-address-asc": function(a, b) {
+                        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                    },
+
+                    "ip-address-desc": function(a, b) {
+                        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                    }
+                });
+            },
+
             initServerTable: function() {
                 this.dataTable = $('#tb_server_review').dataTable({
                     "sScrollY": "450px",
@@ -101,11 +131,14 @@ steal(
                     }, {
                         "mData": "mac"
                     }, {
-                        "mData": "management_ip"
+                        "mData": "management_ip",
+                        "sType": "ip-address"
                     }, {
-                        "mData": "tenant_ip"
+                        "mData": "tenant_ip",
+                        "sType": "ip-address"
                     }, {
-                        "mData": "switch_ip"
+                        "mData": "switch_ip",
+                        "sType": "ip-address"
                     }, {
                         "mData": "port"
                     }, {
@@ -122,7 +155,7 @@ steal(
                     }],
                     "aoColumnDefs": [{
                         bSortable: false,
-                        aTargets: [0, 1, 2, 3, 6]
+                        aTargets: [1, 6]
                     }],
                     "aaSorting": [
                         [4, "asc"],

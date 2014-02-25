@@ -85,15 +85,15 @@ table.display thead th {
 }
 
 .sorting {
-  background: url('../../../img/bg.gif') no-repeat 60% 50%;
+  background: url('../../../img/bg.gif') no-repeat 70% 50%;
 }
 
 .sorting_desc {
-  background: url('../../../img/desc.gif') no-repeat 60% 50%;
+  background: url('../../../img/desc.gif') no-repeat 70% 50%;
 }
 
 .sorting_asc {
-  background: url('../../../img/asc.gif') no-repeat 60% 50%;
+  background: url('../../../img/asc.gif') no-repeat 70% 50%;
 }
 
 .highlight { 
