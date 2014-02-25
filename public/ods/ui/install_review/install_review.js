@@ -207,6 +207,7 @@ steal(
             },
 
             '#retrieve-progress click': function(el, ev) {
+                ev.preventDefault();
                 var selectedCluster = $("input[name='clusterRadio']:checked");
                 if (!selectedCluster.val()) {
                     alert("Please select a cluster");
