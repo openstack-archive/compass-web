@@ -23,7 +23,12 @@ steal(
                     Ods.Cluster.get("installing",
                         this.proxy('onGetInstallingCluster'),
                         this.proxy('onGetInstallingClusterErr'));
-
+                    Ods.Cluster.get("successful",
+                        this.proxy('onGetInstallingCluster'),
+                        this.proxy('onGetInstallingClusterErr'));
+                    Ods.Cluster.get("failed",
+                        this.proxy('onGetInstallingCluster'),
+                        this.proxy('onGetInstallingClusterErr'));
                 } else {
                     this.element.html(this.view('init'));
                     this.dataTableIpAddrSort();
