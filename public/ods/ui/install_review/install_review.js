@@ -519,7 +519,7 @@ steal(
                 steal.dev.log(" *** onFindDashboardLink xhr *** ", xhr);
 
                 if (data.status == "OK") {
-                    $(".dashboard-link").attr("href", data.dashboardlinks["os-single-controller"]);
+                    $(".dashboard-link").attr("href", data.dashboardlinks["os-controller"]);
                     $(".dashboard-link").attr("target", "_blank");
                     $(".dashboard-link").removeClass("disabled");
                 }

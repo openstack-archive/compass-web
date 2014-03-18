@@ -479,7 +479,7 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
             "status": "OK",
             "type": "dashboardlinks",
             "dashboardlinks": {
-                "os-single-controller": "http://10.145.88.232"
+                "os-controller": "http://10.145.88.232"
             }
         };
         return res;
