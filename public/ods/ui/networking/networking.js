@@ -101,6 +101,7 @@ steal(
             var global_gateway = $("#global_gateway").val();
             var global_proxy = $("#global_proxy").val();
             var global_ntpserver = $("#global_ntpserver").val();
+            var global_havip = $("#global_havip").val();
 
             //management section
             var mgt_ipstart = $("#mgt_ip_start").val();
@@ -245,7 +246,8 @@ steal(
                                 "search_path": global_searchpath,
                                 "gateway": global_gateway,
                                 "proxy": global_proxy,
-                                "ntp_server": global_ntpserver
+                                "ntp_server": global_ntpserver,
+                                "ha_vip": global_havip
                             }
                         }
                     };
