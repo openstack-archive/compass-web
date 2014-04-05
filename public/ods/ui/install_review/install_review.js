@@ -18,6 +18,7 @@ steal(
         $.Controller('Ods.Ui.install_review', {}, {
             init: function() {
                 this.totalProgress = 0;
+                this.serverCount = 0;
                 if(this.options.installStep == "progress") {
                     this.element.html(this.view('pending_clusters'));
                     Ods.Cluster.get("installing",
@@ -293,6 +294,7 @@ steal(
                     };
                     var servers = this.options.odsState.servers_config[key];
                     for (var i = 0; i < servers.length; i++) {
+                        this.serverCount ++;
                         var serverjson = {
                             "name": servers[i].hostname,
                             "hostid": servers[i].clusterhost_id,
@@ -554,7 +556,7 @@ steal(
                     left: 130
                 };
 
-                var serversHeight = this.options.odsState.servers.length * 68;
+                var serversHeight = this.serverCount * 68;
                 if (serversHeight < 500) {
                     serversHeight = 500;
                 }
