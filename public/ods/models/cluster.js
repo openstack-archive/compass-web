@@ -113,6 +113,14 @@ steal("jquery/model", "jquery/lang/json",
                     success: success,
                     error: error
                 });
+            },
+            get: function(success, error) {
+                $.ajax({
+                    url: '/api/adapters',
+                    type: 'get',
+                    success: success,
+                    error: error
+                });
             }
         }, {});
 

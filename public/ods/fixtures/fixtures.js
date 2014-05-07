@@ -485,4 +485,21 @@ steal("jquery/dom/fixture", "jquery/lang/json", function(){
         return res;
     });
 
+    $.fixture('GET /api/adapters', function(original, settings, headers) {
+        console.log("original: ", original);
+        console.log("settings: ", settings);
+
+        var res = {
+            "status": "OK",
+            "adapters": [{
+                    "id": 1,
+                    "name": "Centos_openstack"
+                }, {
+                    "id": 2,
+                    "name": "Centos"
+                }
+            ]
+        };
+        return res;
+    });
 })

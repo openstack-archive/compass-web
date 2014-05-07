@@ -36,6 +36,11 @@ steal(
                 this.dataTable.fnClearTable();
                 this.dataTable.fnAddData(oldAllServersData);
 
+                for (var i = 0; i < this.options.odsState.adapters.length; i++) {
+                    $("#adapter").append("<option value=\"" + this.options.odsState.adapters[i].id + "\">" + this.options.odsState.adapters[i].name + "</option>");
+                }
+                $('#adapter').val(String(this.options.odsState.adapter_id));
+
                 var oldSelectedServersData = this.options.odsState.servers;
 
                 for (var i = 0; i < oldSelectedServersData.length; i++) {
@@ -47,6 +52,10 @@ steal(
                     });
                 }
                 this.countCheckedServers();
+            } else {
+                // get adapters
+                this.adapters = [];
+                Ods.Adapter.get(this.proxy('onGetAdapters'), this.proxy('onGetAdaptersErr'));
             }
 
 
@@ -79,7 +88,6 @@ steal(
                     "serverControl": this
                 });
             }
-
         },
 
         dataTableIpAddrSort: function() {
@@ -203,14 +211,14 @@ steal(
                 this.options.odsState.machines = this.dataTable.fnGetData();
 
                 if (this.initServerStep) {
+                    this.options.odsState.adapter_id = parseInt($("#adapter").val());
                     // create cluster
                     Ods.Cluster.create({
                         "cluster": {
                             "name": "",
-                            "adapter_id": 1
+                            "adapter_id": this.options.odsState.adapter_id
                         }
                     }, this.proxy('onClusterCreated'), this.proxy('onClusterCreatedErr'));
-                    this.options.odsState.adapter_id = 1;
                 } else {
                     // replace all hosts in current cluster
                     var cluster_id = this.options.odsState.cluster_id;
@@ -220,6 +228,30 @@ steal(
                 }
 
             }
+        },
+
+        /************************************/
+        // get adapters success callback
+        /************************************/
+        'onGetAdapters': function(data, textStatus, xhr) {
+            if (xhr.status == 200) {
+                this.adapters = data.adapters;
+                this.options.odsState.adapters = data.adapters;
+                if (this.adapters.length > 0) {
+                    for (var i = 0; i < this.adapters.length; i++) {
+                        $("#adapter").append("<option value=\"" + this.adapters[i].id + "\">" + this.adapters[i].name + "</option>");
+                    }
+                } else {
+                    $("#adapter").append("<option value='-1'>Not Available</option>");
+                }
+            }
+        },
+
+        /************************************/
+        // get adapters error callback
+        /************************************/
+        'onGetAdaptersErr': function(xhr, status, statusText) {
+            $("#adapter").append("<option value='-1'>Not Available</option>");
         },
 
         /************************************/
