@@ -1,0 +1,75 @@
+.navbar {
+  background: none repeat scroll 0 0 #438EB9;
+  border: 0 none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  min-height: 45px;
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+}
+.navbar .navbar-nav > li > a {
+    background-color: rgba(0, 0, 0, 0);
+    color: #FFFFFF;
+    font-size: 13px;
+    height: 45px;
+    padding-bottom: 11px;
+    padding-top: 12px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.navbar .navbar-nav > li > a:hover, .navbar .navbar-nav > li > a:focus, .navbar .navbar-nav > li.open > a {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+.navbar-container {
+  padding-left: 10px;
+  padding-right: 20px;
+}
+.navbar .navbar-header {
+  margin: 0 !important;
+}
+.navbar .navbar-brand {
+  color: #FFFFFF;
+  font-size: 24px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-shadow: none;
+}
+.navbar .navbar-brand:hover, .navbar .navbar-brand:focus {
+  color: #FFFFFF;
+}
+.ace-nav > li:first-child {
+  border-left: medium none;
+}
+.ace-nav > li {
+    border-left: 1px solid #DDDDDD;
+    float: left !important;
+    height: 45px;
+    line-height: 45px;
+    padding: 0;
+    position: relative;
+}
+.ace-nav > li.grey > a {
+    background-color: #555555;
+}
+.ace-nav > li > a {
+    background-color: #2E6589;
+    color: #FFFFFF;
+    display: block;
+    height: 100%;
+    line-height: inherit;
+    min-width: 50px;
+    padding: 0 8px;
+    position: relative;
+    text-align: center;
+    width: auto;
+}
+.ace-nav > li.purple > a {
+    background-color: #892E65;
+}
+
+.purple {
+    color: #A069C3 !important;
+}
