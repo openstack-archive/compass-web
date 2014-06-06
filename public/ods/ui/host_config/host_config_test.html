@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>host_config Widget Unit Test</title>
-
-    <link rel="stylesheet" type="text/css" href="../../../css/base.css" />
-    <link rel="stylesheet" type="text/css" href="../../../css/style.css" />
-  </head>
-  <body>
-
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div id="host_config-test">  </div>
-      </div>
+ <head>
+  <meta charset="utf8"/>
+  <title>
+   host_config Widget Unit Test
+  </title>
+  <link href="../../../css/base.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../css/style.css" rel="stylesheet" type="text/css"/>
+ </head>
+ <body>
+  <div class="container-fluid">
+   <div class="row-fluid">
+    <div id="host_config-test">
     </div>
-    <script type='text/javascript' src='../../../steal/steal.js'></script>
-    <script type='text/javascript'>
-      steal('jquery/dom/route', 'ods/fixtures','ods/ui/host_config').then(function($) {
+   </div>
+  </div>
+  <script src="../../../steal/steal.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   steal('jquery/dom/route', 'ods/fixtures','ods/ui/host_config').then(function($) {
 
         var config = [];
 
@@ -111,8 +113,7 @@
 
         $('#host_config-test').ods_ui_host_config({ "odsState" : state });
 
-      }); 
-    </script>
-  </body>
+      });
+  </script>
+ </body>
 </html>
-
