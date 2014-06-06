@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>install_review Widget Unit Test</title>
-
-    <link rel="stylesheet" type="text/css" href="../../../css/base.css" />
-    <link rel="stylesheet" type="text/css" href="../../../css/style.css" />
-  </head>
-  <body>
-
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div id="install_review-test">  </div>
-      </div>
+ <head>
+  <meta charset="utf8"/>
+  <title>
+   install_review Widget Unit Test
+  </title>
+  <link href="../../../css/base.css" rel="stylesheet" type="text/css"/>
+  <link href="../../../css/style.css" rel="stylesheet" type="text/css"/>
+ </head>
+ <body>
+  <div class="container-fluid">
+   <div class="row-fluid">
+    <div id="install_review-test">
     </div>
-
-    <script type='text/javascript' src='../../../steal/steal.js'></script>
-    <script type='text/javascript' src='../../../lib/d3.min.js'></script>
-    <script type='text/javascript'>
-      steal('jquery/dom/route', 'ods/fixtures', 'ods/ui/install_review').then(function($) {
+   </div>
+  </div>
+  <script src="../../../steal/steal.js" type="text/javascript">
+  </script>
+  <script src="../../../lib/d3.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   steal('jquery/dom/route', 'ods/fixtures', 'ods/ui/install_review').then(function($) {
 
         var config = [];
 
@@ -90,9 +92,7 @@
 
         $('#install_review-test').ods_ui_install_review({ "odsState" : state });
 
-      }); 
-    </script>
-    
-  </body>
+      });
+  </script>
+ </body>
 </html>
-
