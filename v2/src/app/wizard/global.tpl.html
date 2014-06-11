@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="accordion-style1 panel-group accordion-style2" id="accordion">
+            <accordion close-others="true">
+
+                <accordion-group is-open="status1.open">
+                    <accordion-heading>
+                        <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> General
+                    </accordion-heading>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
+                                    <label for="{{key}}" class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" id="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </accordion-group>
+
+                <accordion-group is-open="status2.open">
+                    <accordion-heading>
+                        <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> Subnetwork
+                    </accordion-heading>
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                        </div>
+                    </div>
+                </accordion-group>
+
+                <accordion-group is-open="status.open">
+                    <accordion-heading>
+                        <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> Routing Table
+                    </accordion-heading>
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                        </div>
+                    </div>
+                </accordion-group>
+
+            </accordion>
+        </div>
+    </div>
+</div>

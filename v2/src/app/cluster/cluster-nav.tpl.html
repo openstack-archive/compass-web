@@ -1,0 +1,76 @@
+<div class="sidebar" id="sidebar">
+    <div>Cluster Name</div>
+    <ul class="nav nav-list">
+        <li ng-class="{active:state.includes('cluster.overview')}">
+            <a ui-sref="cluster.overview">
+                <i class="menu-icon fa fa-tachometer"></i>
+                Overview
+            </a>
+        </li>
+        <!--<li ng-class="{open:state.includes('cluster.monitoring')}">-->
+        <li ng-class="{'active open':state.includes('cluster.monitoring')}">
+            <a href ng-click="isMonitoringNavOpen = !isMonitoringNavOpen">
+                <i class="menu-icon fa fa-bar-chart-o"></i>
+                Monitoring
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <ul class="submenu cssFade" ng-hide="isMonitoringNavOpen">
+                <li ng-class="{active:state.includes('cluster.monitoring.hostgroups')}">
+                    <a ui-sref="cluster.monitoring.hostgroups">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Host Groups
+                    </a>
+                </li>
+                <li ng-class="{active:state.includes('cluster.monitoring.servicegroups')}">
+                    <a ui-sref="cluster.monitoring.servicegroups">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Service Groups
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!--<li ng-class="{'active open':state.includes('cluster.config')}">-->
+        <li ng-class="{'active open':state.includes('cluster.config')}">
+            <a href ng-click="isConfigNavOpen = !isConfigNavOpen">
+                <i class="menu-icon fa fa-cog"></i>
+                <span class="menu-text">configurations</span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <ul class="submenu cssFade" ng-hide="isConfigNavOpen">
+                <li ng-class="{active:state.includes('cluster.config.security')}">
+                    <a ui-sref="cluster.config.security">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Security
+                    </a>
+                </li>
+                <li ng-class="{active:state.includes('cluster.config.network')}">
+                    <a ui-sref="cluster.config.network">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Network
+                    </a>
+                </li>
+                <li ng-class="{active:state.includes('cluster.config.partition')}">
+                    <a ui-sref="cluster.config.partition">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Partition
+                    </a>
+                </li>
+                <li ng-class="{active:state.includes('cluster.config.roles')}">
+                    <a ui-sref="cluster.config.roles">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Roles
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li ng-class="{active:state.includes('cluster.log')}">
+            <a ui-sref="cluster.log">
+                <i class="menu-icon fa fa-list-alt"></i>
+                Log
+            </a>
+        </li>
+
+    </ul>
+    <!-- /.nav-list -->
+
+</div>

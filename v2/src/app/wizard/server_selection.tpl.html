@@ -1,0 +1,26 @@
+<table id="sv-selection" class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Host MAC</th>
+            <th>Switch IP</th>
+            <th>Port</th>
+            <th>Hostname</th>
+            <th>Cluster</th>
+            <th>OS</th>
+            <th>Target System</th>
+            <th>State</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="server in servers">
+            <td>{{server["Host MAC"]}}</td>
+            <td>{{server["Switch IP"]}}</td>
+            <td>{{server["Port"]}}</td>
+            <td>{{server["Hostname"]}}</td>
+            <td>{{server["Cluster"]}}</td>
+            <td>{{server["OS"]}}</td>
+            <td>{{server["Target System"]}}</td>
+            <td>{{server["State"]}}</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,46 @@
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>Create Cluster Wizard</h1>
+    </div>
+
+    <div id="create-cluster-wizard">
+        <ul class="wizard-steps">
+            <li ng-repeat="step in steps" class="{{step.state}}" ng-click="goToStep(step.id)">
+                <span class="step">{{step.id}}</span>
+                <span class="title">{{step.title}}</span>
+            </li>
+        </ul>
+
+
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    {{steps[currentStep-1].title}}
+
+                    <small ng-if="steps[currentStep-1].description"><i class="ace-icon fa fa-angle-double-right"></i> {{steps[currentStep-1].description}}</small>
+                </h5>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div ng-include="steps[currentStep-1].template"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wizard-actions">
+            <button ng-click="stepBackward()" ng-disabled="currentStep==1" class="btn btn-prev">
+                <i class="ace-icon fa fa-arrow-left"></i>
+                Prev
+            </button>
+            <button ng-if="currentStep<steps.length" ng-click="stepForward()" class="btn btn-success btn-next">
+                Next
+                <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+            </button>
+            <button ng-if="currentStep==steps.length" class="btn btn-success btn-next">
+                Deploy
+            </button>
+        </div>
+    </div>
+</div>
