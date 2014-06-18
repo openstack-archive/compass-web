@@ -1,0 +1,25 @@
+[{
+    "name": "cluster.monitoring.hostgroups",
+    "url": "/hostgroups",
+    "display": "Host Groups",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.servicegroups",
+    "url": "/servicegroups",
+    "display": "Service Groups",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.novamanage",
+    "url": "/novamanage",
+    "display": "Nova Manage",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.charts",
+    "url": "/charts",
+    "display": "Charts",
+    "controller": "",
+    "templateUrl": ""
+}]

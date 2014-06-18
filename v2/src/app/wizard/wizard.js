@@ -12,12 +12,12 @@ angular.module('compass.wizard', [
         });
 })
 
-.controller('wizardCtrl', function($scope, $http) {
+.controller('wizardCtrl', function($scope, dataService) {
     // current step for create-cluster wizard
     $scope.currentStep = 1;
 
     // get the wizard steps for create-cluster
-    $http.get('data/wizard_steps.json').success(function(data) {
+    dataService.getWizardSteps().success(function(data) {
         // get the wizard steps for os, ts or os_and_ts
         $scope.steps = data["os_and_ts"];
 
@@ -55,13 +55,12 @@ angular.module('compass.wizard', [
 
     });
 
-    $http.get('data/servers.json').success(function(data) {
+    dataService.getAllServersInfo().success(function(data) {
         $scope.servers = data;
         console.log(data);
     });
 
-    $http.get('data/os_global_config.json').success(function(data) {
+    dataService.getOsGlobalConfig().success(function(data) {
         $scope.os_global_config = data;
-        console.log(data);
     });
 });

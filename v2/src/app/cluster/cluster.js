@@ -4,7 +4,7 @@ angular.module('compass.cluster', [
     'ngAnimate'
 ])
 
-.config(function config($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('clusterList', {
             url: '/clusterlist',
@@ -43,21 +43,19 @@ angular.module('compass.cluster', [
             templateUrl: 'src/app/cluster/cluster-log.tpl.html'
         })
         .state('cluster.monitoring', {
-            url: '/monitoring'
-            //templateUrl: 'src/app/cluster/cluster-monitoring.tpl.html'
-        })
-        .state('cluster.monitoring.hostgroups', {
-            url: '/hostgroups',
-            templateUrl: 'src/app/cluster/cluster-monitoring.tpl.html'
-        })
-        .state('cluster.monitoring.servicegroups', {
-            url: '/servicegroups',
+            url: '/monitoring',
             templateUrl: 'src/app/cluster/cluster-monitoring.tpl.html'
         });
 })
 
-.controller('clusternavCtrl', function($scope, $http, $state) {
+.controller('clusternavCtrl', function($scope, $state, dataService, stateService) {
     $scope.state = $state;
+
+    dataService.getMonitoringNav().success(function(data) {
+        $scope.monitoringNav = data;
+        stateService.addStates($scope.monitoringNav);
+    });
+
 }).directive('clusternav', function() {
     return {
         templateUrl: 'src/app/cluster/cluster-nav.tpl.html'

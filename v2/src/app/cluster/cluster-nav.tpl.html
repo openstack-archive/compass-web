@@ -1,5 +1,7 @@
 <div class="sidebar" id="sidebar">
-    <div>Cluster Name</div>
+    <div>
+        Cluster Name
+    </div>
     <ul class="nav nav-list">
         <li ng-class="{active:state.includes('cluster.overview')}">
             <a ui-sref="cluster.overview">
@@ -7,7 +9,6 @@
                 Overview
             </a>
         </li>
-        <!--<li ng-class="{open:state.includes('cluster.monitoring')}">-->
         <li ng-class="{'active open':state.includes('cluster.monitoring')}">
             <a href ng-click="isMonitoringNavOpen = !isMonitoringNavOpen">
                 <i class="menu-icon fa fa-bar-chart-o"></i>
@@ -15,21 +16,14 @@
                 <b class="arrow fa fa-angle-down"></b>
             </a>
             <ul class="submenu cssFade" ng-hide="isMonitoringNavOpen">
-                <li ng-class="{active:state.includes('cluster.monitoring.hostgroups')}">
-                    <a ui-sref="cluster.monitoring.hostgroups">
+                <li ng-repeat="nav in monitoringNav" ng-class="{active:state.includes('{{nav.name}}')}">
+                    <a ui-sref="{{nav.name}}">
                         <i class="menu-icon fa fa-caret-right"></i>
-                        Host Groups
-                    </a>
-                </li>
-                <li ng-class="{active:state.includes('cluster.monitoring.servicegroups')}">
-                    <a ui-sref="cluster.monitoring.servicegroups">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        Service Groups
+                        {{nav.display}}
                     </a>
                 </li>
             </ul>
         </li>
-        <!--<li ng-class="{'active open':state.includes('cluster.config')}">-->
         <li ng-class="{'active open':state.includes('cluster.config')}">
             <a href ng-click="isConfigNavOpen = !isConfigNavOpen">
                 <i class="menu-icon fa fa-cog"></i>
