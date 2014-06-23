@@ -2,14 +2,22 @@ var app = angular.module('compass', [
     'compass.topnav',
     'compass.wizard',
     'compass.cluster',
+    'compass.clusterlist',
     'compass.server',
     'ui.router',
     'ui.bootstrap',
-    'ngAnimate'
+    'ngAnimate',
+    'compassAppDev'
 ]);
+
+app.constant('settings', {
+    apiUrlBase: '/api/v2.0',
+    metadataUrlBase: 'data'
+});
 
 app.config(function($stateProvider, $urlRouterProvider) {
     app.stateProvider = $stateProvider;
+    $urlRouterProvider.otherwise('/clusterlist');
 });
 
 // stateService is used for dynamically add/edit state
@@ -38,56 +46,55 @@ app.service('stateService', ['$state',
     }
 ]);
 
-app.service('dataService', ['$http',
-    function($http) {
-        var beUrlBase = 'data'; // URL base for backend ajax call
-        var feUrlBase = 'data'; // URL base for frontend ajax call
+app.service('dataService', ['$http', 'settings',
+    function($http, settings) {
 
         this.getWizardSteps = function() {
-            return $http.get(feUrlBase + '/wizard_steps.json');
+            return $http.get(settings.metadataUrlBase + '/wizard_steps.json');
         };
 
-        this.getOsGlobalConfig = function(id) {
-            return $http.get(feUrlBase + '/os_global_config.json');
+        this.getAdapterConfig = function() {
+            return $http.get(settings.metadataUrlBase + '/adapter_config');
         };
 
-        this.getAllServersInfo = function(cust) {
-            return $http.get(beUrlBase + '/servers.json');
+        this.getAllServersInfo = function() {
+            return $http.get(settings.apiUrlBase + '/servers');
         };
 
-        this.getMonitoringNav = function(cust) {
-            return $http.get(beUrlBase + '/monitoring_nav.json');
+        this.getMonitoringNav = function() {
+            return $http.get(settings.metadataUrlBase + '/monitoring_nav.json');
+        };
+
+        this.getAdapters = function() {
+            return $http.get(settings.apiUrlBase + '/adapters');
+        };
+
+        this.createCluster = function(cluster) {
+            return $http.post(settings.apiUrlBase + '/clusters', angular.toJson(cluster));
+        };
+
+        this.getClusters = function() {
+            return $http.get(settings.apiUrlBase + '/clusters');
+        };
+
+        this.updateClusterConfig = function (id, config) {
+            return $http.put(settings.apiUrlBase + '/clusters/' + id + '/config', angular.toJson(config));
         };
     }
-])
+]);
 
 
+app.factory('wizardFactory', [
+    function() {
+        var wizard = {};
 
+        wizard.setClusterInfo = function(cluster) {
+            wizard.cluster = cluster;
+        };
 
-/*
-.config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
-  $urlRouterProvider.otherwise( '/wizard' );
-})
-
-.run( function run () {
-})
-*/
-
-
-/*
-compassApp.directive('a', function() {
-    return {
-        restrict: 'E',
-        link: function(scope, elem, attrs) {
-            if (attrs.href === '#' || attrs.href === '#clusterwizard' || attrs.href === '#servers') {
-
-            } else {
-                elem.on('click', function(e) {
-                    e.preventDefault();
-                });
-            }
+        wizard.getClusterInfo = function() {
+            return wizard.cluster;
         }
-    };
-});
-
-*/
+        return wizard;
+    }
+]);

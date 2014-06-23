@@ -1,0 +1,63 @@
+<script type="text/ng-template" id="createClusterModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Create Cluster</h3>
+    </div>
+    <div class="modal-body">
+       <form name="createClusterForm" class="form-horizontal">
+            <!--<div class="form-group">
+                <div class="control-group">
+                    <div class="radio pull-left">
+                        <label>
+                            <input type="radio" class="ace" name="form-field-radio">
+                            <span class="lbl"> Create New Cluster</span>
+                        </label>
+                    </div>
+
+                    <div class="radio pull-left">
+                        <label>
+                            <input type="radio" class="ace" name="form-field-radio">
+                            <span class="lbl"> Import Cluster CSV Files</span>
+                        </label>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="form-group" ng-class="{'has-error':createClusterForm.clustername.$error.required&& !createClusterForm.clustername.$pristine}">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">Cluster Name</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <input type="text" class="width-100" ng-model="cluster.name" name="clustername" required>
+                </div>
+                <div ng-show="createClusterForm.clustername.$error.required" class="help-block col-xs-12 col-sm-reset inline"> Required</div>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error':createClusterForm.targetsystem.$error.required}">
+                <label class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">Target System</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <select name="targetsystem" class="width-100" ng-model="cluster.adapter_id" required>
+                        <option ng-repeat="adapter in adapters" value="{{adapter.id}}"> {{adapter.display}}</option>
+                    </select>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> Required </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">OS</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <select name="os" class="width-100" ng-model="cluster.os_id" required>
+
+                        <option ng-repeat="os in compatible_os" value="{{os.os_id}}"> {{os.name}}</option>
+
+                    </select>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> Required </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="ok()" ng-disabled="createClusterForm.$invalid">Create</button>
+    </div>
+</script>

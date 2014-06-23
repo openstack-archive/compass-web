@@ -17,27 +17,8 @@
 
                     <ul class="dropdown-menu dropdown-light-blue dropdown-caret">
                         <li>
-                            <!--<a ui-sref="wizard">
-                                <div>Create Cluster</div>
-                            </a>-->
+                            <div ng-include="'src/app/cluster/cluster-create.tpl.html'"></div>
                             <a href>
-                                <script type="text/ng-template" id="myModalContent.html">
-                                <div class = "modal-header" > 
-                                    < h3 class = "modal-title" > I am a modal </h3>
-                                </div>
-                                <div class="modal-body">
-                                    <ul>
-                                        <li ng-repeat="item in items">
-                                            <a ng-click="selectedd.item = item">{{ item }}</a>
-                                        </li>
-                                    </ul>
-                                    Selected: <b>{{ selectedd.item }}</b>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-primary" ng-click="ok()">OK</button>
-                                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-                                </div>
-                                </script>
                                 <div ng-controller="createClusterCtrl">
                                     <span ng-click="open()">Create Cluster</span>
                                 </div>

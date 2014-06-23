@@ -9,11 +9,13 @@
                     </accordion-heading>
                     <div class="row">
                         <div class="col-xs-12">
-                            <form class="form-horizontal" role="form">
+                            <form id="generalForm" class="form-horizontal" role="form">
                                 <div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
-                                    <label for="{{key}}" class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" id="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
+                                    <div ng-if="key!='_self'">
+                                        <label class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" name="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -26,10 +28,74 @@
                         <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> Subnetwork
                     </accordion-heading>
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-lg-2">
+                        </div>
+                        <div class="col-lg-8">
+                            <table class="table table-hover table-striped nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Subnet</th>
+                                        <th>Netmask</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input ng-model="newsubnetwork.name" type="text" placeholder="Name" required>
+                                        </td>
+                                        <td>
+                                            <input ng-model="newsubnetwork.subnet" type="text" placeholder="Subnet" required>
+                                        </td>
+                                        <td>
+                                            <input ng-model="newsubnetwork.netmask" type="text" placeholder="Netmask" required>
+                                        </td>
+                                        <td>
+                                            <button ng-click="addSubnetwork()" class="btn btn-info btn-sm" formnovalidate>Add</button>
+                                        </td>
+                                    </tr>
 
+                                    <tr ng-repeat="sub in subnetworks">
+                                        <td>
+                                            <span ng-hide="editSubnetworkMode">{{sub.name}}</span>
+                                            <input type="text" ng-show="editSubnetworkMode" ng-model="sub.name" ng-required />
+                                        </td>
+                                        <td>
+                                            <span ng-hide="editSubnetworkMode">{{sub.subnet}}</span>
+                                            <input type="text" ng-show="editSubnetworkMode" ng-model="sub.subnet" ng-required />
+                                        </td>
+                                        <td>
+                                            <span ng-hide="editSubnetworkMode">{{sub.netmask}}</span>
+                                            <input type="text" ng-show="editSubnetworkMode" ng-model="sub.netmask" ng-required />
+                                        </td>
+                                        <td>
+                                            <!--edit button-->
+                                            <button ng-hide="editSubnetworkMode" ng-click="editSubnetworkMode = true; " class="btn btn-xs btn-success">
+                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                            </button>
+                                            <!--delete button-->
+                                            <button ng-hide="editSubnetworkMode" ng-click="subnetworks.splice($index,1)" class="btn btn-xs btn-danger">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                            </button>
+                                            <!--save button-->
+                                            <button ng-show="editSubnetworkMode" ng-click="editSubnetworkMode = false" class="btn btn-xs btn-primary">
+                                                <i class="ace-icon fa fa-check bigger-120"></i>
+                                            </button>
+                                            <!--cancel button-->
+                                            <button ng-show="editSubnetworkMode" ng-click="editSubnetworkMode = false; cancel()" class="btn btn-xs btn-default">
+                                                <i class="ace-icon fa fa-times bigger-120"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-2">
                         </div>
                     </div>
+
                 </accordion-group>
 
                 <accordion-group is-open="status.open">
@@ -37,10 +103,82 @@
                         <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> Routing Table
                     </accordion-heading>
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-lg-2">
+                        </div>
+                        <div class="col-lg-8">
+                            <table class="table table-hover table-striped nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Subnet</th>
+                                        <th>Netmask</th>
+                                        <th>Gateway</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input ng-model="newrouting.name" type="text" placeholder="Name" required>
+                                        </td>
+                                        <td>
+                                            <input ng-model="newrouting.subnet" type="text" placeholder="Subnet" required>
+                                        </td>
+                                        <td>
+                                            <input ng-model="newrouting.netmask" type="text" placeholder="Netmask" required>
+                                        </td>
+                                        <td>
+                                            <input ng-model="newrouting.gateway" type="text" placeholder="Gateway" required>
+                                        </td>                                        
+                                        <td>
+                                            <button ng-click="addRouting()" class="btn btn-info btn-sm" formnovalidate>Add</button>
+                                        </td>
+                                    </tr>
 
+                                    <tr ng-repeat="routing in routingtable">
+                                        <td>
+                                            <span ng-hide="editRoutingtableMode">{{routing.name}}</span>
+                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.name" ng-required />
+                                        </td>
+                                        <td>
+                                            <span ng-hide="editRoutingtableMode">{{routing.subnet}}</span>
+                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.subnet" ng-required />
+                                        </td>
+                                        <td>
+                                            <span ng-hide="editRoutingtableMode">{{routing.netmask}}</span>
+                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.netmask" ng-required />
+                                        </td>
+                                        <td>
+                                            <span ng-hide="editRoutingtableMode">{{routing.gateway}}</span>
+                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.gateway" ng-required />
+                                        </td>                                        
+                                        <td>
+                                            <!--edit button-->
+                                            <button ng-hide="editRoutingtableMode" ng-click="editRoutingtableMode = true; " class="btn btn-xs btn-success">
+                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                            </button>
+                                            <!--delete button-->
+                                            <button ng-hide="editRoutingtableMode" ng-click="routingtable.splice($index,1)" class="btn btn-xs btn-danger">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                            </button>
+                                            <!--save button-->
+                                            <button ng-show="editRoutingtableMode" ng-click="editRoutingtableMode = false" class="btn btn-xs btn-primary">
+                                                <i class="ace-icon fa fa-check bigger-120"></i>
+                                            </button>
+                                            <!--cancel button-->
+                                            <button ng-show="editRoutingtableMode" ng-click="editRoutingtableMode = false; cancel()" class="btn btn-xs btn-default">
+                                                <i class="ace-icon fa fa-times bigger-120"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-2">
                         </div>
                     </div>
+
                 </accordion-group>
 
             </accordion>

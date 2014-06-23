@@ -12,7 +12,10 @@ angular.module('compass.wizard', [
         });
 })
 
-.controller('wizardCtrl', function($scope, dataService) {
+.controller('wizardCtrl', function($scope, dataService, wizardFactory) {
+
+    $scope.wizardCluster = wizardFactory.getClusterInfo();
+
     // current step for create-cluster wizard
     $scope.currentStep = 1;
 
@@ -38,8 +41,24 @@ angular.module('compass.wizard', [
 
         // go to next step
         $scope.stepForward = function() {
-            if ($scope.currentStep < $scope.steps.length)
-                $scope.currentStep = $scope.currentStep + 1;
+            if ($scope.steps[$scope.currentStep - 1].title == "OS Global Config") {
+                var general_config = $('#generalForm').serializeObject();
+                var global_os_config = {
+                    "os_config": {
+                        "global": general_config,
+                        "subnetworks": $scope.subnetworks,
+                        "route_table": $scope.routingtable
+                    }
+                };
+                console.log(global_os_config);
+                dataService.updateClusterConfig(1, global_os_config).success(function(data) {
+                    if ($scope.currentStep < $scope.steps.length)
+                        $scope.currentStep = $scope.currentStep + 1;
+                })
+            } else {
+                if ($scope.currentStep < $scope.steps.length)
+                    $scope.currentStep = $scope.currentStep + 1;
+            }
         };
 
         // go to previous step
@@ -57,10 +76,38 @@ angular.module('compass.wizard', [
 
     dataService.getAllServersInfo().success(function(data) {
         $scope.servers = data;
-        console.log(data);
     });
 
-    dataService.getOsGlobalConfig().success(function(data) {
-        $scope.os_global_config = data;
+    dataService.getAdapterConfig().success(function(data) {
+        $scope.os_global_config = data['os_config']['centos']['global'];
+        //console.log("###", $scope.os_global_config);
+
+        var os_security = data['os_config']['centos']['security'];
+        var adapter_security = data['adapter_config']['security'];
+
+        $scope.security = {
+            'os_security': os_security,
+            'adapter_security': adapter_security
+        };
+        //console.log($scope.security);
+
     });
-});
+
+    $scope.subnetworks = [];
+    $scope.newsubnetwork = {};
+    $scope.addSubnetwork = function() {
+        $scope.subnetworks.push($scope.newsubnetwork);
+        $scope.newsubnetwork = {};
+        console.log($scope.subnetworks);
+    };
+
+    $scope.routingtable = [];
+    $scope.newrouting = {};
+    $scope.addRouting = function() {
+        $scope.routingtable.push($scope.newrouting);
+        $scope.newrouting = {};
+        console.log($scope.routingtable);
+    };
+
+
+})

@@ -3,17 +3,11 @@ html {
     overflow-y: scroll;
 }
 .notification-msg {
-	white-space: normal;
+    white-space: normal;
 }
 .nav-list > li.open .submenu {
     display: block;
 }
-
-.ng-hide-add, .ng-hide-remove {
-    /* ensure visibility during the transition */
-    display: block !important; /* yes, important */
-}
-
 .cssSlideUp {
     transition: 1s linear all;
     height: 300px;
@@ -22,11 +16,13 @@ html {
 .cssSlideUp.ng-hide {
     height:0;
 }
-
 .cssFade {
     transition: 0.5s linear all;
     opacity: 1;
 }
 .cssFade.ng-hide {
     opacity: 0;
+}
+.nowrap {
+    white-space: nowrap;
 }

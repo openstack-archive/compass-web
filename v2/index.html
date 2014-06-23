@@ -13,20 +13,24 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
     <script type="text/javascript" src="vendor/jquery/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="vendor/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="vendor/angular/angular.min.js"></script>
     <script type="text/javascript" src="vendor/angular/angular-animate.min.js"></script>
+    <script type="text/javascript" src="vendor/angular/angular-mocks.js"></script>
     <!--<script type="text/javascript" src="../vendor/angular/angular-resource.min.js"></script>-->
     <script type="text/javascript" src="vendor/angular-ui-router/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls-0.11.0.min.js"></script>
+    <script type="text/javascript" src="vendor/angular-xeditable/xeditable.min.js"></script>
 
     <script type="text/javascript" src="src/app/app.js"></script>
+    <script type="text/javascript" src="src/app/appDev.js"></script>
     <script type="text/javascript" src="src/app/topnav/topnav.js"></script>
     <script type="text/javascript" src="src/app/wizard/wizard.js"></script>
     <script type="text/javascript" src="src/app/cluster/cluster.js"></script>
+    <script type="text/javascript" src="src/app/cluster/clusterlist.js"></script>
     <script type="text/javascript" src="src/app/server/server.js"></script>
+    <script type="text/javascript" src="src/common/serialize.js"></script>
 </head>
 
 <body ng-app="compass">
@@ -36,14 +40,6 @@
     </div>
 
     <div class="main-container no-skin">
-
-        <!-- use the side bar only if the state is cluster (including the nested states)-->
-        <!--<div ng-if="state.includes('cluster')">
-            <div ng-controller="clusternavCtrl">
-                <div clusternav></div>
-            </div>
-        </div>-->
-
         <div ui-view></div>
     </div>
 
