@@ -26,3 +26,42 @@ html {
 .nowrap {
     white-space: nowrap;
 }
+.action {
+    cursor: pointer;
+}
+.action i {
+    padding-top: 7px;
+}
+.role-tag {
+    background-color: #91b8d0;
+    color: #fff;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: normal;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    padding: 4px 22px 5px 9px;
+    position: relative;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease 0s;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+.alert-dismissable .close {
+    color: inherit;
+    position: relative;
+    right: -17px !important;
+    top: 0 !important;
+}
+select {
+    padding-left: 1px !important;
+}
+.opacity-zero {
+    opacity: 0;
+}
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+.max-width-200 {
+    max-width: 200px;
+}

@@ -1,89 +1,40 @@
 <div class="row">
-    <div class="col-sm-8">
-        <div class="center">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <span>
-                                Mount Point
-                            </span>
-                        </div>
-                        <div class="col-xs-3">
-                            <span>
-                                Size Percentage
-                            </span>
-                        </div>
-                        <div class="col-xs-3">
-                            <span>
-                                Max Size
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-3">
-                                <span>
-                                    <input type="text" class="input-medium" id="form-field-1">
-                                </span>
-                            </div>
-                            <div class="col-xs-3">
-                                <span>
-                                    <input type="text" class="input-medium" id="form-field-2">
-                                </span>
-                            </div>
-                            <div class="col-xs-3">
-                                <span>
-                                    <input type="text" class="input-medium" id="form-field-3">
-                                </span>
-                            </div>
-                            <div class="col-xs-1">
-                                <span>
-                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="form-group">
-
-                            <div class="col-xs-3">
-                                <span>
-                                    <input type="text" class="input-medium" id="form-field-1">
-                                </span>
-                            </div>
-                            <div class="col-xs-3">
-                                <span>
-                                    <input type="text" class="input-medium" id="form-field-2">
-                                </span>
-                            </div>
-                            <div class="col-xs-3">
-                                <span>
-                                    <input type="text" class="input-medium" id="form-field-3">
-                                </span>
-                            </div>
-                            <div class="col-xs-1">
-                                <span>
-                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
-            </div>
-        </div>
+    <div class="col-lg-8">
+        <table class="table table-hover nowrap">
+            <thead>
+                <tr>
+                    <th>Mount Point</th>
+                    <th>Size Percentage (%)</th>
+                    <th>Max Size (G)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="partition.length > 0" ng-repeat="pa in partition track by $index">
+                    <td>
+                        <input ng-model="pa.mount_point" type="text" placeholder="Mount Point" class="input-medium">
+                    </td>
+                    <td>
+                        <input ng-model="pa.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                    </td>
+                    <td>
+                        <input ng-model="pa.max_size" type="text" placeholder="Max Size" class="input-medium">
+                    </td>
+                    <td>
+                        <!--Add Action-->
+                        <span class="action" ng-click="addPartition()">
+                            <i class="fa fa-plus-circle bigger-140 blue"></i>
+                        </span>
+                        <!--Remove Action-->
+                        <span ng-show="partition.length > 1" class="action" ng-click="partition.splice($index,1)">
+                            <i class="fa fa-minus-circle bigger-140 blue"></i>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="col-sm-4">
-        <div style="height: 200px; width: 200px; background: pink;"></div>
-
-        <span>sm-3</span>
+    <div class="col-lg-4">
+        <!--TODO: Partition pie chart-->
     </div>
 </div>

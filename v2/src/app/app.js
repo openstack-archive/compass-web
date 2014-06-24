@@ -57,9 +57,13 @@ app.service('dataService', ['$http', 'settings',
             return $http.get(settings.metadataUrlBase + '/adapter_config');
         };
 
-        this.getAllServersInfo = function() {
+        this.getServers = function() {
             return $http.get(settings.apiUrlBase + '/servers');
         };
+
+        this.getServerColumns = function() {
+            return $http.get(settings.metadataUrlBase + '/machine_host_columns.json');
+        }
 
         this.getMonitoringNav = function() {
             return $http.get(settings.metadataUrlBase + '/monitoring_nav.json');
@@ -77,9 +81,17 @@ app.service('dataService', ['$http', 'settings',
             return $http.get(settings.apiUrlBase + '/clusters');
         };
 
-        this.updateClusterConfig = function (id, config) {
+        this.updateClusterConfig = function(id, config) {
             return $http.put(settings.apiUrlBase + '/clusters/' + id + '/config', angular.toJson(config));
         };
+
+        this.getClusterSubnetConfig = function(id) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/subnet-config');
+        };
+
+        this.postClusterSubnetConfig = function(id, subnet_config) {
+            return $http.post(settings.apiUrlBase + '/clusters/' + id + '/subnet-config', angular.toJson(subnet_config));
+        }
     }
 ]);
 
@@ -94,7 +106,57 @@ app.factory('wizardFactory', [
 
         wizard.getClusterInfo = function() {
             return wizard.cluster;
+        };
+
+        wizard.setSteps = function(steps) {
+            wizard.steps = steps;
+        };
+
+        wizard.getSteps = function() {
+            return wizard.steps;
+        };
+
+        wizard.setStepCommit = function(stepId, commitState, message) {
+            angular.forEach(wizard.steps, function(step) {
+                if(step.id == stepId) {
+                    step.commit = commitState;
+                    step.message = message;
+                }
+            })
+        };
+
+        wizard.getStepCommit = function(stepId) {
+            angular.forEach(wizard.steps, function(step) {
+                if(step.id == stepId) {
+                    return step;
+                }
+            })            
         }
+
+        wizard.setServers = function(servers) {
+            wizard.servers = servers;
+        };
+
+        wizard.getServers = function() {
+            return wizard.servers;
+        };
+
+        wizard.setAdapter = function(adapter) {
+            wizard.adapter = adapter;
+        };
+
+        wizard.getAdapter = function() {
+            return wizard.adapter;
+        };
+/*
+        wizard.setSubnetworks = function(subnetworks) {
+            wizard.subnetworks = subnetworks;
+        };
+
+        wizard.getSubnetworks = function() {
+            return wizard.subnetworks;
+        };
+*/
         return wizard;
     }
 ]);

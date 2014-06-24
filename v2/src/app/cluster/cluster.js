@@ -62,21 +62,8 @@ angular.module('compass.cluster', [
 .controller('createClusterCtrl', ['$scope', '$state', '$modal', '$log', 'dataService', 'wizardFactory',
     function($scope, $state, $modal, $log, dataService, wizardFactory) {
         dataService.getAdapters().success(function(data) {
-            $scope.adapters = data;
-            $scope.compatible_os = [];
-
+            $scope.allAdapters = data;
             $scope.cluster = {};
-            $scope.cluster.name = "";
-            $scope.cluster.adapter_id = $scope.adapters[0].id;
-
-            $scope.$watch('cluster.adapter_id', function() {
-                angular.forEach($scope.adapters, function(adapter) {
-                    if (adapter.id == $scope.cluster.adapter_id) {
-                        $scope.compatible_os = adapter.compatible_os;
-                        console.log($scope.compatible_os);
-                    }
-                })
-            });
 
             $scope.open = function(size) {
                 var modalInstance = $modal.open({
@@ -84,14 +71,11 @@ angular.module('compass.cluster', [
                     controller: ModalInstanceCtrl,
                     size: size,
                     resolve: {
-                        adapters: function() {
-                            return $scope.adapters;
+                        allAdapters: function() {
+                            return $scope.allAdapters;
                         },
                         cluster: function() {
                             return $scope.cluster;
-                        },
-                        compatible_os: function() {
-                            return $scope.compatible_os;
                         }
                     }
                 });
@@ -100,22 +84,33 @@ angular.module('compass.cluster', [
                     $scope.cluster = cluster;
                     dataService.createCluster(cluster).success(function(data, status) {
                         wizardFactory.setClusterInfo(data);
+                        angular.forEach($scope.allAdapters, function(adapter) {
+                            if(adapter.id == $scope.cluster.adapter_id) {
+                                wizardFactory.setAdapter(adapter);
+                            }
+                        })
                         $state.go('wizard');
                         $scope.cluster = {};
                     });
                 }, function() {
-                    console.log("modal cancelled");
+                    // modal cancelled
                 });
             };
         });
     }
 ]);
 
-
-var ModalInstanceCtrl = function($scope, $modalInstance, adapters, cluster, compatible_os) {
-    $scope.adapters = adapters;
+var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
+    $scope.allAdapters = allAdapters;
     $scope.cluster = cluster;
-    $scope.compatible_os = compatible_os;
+
+    $scope.$watch('cluster.adapter_id', function() {
+        angular.forEach($scope.allAdapters, function(adapter) {
+            if (adapter.id == $scope.cluster.adapter_id) {
+                $scope.compatible_os = adapter.compatible_os;
+            }
+        })
+    });
 
     $scope.ok = function() {
         $scope.result = 'ok';

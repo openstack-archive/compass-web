@@ -10,11 +10,135 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <form id="generalForm" class="form-horizontal" role="form">
-                                <div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
+                                <!-- Use metadata to generate the form. might be used later -->
+                                <!--<div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
                                     <div ng-if="key!='_self'">
                                         <label class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" name="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">HTTP Proxy</label>
+                                        <div class="col-sm-8">
+                                            <input ng-model="general.http_proxy" type="text" class="col-xs-10 col-sm-5" placeholder="HTTP Proxy" name="http_proxy">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">NTP Server</label>
+                                        <div class="col-sm-8">
+                                            <input ng-model="general.ntp_server" type="text" class="col-xs-10 col-sm-5" placeholder="NTP Server" name="ntp_server">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-repeat="dns_server in general.dns_servers track by $index" class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">
+                                            <span ng-if="$index==0">DNS Servers</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input ng-model="general.dns_servers[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="DNS Server" name="dns_servers">
+                                            <span class="col-xs-2 col-sm-3">
+                                                <!--Add Action-->
+                                                <span class="action" ng-click="addDNSServer()">
+                                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                </span>
+                                                <!--Remove Action-->
+                                                <span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
+                                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-repeat="search_path in general.search_path track by $index" class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">
+                                            <span ng-if="$index==0">Search Path</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input ng-model="general.search_path[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Search Path" name="search_path">
+                                            <span class="col-xs-2 col-sm-3">
+                                                <!--Add Action-->
+                                                <span class="action" ng-click="addSearchPath()">
+                                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                </span>
+                                                <!--Remove Action-->
+                                                <span ng-show="general.search_path.length > 1" class="action" ng-click="general.search_path.splice($index,1)">
+                                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                </span>
+                                            </span>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">Domain</label>
+                                        <div class="col-sm-8">
+                                            <input ng-model="general.domain" type="text" class="col-xs-10 col-sm-5" placeholder="Domain" name="domain">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">Gateway</label>
+                                        <div class="col-sm-8">
+                                            <input ng-model="general.gateway" type="text" class="col-xs-10 col-sm-5" placeholder="Gateway" name="gateway">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">Timezone</label>
+                                        <div class="col-sm-8">
+                                            <select ng-model="general.timezone" name="timezone" class="col-xs-10 col-sm-5">
+                                                <option value="-12.0">(GMT -12:00) Eniwetok, Kwajalein</option>
+                                                <option value="-11.0">(GMT -11:00) Midway Island, Samoa</option>
+                                                <option value="-10.0">(GMT -10:00) Hawaii</option>
+                                                <option value="-9.0">(GMT -9:00) Alaska</option>
+                                                <option value="-8.0">(GMT -8:00) Pacific Time (US &amp; Canada)</option>
+                                                <option value="-7.0">(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+                                                <option value="-6.0">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
+                                                <option value="-5.0">(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+                                                <option value="-4.0">(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+                                                <option value="-3.5">(GMT -3:30) Newfoundland</option>
+                                                <option value="-3.0">(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
+                                                <option value="-2.0">(GMT -2:00) Mid-Atlantic</option>
+                                                <option value="-1.0">(GMT -1:00 hour) Azores, Cape Verde Islands</option>
+                                                <option value="0.0">(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
+                                                <option value="1.0">(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
+                                                <option value="2.0">(GMT +2:00) Kaliningrad, South Africa</option>
+                                                <option value="3.0">(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+                                                <option value="3.5">(GMT +3:30) Tehran</option>
+                                                <option value="4.0">(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+                                                <option value="4.5">(GMT +4:30) Kabul</option>
+                                                <option value="5.0">(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+                                                <option value="5.5">(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+                                                <option value="5.75">(GMT +5:45) Kathmandu</option>
+                                                <option value="6.0">(GMT +6:00) Almaty, Dhaka, Colombo</option>
+                                                <option value="7.0">(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+                                                <option value="8.0">(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+                                                <option value="9.0">(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+                                                <option value="9.5">(GMT +9:30) Adelaide, Darwin</option>
+                                                <option value="10.0">(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+                                                <option value="11.0">(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+                                                <option value="12.0">(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">Language</label>
+                                        <div class="col-sm-8">
+                                            <select ng-model="general.language" name="language" class="col-xs-10 col-sm-5">
+                                                <option value="en">English</option>
+                                                <option value="cn">Chinese</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -31,7 +155,7 @@
                         <div class="col-lg-2">
                         </div>
                         <div class="col-lg-8">
-                            <table class="table table-hover table-striped nowrap">
+                            <table class="table table-hover nowrap">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -41,51 +165,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <input ng-model="newsubnetwork.name" type="text" placeholder="Name" required>
-                                        </td>
-                                        <td>
-                                            <input ng-model="newsubnetwork.subnet" type="text" placeholder="Subnet" required>
-                                        </td>
-                                        <td>
-                                            <input ng-model="newsubnetwork.netmask" type="text" placeholder="Netmask" required>
-                                        </td>
-                                        <td>
-                                            <button ng-click="addSubnetwork()" class="btn btn-info btn-sm" formnovalidate>Add</button>
-                                        </td>
-                                    </tr>
-
                                     <tr ng-repeat="sub in subnetworks">
                                         <td>
-                                            <span ng-hide="editSubnetworkMode">{{sub.name}}</span>
-                                            <input type="text" ng-show="editSubnetworkMode" ng-model="sub.name" ng-required />
+                                            <input type="text" ng-model="sub.name" placeholder="Name" />
                                         </td>
                                         <td>
-                                            <span ng-hide="editSubnetworkMode">{{sub.subnet}}</span>
-                                            <input type="text" ng-show="editSubnetworkMode" ng-model="sub.subnet" ng-required />
+                                            <input type="text" ng-model="sub.subnet" placeholder="Subnet" />
                                         </td>
                                         <td>
-                                            <span ng-hide="editSubnetworkMode">{{sub.netmask}}</span>
-                                            <input type="text" ng-show="editSubnetworkMode" ng-model="sub.netmask" ng-required />
+                                            <input type="text" ng-model="sub.netmask" placeholder="Netmask" />
                                         </td>
                                         <td>
-                                            <!--edit button-->
-                                            <button ng-hide="editSubnetworkMode" ng-click="editSubnetworkMode = true; " class="btn btn-xs btn-success">
-                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                            </button>
-                                            <!--delete button-->
-                                            <button ng-hide="editSubnetworkMode" ng-click="subnetworks.splice($index,1)" class="btn btn-xs btn-danger">
-                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                            </button>
-                                            <!--save button-->
-                                            <button ng-show="editSubnetworkMode" ng-click="editSubnetworkMode = false" class="btn btn-xs btn-primary">
-                                                <i class="ace-icon fa fa-check bigger-120"></i>
-                                            </button>
-                                            <!--cancel button-->
-                                            <button ng-show="editSubnetworkMode" ng-click="editSubnetworkMode = false; cancel()" class="btn btn-xs btn-default">
-                                                <i class="ace-icon fa fa-times bigger-120"></i>
-                                            </button>
+                                            <!--Add Action-->
+                                            <span class="action" ng-click="addSubnetwork()">
+                                                <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                            </span>
+                                            <!--Remove Action-->
+                                            <span ng-show="subnetworks.length > 1" class="action" ng-click="removeSubnetwork($index)">
+                                                <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                            </span>
                                         </td>
                                     </tr>
 
@@ -106,7 +204,7 @@
                         <div class="col-lg-2">
                         </div>
                         <div class="col-lg-8">
-                            <table class="table table-hover table-striped nowrap">
+                            <table class="table table-hover nowrap">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -117,58 +215,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr ng-repeat="route in routingtable">
                                         <td>
-                                            <input ng-model="newrouting.name" type="text" placeholder="Name" required>
+                                            <input type="text" ng-model="route.name" placeholder="Name" />
                                         </td>
                                         <td>
-                                            <input ng-model="newrouting.subnet" type="text" placeholder="Subnet" required>
+                                            <input type="text" ng-model="route.subnet" placeholder="Subnet" />
                                         </td>
                                         <td>
-                                            <input ng-model="newrouting.netmask" type="text" placeholder="Netmask" required>
+                                            <input type="text" ng-model="route.netmask" placeholder="Netmask" />
                                         </td>
                                         <td>
-                                            <input ng-model="newrouting.gateway" type="text" placeholder="Gateway" required>
-                                        </td>                                        
-                                        <td>
-                                            <button ng-click="addRouting()" class="btn btn-info btn-sm" formnovalidate>Add</button>
-                                        </td>
-                                    </tr>
-
-                                    <tr ng-repeat="routing in routingtable">
-                                        <td>
-                                            <span ng-hide="editRoutingtableMode">{{routing.name}}</span>
-                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.name" ng-required />
+                                            <input type="text" ng-model="route.gateway" placeholder="Gateway" />
                                         </td>
                                         <td>
-                                            <span ng-hide="editRoutingtableMode">{{routing.subnet}}</span>
-                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.subnet" ng-required />
-                                        </td>
-                                        <td>
-                                            <span ng-hide="editRoutingtableMode">{{routing.netmask}}</span>
-                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.netmask" ng-required />
-                                        </td>
-                                        <td>
-                                            <span ng-hide="editRoutingtableMode">{{routing.gateway}}</span>
-                                            <input type="text" ng-show="editRoutingtableMode" ng-model="routing.gateway" ng-required />
-                                        </td>                                        
-                                        <td>
-                                            <!--edit button-->
-                                            <button ng-hide="editRoutingtableMode" ng-click="editRoutingtableMode = true; " class="btn btn-xs btn-success">
-                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                            </button>
-                                            <!--delete button-->
-                                            <button ng-hide="editRoutingtableMode" ng-click="routingtable.splice($index,1)" class="btn btn-xs btn-danger">
-                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                            </button>
-                                            <!--save button-->
-                                            <button ng-show="editRoutingtableMode" ng-click="editRoutingtableMode = false" class="btn btn-xs btn-primary">
-                                                <i class="ace-icon fa fa-check bigger-120"></i>
-                                            </button>
-                                            <!--cancel button-->
-                                            <button ng-show="editRoutingtableMode" ng-click="editRoutingtableMode = false; cancel()" class="btn btn-xs btn-default">
-                                                <i class="ace-icon fa fa-times bigger-120"></i>
-                                            </button>
+                                            <!--Add Action-->
+                                            <span class="action" ng-click="addRoute()">
+                                                <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                            </span>
+                                            <!--Remove Action-->
+                                            <span ng-show="routingtable.length > 1" class="action" ng-click="removeRoute($index)">
+                                                <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                            </span>
                                         </td>
                                     </tr>
 

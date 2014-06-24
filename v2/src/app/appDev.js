@@ -14,7 +14,19 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display": "OpenStack",
             "os_installer": "cobbler",
             "package_installer": "chef",
-            "roles": ["compute", "controller", "metering", "network", "storage"],
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }, {
+                "display_name": "Controller",
+                "name": "os-controller"
+            }, {
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
             "compatible_os": [{
                 "name": "CentOs",
                 "os_id": 1
@@ -28,7 +40,16 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display": "Hadoop",
             "os_installer": "cobbler",
             "package_installer": "chef",
-            "roles": ["compute", "controller", "network", "storage"],
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }, {
+                "display_name": "Controller",
+                "name": "os-controller"
+            }, {
+                "display_name": "Network",
+                "name": "os-network"
+            }],
             "compatible_os": [{
                 "name": "CentOs",
                 "os_id": 1
@@ -41,35 +62,57 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url);
         var servers = [{
             "id": 1,
-            "Host MAC": "28.e5.ee.47.14.92",
-            "Switch IP": "172.29.8.40",
-            "Vlan": "1",
-            "Port": "1",
-            "Hostname": "sv-1",
-            "Cluster": ["cluster1", "cluster2"],
-            "OS": "CentOS",
-            "Target System": ["CentOS", "OpenStack"],
-            "State": "Installing"
+            "mac": "28.e5.ee.47.14.92",
+            "switch_ip": "172.29.8.40",
+            "vlan": "1",
+            "port": "1",
+            "hostname": "sv-1",
+            "clusters": ["cluster1", "cluster2"],
+            "os": "CentOS",
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }, {
+                "display_name": "Controller",
+                "name": "os-controller"
+            }, {
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Installing"
         }, {
             "id": 2,
-            "Host MAC": "28.e5.ee.47.a2.93",
-            "Switch IP": "172.29.8.40",
-            "Vlan": "2",
-            "Port": "2",
-            "Hostname": "sv-2",
-            "Cluster": ["cluster1"],
-            "OS": "CentOS",
-            "Target System": ["CentOS"],
-            "State": "Successful"
+            "mac": "28.e5.ee.47.a2.93",
+            "switch_ip": "172.29.8.40",
+            "vlan": "2",
+            "port": "2",
+            "hostname": "sv-2",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "roles": [{
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Successful"
         }];
+        console.log(servers);
         return [200, servers, {}];
     });
 
     $httpBackend.whenPOST(settings.apiUrlBase + '/clusters').respond(function(method, url, data) {
         console.log(method, url, data);
+        var postData = JSON.parse(data)
         var mockResponse = {
             "id": 1,
-            "name": "cluster_01",
+            "name": postData.name,
             "adapter_id": 1,
             "os_id": 1,
             "editable": true,
@@ -122,9 +165,32 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, clusters, {}];
     });
 
-    $httpBackend.whenPUT(settings.apiUrlBase + '/clusters/1/config').respond(function(method, url, data) {
+    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        return [200, {}, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/subnet-config/).respond(function(method, url, data) {
         console.log(method, url);
+        var subnetworks = [{
+                "subnet_id": 1,
+                "name": "net1",
+                "subnet": "192.168.1.0",
+                "netmask": "255.255.255.0",
+            }, {
+                "subnet_id": 2,
+                "name": "net2",
+                "subnet": "172.165.1.0",
+                "netmask": "255.255.255.0",
+            }
+        ];
+        return [200, subnetworks, {}];
+    });
+
+    $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/subnet-config/).respond(function(method, url, data) {
+        console.log(method, url, data);
 
         return [200, {}, {}];
     });
+
 });

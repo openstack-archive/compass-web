@@ -1,1 +1,95 @@
-network
+<div ng-controller="networkCtrl">
+    <div class="row">
+        <div class="pull-left">
+            <form name="addInterfaceForm">
+                <div class="input-group">
+                    <input ng-model="newInterface" type="text" placeholder="Interface" class="form-control" required>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-info" ng-disabled="addInterfaceForm.$invalid" ng-click="addInterface(newInterface)">
+                            Add
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="pull-left">
+            <span class="input-icon">
+                <input type="text" placeholder="Search" ng-model="search">
+                <i class="ace-icon fa fa-search blue"></i>
+            </span>
+        </div>
+        <div class="pull-left">
+            <button ng-click="autofill()" type="button" class="btn btn-sm btn-primary">
+                Autofill
+            </button>
+        </div>
+        <div class="pull-right">
+            <!-- Column Show / Hide button -->
+            <div class="btn-group" dropdown>
+                <button type="button" class="btn btn-white btn-default dropdown-toggle">
+                    Column Show / Hide
+                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                        <a class="action">
+                            <span ng-class="{'opacity-zero': !column.visible}">
+                                <i class="ace-icon fa fa-check blue"></i>
+                            </span>
+                            {{column.title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <table ng-table="tableParams" class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{
+                    'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                    'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                  }" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                        {{column.title}}
+                    </th>
+                    <th ng-repeat="interface in interfaces" ng-mouseover="deleteView=true" ng-mouseleave="deleteView=false">
+                        {{interface}}
+                        <span ng-class="{'opacity-zero': !deleteView}" ng-click="deleteInterface(interface)" class="action"><i class="ace-icon fa fa-times-circle bigger-120 red"></i> </span>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="server in $data | filter:search" ng-init="serverIndex = $index">
+                    <td>
+                        <input ng-model="server.checked" type="checkbox">
+                    </td>
+                    <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                        <span ng-if="column.field=='hostname'">
+                            <input ng-model="server[column.field]" placeholder="Hostname" class="form-control margin-bottom-10 max-width-200" type="text">
+                        </span>
+                        <span ng-if="column.field!='hostname'">
+                            {{server[column.field]}}
+                        </span>
+                    </td>
+                    <td ng-repeat="interface in interfaces" ng-init="server.network[interface]={};">
+                        <input ng-model="server.network[interface].ip" placeholder="IP Address" class="form-control margin-bottom-10 max-width-200" type="text">
+                        <select ng-model="server.network[interface].subnet_id" class="form-control margin-bottom-10 max-width-200">
+                            <option ng-repeat="sub in subnetworks" value="{{sub.subnet_id}}">
+                                Subnetwork: {{sub.name}}
+                            </option>
+                        </select>
+                        <span>
+                            <!--TODO: validate management network (each sv can only have one mgmt network) -->
+                            <!--radio not working here to bind model-->
+                            <input ng-model="server.network[interface].is_mgmt" name="mgmt-{{serverIndex}}" type="checkbox"> Is Mgmt Network
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

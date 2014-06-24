@@ -1,113 +1,113 @@
 {
-  "os_and_ts": [{
-    "id": 1,
-    "title": "Server Selection",
-    "state": "active",
-    "template": "src/app/wizard/server_selection.tpl.html",
-    "description": "Select the servers you want to use for OpenStack"
-  }, {
-    "id": 2,
-    "title": "OS Global Config",
-    "state": "",
-    "template": "src/app/wizard/global.tpl.html",
-    "description": ""
-  }, {
-    "id": 3,
-    "title": "Network",
-    "state": "",
-    "template": "src/app/wizard/network.tpl.html",
-    "description": ""
-  }, {
-    "id": 4,
-    "title": "Partition",
-    "state": "",
-    "template": "src/app/wizard/partition.tpl.html",
-    "description": ""
-  }, {
-    "id": 5,
-    "title": "Security",
-    "state": "",
-    "template": "src/app/wizard/security.tpl.html",
-    "description": ""
-  }, {
-    "id": 6,
-    "title": "Role Assignment",
-    "state": "",
-    "template": "src/app/wizard/role_assignment.tpl.html",
-    "description": ""
-  }, {
-    "id": 7,
-    "title": "Network Mapping",
-    "state": "",
-    "template": "src/app/wizard/network_mapping.tpl.html",
-    "description": ""
-  }, {
-    "id": 8,
-    "title": "Review",
-    "state": "",
-    "template": "src/app/wizard/review.tpl.html",
-    "description": ""
-  }],
-  "os": [{
-    "id": 1,
-    "title": "Server Selection",
-    "state": "active",
-    "template": "templates/server_selection.html"
-  }, {
-    "id": 2,
-    "title": "Timezone & Language",
-    "state": "",
-    "template": "templates/timezone_language.html"
-  }, {
-    "id": 3,
-    "title": "Partition",
-    "state": "",
-    "template": "templates/partition.html"
-  }, {
-    "id": 4,
-    "title": "Network",
-    "state": "",
-    "template": "templates/network.html"
-  }, {
-    "id": 5,
-    "title": "Host Configuration",
-    "state": "",
-    "template": "templates/host_config.html"
-  }, {
-    "id": 6,
-    "title": "Security",
-    "state": "",
-    "template": "templates/security.html"
-  }, {
-    "id": 7,
-    "title": "Review",
-    "state": "",
-    "template": "templates/review.html"
-  }],
-  "ts": [{
-    "id": 1,
-    "title": "Server Selection",
-    "state": "active",
-    "template": "templates/server_selection.html"
-  }, {
-    "id": 2,
-    "title": "Security",
-    "state": "",
-    "template": "templates/security.html"
-  }, {
-    "id": 3,
-    "title": "Role Assignment",
-    "state": "",
-    "template": "templates/role_assignment.html"
-  }, {
-    "id": 4,
-    "title": "Network Mapping",
-    "state": "",
-    "template": "templates/network_mapping.html"
-  }, {
-    "id": 5,
-    "title": "Review",
-    "state": "",
-    "template": "templates/review.html"
-  }]
+    "os_and_ts": [{
+        "id": 1,
+        "title": "Server Selection",
+        "state": "active",
+        "template": "src/app/wizard/server_selection.tpl.html",
+        "description": "Select the servers you want to use for OpenStack"
+    }, {
+        "id": 2,
+        "title": "OS Global Config",
+        "state": "",
+        "template": "src/app/wizard/global.tpl.html",
+        "description": ""
+    }, {
+        "id": 3,
+        "title": "Network",
+        "state": "",
+        "template": "src/app/wizard/network.tpl.html",
+        "description": ""
+    }, {
+        "id": 4,
+        "title": "Partition",
+        "state": "",
+        "template": "src/app/wizard/partition.tpl.html",
+        "description": ""
+    }, {
+        "id": 5,
+        "title": "Security",
+        "state": "",
+        "template": "src/app/wizard/security.tpl.html",
+        "description": ""
+    }, {
+        "id": 6,
+        "title": "Role Assignment",
+        "state": "",
+        "template": "src/app/wizard/role_assignment.tpl.html",
+        "description": ""
+    }, {
+        "id": 7,
+        "title": "Network Mapping",
+        "state": "",
+        "template": "src/app/wizard/network_mapping.tpl.html",
+        "description": ""
+    }, {
+        "id": 8,
+        "title": "Review",
+        "state": "",
+        "template": "src/app/wizard/review.tpl.html",
+        "description": ""
+    }],
+    "os": [{
+        "id": 1,
+        "title": "Server Selection",
+        "state": "active",
+        "template": "templates/server_selection.html"
+    }, {
+        "id": 2,
+        "title": "Timezone & Language",
+        "state": "",
+        "template": "templates/timezone_language.html"
+    }, {
+        "id": 3,
+        "title": "Partition",
+        "state": "",
+        "template": "templates/partition.html"
+    }, {
+        "id": 4,
+        "title": "Network",
+        "state": "",
+        "template": "templates/network.html"
+    }, {
+        "id": 5,
+        "title": "Host Configuration",
+        "state": "",
+        "template": "templates/host_config.html"
+    }, {
+        "id": 6,
+        "title": "Security",
+        "state": "",
+        "template": "templates/security.html"
+    }, {
+        "id": 7,
+        "title": "Review",
+        "state": "",
+        "template": "templates/review.html"
+    }],
+    "ts": [{
+        "id": 1,
+        "title": "Server Selection",
+        "state": "active",
+        "template": "templates/server_selection.html"
+    }, {
+        "id": 2,
+        "title": "Security",
+        "state": "",
+        "template": "templates/security.html"
+    }, {
+        "id": 3,
+        "title": "Role Assignment",
+        "state": "",
+        "template": "templates/role_assignment.html"
+    }, {
+        "id": 4,
+        "title": "Network Mapping",
+        "state": "",
+        "template": "templates/network_mapping.html"
+    }, {
+        "id": 5,
+        "title": "Review",
+        "state": "",
+        "template": "templates/review.html"
+    }]
 }
