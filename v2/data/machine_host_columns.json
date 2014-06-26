@@ -32,6 +32,10 @@
         "field": "os_installed",
         "visible": true
     }, {
+        "title": "Adapter",
+        "field": "adapter",
+        "visible": true
+    }, {
         "title": "State",
         "field": "state",
         "visible": true
@@ -67,6 +71,10 @@
     }, {
         "title": "OS Reinstall",
         "field": "os_installed",
+        "visible": false
+    }, {
+        "title": "Adapter",
+        "field": "adapter",
         "visible": false
     }, {
         "title": "State",

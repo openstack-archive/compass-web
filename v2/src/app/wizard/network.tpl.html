@@ -12,9 +12,10 @@
                 </div>
             </form>
         </div>
+        
         <div class="pull-left">
             <span class="input-icon">
-                <input type="text" placeholder="Search" ng-model="search">
+                <input type="text" placeholder="Search" ng-model="search.$">
                 <i class="ace-icon fa fa-search blue"></i>
             </span>
         </div>
@@ -46,7 +47,7 @@
 
     <div class="row">
         <table ng-table="tableParams" class="table table-hover table-striped">
-            <thead>
+           <thead>
                 <tr>
                     <th></th>
                     <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{
@@ -63,7 +64,7 @@
             </thead>
 
             <tbody>
-                <tr ng-repeat="server in $data | filter:search" ng-init="serverIndex = $index">
+                <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index">
                     <td>
                         <input ng-model="server.checked" type="checkbox">
                     </td>
@@ -74,7 +75,9 @@
                         <span ng-if="column.field!='hostname'">
                             {{server[column.field]}}
                         </span>
+                        {{server.network}}
                     </td>
+
                     <td ng-repeat="interface in interfaces" ng-init="server.network[interface]={};">
                         <input ng-model="server.network[interface].ip" placeholder="IP Address" class="form-control margin-bottom-10 max-width-200" type="text">
                         <select ng-model="server.network[interface].subnet_id" class="form-control margin-bottom-10 max-width-200">
@@ -83,8 +86,7 @@
                             </option>
                         </select>
                         <span>
-                            <!--TODO: validate management network (each sv can only have one mgmt network) -->
-                            <!--radio not working here to bind model-->
+
                             <input ng-model="server.network[interface].is_mgmt" name="mgmt-{{serverIndex}}" type="checkbox"> Is Mgmt Network
                         </span>
                     </td>

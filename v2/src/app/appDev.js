@@ -69,6 +69,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "hostname": "sv-1",
             "clusters": ["cluster1", "cluster2"],
             "os": "CentOS",
+            "adapter": "OpenStack",
             "roles": [{
                 "display_name": "Compute",
                 "name": "os-compute-worker"
@@ -93,6 +94,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "hostname": "sv-2",
             "clusters": ["cluster1"],
             "os": "CentOS",
+            "adapter": "OpenStack",
             "roles": [{
                 "display_name": "Network",
                 "name": "os-network"
@@ -167,30 +169,53 @@ compassAppDev.run(function($httpBackend, settings, $http) {
 
     $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
         console.log(method, url, data);
-        return [200, {}, {}];
+        var config = JSON.parse(data);
+
+        return [200, config, {}];
     });
 
     $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/subnet-config/).respond(function(method, url, data) {
         console.log(method, url);
         var subnetworks = [{
-                "subnet_id": 1,
-                "name": "net1",
-                "subnet": "192.168.1.0",
-                "netmask": "255.255.255.0",
-            }, {
-                "subnet_id": 2,
-                "name": "net2",
-                "subnet": "172.165.1.0",
-                "netmask": "255.255.255.0",
-            }
-        ];
+            "subnet_id": 1,
+            "name": "net1",
+            "subnet": "192.168.1.0",
+            "netmask": "255.255.255.0",
+        }, {
+            "subnet_id": 2,
+            "name": "net2",
+            "subnet": "172.165.1.0",
+            "netmask": "255.255.255.0",
+        }];
         return [200, subnetworks, {}];
     });
 
     $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/subnet-config/).respond(function(method, url, data) {
         console.log(method, url, data);
 
-        return [200, {}, {}];
+        var subnetConfig = JSON.parse(data);
+        var i = 1;
+        angular.forEach(subnetConfig, function(subnet) {
+            subnet.subnet_id = i;
+            i++;
+        });
+
+        console.log(subnetConfig);
+        return [200, subnetConfig, {}];
     });
+
+    $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/routing-table/).respond(function(method, url, data) {
+        console.log(method, url, data);
+
+        var routingTable = JSON.parse(data);
+        var i = 1;
+        angular.forEach(routingTable, function(rt) {
+            rt.id = i;
+            i++;
+        });
+
+        console.log(routingTable);
+        return [200, routingTable, {}];
+    })
 
 });
