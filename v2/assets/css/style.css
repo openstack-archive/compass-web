@@ -26,3 +26,16 @@ html {
 .nowrap {
     white-space: nowrap;
 }
+.btn-clstr {
+    border: none !important;
+    background-color: inherit!important;
+    color: #000000 !important
+}
+button.btn-cltd:hover, button.btn-clstrd:active {
+    background-color: #d15b47 !important;
+    color: #FFFFFF !important;
+}
+button.btn-clte:hover, button.btn-clstre:active {
+    background-color:#3a87ad !important;
+    color: #FFFFFF !important;
+}

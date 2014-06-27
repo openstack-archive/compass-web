@@ -1,1 +1,43 @@
-cluster list
+<h1>My Clusters</h1>
+  <div>
+    <table ng-table="tableParams" class="ng-table table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th><a href="" ng-click="showSort= 'true'; sortAsc = ! sortAsc; predicate = 'clusterName'; reverse=!reverse">Cluster Name
+             <i ng-hide="showSort" class="fa fa-sort"></i>
+             <span ng-show="showSort">
+                <i ng-show="sortAsc" class="fa fa-sort-asc"></i>
+                <i ng-hide="sortAsc" class="fa fa-sort-desc"></i></a>
+            </span>
+            </th>
+          <th><a href="" ng-click="predicate = 'clusterState'; reverse=!reverse">State</a></th>
+          <th>Deployment Details</th>
+          <th><a href="" ng-click="predicate = 'targetSystem'; reverse=!reverse">Target System</a></th>
+          <th><a href="" ng-click="predicate = 'dateModified'; reverse=!reverse">Date Modified</a></th>
+          <th>Actions</th>
+        </tr>
+       </thead>
+  <tbody>
+      <tr ng-repeat="cluster in $data | orderBy:predicate:reverse">
+        <td sortable="cluster.clusterName">{{cluster.clusterName}}</td>
+        <td><span class ="label label label-sm" ng-class="{
+        'label-warning':cluster.clusterState==='Undeployed',
+        'label-info':cluster.clusterState==='Deploying', 
+        'label-danger':cluster.clusterState==='Failed',
+        'label-success':cluster.clusterState==='Successful'}"> 
+          {{cluster.clusterState}}</span></td>
+        <td>{{cluster.deploymentDetails}}</td>
+        <td>{{cluster.targetSystem}}</td>
+        <td>{{cluster.dateModified}}</td>
+        <td>
+          <button ng-click="alert()" class="btn btn-xs btn-clstr btn-cltd">
+            <i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+          <button ng-click="export()" class="btn btn-xs btn-clstr btn-clte">
+            <i class="glyphicon glyphicon-export"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+
