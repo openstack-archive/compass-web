@@ -27,6 +27,7 @@ html {
 .nowrap {
     white-space: nowrap;
 }
+
 .action {
     cursor: pointer;
 }
@@ -68,4 +69,83 @@ select {
 }
 .partition-chart {
     padding-top: 30px;
+.btn-clstr {
+    border: none !important;
+    background-color: inherit!important;
+    color: #000000 !important
+}
+button.btn-cltd:hover, button.btn-clstrd:active {
+    background-color: #d15b47 !important;
+    color: #FFFFFF !important;
+}
+button.btn-clte:hover, button.btn-clstre:active {
+    background-color:#3a87ad !important;
+    color: #FFFFFF !important;
+}
+.clusterlist-top {
+    padding: 1% 2% !important;
+}
+.clusterlist-right {
+    float: right !important;
+}
+.ng-table th.sortable {
+    cursor: pointer
+}
+.ng-table th.sortable div {
+    padding-right: 18px;
+    position: relative
+}
+.ng-table th.sortable div:after, .ng-table th.sortable div:before {
+    content: "";
+    border-width: 0 4px 4px;
+    border-style: solid;
+    border-color: #000 transparent;
+    visibility: visible;
+    right: 8px;
+    top: 50%;
+    position: absolute;
+    opacity: .3;
+    margin-top: -4px
+}
+.ng-table th.sortable div:before {
+    margin-top: 2px;
+    border-bottom: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #000
+}
+.ng-table th.sortable div:hover:after, .ng-table th.sortable div:hover:before {
+    opacity: 1;
+    visibility: visible
+}
+.ng-table th.sortable.sort-desc, .ng-table th.sortable.sort-asc {
+    background-color: rgba(141, 192, 219, .25);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, .75)
+}
+.ng-table th.sortable.sort-desc div:after, .ng-table th.sortable.sort-asc div:after {
+    margin-top: -2px
+}
+.ng-table th.sortable.sort-desc div:before, .ng-table th.sortable.sort-asc div:before {
+    visibility: hidden
+}
+.ng-table th.sortable.sort-asc div:after, .ng-table th.sortable.sort-asc div:hover:after {
+    visibility: visible;
+    filter: alpha(opacity=60);
+    -khtml-opacity: .6;
+    -moz-opacity: .6;
+    opacity: .6
+}
+.ng-table th.sortable.sort-desc div:after {
+    border-bottom: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #000;
+    visibility: visible;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    filter: alpha(opacity=60);
+    -khtml-opacity: .6;
+    -moz-opacity: .6;
+    opacity: .6
 }
