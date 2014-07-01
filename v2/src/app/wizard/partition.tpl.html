@@ -1,40 +1,42 @@
-<div class="row">
-    <div class="col-lg-8">
-        <table class="table table-hover nowrap">
-            <thead>
-                <tr>
-                    <th>Mount Point</th>
-                    <th>Size Percentage (%)</th>
-                    <th>Max Size (G)</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-if="partition.length > 0" ng-repeat="pa in partition track by $index">
-                    <td>
-                        <input ng-model="pa.mount_point" type="text" placeholder="Mount Point" class="input-medium">
-                    </td>
-                    <td>
-                        <input ng-model="pa.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
-                    </td>
-                    <td>
-                        <input ng-model="pa.max_size" type="text" placeholder="Max Size" class="input-medium">
-                    </td>
-                    <td>
-                        <!--Add Action-->
-                        <span class="action" ng-click="addPartition()">
-                            <i class="fa fa-plus-circle bigger-140 blue"></i>
-                        </span>
-                        <!--Remove Action-->
-                        <span ng-show="partition.length > 1" class="action" ng-click="partition.splice($index,1)">
-                            <i class="fa fa-minus-circle bigger-140 blue"></i>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-lg-4">
-        <!--TODO: Partition pie chart-->
+<div ng-controller="partitionCtrl">
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table table-hover nowrap">
+                <thead>
+                    <tr>
+                        <th>Mount Point</th>
+                        <th>Size Percentage (%)</th>
+                        <th>Max Size (G)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="partition.length > 0" ng-repeat="pa in partition track by $index">
+                        <td>
+                            <input ng-model="pa.mount_point" type="text" placeholder="Mount Point" class="input-medium">
+                        </td>
+                        <td>
+                            <input ng-model="pa.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                        </td>
+                        <td>
+                            <input ng-model="pa.max_size" type="text" placeholder="Max Size" class="input-medium">
+                        </td>
+                        <td>
+                            <!--Add Action-->
+                            <span class="action" ng-click="addPartition()">
+                                <i class="fa fa-plus-circle bigger-140 blue"></i>
+                            </span>
+                            <!--Remove Action-->
+                            <span ng-show="partition.length > 1" class="action" ng-click="partition.splice($index,1)">
+                                <i class="fa fa-minus-circle bigger-140 blue"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <!--TODO: Partition pie chart-->
+        </div>
     </div>
 </div>

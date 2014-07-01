@@ -3,7 +3,7 @@
         <div class="col-xs-12">
             <div class="accordion-style1 panel-group accordion-style2" id="accordion">
                 <accordion close-others="true">
-                    <accordion-group is-open="status1.open">
+                    <accordion-group ng-init="status1.open=true" is-open="status1.open">
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> General
                         </accordion-heading>
@@ -19,6 +19,7 @@
                                         </div>
                                     </div>
                                 </div>-->
+                                    <!--TODO: use json to generate inputs-->
                                     <div class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">HTTP Proxy</label>
@@ -160,7 +161,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-lg-2">
                             </div>
                         </div>
 

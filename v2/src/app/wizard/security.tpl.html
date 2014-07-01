@@ -1,145 +1,147 @@
-<div class="row">
-    <div class="col-xs-12">
-        <div class="accordion-style1 panel-group accordion-style2" id="accordion">
-            <accordion close-others="true">
+<div ng-controller="securityCtrl">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="accordion-style1 panel-group accordion-style2" id="accordion">
+                <accordion close-others="true">
 
-                <accordion-group is-open="status1.open">
-                    <accordion-heading>
-                        <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> Server Credentials
-                    </accordion-heading>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label no-padding-right">Username</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" id="server-username">
+                    <accordion-group is-open="status1.open">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> Server Credentials
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">Username</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" id="server-username">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label no-padding-right">Password</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="col-xs-10 col-sm-5" placeholder="Password" id="server-password">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">Password</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Password" id="server-password">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="{{key}}" class="col-sm-4 control-label no-padding-right">Confirm Password</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="col-xs-10 col-sm-5" placeholder="Confirm Password" id="{{key}}">
+                                    <div class="form-group">
+                                        <label for="{{key}}" class="col-sm-4 control-label no-padding-right">Confirm Password</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Confirm Password" id="{{key}}">
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </accordion-group>
+                    </accordion-group>
 
-                <accordion-group is-open="status2.open">
-                    <accordion-heading>
-                        <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> OpenStack Services Credentials
-                    </accordion-heading>
-                    <div class="row">
-                        <div class="col-lg-2">
+                    <accordion-group is-open="status2.open">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> OpenStack Services Credentials
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-lg-2">
+                            </div>
+                            <div class="col-lg-8">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(service, credential) in service_credentials" inlineEdit>
+                                            <td>
+                                                <span ng-hide="editServiceMode">{{service}}</span>
+                                                <input ng-show="editServiceMode" ng-model="service" placeholder="Service" type="text" ng-required />
+                                            </td>
+                                            <td>
+                                                <span ng-hide="editServiceMode">{{credential.username}}</span>
+                                                <input ng-show="editServiceMode" ng-model="credential.username" placeholder="Username" type="text" ng-required />
+                                            </td>
+                                            <td>
+                                                <span ng-hide="editServiceMode">{{credential.password}}</span>
+                                                <input ng-show="editServiceMode" ng-model="credential.password" placeholder="Password" type="password" ng-required />
+                                                <input ng-show="editServiceMode" placeholder="Confirm Password" type="password" ng-required />
+                                            </td>
+                                            <td>
+                                                <!--edit button-->
+                                                <button ng-hide="editServiceMode" ng-click="editServiceMode = true; edit()" class="btn btn-xs btn-success">
+                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                </button>
+                                                <!--save button-->
+                                                <button ng-show="editServiceMode" ng-click="editServiceMode = false; save()" class="btn btn-xs btn-primary">
+                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                </button>
+                                                <!--cancel button-->
+                                                <button ng-show="editServiceMode" ng-click="editServiceMode = false; cancel()" class="btn btn-xs btn-default">
+                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-2">
+                            </div>
                         </div>
-                        <div class="col-lg-8">
-                            <table class="table table-hover nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Service</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="(service, credential) in service_credentials" inlineEdit>
-                                        <td>
-                                            <span ng-hide="editServiceMode">{{service}}</span>
-                                            <input ng-show="editServiceMode" ng-model="service" placeholder="Service" type="text" ng-required />
-                                        </td>
-                                        <td>
-                                            <span ng-hide="editServiceMode">{{credential.username}}</span>
-                                            <input ng-show="editServiceMode" ng-model="credential.username" placeholder="Username" type="text" ng-required />
-                                        </td>
-                                        <td>
-                                            <span ng-hide="editServiceMode">{{credential.password}}</span>
-                                            <input ng-show="editServiceMode" ng-model="credential.password" placeholder="Password" type="password" ng-required />
-                                            <input ng-show="editServiceMode" placeholder="Confirm Password" type="password" ng-required />
-                                        </td>
-                                        <td>
-                                            <!--edit button-->
-                                            <button ng-hide="editServiceMode" ng-click="editServiceMode = true; edit()" class="btn btn-xs btn-success">
-                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                            </button>
-                                            <!--save button-->
-                                            <button ng-show="editServiceMode" ng-click="editServiceMode = false; save()" class="btn btn-xs btn-primary">
-                                                <i class="ace-icon fa fa-check bigger-120"></i>
-                                            </button>
-                                            <!--cancel button-->
-                                            <button ng-show="editServiceMode" ng-click="editServiceMode = false; cancel()" class="btn btn-xs btn-default">
-                                                <i class="ace-icon fa fa-times bigger-120"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-lg-2">
-                        </div>
-                    </div>
-                </accordion-group>
+                    </accordion-group>
 
-                <accordion-group is-open="status.open">
-                    <accordion-heading>
-                        <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> OpenStack Management Console Credentials
-                    </accordion-heading>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <table class="table table-hover nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Service</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="(service, credential) in management_credentials" inlineEdit>
-                                        <td>
-                                            <span ng-hide="editMgntMode">{{service}}</span>
-                                            <input ng-show="editMgntMode" ng-model="service" placeholder="Service" type="text" ng-required />
-                                        </td>
-                                        <td>
-                                            <span ng-hide="editMgntMode">{{credential.username}}</span>
-                                            <input ng-show="editMgntMode" ng-model="credential.username" placeholder="Username" type="text" ng-required />
-                                        </td>
-                                        <td>
-                                            <span ng-hide="editMgntMode">{{credential.password}}</span>
-                                            <input ng-show="editMgntMode" ng-model="credential.password" placeholder="Password" type="password" ng-required />
-                                            <input ng-show="editMgntMode" placeholder="Confirm Password" type="password" ng-required />
-                                        </td>
-                                        <td>
-                                            <!--edit button-->
-                                            <button ng-hide="editMgntMode" ng-click="editMgntMode = true; edit()" class="btn btn-xs btn-success">
-                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                            </button>
-                                            <!--save button-->
-                                            <button ng-show="editMgntMode" ng-click="editMgntMode = false; save()" class="btn btn-xs btn-primary">
-                                                <i class="ace-icon fa fa-check bigger-120"></i>
-                                            </button>
-                                            <!--cancel button-->
-                                            <button ng-show="editMgntMode" ng-click="editMgntMode = false; cancel()" class="btn btn-xs btn-default">
-                                                <i class="ace-icon fa fa-times bigger-120"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <accordion-group is-open="status.open">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> OpenStack Management Console Credentials
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(service, credential) in management_credentials" inlineEdit>
+                                            <td>
+                                                <span ng-hide="editMgntMode">{{service}}</span>
+                                                <input ng-show="editMgntMode" ng-model="service" placeholder="Service" type="text" ng-required />
+                                            </td>
+                                            <td>
+                                                <span ng-hide="editMgntMode">{{credential.username}}</span>
+                                                <input ng-show="editMgntMode" ng-model="credential.username" placeholder="Username" type="text" ng-required />
+                                            </td>
+                                            <td>
+                                                <span ng-hide="editMgntMode">{{credential.password}}</span>
+                                                <input ng-show="editMgntMode" ng-model="credential.password" placeholder="Password" type="password" ng-required />
+                                                <input ng-show="editMgntMode" placeholder="Confirm Password" type="password" ng-required />
+                                            </td>
+                                            <td>
+                                                <!--edit button-->
+                                                <button ng-hide="editMgntMode" ng-click="editMgntMode = true; edit()" class="btn btn-xs btn-success">
+                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                </button>
+                                                <!--save button-->
+                                                <button ng-show="editMgntMode" ng-click="editMgntMode = false; save()" class="btn btn-xs btn-primary">
+                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                </button>
+                                                <!--cancel button-->
+                                                <button ng-show="editMgntMode" ng-click="editMgntMode = false; cancel()" class="btn btn-xs btn-default">
+                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </accordion-group>
+                    </accordion-group>
 
-            </accordion>
+                </accordion>
+            </div>
         </div>
     </div>
 </div>

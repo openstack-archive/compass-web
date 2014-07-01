@@ -58,10 +58,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, adapters, {}];
     });
 
-    $httpBackend.whenGET(settings.apiUrlBase + '/servers').respond(function(method, url, data) {
+    $httpBackend.whenGET(settings.apiUrlBase + '/machines-hosts').respond(function(method, url, data) {
         console.log(method, url);
         var servers = [{
-            "id": 1,
+            "machine_id": 10,
             "mac": "28.e5.ee.47.14.92",
             "switch_ip": "172.29.8.40",
             "vlan": "1",
@@ -86,7 +86,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "network": {},
             "state": "Installing"
         }, {
-            "id": 2,
+            "machine_id": 11,
             "mac": "28.e5.ee.47.a2.93",
             "switch_ip": "172.29.8.40",
             "vlan": "2",
@@ -171,6 +171,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
         var config = JSON.parse(data);
 
+        console.log(config);
         return [200, config, {}];
     });
 
@@ -194,11 +195,16 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
 
         var subnetConfig = JSON.parse(data);
-        var i = 1;
-        angular.forEach(subnetConfig, function(subnet) {
-            subnet.subnet_id = i;
-            i++;
-        });
+        subnetConfig.subnet_id = Math.floor((Math.random() * 100) + 1);
+
+        console.log(subnetConfig);
+        return [200, subnetConfig, {}];
+    });
+
+    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/subnet-config\/[1-9][0-9]*/).respond(function(method, url, data) {
+        console.log(method, url, data);
+
+        var subnetConfig = JSON.parse(data);
 
         console.log(subnetConfig);
         return [200, subnetConfig, {}];
@@ -208,14 +214,39 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
 
         var routingTable = JSON.parse(data);
-        var i = 1;
-        angular.forEach(routingTable, function(rt) {
-            rt.id = i;
-            i++;
-        });
+        routingTable.id = Math.floor((Math.random() * 100) + 1);
 
         console.log(routingTable);
         return [200, routingTable, {}];
-    })
+    });
 
+    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/routing-table\/[1-9][0-9]*/).respond(function(method, url, data) {
+        console.log(method, url, data);
+
+        var routingTable = JSON.parse(data);
+
+        console.log(routingTable);
+        return [200, routingTable, {}];
+    });
+
+    $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/action/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var actionResponse = {
+            "hosts": [{
+                "id": Math.floor((Math.random() * 100) + 1),
+                "machine_id": 10
+            }, {
+                "id": Math.floor((Math.random() * 100) + 1),
+                "machine_id": 11
+            }]
+        }
+        return [200, actionResponse, {}];
+    });
+
+    $httpBackend.whenPOST(/\.*\/hosts\/[1-9][0-9]*\/network/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var network = JSON.parse(data);
+        network.id = Math.floor((Math.random() * 100) + 1);
+        return [200, network, {}];
+    });
 });

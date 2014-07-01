@@ -1,20 +1,11 @@
 <div ng-controller="svSelectCtrl">
     <div class="row">
         <div class="pull-left">
+            <!--Search Input-->
             <span class="input-icon">
-                <input type="text" placeholder="Search" ng-model="search">
+                <input type="text" placeholder="Search" ng-model="search.$">
                 <i class="ace-icon fa fa-search blue"></i>
             </span>
-        </div>
-        <div class="pull-right">
-            <div class="checkbox">
-                <label>
-                    <input ng-model="hideunselected" ng-change="hideUnselected()" type="checkbox" class="ace">
-                    <span class="lbl">&nbsp;Hide Unselected Servers</span>
-                </label>
-            </div>
-        </div>
-        <div class="pull-right">
             <!-- Column Show / Hide button -->
             <div class="btn-group" dropdown>
                 <button type="button" class="btn btn-white btn-default dropdown-toggle">
@@ -33,45 +24,55 @@
                 </ul>
             </div>
         </div>
+        <div class="pull-right">
+            <div class="checkbox">
+                <label>
+                    <input ng-model="hideunselected" ng-change="hideUnselected()" type="checkbox" class="ace">
+                    <span class="lbl">&nbsp;Hide Unselected Servers</span>
+                </label>
+            </div>
+        </div>
     </div>
 
     <div class="row">
-        <table ng-table="tableParams" class="table table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" ng-model="selectall" ng-change="selectAllServers(selectall)">
-                    </th>
-                    <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" ng-model="selectall" ng-change="selectAllServers(selectall)">
+                        </th>
+                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{
                     'sort-asc': tableParams.isSortBy(column.field, 'asc'),
                     'sort-desc': tableParams.isSortBy(column.field, 'desc')
                   }" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
-                        {{column.title}}
-                    </th>
-                </tr>
-            </thead>
+                            {{column.title}}
+                        </th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr ng-repeat="server in $data | filter:search">
-                    <td>
-                        <input ng-model="server.selected" type="checkbox">
-                    </td>
-                    <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
-                        <span ng-if="column.field=='os_installed'">
-                            <span ng-if="server['os']">
-                                <input type="checkbox" ng-model="server.reinstallos">
-                                <span class="lbl">&nbsp;Reinstall OS</span>
+                <tbody>
+                    <tr ng-repeat="server in $data | filter:search">
+                        <td>
+                            <input ng-model="server.selected" type="checkbox">
+                        </td>
+                        <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                            <span ng-if="column.field=='os_installed'">
+                                <span ng-if="server['os']">
+                                    <input type="checkbox" ng-model="server.reinstallos">
+                                    <span class="lbl"></span>
+                                </span>
+                                <span ng-if="!server['os']">
+                                    -
+                                </span>
                             </span>
-                            <span ng-if="!server['os']">
-                                -
+                            <span ng-if="column.field!='os_installed'">
+                                {{server[column.field]}}
                             </span>
-                        </span>
-                        <span ng-if="column.field!='os_installed'">
-                            {{server[column.field]}}
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

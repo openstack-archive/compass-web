@@ -8,6 +8,7 @@ html {
 .nav-list > li.open .submenu {
     display: block;
 }
+/*
 .cssSlideUp {
     transition: 1s linear all;
     height: 300px;
@@ -22,7 +23,7 @@ html {
 }
 .cssFade.ng-hide {
     opacity: 0;
-}
+}*/
 .nowrap {
     white-space: nowrap;
 }
