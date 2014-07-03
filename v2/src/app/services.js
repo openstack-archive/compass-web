@@ -116,6 +116,7 @@ angular.module('compass.services', [])
             wizard.routingtable = [];
             wizard.generalConfig = {};
             wizard.interfaces = {};
+            wizard.partition = {};
         };
 
         wizard.reset();
@@ -201,6 +202,14 @@ angular.module('compass.services', [])
         wizard.getInterfaces = function() {
             return wizard.interfaces;
         };
+
+        wizard.setPartition = function(partition) {
+            wizard.partition = partition;
+        };
+
+        wizard.getPartition = function() {
+            return wizard.partition;
+        }
 
         return wizard;
     }

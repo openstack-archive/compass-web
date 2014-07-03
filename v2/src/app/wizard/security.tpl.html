@@ -54,8 +54,7 @@
                                     <tbody>
                                         <tr ng-repeat="(service, credential) in service_credentials" inlineEdit>
                                             <td>
-                                                <span ng-hide="editServiceMode">{{service}}</span>
-                                                <input ng-show="editServiceMode" ng-model="service" placeholder="Service" type="text" ng-required />
+                                                <span>{{service}}</span>
                                             </td>
                                             <td>
                                                 <span ng-hide="editServiceMode">{{credential.username}}</span>

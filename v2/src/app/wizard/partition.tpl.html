@@ -11,32 +11,58 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-if="partition.length > 0" ng-repeat="pa in partition track by $index">
+                    <tr>
                         <td>
-                            <input ng-model="pa.mount_point" type="text" placeholder="Mount Point" class="input-medium">
+                            <input ng-model="newPartition.mount_point" type="text" placeholder="Mount Point" class="input-medium">
                         </td>
                         <td>
-                            <input ng-model="pa.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                            <input ng-model="newPartition.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
                         </td>
                         <td>
-                            <input ng-model="pa.max_size" type="text" placeholder="Max Size" class="input-medium">
+                            <input ng-model="newPartition.max_size" type="text" placeholder="Max Size" class="input-medium">
                         </td>
                         <td>
-                            <!--Add Action-->
-                            <span class="action" ng-click="addPartition()">
-                                <i class="fa fa-plus-circle bigger-140 blue"></i>
-                            </span>
-                            <!--Remove Action-->
-                            <span ng-show="partition.length > 1" class="action" ng-click="partition.splice($index,1)">
-                                <i class="fa fa-minus-circle bigger-140 blue"></i>
-                            </span>
+                            <button ng-click="addPartition()" class="btn btn-sm btn-info" type="button">
+                                Add
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="(key, data) in partition">
+                        <td>
+                            <span>{{key}}</span>
+                        </td>
+                        <td>
+                            <span ng-hide="editPartitionMode">{{data.size_percentage}}</span>
+                            <input ng-show="editPartitionMode" ng-model="data.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                        </td>
+                        <td>
+                            <span ng-hide="editPartitionMode">{{data.max_size}}</span>
+                            <input ng-show="editPartitionMode" ng-model="data.max_size" type="text" placeholder="Max Size" class="input-medium">
+                        </td>
+                        <td>
+                            <!--edit button-->
+                            <button ng-hide="editPartitionMode" ng-click="editPartitionMode = true;" class="btn btn-xs btn-success">
+                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                            </button>
+                            <!--delete button-->
+                            <button ng-hide="editPartitionMode" ng-click="editPartitionMode = true; deletePartition(key)" class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                            </button>                            
+                            <!--save button-->
+                            <button ng-show="editPartitionMode" ng-click="editPartitionMode = false;" class="btn btn-xs btn-primary">
+                                <i class="ace-icon fa fa-check bigger-120"></i>
+                            </button>
+                            <!--cancel button-->
+                            <button ng-show="editPartitionMode" ng-click="editPartitionMode = false; cancel()" class="btn btn-xs btn-default">
+                                <i class="ace-icon fa fa-times bigger-120"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-4">
-            <!--TODO: Partition pie chart-->
+        <div class="col-lg-4 text-center partition-chart">
+            <piechart piedata="partitionarray"></piechart>
         </div>
     </div>
 </div>

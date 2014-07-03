@@ -66,3 +66,6 @@ select {
 .max-width-200 {
     max-width: 200px;
 }
+.partition-chart {
+    padding-top: 30px;
+}

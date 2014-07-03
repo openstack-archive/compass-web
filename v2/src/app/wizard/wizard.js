@@ -1,7 +1,8 @@
 angular.module('compass.wizard', [
     'ui.router',
     'ui.bootstrap',
-    'ngTable'
+    'ngTable',
+    'compass.charts'
 ])
 
 .config(function config($stateProvider) {
@@ -79,12 +80,6 @@ angular.module('compass.wizard', [
                         break;
                 }
             })
-
-
-            /*
-            if ($scope.steps[$scope.currentStep - 1].title == "Partition") {
-            }
-*/
         };
 
         $scope.next = function() {
@@ -431,7 +426,7 @@ angular.module('compass.wizard', [
         });
 
         var interfaceCount = Object.keys($scope.interfaces).length;
-        if(interfaceCount == 0) {
+        if (interfaceCount == 0) {
             alert("Please add interface");
         } else {
             // add hosts
@@ -496,42 +491,35 @@ angular.module('compass.wizard', [
 
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
-    $scope.partition = [];
-    $scope.addPartition = function() {
-        $scope.partition.push({});
-        console.log($scope.partition);
-    };
-    $scope.$watch('partition', function() {
-        if ($scope.partition.length == 0) {
-            $scope.partition.push({});
-        }
-    }, true);
+    $scope.partition = wizardFactory.getPartition();
 
-    var partitionData = {};
-/*
-    angular.forEach($scope.partition, function(pa) {
-        console.log(pa);
-        if (partitionData[pa.mount_point] !== undefined) {
-            if (!partitionData[pa.mount_point].push) {
-                partitionData[pa.mount_point] = [partitionData[pa.mount_point]];
-            }
-            partitionData[pa.mount_point].push({
-                "size_percentage": pa.size_percentage,
-                "max_size": pa.max_size
-            } || {});
-        } else {
-            partitionData[pa.mount_point] = {
-                "size_percentage": pa.size_percentage,
-                "max_size": pa.max_size
-            } || {};
-        }
-    });
-*/
+    $scope.addPartition = function() {
+        var mount_point = $scope.newPartition.mount_point;
+        $scope.partition[mount_point] = {};
+        $scope.partition[mount_point].size_percentage = $scope.newPartition.size_percentage;
+        $scope.partition[mount_point].max_size = $scope.newPartition.max_size;
+        $scope.newPartition = {};
+    };
+
+    $scope.deletePartition = function(mount_point) {
+        delete $scope.partition[mount_point];
+    };
+
+    $scope.$watch('partition', function() {
+        console.log("changed")
+        $scope.partitionarray = [];
+        angular.forEach($scope.partition, function(value, key) {
+            $scope.partitionarray.push({
+                "name": key,
+                "number": value.size_percentage
+            });
+        });
+    }, true);
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
-        console.info("### catch commit change in networkCtrl ###", newCommitState);
+        console.info("### catch commit change in partitionCtrl ###", newCommitState);
         if (newCommitState !== undefined) {
             if (newCommitState.name == "partition" && newCommitState.state == "triggered") {
                 $scope.commit();
@@ -540,34 +528,26 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-        dataService.updateClusterConfig(cluster.id, partitionData).success(function(data) {
+        var os_partition = {
+            "os_config": {
+                "partition": $scope.partition
+            }
+        };
+        dataService.updateClusterConfig(cluster.id, os_partition).success(function(configData) {
+            wizardFactory.getPartition(configData["os_config"]["partition"]);
             var commitState = {
                 "name": "partition",
                 "state": "success",
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
-        });        
+        });
+        //TODO: error handling
     };
 })
 
 .controller('securityCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
-    /*
-    dataService.getAdapterConfig().success(function(data) {
-        $scope.os_global_config = data['os_config']['centos']['global'];
-        //console.log("###", $scope.os_global_config);
-
-        var os_security = data['os_config']['centos']['security'];
-        var adapter_security = data['adapter_config']['security'];
-
-        $scope.security = {
-            'os_security': os_security,
-            'adapter_security': adapter_security
-        };
-        //console.log($scope.security);
-    });
-    */
 
     //For Service Credentials Section
     $scope.service_credentials = {
@@ -644,7 +624,7 @@ angular.module('compass.wizard', [
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
-        console.info("### catch commit change in networkCtrl ###", newCommitState);
+        console.info("### catch commit change in securityCtrl ###", newCommitState);
         if (newCommitState !== undefined) {
             if (newCommitState.name == "security" && newCommitState.state == "triggered") {
                 $scope.commit();
@@ -661,7 +641,7 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
-        });        
+        });
     };
 })
 
