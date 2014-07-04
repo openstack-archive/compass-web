@@ -1,0 +1,134 @@
+{
+    "cluster": {
+        "id": 10,
+        "name": "demo",
+        "adapter_id": 1,
+        "os_id":1
+    },
+    "partition": {
+        "/var": {
+            "size_percentage": 30
+        },
+        "/home": {
+            "size_percentage": 20
+        },
+        "/tmp": {
+            "size_percentage": 10
+        },
+        "/spare": {
+            "size_percentage": 40
+        }
+    },
+    "subnet": [{
+        "name": "subnet1",
+        "subnet": "192.168.10.1",
+        "netmask": "255.255.255.0",
+        "subnet_id": 1
+    }, {
+        "name": "subnet2",
+        "subnet": "172.1.100.1",
+        "netmask": "255.255.255.0",
+        "subnet_id": 2
+    }],
+    "interface": {
+        "eth0": {
+            "subnet_id": 1,
+            "is_mgmt": true
+        },
+        "eth1": {
+            "subnet_id": 1,
+            "is_mgmt": false
+        },
+        "eth2": {
+            "subnet_id": 2,
+            "is_mgmt": false
+        },
+        "eth3": {
+            "subnet_id": 2,
+            "is_mgmt": false
+        }
+    },
+    "general": {
+        "timezone": "-8.00",
+        "language": "en",
+        "http_proxy": "",
+        "ntp_server": "",
+        "domain": "compass.com",
+        "gateway": "172.19.100.1",
+        "dns_servers": [""],
+        "search_path": ["compass.com"]
+    },
+    "server_credentials": {
+        "username": "admin",
+        "password": "admin"
+    },
+    "service_credentials": {
+        "rabbitmq": {
+            "username": "guest",
+            "password": "guest"
+        },
+        "compute": {
+            "username": "nova",
+            "password": "nova"
+        },
+        "dashboard": {
+            "username": "dashboard",
+            "password": "dashboard"
+        },
+        "identity": {
+            "username": "keystone",
+            "password": "keystone"
+        },
+        "image": {
+            "username": "glance",
+            "password": "glance"
+        },
+        "metering": {
+            "username": "ceilometer",
+            "password": "ceilometer"
+        },
+        "super": {
+            "username": "root",
+            "password": "root"
+        },
+        "volumn": {
+            "username": "cinder",
+            "password": "cinder"
+        }
+    },
+    "management_credentials": {
+        "admin": {
+            "username": "admin",
+            "password": "admin"
+        },
+        "compute": {
+            "username": "nova",
+            "password": "nova"
+        },
+        "dashboard": {
+            "username": "dashboard",
+            "password": "dashboard"
+        },
+        "image": {
+            "username": "glance",
+            "password": "glance"
+        },
+        "metering": {
+            "username": "ceilometer",
+            "password": "ceilometer"
+        },
+        "network": {
+            "username": "quantum",
+            "password": "quantum"
+        },
+        "object-store": {
+            "username": "swift",
+            "password": "swift"
+        },
+        "volumn": {
+            "username": "cinder",
+            "password": "cinder"
+        }
+    }
+
+}

@@ -8,15 +8,20 @@ angular.module('compass.wizard', [
 .config(function config($stateProvider) {
     $stateProvider
         .state('wizard', {
-            url: '/wizard',
+            url: '/wizard?config',
             controller: 'wizardCtrl',
             templateUrl: 'src/app/wizard/wizard.tpl.html'
         });
 })
 
-.controller('wizardCtrl', function($scope, dataService, wizardFactory) {
+.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams) {
+    if($stateParams.config == "true") {
+        dataService.getWizardPreConfig().success(function(data) {
+            wizardFactory.preConfig(data);        
+        });        
+    }
+
     $scope.clusterInfo = wizardFactory.getClusterInfo();
-    console.info("$scope.clusterInfo", $scope.clusterInfo)
 
     // current step for create-cluster wizard
     $scope.currentStep = 1;
@@ -548,78 +553,8 @@ angular.module('compass.wizard', [
 
 .controller('securityCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
-
-    //For Service Credentials Section
-    $scope.service_credentials = {
-        "rabbitmq": {
-            "username": "guest",
-            "password": "guest"
-        },
-        "compute": {
-            "username": "nova",
-            "password": "nova"
-        },
-        "dashboard": {
-            "username": "dashboard",
-            "password": "dashboard"
-        },
-        "identity": {
-            "username": "keystone",
-            "password": "keystone"
-        },
-        "image": {
-            "username": "glance",
-            "password": "glance"
-        },
-        "metering": {
-            "username": "ceilometer",
-            "password": "ceilometer"
-        },
-        "super": {
-            "username": "root",
-            "password": "root"
-        },
-        "volumn": {
-            "username": "cinder",
-            "password": "cinder"
-        }
-    };
-
-    //For management console credentials
-    $scope.management_credentials = {
-        "admin": {
-            "username": "admin",
-            "password": "admin"
-        },
-        "compute": {
-            "username": "nova",
-            "password": "nova"
-        },
-        "dashboard": {
-            "username": "dashboard",
-            "password": "dashboard"
-        },
-        "image": {
-            "username": "glance",
-            "password": "glance"
-        },
-        "metering": {
-            "username": "ceilometer",
-            "password": "ceilometer"
-        },
-        "network": {
-            "username": "quantum",
-            "password": "quantum"
-        },
-        "object-store": {
-            "username": "swift",
-            "password": "swift"
-        },
-        "volumn": {
-            "username": "cinder",
-            "password": "cinder"
-        }
-    };
+    $scope.service_credentials = wizardFactory.getServiceCredentials();
+    $scope.management_credentials = wizardFactory.getManagementCredentials();
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -688,7 +623,6 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-
         var commitState = {
             "name": "role_assign",
             "state": "success",

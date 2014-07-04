@@ -42,10 +42,10 @@
                         <th>
                             <input type="checkbox" ng-model="selectall" ng-change="selectAllServers(selectall)">
                         </th>
-                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{
-                    'sort-asc': tableParams.isSortBy(column.field, 'asc'),
-                    'sort-desc': tableParams.isSortBy(column.field, 'desc')
-                  }" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" 
+                            ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                    'sort-desc': tableParams.isSortBy(column.field, 'desc')}" 
+                            ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
                             {{column.title}}
                         </th>
                     </tr>

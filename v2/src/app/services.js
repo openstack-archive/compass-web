@@ -30,6 +30,10 @@ angular.module('compass.services', [])
 .service('dataService', ['$http', 'settings',
     function($http, settings) {
 
+        this.getWizardPreConfig = function() {
+            return $http.get(settings.metadataUrlBase + '/config.json');
+        };
+
         this.getWizardSteps = function() {
             return $http.get(settings.metadataUrlBase + '/wizard_steps.json');
         };
@@ -104,8 +108,8 @@ angular.module('compass.services', [])
 .factory('wizardFactory', [
     function() {
         var wizard = {};
-        wizard.reset = function() {
-            wizard.cluster = {"id":1};
+        wizard.init = function() {
+            wizard.cluster = {};
             wizard.steps = [];
             wizard.commit = {};
             wizard.servers = [];
@@ -117,9 +121,21 @@ angular.module('compass.services', [])
             wizard.generalConfig = {};
             wizard.interfaces = {};
             wizard.partition = {};
+            wizard.service_credentials = {};
+            wizard.management_credentials = {};
         };
 
-        wizard.reset();
+        wizard.init();
+
+        wizard.preConfig = function(config) {
+            wizard.setClusterInfo(config.cluster);
+            wizard.setSubnetworks(config.subnet);
+            wizard.setInterfaces(config.interface);
+            wizard.setGeneralConfig(config.general);
+            wizard.setPartition(config.partition);
+            wizard.setServiceCredentials(config.service_credentials);
+            wizard.setManagementCredentials(config.management_credentials);
+        };
 
         wizard.setClusterInfo = function(cluster) {
             wizard.cluster = cluster;
@@ -139,11 +155,9 @@ angular.module('compass.services', [])
 
         wizard.setCommitState = function(commitState) {
             wizard.commit = commitState;
-            //console.info("wizard.setCommit  ", wizard.commit);
         };
 
         wizard.getCommitState = function() {
-            //console.info("wizard.getCommit  ", wizard.commit);
             return wizard.commit;
         };
 
@@ -209,7 +223,23 @@ angular.module('compass.services', [])
 
         wizard.getPartition = function() {
             return wizard.partition;
-        }
+        };
+
+        wizard.setServiceCredentials = function(credentials) {
+            wizard.service_credentials = credentials;
+        };
+
+        wizard.getServiceCredentials = function() {
+            return wizard.service_credentials;
+        };
+
+        wizard.setManagementCredentials = function(credentials) {
+            wizard.management_credentials = credentials;
+        };
+
+        wizard.getManagementCredentials = function() {
+            return wizard.management_credentials;
+        };
 
         return wizard;
     }
