@@ -69,6 +69,7 @@ select {
 }
 .partition-chart {
     padding-top: 30px;
+}
 .btn-clstr {
     border: none !important;
     background-color: inherit!important;

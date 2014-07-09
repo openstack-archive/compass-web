@@ -4,8 +4,10 @@
         <span ng-include="'src/app/cluster/cluster-create.tpl.html'"></span>
         <a href>
             <span ng-controller="createClusterCtrl">
-                <button ng-click="open()" class="btn btn-primary"><i class="glyphicon glyphicon-plus">
-    </i>Create New Cluster</button>
+                <button ng-click="open()" class="btn btn-primary">
+                  <i class="glyphicon glyphicon-plus"></i>
+                  Create New Cluster
+                </button>
             </span>
         </a>
     </span>
@@ -17,24 +19,37 @@
             <tr>
                 <th class="sortable" ng-class="{
                   'sort-asc': tableParams.isSortBy('clusterName', 'asc'),
-                  'sort-desc': tableParams.isSortBy('clusterName', 'desc')}" ng-click="tableParams.sorting({'clusterName' : tableParams.isSortBy('clusterName', 'asc') ? 'desc' : 'asc'})"><a href=""><div> Cluster Name</i></a></div>
+                  'sort-desc': tableParams.isSortBy('clusterName', 'desc')}" ng-click="tableParams.sorting({'clusterName' : tableParams.isSortBy('clusterName', 'asc') ? 'desc' : 'asc'})">
+                    <a href="">
+                        <div>Cluster Name</i>
+                    </a>
+                    </div>
                 </th>
                 <th class="sortable" ng-class="{
                     'sort-asc': tableParams.isSortBy('clusterState', 'asc'),
                     'sort-desc': tableParams.isSortBy('clusterState', 'desc') 
-                  }" ng-click="tableParams.sorting({'clusterState' : tableParams.isSortBy('clusterState', 'asc') ? 'desc' : 'asc'})"><a href=""><div>State </a></div>
+                  }" ng-click="tableParams.sorting({'clusterState' : tableParams.isSortBy('clusterState', 'asc') ? 'desc' : 'asc'})">
+                    <a href="">
+                        <div>State</a>
+                    </div>
                 </th>
                 <th>Deployment Details</a>
                 </th>
                 <th class="sortable" ng-class="{
                     'sort-asc': tableParams.isSortBy('targetSystem', 'asc'),
                     'sort-desc': tableParams.isSortBy('targetSystem', 'desc') 
-                  }" ng-click="tableParams.sorting({'targetSystem' : tableParams.isSortBy('targetSystem', 'asc') ? 'desc' : 'asc'})"><a href=""><div>Target System</a></div>
+                  }" ng-click="tableParams.sorting({'targetSystem' : tableParams.isSortBy('targetSystem', 'asc') ? 'desc' : 'asc'})">
+                    <a href="">
+                        <div>Target System</a>
+                    </div>
                 </th>
                 <th class="sortable" ng-class="{
                     'sort-asc': tableParams.isSortBy('dateModified', 'asc'),
                     'sort-desc': tableParams.isSortBy('dateModified', 'desc') 
-                  }" ng-click="tableParams.sorting({'dateModified' : tableParams.isSortBy('dateModified', 'asc') ? 'desc' : 'asc'})"><a href=""><div>Date Modified</a></div>
+                  }" ng-click="tableParams.sorting({'dateModified' : tableParams.isSortBy('dateModified', 'asc') ? 'desc' : 'asc'})">
+                    <a href="">
+                        <div>Date Modified</a>
+                    </div>
                 </th>
                 <th>Actions</th>
             </tr>
