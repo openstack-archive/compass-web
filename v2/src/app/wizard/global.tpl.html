@@ -22,15 +22,106 @@
                                     <!--TODO: use json to generate inputs-->
                                     <div class="form-group">
                                         <div>
-                                            <label class="col-sm-4 control-label no-padding-right">HTTP Proxy</label>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Language
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <div class="col-sm-8">
-                                                <input ng-model="general.http_proxy" type="text" class="col-xs-10 col-sm-5" placeholder="HTTP Proxy" name="http_proxy">
+                                                <select ng-model="general.language" name="language" class="col-xs-10 col-sm-5">
+                                                    <option value="en">English</option>
+                                                    <option value="cn">Chinese</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div>
-                                            <label class="col-sm-4 control-label no-padding-right">NTP Server</label>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Timezone
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select ng-model="general.timezone" name="timezone" class="col-xs-10 col-sm-5">
+                                                    <option ng-repeat="tm in timezones" value="{{tm.value}}">(GMT {{tm.value}}) {{tm.timezone}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-repeat="http_proxy in general.http_proxy track by $index" class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                <span ng-if="$index==0">
+                                                    HTTP Proxy
+                                                    <span class="text-danger opacity-zero">*</span>
+                                                </span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="general.http_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="HTTP Proxy" name="http_proxy">
+                                                <span class="col-xs-2 col-sm-3">
+                                                    <!--Add Action-->
+                                                    <span class="action" ng-click="addValue('http_proxy')">
+                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                    </span>
+                                                    <!--Remove Action-->
+                                                    <span ng-show="general.http_proxy.length > 1" class="action" ng-click="general.http_proxy.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-repeat="https_proxy in general.https_proxy track by $index" class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                <span ng-if="$index==0">
+                                                    HTTPS Proxy
+                                                    <span class="text-danger opacity-zero">*</span>
+                                                </span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="general.https_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="HTTPS Proxy" name="https_proxy">
+                                                <span class="col-xs-2 col-sm-3">
+                                                    <!--Add Action-->
+                                                    <span class="action" ng-click="addValue('https_proxy')">
+                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                    </span>
+                                                    <!--Remove Action-->
+                                                    <span ng-show="general.https_proxy.length > 1" class="action" ng-click="general.https_proxy.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-repeat="no_proxy in general.default_no_proxy track by $index" class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                <span ng-if="$index==0">
+                                                    Default No Proxy
+                                                    <span class="text-danger opacity-zero">*</span>
+                                                </span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="general.default_no_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Default No Proxy" name="default_no_proxy">
+                                                <span class="col-xs-2 col-sm-3">
+                                                    <!--Add Action-->
+                                                    <span class="action" ng-click="addValue('default_no_proxy')">
+                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                    </span>
+                                                    <!--Remove Action-->
+                                                    <span ng-show="general.default_no_proxy.length > 1" class="action" ng-click="general.default_no_proxy.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                NTP Server
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <div class="col-sm-8">
                                                 <input ng-model="general.ntp_server" type="text" class="col-xs-10 col-sm-5" placeholder="NTP Server" name="ntp_server">
                                             </div>
@@ -39,13 +130,16 @@
                                     <div ng-repeat="dns_server in general.dns_servers track by $index" class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">
-                                                <span ng-if="$index==0">DNS Servers</span>
+                                                <span ng-if="$index==0">
+                                                    DNS Servers
+                                                    <span class="text-danger">*</span>
+                                                </span>
                                             </label>
                                             <div class="col-sm-8">
                                                 <input ng-model="general.dns_servers[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="DNS Server" name="dns_servers">
                                                 <span class="col-xs-2 col-sm-3">
                                                     <!--Add Action-->
-                                                    <span class="action" ng-click="addDNSServer()">
+                                                    <span class="action" ng-click="addValue('dns_servers')">
                                                         <i class="fa fa-plus-circle bigger-140 blue"></i>
                                                     </span>
                                                     <!--Remove Action-->
@@ -59,13 +153,16 @@
                                     <div ng-repeat="search_path in general.search_path track by $index" class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">
-                                                <span ng-if="$index==0">Search Path</span>
+                                                <span ng-if="$index==0">
+                                                    Search Path
+                                                    <span class="text-danger">*</span>
+                                                </span>
                                             </label>
                                             <div class="col-sm-8">
                                                 <input ng-model="general.search_path[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Search Path" name="search_path">
                                                 <span class="col-xs-2 col-sm-3">
                                                     <!--Add Action-->
-                                                    <span class="action" ng-click="addSearchPath()">
+                                                    <span class="action" ng-click="addValue('search_path')">
                                                         <i class="fa fa-plus-circle bigger-140 blue"></i>
                                                     </span>
                                                     <!--Remove Action-->
@@ -78,7 +175,10 @@
                                     </div>
                                     <div class="form-group">
                                         <div>
-                                            <label class="col-sm-4 control-label no-padding-right">Domain</label>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Domain
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <div class="col-sm-8">
                                                 <input ng-model="general.domain" type="text" class="col-xs-10 col-sm-5" placeholder="Domain" name="domain">
                                             </div>
@@ -86,33 +186,16 @@
                                     </div>
                                     <div class="form-group">
                                         <div>
-                                            <label class="col-sm-4 control-label no-padding-right">Gateway</label>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Default Gateway
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <div class="col-sm-8">
-                                                <input ng-model="general.gateway" type="text" class="col-xs-10 col-sm-5" placeholder="Gateway" name="gateway">
+                                                <input ng-model="general.default_gateway" type="text" class="col-xs-10 col-sm-5" placeholder="Gateway" name="gateway">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div>
-                                            <label class="col-sm-4 control-label no-padding-right">Timezone</label>
-                                            <div class="col-sm-8">
-                                                <select ng-model="general.timezone" name="timezone" class="col-xs-10 col-sm-5">
-                                                    <option ng-repeat="tm in timezones" value="{{tm.value}}">(GMT {{tm.value}}) {{tm.timezone}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div>
-                                            <label class="col-sm-4 control-label no-padding-right">Language</label>
-                                            <div class="col-sm-8">
-                                                <select ng-model="general.language" name="language" class="col-xs-10 col-sm-5">
-                                                    <option value="en">English</option>
-                                                    <option value="cn">Chinese</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -167,7 +250,8 @@
 
                     </accordion-group>
 
-                    <accordion-group is-open="status.open">
+                    <!--Keep routing table for later use-->
+                    <!--<accordion-group is-open="status.open">
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> Routing Table
                         </accordion-heading>
@@ -200,11 +284,9 @@
                                                 <input type="text" ng-model="route.gateway" placeholder="Gateway" />
                                             </td>
                                             <td>
-                                                <!--Add Action-->
                                                 <span class="action" ng-click="addRoute()">
                                                     <i class="fa fa-plus-circle bigger-140 blue"></i>
                                                 </span>
-                                                <!--Remove Action-->
                                                 <span ng-show="routingtable.length > 1" class="action" ng-click="removeRoute($index)">
                                                     <i class="fa fa-minus-circle bigger-140 blue"></i>
                                                 </span>
@@ -217,7 +299,7 @@
                             <div class="col-sm-2">
                             </div>
                         </div>
-                    </accordion-group>
+                    </accordion-group>-->
                 </accordion>
             </div>
         </div>

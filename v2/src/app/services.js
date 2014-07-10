@@ -58,6 +58,10 @@ angular.module('compass.services', [])
             return $http.get(settings.apiUrlBase + '/adapters');
         };
 
+        this.getAdapter = function(id) {
+            return $http.get(settings.apiUrlBase + '/adapters/' + id);
+        };
+
         this.createCluster = function(cluster) {
             return $http.post(settings.apiUrlBase + '/clusters', angular.toJson(cluster));
         };
@@ -70,18 +74,20 @@ angular.module('compass.services', [])
             return $http.put(settings.apiUrlBase + '/clusters/' + id + '/config', angular.toJson(config));
         };
 
-        this.getClusterSubnetConfig = function(id) {
-            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/subnet-config');
+        this.getSubnetConfig = function() {
+            return $http.get(settings.apiUrlBase + '/subnetworks');
         };
 
-        this.postClusterSubnetConfig = function(id, subnet_config) {
-            return $http.post(settings.apiUrlBase + '/clusters/' + id + '/subnet-config', angular.toJson(subnet_config));
+        this.postSubnetConfig = function(subnet_config) {
+            return $http.post(settings.apiUrlBase + '/subnetworks', angular.toJson(subnet_config));
         };
 
-        this.putClusterSubnetConfig = function(id, subnetId, subnet_config) {
-            return $http.put(settings.apiUrlBase + '/clusters/' + id + '/subnet-config/' + subnetId, angular.toJson(subnet_config));
+        this.putSubnetConfig = function(id, subnet_config) {
+            return $http.put(settings.apiUrlBase + '/subnetworks/' + id, angular.toJson(subnet_config));
         };
 
+        // keep routing table for later use
+        /*
         this.postRoutingTable = function(id, routing_table) {
             return $http.post(settings.apiUrlBase + '/clusters/' + id + '/routing-table', angular.toJson(routing_table));
         };
@@ -89,6 +95,7 @@ angular.module('compass.services', [])
         this.putRoutingTable = function(id, routingId, routing_table) {
             return $http.put(settings.apiUrlBase + '/clusters/' + id + '/routing-table/' + routingId, angular.toJson(routing_table));
         };
+        */
 
         this.getTimezones = function() {
             return $http.get(settings.metadataUrlBase + '/timezone.json');
@@ -98,8 +105,20 @@ angular.module('compass.services', [])
             return $http.post(settings.apiUrlBase + '/clusters/' + id + '/action', angular.toJson(actions));
         };
 
+        this.putHost = function(id, config) {
+            return $http.put(settings.apiUrlBase + '/hosts/' + id, angular.toJson(config));
+        };
+
         this.postHostNetwork = function(id, network) {
             return $http.post(settings.apiUrlBase + '/hosts/' + id + '/network', angular.toJson(network));
+        };
+
+        this.putHostNetwork = function(id, networkId, network) {
+            return $http.put(settings.apiUrlBase + '/hosts/' + id + '/network/' + networkId, angular.toJson(network));
+        };
+
+        this.updateClusterHostConfig = function(clusterId, hostId, config) {
+            return $http.put(settings.apiUrlBase + '/hosts/' + clusterId + '/hosts/' + hostId + '/config', angular.toJson(config));
         };
     }
 ])
@@ -121,20 +140,23 @@ angular.module('compass.services', [])
             wizard.generalConfig = {};
             wizard.interfaces = {};
             wizard.partition = {};
+            wizard.server_credentials = {};
             wizard.service_credentials = {};
             wizard.management_credentials = {};
+            wizard.network_mapping = {};
         };
 
         wizard.init();
 
         wizard.preConfig = function(config) {
             wizard.setClusterInfo(config.cluster);
-            wizard.setSubnetworks(config.subnet);
             wizard.setInterfaces(config.interface);
             wizard.setGeneralConfig(config.general);
             wizard.setPartition(config.partition);
+            wizard.setServerCredentials(config.server_credentials);
             wizard.setServiceCredentials(config.service_credentials);
             wizard.setManagementCredentials(config.management_credentials);
+            wizard.setNetworkMapping(config.network_mapping);
         };
 
         wizard.setClusterInfo = function(cluster) {
@@ -142,7 +164,7 @@ angular.module('compass.services', [])
         };
 
         wizard.getClusterInfo = function() {
-            return wizard.cluster;
+            return angular.copy(wizard.cluster);
         };
 
         wizard.setSteps = function(steps) {
@@ -150,7 +172,7 @@ angular.module('compass.services', [])
         };
 
         wizard.getSteps = function() {
-            return wizard.steps;
+            return angular.copy(wizard.steps);
         };
 
         wizard.setCommitState = function(commitState) {
@@ -166,7 +188,7 @@ angular.module('compass.services', [])
         };
 
         wizard.getAllMachinesHost = function() {
-            return wizard.allServers;
+            return angular.copy(wizard.allServers);
         };
 
         wizard.setServers = function(servers) {
@@ -174,7 +196,7 @@ angular.module('compass.services', [])
         };
 
         wizard.getServers = function() {
-            return wizard.servers;
+            return angular.copy(wizard.servers);
         };
 
         wizard.setAdapter = function(adapter) { ////
@@ -182,7 +204,7 @@ angular.module('compass.services', [])
         };
 
         wizard.getAdapter = function() { /////
-            return wizard.adapter;
+            return angular.copy(wizard.adapter);
         };
 
         wizard.setGeneralConfig = function(config) {
@@ -190,7 +212,7 @@ angular.module('compass.services', [])
         };
 
         wizard.getGeneralConfig = function() {
-            return wizard.generalConfig;
+            return angular.copy(wizard.generalConfig);
         };
 
         wizard.setSubnetworks = function(subnetworks) {
@@ -198,9 +220,11 @@ angular.module('compass.services', [])
         };
 
         wizard.getSubnetworks = function() {
-            return wizard.subnetworks;
+            return angular.copy(wizard.subnetworks);
         };
 
+        // keey routing table for later use
+        /*
         wizard.setRoutingTable = function(routingTb) {
             wizard.routingtable = routingTb;
         };
@@ -208,13 +232,14 @@ angular.module('compass.services', [])
         wizard.getRoutingTable = function() {
             return wizard.routingtable;
         };
+        */
 
         wizard.setInterfaces = function(interfaces) {
             wizard.interfaces = interfaces;
         };
 
         wizard.getInterfaces = function() {
-            return wizard.interfaces;
+            return angular.copy(wizard.interfaces);
         };
 
         wizard.setPartition = function(partition) {
@@ -222,15 +247,22 @@ angular.module('compass.services', [])
         };
 
         wizard.getPartition = function() {
-            return wizard.partition;
+            return angular.copy(wizard.partition);
         };
 
+        wizard.setServerCredentials = function(credentials) {
+            wizard.server_credentials = credentials;
+        };
+
+        wizard.getServerCredentials = function() {
+            return angular.copy(wizard.server_credentials);
+        }
         wizard.setServiceCredentials = function(credentials) {
             wizard.service_credentials = credentials;
         };
 
         wizard.getServiceCredentials = function() {
-            return wizard.service_credentials;
+            return angular.copy(wizard.service_credentials);
         };
 
         wizard.setManagementCredentials = function(credentials) {
@@ -238,7 +270,15 @@ angular.module('compass.services', [])
         };
 
         wizard.getManagementCredentials = function() {
-            return wizard.management_credentials;
+            return angular.copy(wizard.management_credentials);
+        };
+
+        wizard.setNetworkMapping = function(mapping) {
+            wizard.network_mapping = mapping;
+        };
+
+        wizard.getNetworkMapping = function() {
+            return angular.copy(wizard.network_mapping);
         };
 
         return wizard;

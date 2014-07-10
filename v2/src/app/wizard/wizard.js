@@ -2,7 +2,8 @@ angular.module('compass.wizard', [
     'ui.router',
     'ui.bootstrap',
     'ngTable',
-    'compass.charts'
+    'compass.charts',
+    'ngDragDrop'
 ])
 
 .config(function config($stateProvider) {
@@ -15,13 +16,11 @@ angular.module('compass.wizard', [
 })
 
 .controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams) {
-    if($stateParams.config == "true") {
+    if ($stateParams.config == "true") {
         dataService.getWizardPreConfig().success(function(data) {
-            wizardFactory.preConfig(data);        
-        });        
+            wizardFactory.preConfig(data);
+        });
     }
-
-    $scope.clusterInfo = wizardFactory.getClusterInfo();
 
     // current step for create-cluster wizard
     $scope.currentStep = 1;
@@ -61,8 +60,6 @@ angular.module('compass.wizard', [
             $scope.$watch(function() {
                 return wizardFactory.getCommitState()
             }, function(newCommitState, oldCommitState) {
-
-
                 switch (newCommitState.name) {
                     case "sv_selection":
                     case "os_global":
@@ -72,10 +69,11 @@ angular.module('compass.wizard', [
                     case "role_assign":
                     case "network_mapping":
                         if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
-                            console.info("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
+                            console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
                             $scope.next();
                         } else if (newCommitState.state == "error") {
                             // TODO: error handling / display error message
+                            console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                         }
                         break;
                     case "review":
@@ -105,9 +103,12 @@ angular.module('compass.wizard', [
         };
     });
 
-
     dataService.getAllMachineHosts().success(function(data) {
         wizardFactory.setAllMachinesHost(data);
+    });
+
+    dataService.getSubnetConfig().success(function(data) {
+        wizardFactory.setSubnetworks(data);
     });
 
 })
@@ -193,22 +194,34 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('globalCtrl', function($scope, wizardFactory, dataService) {
+.controller('globalCtrl', function($scope, wizardFactory, dataService, $q) {
     var cluster = wizardFactory.getClusterInfo();
 
     //For General Section
     $scope.general = wizardFactory.getGeneralConfig();
 
-    //TODO: bug - should not set dns_servers and search_path to empty
-    $scope.general["dns_servers"] = [""];
-    $scope.general["search_path"] = [""];
+    if (!$scope.general["dns_servers"]) {
+        $scope.general["dns_servers"] = [""];
+    }
+    if (!$scope.general["search_path"]) {
+        $scope.general["search_path"] = [""];
+    }
+    if (!$scope.general["http_proxy"]) {
+        $scope.general["http_proxy"] = [""];
+    }
+    if (!$scope.general["https_proxy"]) {
+        $scope.general["https_proxy"] = [""];
+    }
+    if (!$scope.general["default_no_proxy"]) {
+        $scope.general["default_no_proxy"] = [""];
+    }
 
-    $scope.addDNSServer = function() {
-        $scope.general['dns_servers'].push("");
+    $scope.addValue = function(key) {
+        $scope.general[key].push("");
+        console.log($scope.general);
+        console.log($scope.general.http_proxy.length)
     };
-    $scope.addSearchPath = function() {
-        $scope.general['search_path'].push("");
-    };
+
     dataService.getTimezones().success(function(data) {
         $scope.timezones = data;
     });
@@ -229,6 +242,8 @@ angular.module('compass.wizard', [
     }, true);
 
     //For Routing Table Section
+    //keep routing table for later use
+    /*
     $scope.routingtable = wizardFactory.getRoutingTable();
     $scope.addRoute = function() {
         $scope.routingtable.push({});
@@ -242,6 +257,7 @@ angular.module('compass.wizard', [
             $scope.routingtable.push({});
         }
     }, true);
+    */
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -255,63 +271,62 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-        $scope.updateClusterConfig();
-        $scope.updateSubnet();
-        $scope.updateRoutingTable();
-
-        console.info("$$$$ ", wizardFactory.getSubnetworks(), wizardFactory.getRoutingTable(), wizardFactory.getGeneralConfig())
-
-        //TODO: should have check here to see if each part is updated successfully
-        var commitState = {
-            "name": "os_global",
-            "state": "success",
-            "message": ""
-        };
-        wizardFactory.setCommitState(commitState);
-    };
-
-    $scope.updateClusterConfig = function() {
+        var promises = [];
         var os_global_general = {
             "os_config": {
                 "general": $scope.general
             }
         };
-        // put cluster config
-        dataService.updateClusterConfig(cluster.id, os_global_general).success(function(configData) {
-            wizardFactory.setGeneralConfig(configData["os_config"]["general"]);
+        var updateClusterConfig = dataService.updateClusterConfig(cluster.id, os_global_general).then(function(configData) {
+            wizardFactory.setGeneralConfig(configData.data["os_config"]["general"]);
+        }, function(response) {
+            return $q.reject(response);
+        });
+        promises.push(updateClusterConfig);
+
+        var subnetworks = [];
+        angular.forEach($scope.subnetworks, function(subnet) {
+            if (subnet.subnet_id === undefined) {
+                // post subnetworks
+                var updateSubnetConfig = dataService.postSubnetConfig(subnet).then(function(subnetData) {
+                    subnetworks.push(subnetData.data);
+                }, function(response) {
+                    return $q.reject(response);
+                });
+                promises.push(updateSubnetConfig);
+            } else {
+                // put subnetworks
+                var updateSubnetConfig = dataService.putSubnetConfig(subnet.subnet_id, subnet).then(function(subnetData) {
+                    subnetworks.push(subnetData.data);
+                }, function(response) {
+                    return $q.reject(response);
+                });
+                promises.push(updateSubnetConfig);
+            }
+        });
+
+        $q.all(promises).then(function() {
+            $scope.subnetworks = subnetworks;
+            wizardFactory.setSubnetworks($scope.subnetworks);
+            var commitState = {
+                "name": "os_global",
+                "state": "success",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+        }, function(response) {
+            console.log("promises error", response);
+            var commitState = {
+                "name": "os_global",
+                "state": "error",
+                "message": response.statusText
+            };
+            wizardFactory.setCommitState(commitState);
         });
     };
 
-    $scope.updateSubnet = function() {
-        var subnetCount = $scope.subnetworks.length;
-        var subnetworks = [];
-        var i = 0;
-
-        angular.forEach($scope.subnetworks, function(subnet) {
-            if (subnet.subnet_id === undefined) {
-                // post cluster subnet-config
-                dataService.postClusterSubnetConfig(cluster.id, subnet).success(function(subnetData) {
-                    subnetworks.push(subnetData);
-                    i++;
-                    if (i == subnetCount) {
-                        $scope.subnetworks = subnetworks;
-                        wizardFactory.setSubnetworks($scope.subnetworks);
-                    }
-                })
-            } else {
-                // put cluster subnet-config
-                dataService.putClusterSubnetConfig(cluster.id, subnet.subnet_id, subnet).success(function(subnetData) {
-                    subnetworks.push(subnetData);
-                    i++;
-                    if (i == subnetCount) {
-                        $scope.subnetworks = subnetworks;
-                        wizardFactory.setSubnetworks($scope.subnetworks);
-                    }
-                })
-            }
-        })
-    };
-
+    // keey routing table for later use
+    /*
     $scope.updateRoutingTable = function() {
         var routingCount = $scope.routingtable.length;
         var routingTable = [];
@@ -340,9 +355,10 @@ angular.module('compass.wizard', [
             }
         })
     };
+    */
 })
 
-.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams) {
+.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, $q) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.subnetworks = wizardFactory.getSubnetworks();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -391,27 +407,29 @@ angular.module('compass.wizard', [
         })
     };
 
-    $scope.initHostIpByInterface = function(interfaceName) {
-        if ($scope.servers.network[interfaceName] === undefinded) {
-            $scope.servers.network[interfaceName] = {};
+    $scope.$watch('addInterfacePanel', function(value) {
+        if (!$scope.addInterfacePanel.isCollapsed) {
+            $scope.autoFillPanel.isCollapsed = true;
         }
-    };
+    }, true);
+
+    $scope.$watch('autoFillPanel', function(value) {
+        if (!$scope.autoFillPanel.isCollapsed) {
+            $scope.addInterfacePanel.isCollapsed = true;
+        }
+    }, true);
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
-        console.info("### catch commit change in networkCtrl ###", newCommitState);
-
         if (newCommitState !== undefined) {
             if (newCommitState.name == "network" && newCommitState.state == "triggered") {
-                $scope.commitNetwork();
-            } else if (newCommitState.name == "network_mapping" && newCommitState.state == "triggered") {
-                $scope.commitNetworkMapping();
+                $scope.commit();
             }
         }
     });
 
-    $scope.commitNetwork = function() {
+    $scope.commit = function() {
         var addHostsAction = {
             "add_hosts": {
                 "machines": []
@@ -445,13 +463,23 @@ angular.module('compass.wizard', [
                         }
                     }
                 }
-                wizardFactory.setServers($scope.servers);
 
-                $scope.serverCount = $scope.servers.length;
-                var i = 0;
-                // post host network
+                var hostnamePromises = [];
+                var hostNetworkPromises = [];
+
                 angular.forEach($scope.servers, function(server) {
-                    $scope.networkCount = Object.keys(server.network).length;
+                    var hostname = {
+                        "name": server["name"]
+                    };
+                    // update hostname
+                    var updateHostname = dataService.putHost(server.host_id, hostname).then(function(hostData) {
+                        // success callback
+                    }, function(response) {
+                        // error callback
+                        return $q.reject(response);
+                    });
+                    hostnamePromises.push(updateHostname);
+
                     angular.forEach(server.network, function(value, key) {
                         var network = {
                             "interface": key,
@@ -459,39 +487,58 @@ angular.module('compass.wizard', [
                             "subnet_id": $scope.interfaces[key].subnet_id,
                             "is_mgmt": $scope.interfaces[key].is_mgmt
                         };
+                        if (value.id === undefined) {
+                            // post host network
+                            var updateNetwork = dataService.postHostNetwork(server.host_id, network).then(function(networkData) {
+                                // success callback
+                                console.log("post networkdata", networkData.data);
+                                var interface = networkData.data.interface;
+                                var networkId = networkData.data.id;
+                                server.network[interface].id = networkId;
+                            }, function(response) {
+                                // error callback
+                                return $q.reject(response);
+                            });
+                            hostNetworkPromises.push(updateNetwork);
+                        } else {
+                            // put host network
+                            var updateNetwork = dataService.putHostNetwork(server.host_id, value.id, network).then(function(networkData) {
+                                // success callback
+                                console.log("put networkdata", networkData.data);
+                            }, function(response) {
+                                // error callback
+                                return $q.reject(response);
+                            });
+                            hostNetworkPromises.push(updateNetwork);
+                        }
+                    });
+                });
 
-                        dataService.postHostNetwork(server.host_id, network).success(function(data) {
-                            i++;
-                            if (i == $scope.serverCount * $scope.networkCount) {
-                                wizardFactory.setInterfaces($scope.interfaces);
-                                wizardFactory.setServers($scope.servers);
-                                var commitState = {
-                                    "name": "network",
-                                    "state": "success",
-                                    "message": ""
-                                };
-                                wizardFactory.setCommitState(commitState);
-                            }
-                        });
-                    })
+                $q.all(hostnamePromises.concat(hostNetworkPromises)).then(function() {
+                    // update hostname and network for all hosts successfully
+                    wizardFactory.setServers($scope.servers);
+                    var commitState = {
+                        "name": "network",
+                        "state": "success",
+                        "message": ""
+                    };
+                    wizardFactory.setCommitState(commitState);
+                }, function(response) {
+                    var commitState = {
+                        "name": "network",
+                        "state": "error",
+                        "message": response.statusText
+                    };
+                    wizardFactory.setCommitState(commitState);
                 });
             });
         }
     };
 
-    $scope.commitNetworkMapping = function() {
-        var commitState = {
-            "name": "network_mapping",
-            "state": "success",
-            "message": ""
-        };
-        wizardFactory.setCommitState(commitState);
-    };
-
     $scope.autofill = function() {
         //TODO: add auto fill
         alert("Autofill coming soon");
-    }
+    };
 })
 
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {
@@ -511,7 +558,6 @@ angular.module('compass.wizard', [
     };
 
     $scope.$watch('partition', function() {
-        console.log("changed")
         $scope.partitionarray = [];
         angular.forEach($scope.partition, function(value, key) {
             $scope.partitionarray.push({
@@ -524,7 +570,6 @@ angular.module('compass.wizard', [
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
-        console.info("### catch commit change in partitionCtrl ###", newCommitState);
         if (newCommitState !== undefined) {
             if (newCommitState.name == "partition" && newCommitState.state == "triggered") {
                 $scope.commit();
@@ -553,13 +598,13 @@ angular.module('compass.wizard', [
 
 .controller('securityCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
+    $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
     $scope.management_credentials = wizardFactory.getManagementCredentials();
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
-        console.info("### catch commit change in securityCtrl ###", newCommitState);
         if (newCommitState !== undefined) {
             if (newCommitState.name == "security" && newCommitState.state == "triggered") {
                 $scope.commit();
@@ -568,8 +613,19 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-        var partitionData = {};
-        dataService.updateClusterConfig(cluster.id, partitionData).success(function(data) {
+        var securityData = {
+            "os_config": {
+                "username": $scope.server_credentials.username,
+                "password": $scope.server_credentials.password
+            },
+            "package_config": {
+                "security": {
+                    "service_credentials": $scope.service_credentials,
+                    "console_crendentials": $scope.management_credentials
+                }
+            }
+        };
+        dataService.updateClusterConfig(cluster.id, securityData).success(function(data) {
             var commitState = {
                 "name": "security",
                 "state": "success",
@@ -580,11 +636,30 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('roleAssignCtrl', function($scope, wizardFactory, dataService) {
+.controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, $q) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
 
-    $scope.roles = wizardFactory.getAdapter().roles;
+    dataService.getAdapter(cluster.adapter_id).success(function(data) {
+        wizardFactory.setAdapter(data);
+        $scope.roles = data.roles;
+    });
+
+    dataService.getServerColumns().success(function(data) {
+        $scope.server_columns = data.showless;
+    });
+
+    $scope.selectAllServers = function(flag) {
+        if (flag) {
+            angular.forEach($scope.servers, function(sv) {
+                sv.checked = true;
+            })
+        } else {
+            angular.forEach($scope.servers, function(sv) {
+                sv.checked = false;
+            })
+        }
+    };
 
     $scope.removeRole = function(server, role) {
         var serverIndex = $scope.servers.indexOf(server);
@@ -593,28 +668,52 @@ angular.module('compass.wizard', [
     };
 
     $scope.assignRole = function(role) {
-        // get selected servers and assign role to them
-        var roleExist = false;
+        var serverChecked = false;
         for (var i = 0; i < $scope.servers.length; i++) {
             if ($scope.servers[i].checked) {
-                for (var j = 0; j < $scope.servers[i].roles.length; j++) {
-                    if (role.name == $scope.servers[i].roles[j].name) {
-                        roleExist = true;
+                serverChecked = true;
+            }
+        }
+        if (!serverChecked) {
+            alert("Please select at least one server");
+        } else {
+            // get selected servers and assign role to them
+            var roleExist = false;
+            for (var i = 0; i < $scope.servers.length; i++) {
+                if ($scope.servers[i].checked) {
+                    for (var j = 0; j < $scope.servers[i].roles.length; j++) {
+                        if (role.name == $scope.servers[i].roles[j].name) {
+                            roleExist = true;
+                        }
+                    }
+                    if (!roleExist) {
+                        $scope.servers[i].roles.push(role);
+                    } else {
+                        roleExist = false;
                     }
                 }
-            }
-            if (!roleExist) {
-                $scope.servers[i].roles.push(role);
-            } else {
-                roleExist = false;
             }
         }
     };
 
+    $scope.tableParams = new ngTableParams({
+        page: 1, // show first page
+        count: $scope.servers.length + 1 // count per page
+    }, {
+        counts: [], // hide count-per-page box
+        total: $scope.servers.length, // length of data
+        getData: function($defer, params) {
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                $filter('orderBy')($scope.servers, params.orderBy()) : $scope.servers;
+
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
+
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
-        console.info("### catch commit change in networkCtrl ###", newCommitState);
         if (newCommitState !== undefined) {
             if (newCommitState.name == "role_assign" && newCommitState.state == "triggered") {
                 $scope.commit();
@@ -623,11 +722,90 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-        var commitState = {
-            "name": "role_assign",
-            "state": "success",
-            "message": ""
-        };
-        wizardFactory.setCommitState(commitState);
+        var promises = [];
+        angular.forEach($scope.servers, function(server) {
+            var roles = [];
+            angular.forEach(server.roles, function(role) {
+                roles.push(role.name);
+            });
+            var config = {
+                "package_config": {
+                    "roles": roles
+                }
+            };
+            var updateRoles = dataService.updateClusterHostConfig(cluster.id, server.host_id, config).then(function(configData) {
+                // success callback
+            }, function(response) {
+                // error callback
+                return $q.reject(response);
+            });
+        });
+
+        $q.all(promises).then(function() {
+            wizardFactory.setServers($scope.servers);
+            var commitState = {
+                "name": "role_assign",
+                "state": "success",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+        }, function(response) {
+            console.log("promises error", response);
+            var commitState = {
+                "name": "role_assign",
+                "state": "error",
+                "message": response.statusText
+            };
+            wizardFactory.setCommitState(commitState);
+        });
     };
 })
+
+.controller('networkMappingCtrl', function($scope, wizardFactory, dataService) {
+    var cluster = wizardFactory.getClusterInfo();
+    $scope.interfaces = wizardFactory.getInterfaces();
+    $scope.networking = wizardFactory.getNetworkMapping();
+
+    $scope.pendingInterface = "";
+
+    $scope.onDrop = function($event, key) {
+        $scope.pendingInterface = key;
+    };
+
+    $scope.dropSuccessHandler = function($event, key, dict) {
+        dict[key].mapping_interface = $scope.pendingInterface;
+    };
+
+    $scope.$watch(function() {
+        return wizardFactory.getCommitState()
+    }, function(newCommitState, oldCommitState) {
+        if (newCommitState !== undefined) {
+            if (newCommitState.name == "network_mapping" && newCommitState.state == "triggered") {
+                $scope.commit();
+            }
+        }
+    });
+
+    $scope.commit = function() {
+        var networks = {};
+        angular.forEach($scope.networking, function(value, key) {
+            networks[key] = value.mapping_interface;
+        });
+        var network_mapping = {
+            "package_config": {
+                "network_mapping": networks
+            }
+        };
+        dataService.updateClusterConfig(cluster.id, network_mapping).success(function(data) {
+            wizardFactory.setNetworkMapping($scope.networking);
+            var commitState = {
+                "name": "network_mapping",
+                "state": "success",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+        });
+        //TODO: error handling
+    };
+})
+

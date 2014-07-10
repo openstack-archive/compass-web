@@ -25,77 +25,125 @@
             </div>
         </div>
         <div class="pull-right">
-            <button class="btn btn-sm btn-info" ng-init="addInterface.isCollapsed = true;" ng-click="addInterface.isCollapsed = !addInterface.isCollapsed">Add Interface&nbsp;&nbsp;<i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !addInterface.isCollapsed}"></i>
+            <button class="btn btn-sm btn-info" ng-init="addInterfacePanel.isCollapsed = true;" ng-click="addInterfacePanel.isCollapsed = !addInterfacePanel.isCollapsed">
+                Add Interface&nbsp;&nbsp;
+                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !addInterfacePanel.isCollapsed}"></i>
             </button>
-            <button class="btn btn-sm btn-info" ng-init="autoFill.isCollapsed = true;" ng-click="autoFill.isCollapsed = !autoFill.isCollapsed">
-                Autofill&nbsp;&nbsp;<i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFill.isCollapsed}"></i>
+            <button class="btn btn-sm btn-info" ng-init="autoFillPanel.isCollapsed = true;" ng-click="autoFillPanel.isCollapsed = !autoFillPanel.isCollapsed">
+                Autofill&nbsp;&nbsp;<i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
             </button>
         </div>
     </div>
     <div class="row">
-        <div collapse="addInterface.isCollapsed">
-            <div class="well well-lg">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <table class="table table-hover nowrap">
-                            <thead>
-                                <tr>
-                                    <th>Interface</th>
-                                    <th>Subnet</th>
-                                    <th>Is Mgmt Network</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody ng-init="network={};">
-                                <tr>
-                                    <td>
-                                        <input type="text" ng-model="newInterface.name" placeholder="Interface" required />
-                                    </td>
-                                    <td>
-                                        <select ng-model="newInterface.subnet_id" class="max-width-200">
-                                            <option ng-repeat="sub in subnetworks" value="{{sub.subnet_id}}">
-                                                {{sub.name}}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>-</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-info" ng-click="addInterface(newInterface)">
-                                            Add
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr ng-repeat="(name, value) in interfaces">
-                                    <td>
-                                        {{name}}
-                                    </td>
-                                    <td>
-                                        <span ng-repeat="sub in subnetworks">
-                                            <span ng-if="sub.subnet_id == value.subnet_id">{{sub.name}}</span>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <input ng-model="value.is_mgmt" type="checkbox" name="is-mgmt" />
-                                    </td>
-                                    <td>
-                                        <!--Remove Action-->
-                                        <button class="btn btn-xs btn-danger" ng-click="deleteInterface(name)"><i class="fa fa-trash-o bigger-120"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div collapse="addInterfacePanel.isCollapsed">
+            <div class="widget-box">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-8">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Interface</th>
+                                            <th>Subnet</th>
+                                            <th>Is Mgmt Network</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-init="network={};">
+                                        <tr>
+                                            <td>
+                                                <input type="text" ng-model="newInterface.name" placeholder="Interface" required />
+                                            </td>
+                                            <td>
+                                                <select ng-model="newInterface.subnet_id" class="max-width-200">
+                                                    <option ng-repeat="sub in subnetworks" value="{{sub.subnet_id}}">
+                                                        {{sub.name}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>-</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-info" ng-click="addInterface(newInterface)">
+                                                    Add
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="(name, value) in interfaces">
+                                            <td>
+                                                {{name}}
+                                            </td>
+                                            <td>
+                                                <span ng-repeat="sub in subnetworks">
+                                                    <span ng-if="sub.subnet_id == value.subnet_id">{{sub.name}}</span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input ng-model="value.is_mgmt" type="checkbox" name="is-mgmt" />
+                                            </td>
+                                            <td>
+                                                <!--Remove Action-->
+                                                <button class="btn btn-xs btn-danger" ng-click="deleteInterface(name)"><i class="fa fa-trash-o bigger-120"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-2"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div collapse="autoFill.isCollapsed">
-            <div class="well well-lg">
-                <div class="row">
-                    <div class="col-xs-12">
-                        Autofill Panel
+        <div collapse="autoFillPanel.isCollapsed">
+            <div class="widget-box">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-8">
+
+                                <form role="form" class="form-horizontal ng-pristine ng-valid" id="autoForm">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-3 control-label no-padding-right">
+                                                Hostname
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <select class="col-xs-10 col-sm-5 ng-pristine ng-valid">
+                                                    <option value="host">Host</option>
+                                                    <option value="switch_ip">Switch IP</option>
+                                                    <option value="switch_alias">Switch Alias</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-repeat="(name, value) in interfaces" class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">
+                                            {{name}}&nbsp;IP
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="IP Start">
+                                            <select>
+                                                <option value="1">Increase by 1</option>
+                                                <option value="2">Increase by 2</option>
+                                                <option value="3">Increase by 3</option>
+                                                <option value="4">Increase by 4</option>
+                                                <option value="5">Increase by 5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-offset-4">
+                                        <button ng-click="autofill()" class="btn btn-sm btn-primary">
+                                            Fill Values
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-2"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,10 +170,10 @@
             <tbody>
                 <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index">
                     <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
-                        <span ng-if="column.field=='hostname'">
+                        <span ng-if="column.field=='name'">
                             <input ng-model="server[column.field]" placeholder="Hostname" class="form-control margin-bottom-10 max-width-200" type="text">
                         </span>
-                        <span ng-if="column.field!='hostname'">
+                        <span ng-if="column.field!='name'">
                             {{server[column.field]}}
                         </span>
 

@@ -1,10 +1,28 @@
 <div ng-controller="roleAssignCtrl">
     <div class="row">
         <div class="pull-left">
+            <!--Search Input-->
             <span class="input-icon">
-                <input type="text" placeholder="Search" ng-model="search">
+                <input type="text" placeholder="Search" ng-model="search.$">
                 <i class="ace-icon fa fa-search blue"></i>
             </span>
+            <!-- Column Show / Hide button -->
+            <div class="btn-group" dropdown>
+                <button type="button" class="btn btn-white btn-default dropdown-toggle">
+                    Column Show / Hide
+                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                        <a class="action">
+                            <span ng-class="{'opacity-zero': !column.visible}">
+                                <i class="ace-icon fa fa-check blue"></i>
+                            </span>
+                            {{column.title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="pull-right">
             <div class="btn-group" dropdown>
@@ -14,7 +32,9 @@
                 </button>
                 <ul class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
                     <li ng-repeat="role in roles">
-                        <a href value="{{role.name}}" ng-click="assignRole(role)">{{role.display_name}}</a>
+                        <a class="action" ng-click="assignRole(role)">
+                            {{role.display_name}}
+                        </a>
                     </li>
 
                 </ul>
@@ -23,29 +43,29 @@
     </div>
 
     <div class="row">
-        <table class="table table-hover table-striped">
+        <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="selectall" ng-change="selectAllServers(selectall)">
                     </th>
-                    <th>Host MAC</th>
-                    <th>Switch IP</th>
-                    <th>Port</th>
-                    <th>Hostname</th>
+                    <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" 
+                        ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                   'sort-desc': tableParams.isSortBy(column.field, 'desc')}"
+                        ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                        {{column.title}}
+                    </th>
                     <th>Roles</th>
-
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="server in servers | filter:search">
+                <tr ng-repeat="server in $data | filter: search">
                     <td>
                         <input ng-model="server.checked" type="checkbox">
                     </td>
-                    <td>{{server["mac"]}}</td>
-                    <td>{{server["switch_ip"]}}</td>
-                    <td>{{server["port"]}}</td>
-                    <td>{{server["hostname"]}}</td>
+                    <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                        {{server[column.field]}}
+                    </td>
                     <td>
                         <alert ng-repeat="role in server['roles']" class="role-tag" close="removeRole(server, role)">
                             {{role.display_name}}

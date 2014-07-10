@@ -69,6 +69,32 @@ select {
 }
 .partition-chart {
     padding-top: 30px;
+}
+.margin-top-minus10 {
+    margin-top: -10px !important;
+}
+.drag-enter {
+    background: none repeat scroll 0 0 #F0F9FF;
+    border: 2px dashed #BED2DB !important;
+    box-sizing: border-box;
+    margin: 5px 0;
+    min-height: 50px;
+    padding: 0;
+}
+.network-draggable {
+    position: relative;
+    width: 200px;
+}
+.network-placeholder {
+    min-height: 200px;  
+}
+.interface-placeholder {
+    border: 1px solid #BED2DB;
+    box-sizing: border-box;
+    margin: 5px 0;
+    min-height: 50px;  
+    padding: 10px;
+}
 .btn-clstr {
     border: none !important;
     background-color: inherit!important;

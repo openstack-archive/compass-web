@@ -17,7 +17,7 @@
         "visible": true
     }, {
         "title": "Hostname",
-        "field": "hostname",
+        "field": "name",
         "visible": true
     }, {
         "title": "Clusters",
@@ -58,7 +58,7 @@
         "visible": false
     }, {
         "title": "Hostname",
-        "field": "hostname",
+        "field": "name",
         "visible": true
     }, {
         "title": "Clusters",
@@ -76,6 +76,51 @@
         "title": "Adapter",
         "field": "adapter",
         "visible": false
+    }, {
+        "title": "State",
+        "field": "state",
+        "visible": false
+    }],
+    "review": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "name",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "OS",
+        "field": "os",
+        "visible": false
+    }, {
+        "title": "OS Reinstall",
+        "field": "os_installed",
+        "visible": false
+    }, {
+        "title": "Adapter",
+        "field": "adapter",
+        "visible": false
+    }, {
+        "title": "Roles",
+        "field": "roles",
+        "visible": true
     }, {
         "title": "State",
         "field": "state",

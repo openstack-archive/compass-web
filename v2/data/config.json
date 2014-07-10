@@ -3,33 +3,25 @@
         "id": 10,
         "name": "demo",
         "adapter_id": 1,
-        "os_id":1
+        "os_id": 1
     },
     "partition": {
+        "/swap": {
+            "size_percentage": 10
+        },
+        "/boot": {
+            "size_percentage": 10
+        },
         "/var": {
             "size_percentage": 30
         },
         "/home": {
-            "size_percentage": 20
-        },
-        "/tmp": {
-            "size_percentage": 10
+            "size_percentage": 30
         },
         "/spare": {
-            "size_percentage": 40
+            "size_percentage": 20
         }
     },
-    "subnet": [{
-        "name": "subnet1",
-        "subnet": "192.168.10.1",
-        "netmask": "255.255.255.0",
-        "subnet_id": 1
-    }, {
-        "name": "subnet2",
-        "subnet": "172.1.100.1",
-        "netmask": "255.255.255.0",
-        "subnet_id": 2
-    }],
     "interface": {
         "eth0": {
             "subnet_id": 1,
@@ -49,14 +41,16 @@
         }
     },
     "general": {
-        "timezone": "-8.00",
+        "timezone": "-4.00",
         "language": "en",
-        "http_proxy": "",
+        "http_proxy": [""],
+        "https_proxy": [""],
+        "default_no_proxy":[""],
         "ntp_server": "",
-        "domain": "compass.com",
-        "gateway": "172.19.100.1",
         "dns_servers": [""],
-        "search_path": ["compass.com"]
+        "search_path": ["compass.com"],
+        "domain": "compass.com",
+        "default_gateway": "172.19.100.1"
     },
     "server_credentials": {
         "username": "admin",
@@ -87,11 +81,11 @@
             "username": "ceilometer",
             "password": "ceilometer"
         },
-        "super": {
+        "mysql": {
             "username": "root",
             "password": "root"
         },
-        "volumn": {
+        "volume": {
             "username": "cinder",
             "password": "cinder"
         }
@@ -125,10 +119,27 @@
             "username": "swift",
             "password": "swift"
         },
-        "volumn": {
+        "volume": {
             "username": "cinder",
             "password": "cinder"
         }
+    },
+    "network_mapping": {
+        "management": {
+            "display": "Management Network",
+            "mapping_interface": ""
+        },
+        "tenant": {
+            "display": "Tenant Network",
+            "mapping_interface": ""
+        },
+        "storage": {
+            "display": "Storage Network",
+            "mapping_interface": ""
+        },
+        "public": {
+            "display": "Public Network",
+            "mapping_interface": ""
+        }
     }
-
 }

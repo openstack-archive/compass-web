@@ -14,19 +14,19 @@
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label no-padding-right">Username</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" id="server-username">
+                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" id="server-username" ng-model="server_credentials.username">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label no-padding-right">Password</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Password" id="server-password">
+                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Password" id="server-password" ng-model="server_credentials.password">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="{{key}}" class="col-sm-4 control-label no-padding-right">Confirm Password</label>
+                                        <label class="col-sm-4 control-label no-padding-right">Confirm Password</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Confirm Password" id="{{key}}">
+                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Confirm Password" value="{{server_credentials.password}}">
                                         </div>
                                     </div>
                                 </form>
@@ -36,12 +36,12 @@
 
                     <accordion-group is-open="status2.open">
                         <accordion-heading>
-                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> OpenStack Services Credentials
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> OpenStack Database & Queue Credentials
                         </accordion-heading>
                         <div class="row">
-                            <div class="col-lg-2">
+                            <div class="col-lg-1">
                             </div>
-                            <div class="col-lg-8">
+                            <div class="col-lg-10">
                                 <table class="table table-hover nowrap">
                                     <thead>
                                         <tr>
@@ -83,17 +83,19 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-1">
                             </div>
                         </div>
                     </accordion-group>
 
                     <accordion-group is-open="status.open">
                         <accordion-heading>
-                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> OpenStack Management Console Credentials
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> OpenStack Keystone User Credentials
                         </accordion-heading>
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-lg-1">
+                            </div>                            
+                            <div class="col-lg-10">
                                 <table class="table table-hover nowrap">
                                     <thead>
                                         <tr>
@@ -136,6 +138,8 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="col-lg-1">
+                            </div>                             
                         </div>
                     </accordion-group>
 

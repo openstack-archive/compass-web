@@ -58,6 +58,38 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, adapters, {}];
     });
 
+    $httpBackend.whenGET(/\.*\/adapters\/[1-9][0-9]*/).respond(function(method, url, data) {
+        console.log(method, url);
+        var adapter = {
+            "id": 1,
+            "name": "openstack",
+            "display": "OpenStack",
+            "os_installer": "cobbler",
+            "package_installer": "chef",
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }, {
+                "display_name": "Controller",
+                "name": "os-controller"
+            }, {
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "compatible_os": [{
+                "name": "CentOs",
+                "os_id": 1
+            }, {
+                "name": "Ubuntu",
+                "os_id": 2
+            }]
+        };
+        return [200, adapter, {}];
+    });
+
     $httpBackend.whenGET(settings.apiUrlBase + '/machines-hosts').respond(function(method, url, data) {
         console.log(method, url);
         var servers = [{
@@ -66,7 +98,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.40",
             "vlan": "1",
             "port": "1",
-            "hostname": "sv-1",
+            "name": "sv-1",
             "clusters": ["cluster1", "cluster2"],
             "os": "CentOS",
             "adapter": "OpenStack",
@@ -91,7 +123,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.40",
             "vlan": "2",
             "port": "2",
-            "hostname": "sv-2",
+            "name": "sv-2",
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
@@ -175,7 +207,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, config, {}];
     });
 
-    $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/subnet-config/).respond(function(method, url, data) {
+    $httpBackend.whenGET(settings.apiUrlBase + '/subnetworks').respond(function(method, url, data) {
         console.log(method, url);
         var subnetworks = [{
             "subnet_id": 1,
@@ -191,7 +223,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, subnetworks, {}];
     });
 
-    $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/subnet-config/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(settings.apiUrlBase + '/subnetworks').respond(function(method, url, data) {
         console.log(method, url, data);
 
         var subnetConfig = JSON.parse(data);
@@ -201,7 +233,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, subnetConfig, {}];
     });
 
-    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/subnet-config\/[1-9][0-9]*/).respond(function(method, url, data) {
+    $httpBackend.whenPUT(/\.*\/subnetworks\/[1-9][0-9]*/).respond(function(method, url, data) {
         console.log(method, url, data);
 
         var subnetConfig = JSON.parse(data);
@@ -210,6 +242,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, subnetConfig, {}];
     });
 
+    // keep routing table for later use
+    /*
     $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/routing-table/).respond(function(method, url, data) {
         console.log(method, url, data);
 
@@ -220,7 +254,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, routingTable, {}];
     });
 
-    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/routing-table\/[1-9][0-9]*/).respond(function(method, url, data) {
+    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/routing-table\/[1-9][0-9]/).respond(function(method, url, data) {
         console.log(method, url, data);
 
         var routingTable = JSON.parse(data);
@@ -228,6 +262,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(routingTable);
         return [200, routingTable, {}];
     });
+    */
 
     $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/action/).respond(function(method, url, data) {
         console.log(method, url, data);
@@ -243,10 +278,28 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, actionResponse, {}];
     });
 
+    $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var host_config = JSON.parse(data);
+        return [200, host_config, {}];
+    });
+
     $httpBackend.whenPOST(/\.*\/hosts\/[1-9][0-9]*\/network/).respond(function(method, url, data) {
         console.log(method, url, data);
         var network = JSON.parse(data);
         network.id = Math.floor((Math.random() * 100) + 1);
         return [200, network, {}];
+    });
+
+    $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*\/network\/[1-9][0-9]/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var network = JSON.parse(data);
+        return [200, network, {}];
+    });
+
+    $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/hosts\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var config = JSON.parse(data);
+        return [200, config, {}];
     });
 });
