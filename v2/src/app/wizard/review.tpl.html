@@ -1,1 +1,204 @@
-review
+<div ng-controller="reviewCtrl">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-list"></i>
+                        Hosts
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isHostsCollapsed = !isHostsCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isHostsCollapsed, 'fa-chevron-down': isHostsCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isHostsCollapsed">
+                            <table ng-table="tableParams" class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                   'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                                            {{column.title}}
+                                        </th>
+                                        <th ng-repeat="(key, value) in interfaces">
+                                            {{key}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="server in $data | filter: search">
+                                        <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                                            <span ng-if="column.field!='roles'">
+                                                {{server[column.field]}}
+                                            </span>
+                                            <span ng-if="column.field=='roles'">
+                                                <span ng-repeat="role in server['roles']" class="badge">
+                                                    {{role.display_name}}
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td ng-repeat="(key, value) in interfaces">
+                                            {{server['network'][key].ip}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-sun-o"></i>
+                        Network Mapping
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isMappingCollapsed = !isMappingCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isMappingCollapsed, 'fa-chevron-down': isMappingCollapsed}"></i>
+                        </a>
+                    </div>                    
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isMappingCollapsed">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Network</th>
+                                        <th>Interface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in network_mapping">
+                                        <td>{{value.display}}</td>
+                                        <td>{{value.mapping_interface}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-database"></i>
+                        Partition
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isPartitionCollapsed = !isPartitionCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isPartitionCollapsed, 'fa-chevron-down': isPartitionCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isPartitionCollapsed">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mount Point</th>
+                                        <th>Size Percentage(%)</th>
+                                        <th>Max Size(G)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in partition">
+                                        <td>{{key}}</td>
+                                        <td>{{value.size_percentage}}</td>
+                                        <td>{{value.max_size}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-lock"></i>
+                        Credentials
+                    </h4>
+                    <div class="widget-toolbar no-border">
+                        <ul class="nav nav-tabs">
+                            <li ng-repeat="tab in tabs" ng-class="{active:isActiveTab(tab.url)}" ng-click="onClickTab(tab)">
+                                <a href>{{tab.title}}</a>
+                            </li>
+                        </ul>                      
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding">
+                            <div ng-include="currentTab"></div>
+                            <script type="text/ng-template" id="service.tpl.html">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(key, value) in service_credentials">
+                                            <td>{{key}}</td>
+                                            <td>{{value.username}}</td>
+                                            <td>{{value.password}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </script>
+                            <script type="text/ng-template" id="console.tpl.html">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(key, value) in management_credentials">
+                                            <td>{{key}}</td>
+                                            <td>{{value.username}}</td>
+                                            <td>{{value.password}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </script>
+                            <script type="text/ng-template" id="server.tpl.html">
+                                <h6>
+                                    <strong>Username:</strong>
+                                    {{server_credentials.username}}
+                                </h6>
+                                <h6>
+                                    <strong>Password:</strong>
+                                    {{server_credentials.password}}
+                                </h6>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

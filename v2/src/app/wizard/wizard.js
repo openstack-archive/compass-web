@@ -15,10 +15,11 @@ angular.module('compass.wizard', [
         });
 })
 
-.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams) {
+.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state) {
     if ($stateParams.config == "true") {
         dataService.getWizardPreConfig().success(function(data) {
             wizardFactory.preConfig(data);
+            $scope.cluster = wizardFactory.getClusterInfo();            
         });
     }
 
@@ -77,7 +78,7 @@ angular.module('compass.wizard', [
                         }
                         break;
                     case "review":
-                        // TODO: go to cluster overview page
+                        $state.go("cluster.overview", {'id':$scope.cluster.id});
                         break;
                     default:
                         break;
@@ -809,3 +810,54 @@ angular.module('compass.wizard', [
     };
 })
 
+.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams) {
+    var cluster = wizardFactory.getClusterInfo();
+    $scope.servers = wizardFactory.getServers();
+    $scope.interfaces = wizardFactory.getInterfaces();
+    $scope.partition = wizardFactory.getPartition();
+    $scope.network_mapping = wizardFactory.getNetworkMapping();
+    $scope.server_credentials = wizardFactory.getServerCredentials();
+    $scope.service_credentials = wizardFactory.getServiceCredentials();
+    $scope.management_credentials = wizardFactory.getManagementCredentials();
+
+    dataService.getServerColumns().success(function(data) {
+        $scope.server_columns = data.review;
+    });
+
+    $scope.tabs = [{
+        title: 'Database & Queue',
+        url: 'service.tpl.html'
+    }, {
+        title: 'Keystone User',
+        url: 'console.tpl.html'
+    }, {
+        title: 'Server',
+        url: 'server.tpl.html'
+    }];
+
+    $scope.currentTab = $scope.tabs[0].url;
+
+    $scope.onClickTab = function (tab) {
+        $scope.currentTab = tab.url;
+    }
+    
+    $scope.isActiveTab = function(tabUrl) {
+        return tabUrl == $scope.currentTab;
+    }
+
+    $scope.tableParams = new ngTableParams({
+        page: 1, // show first page
+        count: $scope.servers.length + 1 // count per page
+    }, {
+        counts: [], // hide count-per-page box
+        total: $scope.servers.length, // length of data
+        getData: function($defer, params) {
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                $filter('orderBy')($scope.servers, params.orderBy()) : $scope.servers;
+
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
+
+})

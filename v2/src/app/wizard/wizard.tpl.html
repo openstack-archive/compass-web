@@ -34,12 +34,12 @@
                 <i class="ace-icon fa fa-arrow-left"></i>
                 Prev
             </button>
-            <button ng-if="currentStep<steps.length" ng-click="stepForward()" class="btn btn-success btn-next">
-                Next
-                <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-            </button>
-            <button ng-if="currentStep==steps.length" class="btn btn-success btn-next">
-                Deploy
+            <button ng-click="stepForward()" class="btn btn-success btn-next">
+                <span ng-if="currentStep<steps.length">
+                    Next
+                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                </span>
+                <span ng-if="currentStep==steps.length">Deploy</span>
             </button>
         </div>
     </div>
