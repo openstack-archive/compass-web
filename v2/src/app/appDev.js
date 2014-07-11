@@ -103,9 +103,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
-            }, {
                 "display_name": "Controller",
                 "name": "os-controller"
             }, {
@@ -134,6 +131,146 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "display_name": "Storage",
                 "name": "os-block-storage-worker"
             }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 12,
+            "mac": "28.e5.ee.47.ee.32",
+            "switch_ip": "172.29.8.40",
+            "vlan": "2",
+            "port": "3",
+            "name": "sv-3",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Network",
+                "name": "os-network"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 13,
+            "mac": "28.e5.ee.47.33.66",
+            "switch_ip": "172.29.8.40",
+            "vlan": "2",
+            "port": "4",
+            "name": "sv-4",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 14,
+            "mac": "28.e5.ee.47.2c.22",
+            "switch_ip": "172.29.8.40",
+            "vlan": "2",
+            "port": "5",
+            "name": "sv-5",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 15,
+            "mac": "28.e5.ee.47.55.19",
+            "switch_ip": "172.29.8.40",
+            "vlan": "2",
+            "port": "6",
+            "name": "sv-6",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 16,
+            "mac": "28.e5.ee.47.41.b2",
+            "switch_ip": "172.29.8.41",
+            "vlan": "2",
+            "port": "7",
+            "name": "sv-7",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 17,
+            "mac": "28.e5.ee.47.25.33",
+            "switch_ip": "172.29.8.41",
+            "vlan": "8",
+            "port": "8",
+            "name": "sv-8",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 18,
+            "mac": "28.e5.ee.47.5a.60",
+            "switch_ip": "172.29.8.41",
+            "vlan": "9",
+            "port": "9",
+            "name": "sv-9",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Network",
+                "name": "os-network"
+            }, {
+                "display_name": "Storage",
+                "name": "os-block-storage-worker"
+            }],
+            "network": {},
+            "state": "Successful"
+        }, {
+            "machine_id": 19,
+            "mac": "28.e5.ee.47.c1.82",
+            "switch_ip": "172.29.8.41",
+            "vlan": "10",
+            "port": "10",
+            "name": "sv-10",
+            "clusters": ["cluster1"],
+            "os": "CentOS",
+            "adapter": "OpenStack",
+            "roles": [{
+                "display_name": "Compute",
+                "name": "os-compute-worker"
+            }, ],
             "network": {},
             "state": "Successful"
         }];
@@ -332,15 +469,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
 
     $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/action/).respond(function(method, url, data) {
         console.log(method, url, data);
+        var machines = JSON.parse(data)["add_hosts"]["machines"];
+        angular.forEach(machines, function(machine) {
+            machine.id = Math.floor((Math.random() * 500) + 1);
+        })
         var actionResponse = {
-            "hosts": [{
-                "id": Math.floor((Math.random() * 100) + 1),
-                "machine_id": 10
-            }, {
-                "id": Math.floor((Math.random() * 100) + 1),
-                "machine_id": 11
-            }]
-        }
+            "hosts": machines
+        };
         return [200, actionResponse, {}];
     });
 

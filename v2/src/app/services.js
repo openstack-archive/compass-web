@@ -129,6 +129,7 @@ angular.module('compass.services', [])
 
 
 .factory('wizardFactory', [
+
     function() {
         var wizard = {};
         wizard.init = function() {

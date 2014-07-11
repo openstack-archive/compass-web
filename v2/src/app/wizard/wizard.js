@@ -19,7 +19,7 @@ angular.module('compass.wizard', [
     if ($stateParams.config == "true") {
         dataService.getWizardPreConfig().success(function(data) {
             wizardFactory.preConfig(data);
-            $scope.cluster = wizardFactory.getClusterInfo();            
+            $scope.cluster = wizardFactory.getClusterInfo();
         });
     }
 
@@ -78,7 +78,9 @@ angular.module('compass.wizard', [
                         }
                         break;
                     case "review":
-                        $state.go("cluster.overview", {'id':$scope.cluster.id});
+                        $state.go("cluster.overview", {
+                            'id': $scope.cluster.id
+                        });
                         break;
                     default:
                         break;
@@ -537,9 +539,65 @@ angular.module('compass.wizard', [
     };
 
     $scope.autofill = function() {
-        //TODO: add auto fill
-        alert("Autofill coming soon");
+        // Autofill IP for each interface
+        angular.forEach($scope.interfaces, function(value, key) {
+            var ip_start = $("#" + key + "-ipstart").val();
+            var interval = $("#" + key + "-increacenum").val();
+            $scope.fillIPBySequence(ip_start, interval, key);
+        })
+
+        // Autofill hostname
+        var hostname_rule = $("#hostname-rule").val();
+        $scope.fillHostname(hostname_rule);
     };
+
+    $scope.fillHostname = function(rule) {
+        switch (rule) {
+            case "host":
+                var server_index = 1;
+                angular.forEach($scope.servers, function(server) {
+                    server.name = "host-" + server_index;
+                    server_index++;
+                })
+                break;
+            case "switch_ip":
+                angular.forEach($scope.servers, function(server) {
+                    server.name = server.switch_ip.replace(/\./g, "-") + "-p" + server.port;
+                })
+                break;
+        }
+
+    };
+
+    $scope.fillIPBySequence = function(ipStart, interval, interface) {
+        if (ipStart == "")
+            return;
+        var ipStartParts = ipStart.split(".");
+        var ipParts = [parseInt(ipStartParts[0]), parseInt(ipStartParts[1]), parseInt(ipStartParts[2]), parseInt(ipStartParts[3])];
+
+        angular.forEach($scope.servers, function(server) {
+            if (ipParts[3] > 255) {
+                ipParts[3] = ipParts[3] - 256;
+                ipParts[2]++;
+            }
+            if (ipParts[2] > 255) {
+                ipParts[2] = ipParts[2] - 256;
+                ipParts[1]++;
+            }
+            if (ipParts[1] > 255) {
+                ipParts[1] = ipParts[1] - 256;
+                ipParts[0]++;
+            }
+            if (ipParts[0] > 255) {
+                server.network[interface].ip = "";
+                return;
+            } else {
+                var ip = ipParts[0] + "." + ipParts[1] + "." + ipParts[2] + "." + ipParts[3]
+                server.network[interface].ip = ip;
+                ipParts[3] = parseInt(ipParts[3]) + parseInt(interval);
+            }
+        })
+    }
 })
 
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {
@@ -837,10 +895,10 @@ angular.module('compass.wizard', [
 
     $scope.currentTab = $scope.tabs[0].url;
 
-    $scope.onClickTab = function (tab) {
+    $scope.onClickTab = function(tab) {
         $scope.currentTab = tab.url;
     }
-    
+
     $scope.isActiveTab = function(tabUrl) {
         return tabUrl == $scope.currentTab;
     }

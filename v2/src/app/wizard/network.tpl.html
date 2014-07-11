@@ -112,10 +112,9 @@
                                                 Hostname
                                             </label>
                                             <div class="col-sm-9">
-                                                <select class="col-xs-10 col-sm-5 ng-pristine ng-valid">
+                                                <select id="hostname-rule" class="col-xs-10 col-sm-5 ng-pristine ng-valid">
                                                     <option value="host">Host</option>
                                                     <option value="switch_ip">Switch IP</option>
-                                                    <option value="switch_alias">Switch Alias</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -125,8 +124,8 @@
                                             {{name}}&nbsp;IP
                                         </label>
                                         <div class="col-sm-9">
-                                            <input type="text" placeholder="IP Start">
-                                            <select>
+                                            <input id="{{name}}-ipstart" type="text" placeholder="IP Start">
+                                            <select id="{{name}}-increacenum">
                                                 <option value="1">Increase by 1</option>
                                                 <option value="2">Increase by 2</option>
                                                 <option value="3">Increase by 3</option>
