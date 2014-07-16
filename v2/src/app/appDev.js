@@ -161,7 +161,25 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [201, mockResponse, {}];
     });
 
-    $httpBackend.whenGET(settings.apiUrlBase + '/clusters').respond(function(method, url, data) {
+    $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/progress/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var states = ["DEPLOYING", "SUCCESSFUL", "UNDEPLOYED", "FAILED"];
+        var progressData = {
+            "id": 1,
+            "state": states[Math.floor((Math.random() * 4))],
+            "config_step": "deploy",
+            "status": {
+                "total_hosts": 4,
+                "installing_hosts": 2,
+                "completed_hosts": 1,
+                "failed_hosts": 1,
+                "message": ""
+            }
+        };
+        return [200, progressData, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/clusters/).respond(function(method, url, data) {
         console.log(method, url);
         var clusters = [{
             "id": 1,
@@ -186,8 +204,56 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "os_id": 1,
             "editable": true,
             "create_by": "user@someemail.com",
+            "create_at": "2014-3-25 12:00:00",
+            "updated_at": "2014-3-28 14:00:00",
+            " links": [{
+                "href": "/clusters/1",
+                "rel": "self"
+            }, {
+                "href": "/clusters/1/hosts",
+                "rel": "hosts"
+            }]
+        }, {
+            "id": 3,
+            "name": "cluster_03",
+            "adapter_id": 1,
+            "os_id": 1,
+            "editable": true,
+            "create_by": "user@someemail.com",
+            "create_at": "2014-3-25 12:00:00",
+            "updated_at": "2014-5-26 09:00:00",
+            " links": [{
+                "href": "/clusters/1",
+                "rel": "self"
+            }, {
+                "href": "/clusters/1/hosts",
+                "rel": "hosts"
+            }]
+        }, {
+            "id": 4,
+            "name": "cluster_04",
+            "adapter_id": 1,
+            "os_id": 1,
+            "editable": true,
+            "create_by": "user@someemail.com",
+            "create_at": "2014-3-25 12:00:00",
+            "updated_at": "2014-3-19 08:00:00",
+            " links": [{
+                "href": "/clusters/1",
+                "rel": "self"
+            }, {
+                "href": "/clusters/1/hosts",
+                "rel": "hosts"
+            }]
+        }, {
+            "id": 5,
+            "name": "cluster_05",
+            "adapter_id": 1,
+            "os_id": 1,
+            "editable": true,
+            "create_by": "user@someemail.com",
             "create_at": "2014-4-25 12:00:00",
-            "updated_at": "2014-4-26 13:00:00",
+            "updated_at": "2014-2-27 20:00:00",
             " links": [{
                 "href": "/clusters/2",
                 "rel": "self"

@@ -66,6 +66,10 @@ angular.module('compass.services', [])
             return $http.post(settings.apiUrlBase + '/clusters', angular.toJson(cluster));
         };
 
+        this.getClusterProgress = function(id) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/progress');
+        };
+
         this.getClusters = function() {
             return $http.get(settings.apiUrlBase + '/clusters');
         };
