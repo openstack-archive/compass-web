@@ -40,12 +40,13 @@
                 <thead>
                     <tr>
                         <th>
-                            <input type="checkbox" ng-model="selectall" ng-change="selectAllServers(selectall)">
+                            <label>
+                                <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                                <span class="lbl"></span>
+                            </label>
                         </th>
-                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" 
-                            ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
-                                    'sort-desc': tableParams.isSortBy(column.field, 'desc')}" 
-                            ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                    'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
                             {{column.title}}
                         </th>
                     </tr>
@@ -54,13 +55,18 @@
                 <tbody>
                     <tr ng-repeat="server in $data | filter:search">
                         <td>
-                            <input ng-model="server.selected" type="checkbox">
+                            <label>
+                                <input ng-model="server.selected" type="checkbox" class="ace">
+                                <span class="lbl"></span>
+                            </label>
                         </td>
                         <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                             <span ng-if="column.field=='os_installed'">
                                 <span ng-if="server['os']">
-                                    <input type="checkbox" ng-model="server.reinstallos">
-                                    <span class="lbl"></span>
+                                    <label>
+                                        <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                        <span class="lbl"></span>
+                                    </label>
                                 </span>
                                 <span ng-if="!server['os']">
                                     -

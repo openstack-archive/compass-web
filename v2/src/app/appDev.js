@@ -102,16 +102,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1", "cluster2"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Controller",
-                "name": "os-controller"
-            }, {
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Installing"
         }, {
@@ -124,13 +115,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -143,10 +128,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Network",
-                "name": "os-network"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -159,13 +141,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -178,10 +154,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -194,10 +167,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -210,13 +180,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -229,13 +193,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -248,13 +206,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }, {
@@ -267,10 +219,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "clusters": ["cluster1"],
             "os": "CentOS",
             "adapter": "OpenStack",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
-            }, ],
+            "roles": [],
             "network": {},
             "state": "Successful"
         }];
