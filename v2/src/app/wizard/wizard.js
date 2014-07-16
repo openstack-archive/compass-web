@@ -675,8 +675,10 @@ angular.module('compass.wizard', [
     $scope.commit = function() {
         var securityData = {
             "os_config": {
-                "username": $scope.server_credentials.username,
-                "password": $scope.server_credentials.password
+                "server_credentials": {
+                    "username": $scope.server_credentials.username,
+                    "password": $scope.server_credentials.password
+                }
             },
             "package_config": {
                 "security": {
@@ -738,23 +740,58 @@ angular.module('compass.wizard', [
             alert("Please select at least one server");
         } else {
             // get selected servers and assign role to them
-            var roleExist = false;
             for (var i = 0; i < $scope.servers.length; i++) {
                 if ($scope.servers[i].checked) {
-                    for (var j = 0; j < $scope.servers[i].roles.length; j++) {
-                        if (role.name == $scope.servers[i].roles[j].name) {
-                            roleExist = true;
-                        }
-                    }
+                    var roleExist = $scope.checkRoleExist($scope.servers[i].roles, role);
                     if (!roleExist) {
                         $scope.servers[i].roles.push(role);
-                    } else {
-                        roleExist = false;
                     }
                 }
             }
         }
     };
+
+    // Assume all servers have not been assigned any roles before calling this function 
+    $scope.autoAssignRoles = function() {
+        var roles = angular.copy($scope.roles);
+        var svIndex = 0;
+        angular.forEach(roles, function(newrole) {
+            var i = 0;
+            var loopStep = 0;
+            while (i < newrole.count && loopStep < $scope.servers.length) {
+                if (svIndex >= $scope.servers.length) {
+                    svIndex = 0;
+                }
+                var roleExist = $scope.checkRoleExist($scope.servers[svIndex].roles, newrole);
+                if (!roleExist) {
+                    $scope.servers[svIndex].roles.push(newrole);
+                    i++;
+                    loopStep = 0;
+                } else {
+                    loopStep++;
+                }
+                svIndex++;
+            }
+        })
+    };
+
+    $scope.checkRoleExist = function(existingRoles, newRole) {
+        var roleExist = false;
+        angular.forEach(existingRoles, function(existingRole) {
+            if (existingRole.name == newRole.name) {
+                roleExist = true;
+            }
+        })
+        return roleExist;
+    };
+
+    $scope.$watch('roles', function(roles) {
+        var count = 0;
+        angular.forEach(roles, function(role) {
+            count += role.count;
+        })
+        $scope.rolesTotalCount = count;
+    }, true);
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
@@ -799,7 +836,23 @@ angular.module('compass.wizard', [
                 // error callback
                 return $q.reject(response);
             });
+            promises.push(updateRoles);
         });
+
+        if ($scope.ha_vip) {
+            var config = {
+                "package_config": {
+                    "ha_vip": $scope.ha_vip
+                }
+            }
+            var updateHAVIP = dataService.updateClusterConfig(cluster.id, config).then(function(configData) {
+                // success callback
+            }, function(response) {
+                // error callback
+                return $q.reject(response);
+            });
+            promises.push(updateHAVIP);
+        }
 
         $q.all(promises).then(function() {
             wizardFactory.setServers($scope.servers);

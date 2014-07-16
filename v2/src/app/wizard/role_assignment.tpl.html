@@ -23,11 +23,18 @@
                     </li>
                 </ul>
             </div>
+            <span>
+                <input type="text" placeholder="HA VIP" ng-model="ha_vip">
+            </span>
         </div>
         <div class="pull-right">
             <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-info dropdown-toggle">
-                    Assign Roles
+                <button class="btn btn-sm btn-info" ng-init="autoAssignRoles.isCollapsed = true;" ng-click="autoAssignRoles.isCollapsed = !autoAssignRoles.isCollapsed">
+                    Auto Assign&nbsp;
+                    <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoAssignRoles.isCollapsed}"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-info dropdown-toggle">
+                    Manually Assign&nbsp;
                     <span class="ace-icon fa fa-caret-down icon-on-right"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
@@ -36,23 +43,48 @@
                             {{role.display_name}}
                         </a>
                     </li>
-
                 </ul>
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div collapse="autoAssignRoles.isCollapsed">
+            <div class="well">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form name="autoAssignForm" role="form" class="form-horizontal">
+                            <div ng-repeat="role in roles" class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">{{role.display_name}}</label>
+                                <div class="col-sm-8" ng-init="role.count=1">
+                                    <input type="number" min="0" class="col-xs-10 col-sm-5" ng-model="role.count" placeholder="Count">
+                                </div>
+                            </div>
+                            <div class="col-md-offset-4 col-md-8">
+                                <button type="button" class="btn btn-sm btn-info" ng-click="autoAssignRoles()" ng-disabled="autoAssignForm.$invalid">
+                                    Assign
+                                </button>
+                                <span>
+                                    Total Hosts: {{servers.length}} | Total Roles: {{rolesTotalCount}}
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox" ng-model="selectall" ng-change="selectAllServers(selectall)">
+                        <label>
+                            <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                            <span class="lbl"></span>
+                        </label>
                     </th>
-                    <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" 
-                        ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
-                                   'sort-desc': tableParams.isSortBy(column.field, 'desc')}"
-                        ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                    <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                   'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
                         {{column.title}}
                     </th>
                     <th>Roles</th>
@@ -61,7 +93,10 @@
             <tbody>
                 <tr ng-repeat="server in $data | filter: search">
                     <td>
-                        <input ng-model="server.checked" type="checkbox">
+                        <label>
+                            <input ng-model="server.checked" type="checkbox" class="ace">
+                            <span class="lbl"></span>
+                        </label>
                     </td>
                     <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                         {{server[column.field]}}

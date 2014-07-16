@@ -35,7 +35,9 @@ html {
     padding-top: 7px;
 }
 .role-tag {
-    background-color: #91b8d0;
+    background-color: #6fb3e0 !important;
+    border-color: #6fb3e0 !important;
+    border-radius: 10px;
     color: #fff;
     display: inline-block;
     font-size: 13px;
