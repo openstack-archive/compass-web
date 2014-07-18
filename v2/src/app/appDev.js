@@ -440,16 +440,23 @@ compassAppDev.run(function($httpBackend, settings, $http) {
     });
     */
 
-    $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/action/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(/\.*\/clusters\/([0-9]|[1-9][0-9])\/action/).respond(function(method, url, data) {
         console.log(method, url, data);
-        var machines = JSON.parse(data)["add_hosts"]["machines"];
-        angular.forEach(machines, function(machine) {
-            machine.id = Math.floor((Math.random() * 500) + 1);
-        })
-        var actionResponse = {
-            "hosts": machines
-        };
+        var postData = JSON.parse(data);
+        var actionResponse = {};
+
+        if (postData["add_hosts"] !== undefined) {
+            var machines = postData["add_hosts"]["machines"];
+            angular.forEach(machines, function(machine) {
+                machine.id = Math.floor((Math.random() * 500) + 1);
+            })
+            actionResponse = {
+                "hosts": machines
+            };
+        } else if (postData["deploy"] !== undefined) {
+        }
         return [200, actionResponse, {}];
+
     });
 
     $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*/).respond(function(method, url, data) {
