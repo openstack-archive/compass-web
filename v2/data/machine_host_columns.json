@@ -125,5 +125,34 @@
         "title": "State",
         "field": "state",
         "visible": false
+    }],
+    "progress": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": false
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "name",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "Roles",
+        "field": "roles",
+        "visible": false
     }]
 }

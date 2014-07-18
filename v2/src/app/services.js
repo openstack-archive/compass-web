@@ -66,12 +66,16 @@ angular.module('compass.services', [])
             return $http.post(settings.apiUrlBase + '/clusters', angular.toJson(cluster));
         };
 
-        this.getClusterProgress = function(id) {
-            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/progress');
-        };
-
         this.getClusters = function() {
             return $http.get(settings.apiUrlBase + '/clusters');
+        };
+
+        this.getClusterById = function(id) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + id);
+        };
+
+        this.getClusterProgress = function(id) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/progress');
         };
 
         this.updateClusterConfig = function(id, config) {
@@ -121,12 +125,23 @@ angular.module('compass.services', [])
             return $http.put(settings.apiUrlBase + '/hosts/' + id + '/network/' + networkId, angular.toJson(network));
         };
 
+        this.getClusterHostMachines = function(clusterId, hostId) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts');
+        };
+
         this.updateClusterHostConfig = function(clusterId, hostId, config) {
-            return $http.put(settings.apiUrlBase + '/hosts/' + clusterId + '/hosts/' + hostId + '/config', angular.toJson(config));
+            return $http.put(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId + '/config', angular.toJson(config));
+        };
+
+        this.getClusterHostProgress = function(clusterId, hostId) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId + '/progress');
+        };
+
+        this.deleteHost = function(id) {
+            return $http.delete(settings.apiUrlBase + '/hosts/' + id);
         };
     }
 ])
-
 
 .factory('wizardFactory', [
 
