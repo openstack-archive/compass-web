@@ -61,29 +61,12 @@ angular.module('compass.wizard', [
             $scope.$watch(function() {
                 return wizardFactory.getCommitState()
             }, function(newCommitState, oldCommitState) {
-                switch (newCommitState.name) {
-                    case "sv_selection":
-                    case "os_global":
-                    case "network":
-                    case "partition":
-                    case "security":
-                    case "role_assign":
-                    case "network_mapping":
-                        if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
-                            console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
-                            $scope.next();
-                        } else if (newCommitState.state == "error") {
-                            // TODO: error handling / display error message
-                            console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
-                        }
-                        break;
-                    case "review":
-                        $state.go("cluster.overview", {
-                            'id': $scope.cluster.id
-                        });
-                        break;
-                    default:
-                        break;
+                if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
+                    console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
+                    $scope.next();
+                } else if (newCommitState.state == "error") {
+                    // TODO: error handling / display error message
+                    console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 }
             })
         };
@@ -91,6 +74,11 @@ angular.module('compass.wizard', [
         $scope.next = function() {
             if ($scope.currentStep < $scope.steps.length)
                 $scope.currentStep = $scope.currentStep + 1;
+            else if ($scope.currentStep == $scope.steps.length) {
+                $state.go("cluster.overview", {
+                    'id': $scope.cluster.id
+                });
+            }
         }
 
         // go to previous step
@@ -972,4 +960,34 @@ angular.module('compass.wizard', [
         }
     });
 
+    $scope.$watch(function() {
+        return wizardFactory.getCommitState()
+    }, function(newCommitState, oldCommitState) {
+        if (newCommitState !== undefined) {
+            if (newCommitState.name == "review" && newCommitState.state == "triggered") {
+                $scope.commit();
+            }
+        }
+    });
+
+    $scope.commit = function() {
+        var deployAction = {
+            "deploy": {
+                "hosts": []
+            }
+        };
+        angular.forEach($scope.servers, function(server) {
+            deployAction.deploy.hosts.push(server.host_id);
+        });
+
+        dataService.postClusterActions(cluster.id, deployAction).success(function(data) {
+                var commitState = {
+                    "name": "review",
+                    "state": "success",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
+            })
+            //TODO: error handling
+    };
 })
