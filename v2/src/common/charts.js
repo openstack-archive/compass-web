@@ -68,3 +68,49 @@ angular.module('compass.charts', [])
         }
     }
 })
+
+.directive('hostprogressbar', function(dataService, $timeout) {
+    return {
+        restrict: 'E',
+        scope: {
+            hostid: '=',
+            clusterid: '=',
+            clusterstate: '=',
+            progressdata: '@'
+        },
+        link: function(scope, element, attrs) {
+            var hostId = scope.hostid;
+            var clusterId = scope.clusterid;
+            var clusterState = scope.clusterstate;
+            var progress = 0;
+            var progressTimer;
+            scope.progressdata = 0;
+            scope.progressSeverity = "INFO";
+            var getProgress = function(num) {
+                dataService.getClusterHostProgress(clusterId, hostId).then(function(progressData) {
+                    //success
+                    progress = parseInt(eval(progressData.data.percentage * 100));
+                    scope.progressdata = progress;
+                    if (progress < 100 && num != 1) {
+                        progressTimer = $timeout(getProgress, 5000);
+                    }
+                    scope.message = progressData.data.message;
+                    scope.progressSeverity = progressData.data.severity;
+                }, function(response) {
+
+                })
+            };
+
+            if (clusterState == "DEPLOYING") {
+                $timeout(getProgress, 1000);
+            } else {
+                getProgress(1);
+            }
+
+            element.bind('$destroy', function() {
+                $timeout.cancel(progressTimer);
+            });
+        },
+        templateUrl: "src/common/progressbar.tpl.html"
+    }
+})

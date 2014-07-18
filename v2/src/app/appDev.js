@@ -1,6 +1,7 @@
 var compassAppDev = angular.module('compassAppDev', ['compass', 'ngMockE2E']);
 
 compassAppDev.run(function($httpBackend, settings, $http) {
+    var progressPercent = 0;
 
     // Allow all calls not to the API to pass through normally
     $httpBackend.whenGET(new RegExp('src\/.*')).passThrough();
@@ -112,7 +113,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "2",
             "port": "2",
             "name": "sv-2",
-            "clusters": ["cluster1"],
+            "clusters": [],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -223,7 +224,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "network": {},
             "state": "Successful"
         }];
-        console.log(servers);
         return [200, servers, {}];
     });
 
@@ -252,7 +252,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var states = ["DEPLOYING", "SUCCESSFUL", "UNDEPLOYED", "FAILED"];
         var progressData = {
             "id": 1,
-            "state": states[Math.floor((Math.random() * 4))],
+            "state": states[Math.floor((Math.random() * 4))], //states[0],
             "config_step": "deploy",
             "status": {
                 "total_hosts": 4,
@@ -265,7 +265,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, progressData, {}];
     });
 
-    $httpBackend.whenGET(/\.*\/clusters/).respond(function(method, url, data) {
+    $httpBackend.whenGET(/\.*\/clusters$/).respond(function(method, url, data) {
         console.log(method, url);
         var clusters = [{
             "id": 1,
@@ -349,6 +349,30 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             }]
         }];
         return [200, clusters, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*$/).respond(function(method, url, data) {
+        console.log(method, url);
+        var index = url.indexOf("clusters/");
+        var id = url.substring(index).split("/")[1];
+        var cluster = {
+            "id": id,
+            "name": "Cluster" + id,
+            "adapter_id": 1,
+            "os_id": 1,
+            "editable": true,
+            "create_by": "user@someemail.com",
+            "create_at": "2014-3-25 12:00:00",
+            "updated_at": "2014-3-26 13:00:00",
+            " links": [{
+                "href": "/clusters/" + id,
+                "rel": "self"
+            }, {
+                "href": "/clusters/" + id + "/hosts",
+                "rel": "hosts"
+            }]
+        };
+        return [200, cluster, {}];
     });
 
     $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
@@ -447,9 +471,82 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, network, {}];
     });
 
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/hosts$/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var hosts = [];
+        var num = 20;
+        for (var i = 1; i <= num; i++) {
+            var host = {
+                "id": i,
+                "machine_id": i * 2 + 10,
+                "name": "host-" + i,
+                "mac": "28.e5.ee.47.14." + (i < 10 ? "a" : "") + i,
+                "switch_ip": "172.29.8.40",
+                "port": i,
+                "vlan": i,
+                "roles": [{
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }],
+                "clusters": ["cluster1", "cluster2"]
+            };
+            hosts.push(host);
+        }
+        return [200, hosts, {}];
+    });
+
     $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/hosts\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
         console.log(method, url, data);
         var config = JSON.parse(data);
         return [200, config, {}];
     });
+
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/hosts\/([0-9]|[1-9][0-9])\/progress/).respond(function(method, url, data) {
+        //console.log(method, url, data);
+        var index = url.indexOf("clusters/");
+        var hostId = url.substring(index).split("/")[3];
+        var messages = ["Setting up kickstart configurations",
+            "Downloading installation images from server",
+            "Installing bootloaders",
+            "Installing packages",
+            "Chef run complete"
+        ];
+        var message = "";
+        if (progressPercent < 0.1)
+            message = messages[0];
+        else if (progressPercent < 0.2)
+            message = messages[1];
+        else if (progressPercent < 0.5)
+            message = messages[2];
+        else if (progressPercent < 0.9)
+            message = messages[3];
+        else
+            message = messages[4];
+
+
+        var progress = {
+            "cluster_id": 1,
+            "host_id": hostId,
+            "state": "INSTALLING",
+            "percentage": progressPercent,
+            "severity": "INFO",
+            "message": message,
+            "updated_at": "---timestamp---"
+        }
+        progressPercent += 0.01;
+        if (progressPercent > 1) {
+            progressPercent = 1;
+        }
+        return [200, progress, {}];
+    });
+
+    $httpBackend.whenDELETE(/\.*\/hosts\/([0-9]|[1-9][0-9])/).respond(function(method, url, data) {
+        console.log(method, url, data);
+
+        var deleteHost = {};
+        return [200, deleteHost, {}];
+    })
 });

@@ -34,6 +34,10 @@ html {
 .action i {
     padding-top: 7px;
 }
+.action i.fa-trash-o:hover {
+    background-color: #d15b47 !important;
+    color: white;
+}
 .role-tag {
     background-color: #6fb3e0 !important;
     border-color: #6fb3e0 !important;
@@ -88,14 +92,28 @@ select {
     width: 200px;
 }
 .network-placeholder {
-    min-height: 200px;  
+    min-height: 200px;
 }
 .interface-placeholder {
     border: 1px solid #BED2DB;
     box-sizing: border-box;
     margin: 5px 0;
-    min-height: 50px;  
+    min-height: 50px;
     padding: 10px;
+}
+.border-radius-4 {
+    border-radius: 4px !important;
+}
+.cluster-progress {
+    margin-top: -40px;
+    margin-right: 20px;
+    margin-bottom: 18px;
+}
+.progressbar-number {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    margin-top: -1px;
 }
 .btn-clstr {
     border: none !important;
