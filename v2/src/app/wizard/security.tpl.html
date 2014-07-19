@@ -4,7 +4,7 @@
             <div class="accordion-style1 panel-group accordion-style2" id="accordion">
                 <accordion close-others="true">
 
-                    <accordion-group is-open="status1.open">
+                    <accordion-group is-open="serverAccordion.open" ng-init="serverAccordion.open=true">
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> Server Credentials
                         </accordion-heading>
@@ -34,7 +34,7 @@
                         </div>
                     </accordion-group>
 
-                    <accordion-group is-open="serverAccordion.open">
+                    <accordion-group is-open="serviceAccordion.open">
 
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> OpenStack Database &amp; Queue Credentials

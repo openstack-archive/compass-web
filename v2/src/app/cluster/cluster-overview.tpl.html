@@ -6,7 +6,8 @@
             'badge-info':clusterProgress.state==='INSTALLING',
             'badge-danger':clusterProgress.state==='ERROR',
             'badge-success':clusterProgress.state==='SUCCESSFUL'}">
-                {{clusterProgress.state}}</span>
+                {{clusterProgress.state}}
+            </span>
             <!--<i class="ace-icon fa fa-angle-double-right"></i>&nbsp;
             <a href="">OpenStack Dashboard Link</a>-->
         </small>
@@ -109,12 +110,19 @@
                                     </label>
                                 </td>
                                 <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
-                                    <span ng-if="column.field!='roles'">
-                                        {{host[column.field]}}
-                                    </span>
-                                    <span ng-if="column.field=='roles'">
-                                        <span ng-repeat="role in host['roles']" class="badge">
-                                            {{role.display_name}}
+                                    <span ng-switch on="column.field">
+                                        <span ng-switch-when="clusters">
+                                            <span ng-repeat="cluster in host.clusters">
+                                                {{cluster.name}}&nbsp;
+                                            </span>
+                                        </span>
+                                        <span ng-switch-when="roles">
+                                            <span ng-repeat="role in host['roles']" class="badge">
+                                                {{role.display_name}}&nbsp;
+                                            </span>
+                                        </span>
+                                        <span ng-switch-default>
+                                            {{host[column.field]}}
                                         </span>
                                     </span>
                                 </td>

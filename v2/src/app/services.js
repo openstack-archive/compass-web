@@ -47,16 +47,44 @@ angular.module('compass.services', [])
         };
 
         this.getAllMachineHosts = function(os) {
-            if(os) {
+            if (os) {
                 return $http.get(settings.apiUrlBase + '/switches-machines-hosts?os_id=' + os);
             } else {
-                return $http.get(settings.apiUrlBase + '/switches-machines-hosts');                
+                return $http.get(settings.apiUrlBase + '/switches-machines-hosts');
             }
+        };
+
+        this.getSwitches = function() {
+            return $http.get(settings.apiUrlBase + '/switches');
+        };
+
+        this.getSwitchById = function(id) {
+            return $http.get(settings.apiUrlBase + '/switches/' + id);
+        };
+
+        this.postSwitches = function(sw) {
+            return $http.post(settings.apiUrlBase + '/switches', angular.toJson(sw));
+        };
+        /*
+        this.postSwitchFilters = function(filters) {
+            return $http.post(settings.apiUrlBase + '/switch-filters', angular.toJson(filters));
+        };
+*/
+        this.putSwitchFilters = function(id, filters) {
+            return $http.put(settings.apiUrlBase + '/switch-filters/' + id, angular.toJson(filters));
+        };
+
+        this.postSwitchAction = function(id, action) {
+            return $http.post(settings.apiUrlBase + '/switches/' + id + '/action', angular.toJson(action));
+        };
+
+        this.getSwitchMachines = function(id) {
+            return $http.get(settings.apiUrlBase + '/switches/' + id + '/machines');
         };
 
         this.getServerColumns = function() {
             return $http.get(settings.metadataUrlBase + '/machine_host_columns.json');
-        }
+        };
 
         this.getMonitoringNav = function() {
             return $http.get(settings.metadataUrlBase + '/monitoring_nav.json');
@@ -197,7 +225,7 @@ angular.module('compass.services', [])
         wizard.init();
 
         wizard.preConfig = function(config) {
-            wizard.setClusterInfo(config.cluster);
+            //wizard.setClusterInfo(config.cluster);
             wizard.setInterfaces(config.interface);
             wizard.setGeneralConfig(config.general);
             wizard.setPartition(config.partition);

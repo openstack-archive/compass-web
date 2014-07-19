@@ -1,26 +1,28 @@
 <div ng-controller="roleAssignCtrl">
     <div class="row">
-        <div collapse="autoAssignRoles.isCollapsed">
-            <div class="well">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <form name="autoAssignForm" role="form" class="form-horizontal">
-                            <div ng-repeat="role in roles" class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">{{role.display_name}}</label>
-                                <div class="col-sm-8" ng-init="role.count=1">
-                                    <input type="number" min="0" class="col-xs-10 col-sm-5" ng-model="role.count" placeholder="Count">
-                                </div>
+        <div collapse="autoAssignRoles.isCollapsed" class="dashed-panel">
+            <span class="action pull-right" ng-click="autoAssignRoles.isCollapsed = true;">
+                <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
+            </span>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <form name="autoAssignForm" role="form" class="form-horizontal">
+                        <div ng-repeat="role in roles" class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">{{role.display_name}}</label>
+                            <div class="col-sm-8" ng-init="role.count=1">
+                                <input type="number" min="0" class="col-xs-10 col-sm-5" ng-model="role.count" placeholder="Count">
                             </div>
-                            <div class="col-md-offset-4 col-md-8">
-                                <button type="button" class="btn btn-sm btn-info" ng-click="autoAssignRoles()" ng-disabled="autoAssignForm.$invalid">
-                                    Assign
-                                </button>
-                                <span>
-                                    Total Hosts: {{servers.length}} | Total Roles: {{rolesTotalCount}}
-                                </span>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="col-md-offset-4 col-md-8">
+                            <button type="button" class="btn btn-sm btn-info" ng-click="autoAssignRoles()" ng-disabled="autoAssignForm.$invalid">
+                                Assign
+                            </button>
+                            <span>
+                                Total Hosts: {{servers.length}} | Total Roles: {{rolesTotalCount}}
+                            </span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

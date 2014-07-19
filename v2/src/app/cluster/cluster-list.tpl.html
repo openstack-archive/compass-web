@@ -1,117 +1,127 @@
-<div class="page-header cluster-inline">
-    <div class="row header-margins">
-        <div class="col-xs-4">
+<div class="side-padding-40">
+    <div class="row">
+        <div class="col-md-5 no-padding-left">
             <h1 class="blue-header">
                 My Clusters
+                <small>
+                    <span class="cluster-search">
+                        <span class="input-icon">
+                            <input class="no-border" type="text" placeholder="Search" ng-model="search.$">
+                            <i class="ace-icon fa fa-search" style="top:-2px"></i>
+                        </span>
+                    </span>
+                </small>
             </h1>
         </div>
-        <div class="col-xs-8">
+        <div class="col-md-7 no-padding-right" style="margin-top:20px">
             <span ng-include="'src/app/cluster/cluster-create.tpl.html'"></span>
-            <span ng-controller="createClusterCtrl">
-                <button ng-click="open()" class="btn btn-info btn-create pull-right">
+            <span ng-controller="createClusterCtrl" class="pull-right">
+                <button ng-click="open()" class="btn btn-info btn-create">
                     <i class="glyphicon glyphicon-plus"></i>
                     Create New Cluster
                 </button>
             </span>
-            <span id="nav-search" class="nav-search">
+            <!--span id="nav-search" class="nav-search">
                 <form class="form-search">
-                    <span class="input-icon">
-                        <input id="nav-search-input" class="nav-search-input" type="text" placeholder="Search" ng-model="search.$">
-                        <i class="ace-icon fa fa-search nav-search-icon"></i>
-                    </span>
-                </form>
-            </span>
 
+                </form>
+            </span-->
         </div>
     </div>
-    <div class="page-content">
-        <table ng-table="tableParams" class="ng-table table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th class="sortable" ng-class="{
-                  'sort-asc': tableParams.isSortBy('name', 'asc'),
-                  'sort-desc': tableParams.isSortBy('name', 'desc')}" ng-click="tableParams.sorting({'name' : tableParams.isSortBy('name', 'asc') ? 'desc' : 'asc'})">
-                        <div>
-                            Cluster Name
-                        </div>
-                    </th>
-                    <th class="sortable" ng-class="{
-                    'sort-asc': tableParams.isSortBy('state', 'asc'),
-                    'sort-desc': tableParams.isSortBy('state', 'desc') 
-                  }" ng-click="tableParams.sorting({'state' : tableParams.isSortBy('state', 'asc') ? 'desc' : 'asc'})">
-                        <div>
-                            State
-                        </div>
-                    </th>
-                    <th>
-                        Deployment Details
-                    </th>
-                    <th class="sortable" ng-class="{
-                    'sort-asc': tableParams.isSortBy('distributed_system_name', 'asc'),
-                    'sort-desc': tableParams.isSortBy('distributed_system_name', 'desc') 
-                  }" ng-click="tableParams.sorting({'distributed_system_name' : tableParams.isSortBy('distributed_system_name', 'asc') ? 'desc' : 'asc'})">
-                        <div>
-                            Target System
-                        </div>
-                    </th>
-                    <th class="sortable" ng-class="{
-                    'sort-asc': tableParams.isSortBy('os_name', 'asc'),
-                    'sort-desc': tableParams.isSortBy('os_name', 'desc') 
-                  }" ng-click="tableParams.sorting({'os_name' : tableParams.isSortBy('os_name', 'asc') ? 'desc' : 'asc'})">
-                        <div>
-                            OS
-                        </div>
-                    </th>
-                    <th class="sortable" ng-class="{
-                    'sort-asc': tableParams.isSortBy('updated_at', 'asc'),
-                    'sort-desc': tableParams.isSortBy('updated_at', 'desc') 
-                  }" ng-click="tableParams.sorting({'updated_at' : tableParams.isSortBy('updated_at', 'asc') ? 'desc' : 'asc'})">
-                        <div>
-                            Date Modified
-                        </div>
-                    </th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="cluster in $data | filter:search">
-                    <td sortable="'name'">
-                        <span ng-if="cluster.state=='UNINITIALIZED'">
-                            {{cluster.name}}
-                        </span>
-                        <span ng-if="cluster.state!='UNINITIALIZED'">
-                            <a ui-sref="cluster.overview({ id: cluster.id })">{{cluster.name}}</a>
-                        </span>
-                    </td>
-                    <td sortable="'state'">
-                        <span class="label label-sm" ng-class="{
-                      'label-warning':cluster.state==='INITIALIZED',
-                      'label-info':cluster.state==='INSTALLING',
-                      'label-danger':cluster.state==='ERROR',
-                      'label-success':cluster.state==='SUCCESSFUL'}">
-                            {{cluster.state}}
-                        </span>
-                    </td>
-                    <td>{{cluster.progress}}</td>
-                    <td sortable="'distributed_system_name'">
-                        {{cluster.distributed_system_name}}
-                    </td>
-                    <td sortable="'os_name'">
-                        {{cluster.os_name}}
-                    </td>
-                    <td sortable="'updated_at'">
-                        {{cluster.updated_at}}
-                    </td>
-                    <td>
-                        <button ng-click="alert()" class="btn btn-xs btn-clstr btn-cltd">
-                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                        </button>
-                        <button ng-click="export()" class="btn btn-xs btn-clstr btn-clte">
-                            <i class="glyphicon glyphicon-export"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="space-10"></div>
+    <div class="row">
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="ng-table table table-striped table-hover nowrap">
+                <thead>
+                    <tr>
+                        <th class="sortable" ng-class="{
+                      'sort-asc': tableParams.isSortBy('name', 'asc'),
+                      'sort-desc': tableParams.isSortBy('name', 'desc')}" ng-click="tableParams.sorting({'name' : tableParams.isSortBy('name', 'asc') ? 'desc' : 'asc'})">
+                            <div>
+                                Cluster Name
+                            </div>
+                        </th>
+                        <th class="sortable" ng-class="{
+                        'sort-asc': tableParams.isSortBy('state', 'asc'),
+                        'sort-desc': tableParams.isSortBy('state', 'desc') 
+                      }" ng-click="tableParams.sorting({'state' : tableParams.isSortBy('state', 'asc') ? 'desc' : 'asc'})">
+                            <div>
+                                State
+                            </div>
+                        </th>
+                        <th>
+                            Deployment Details
+                        </th>
+                        <th class="sortable" ng-class="{
+                        'sort-asc': tableParams.isSortBy('distributed_system_name', 'asc'),
+                        'sort-desc': tableParams.isSortBy('distributed_system_name', 'desc') 
+                      }" ng-click="tableParams.sorting({'distributed_system_name' : tableParams.isSortBy('distributed_system_name', 'asc') ? 'desc' : 'asc'})">
+                            <div>
+                                Target System
+                            </div>
+                        </th>
+                        <th class="sortable" ng-class="{
+                        'sort-asc': tableParams.isSortBy('os_name', 'asc'),
+                        'sort-desc': tableParams.isSortBy('os_name', 'desc') 
+                      }" ng-click="tableParams.sorting({'os_name' : tableParams.isSortBy('os_name', 'asc') ? 'desc' : 'asc'})">
+                            <div>
+                                OS
+                            </div>
+                        </th>
+                        <th class="sortable" ng-class="{
+                        'sort-asc': tableParams.isSortBy('updated_at', 'asc'),
+                        'sort-desc': tableParams.isSortBy('updated_at', 'desc') 
+                      }" ng-click="tableParams.sorting({'updated_at' : tableParams.isSortBy('updated_at', 'asc') ? 'desc' : 'asc'})">
+                            <div>
+                                Date Modified
+                            </div>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cluster in $data | filter:search">
+                        <td sortable="'name'">
+                            <span ng-if="cluster.state=='UNINITIALIZED'">
+                                <a ui-sref="wizard({ id: cluster.id })">{{cluster.name}}</a>
+                            </span>
+                            <span ng-if="cluster.state!='UNINITIALIZED'">
+                                <a ui-sref="cluster.overview({ id: cluster.id })">{{cluster.name}}</a>
+                            </span>
+                        </td>
+                        <td sortable="'state'">
+                            <span class="label label-sm" ng-class="{
+                          'label-warning':cluster.state==='INITIALIZED',
+                          'label-info':cluster.state==='INSTALLING',
+                          'label-danger':cluster.state==='ERROR',
+                          'label-success':cluster.state==='SUCCESSFUL'}">
+                                {{cluster.state}}
+                            </span>
+                        </td>
+                        <td>
+                            {{cluster.progress}}
+                        </td>
+                        <td sortable="'distributed_system_name'">
+                            {{cluster.distributed_system_name}}
+                        </td>
+                        <td sortable="'os_name'">
+                            {{cluster.os_name}}
+                        </td>
+                        <td sortable="'updated_at'">
+                            {{cluster.updated_at}}
+                        </td>
+                        <td>
+                            <button ng-click="alert()" class="btn btn-xs btn-clstr btn-cltd">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                            </button>
+                            <button ng-click="export()" class="btn btn-xs btn-clstr btn-clte">
+                                <i class="glyphicon glyphicon-export"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>

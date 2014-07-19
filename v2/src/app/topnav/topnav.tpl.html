@@ -12,20 +12,25 @@
             <ul class="nav navbar-nav">
                 <li class="">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="">
-                      Clusters&nbsp;<small><span class="glyphicon glyphicon-chevron-down"></span></small>
+                        Clusters&nbsp;
+                        <small>
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </small>
                     </a>
 
                     <ul class="dropdown-menu dropdown-light-blue dropdown-caret">
-                        <li>
+                        <li ng-controller="createClusterCtrl" ng-click="open()">
                             <div ng-include="'src/app/cluster/cluster-create.tpl.html'"></div>
                             <a href>
-                                <div ng-controller="createClusterCtrl">
-                                    <span ng-click="open()">Create Cluster</span>
-                                </div>
+                                <i class="ace-icon fa fa-plus-square bigger-110 blue"></i>
+                                Create Cluster
                             </a>
                         </li>
                         <li ng-repeat="cluster in clusters">
-                            <a ui-sref="cluster({ id: cluster.id })">{{cluster.name}}</a>
+                            <a ui-sref="cluster.overview({ id: cluster.id })">
+                                <i class="ace-icon fa fa-dot-circle-o blue opacity-zero"></i>
+                                {{cluster.name}}
+                            </a>
                         </li>
                         <li>
                             <a ui-sref="clusterList">
@@ -49,7 +54,7 @@
                 <li class="transparent">
                     <a href class="dropdown-toggle" data-toggle="dropdown">
                         <i class="ace-icon fa fa-bell"></i>
-                        <span class="badge badge-grey">4</span>
+                        <!--span class="badge badge-grey">4</span-->
                     </a>
 
                     <ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -57,7 +62,6 @@
                             <i class="ace-icon fa fa-exclamation-triangle"></i>
                             Notifications
                         </li>
-
                         <li>
                             <a>
                                 <div class="clearfix notification-msg">
@@ -65,7 +69,6 @@
                                 </div>
                             </a>
                         </li>
-
                         <li>
                             <a>
                                 <div class="clearfix notification-msg">
@@ -73,7 +76,6 @@
                                 </div>
                             </a>
                         </li>
-
                         <li>
                             <a>
                                 <div class="clearfix notification-msg">
@@ -81,7 +83,6 @@
                                 </div>
                             </a>
                         </li>
-
                         <li>
                             <a>
                                 <div class="clearfix notification-msg">
@@ -100,32 +101,29 @@
                     </ul>
                 </li>
 
-                <li class="light-blue">
+                <li class="transparent">
                     <a href class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="user-info">
-                            My Account
-                        </span>
-
-                        <i class="icon-caret-down"></i>
+                        My Account
+                        <i class="ace-icon fa fa-caret-down"></i>
                     </a>
 
                     <ul class="user-menu pull-right dropdown-menu dropdown-menu-right dropdown-yellow dropdown-caret dropdown-close">
                         <li>
                             <a href="#">
-                                <i class="icon-cog"></i>
+                                <i class="ace-icon fa fa-cog blue"></i>
                                 Settings
                             </a>
                         </li>
                         <li>
                             <a href="#">
-                                <i class="icon-user"></i>
+                                <i class="ace-icon fa fa-user blue"></i>
                                 Profile
                             </a>
                         </li>
                         <li class="divider"></li>
                         <li ng-click="logout()">
                             <a href>
-                                <i class="icon-off"></i>
+                                <i class="ace-icon fa fa-sign-out blue"></i>
                                 Logout
                             </a>
                         </li>

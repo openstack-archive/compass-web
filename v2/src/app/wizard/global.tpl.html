@@ -42,74 +42,50 @@
                                             </label>
                                             <div class="col-sm-8">
                                                 <select ng-model="general.timezone" name="timezone" class="col-xs-10 col-sm-5">
-                                                    <option ng-repeat="tm in timezones" value="{{tm.value}}">(GMT {{tm.value}}) {{tm.timezone}}</option>
+                                                    <option ng-repeat="tm in timezones" value="{{tm.value}}">({{tm.value}}) {{tm.timezone}}</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-repeat="http_proxy in general.http_proxy track by $index" class="form-group">
+                                    <div class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">
-                                                <span ng-if="$index==0">
-                                                    HTTP Proxy
-                                                    <span class="text-danger opacity-zero">*</span>
-                                                </span>
+                                                HTTP Proxy
+                                                <span class="text-danger opacity-zero">*</span>
                                             </label>
                                             <div class="col-sm-8">
-                                                <input ng-model="general.http_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="HTTP Proxy" name="http_proxy">
-                                                <span class="col-xs-2 col-sm-3">
-                                                    <!--Add Action-->
-                                                    <span class="action" ng-click="addValue('http_proxy')">
-                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                                    </span>
-                                                    <!--Remove Action-->
-                                                    <span ng-show="general.http_proxy.length > 1" class="action" ng-click="general.http_proxy.splice($index,1)">
-                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                                    </span>
-                                                </span>
+                                                <input ng-model="general.http_proxy" type="text" class="col-xs-10 col-sm-5" placeholder="HTTP Proxy" name="http_proxy">
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-repeat="https_proxy in general.https_proxy track by $index" class="form-group">
+                                    <div class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">
-                                                <span ng-if="$index==0">
-                                                    HTTPS Proxy
-                                                    <span class="text-danger opacity-zero">*</span>
-                                                </span>
+                                                HTTPS Proxy
+                                                <span class="text-danger opacity-zero">*</span>
                                             </label>
                                             <div class="col-sm-8">
-                                                <input ng-model="general.https_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="HTTPS Proxy" name="https_proxy">
-                                                <span class="col-xs-2 col-sm-3">
-                                                    <!--Add Action-->
-                                                    <span class="action" ng-click="addValue('https_proxy')">
-                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                                    </span>
-                                                    <!--Remove Action-->
-                                                    <span ng-show="general.https_proxy.length > 1" class="action" ng-click="general.https_proxy.splice($index,1)">
-                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                                    </span>
-                                                </span>
+                                                <input ng-model="general.https_proxy" type="text" class="col-xs-10 col-sm-5" placeholder="HTTPS Proxy" name="https_proxy">
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-repeat="no_proxy in general.default_no_proxy track by $index" class="form-group">
+                                    <div ng-repeat="no_proxy in general.no_proxy track by $index" class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">
                                                 <span ng-if="$index==0">
-                                                    Default No Proxy
+                                                    No Proxy
                                                     <span class="text-danger opacity-zero">*</span>
                                                 </span>
                                             </label>
                                             <div class="col-sm-8">
-                                                <input ng-model="general.default_no_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Default No Proxy" name="default_no_proxy">
+                                                <input ng-model="general.no_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="No Proxy" name="no_proxy">
                                                 <span class="col-xs-2 col-sm-3">
                                                     <!--Add Action-->
-                                                    <span class="action" ng-click="addValue('default_no_proxy')">
+                                                    <span class="action" ng-click="addValue('no_proxy')">
                                                         <i class="fa fa-plus-circle bigger-140 blue"></i>
                                                     </span>
                                                     <!--Remove Action-->
-                                                    <span ng-show="general.default_no_proxy.length > 1" class="action" ng-click="general.default_no_proxy.splice($index,1)">
+                                                    <span ng-show="general.no_proxy.length > 1" class="action" ng-click="general.no_proxy.splice($index,1)">
                                                         <i class="fa fa-minus-circle bigger-140 blue"></i>
                                                     </span>
                                                 </span>

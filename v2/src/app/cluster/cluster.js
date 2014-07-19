@@ -17,35 +17,43 @@ angular.module('compass.cluster', [
         .state('cluster.overview', {
             url: '/overview',
             controller: 'clusterProgressCtrl',
-            templateUrl: 'src/app/cluster/cluster-overview.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-overview.tpl.html',
+            authenticate: true
         })
         .state('cluster.config', {
             url: '/config',
-            templateUrl: 'src/app/cluster/cluster-config.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-config.tpl.html',
+            authenticate: true
         })
         .state('cluster.config.security', {
             url: '/security',
-            templateUrl: 'src/app/cluster/cluster-security.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-security.tpl.html',
+            authenticate: true
         })
         .state('cluster.config.network', {
             url: '/network',
-            templateUrl: 'src/app/cluster/cluster-network.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-network.tpl.html',
+            authenticate: true
         })
         .state('cluster.config.partition', {
             url: '/partition',
-            templateUrl: 'src/app/cluster/cluster-partition.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-partition.tpl.html',
+            authenticate: true
         })
         .state('cluster.config.roles', {
             url: '/roles',
-            templateUrl: 'src/app/cluster/cluster-roles.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-roles.tpl.html',
+            authenticate: true
         })
         .state('cluster.log', {
             url: '/log',
-            templateUrl: 'src/app/cluster/cluster-log.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-log.tpl.html',
+            authenticate: true
         })
         .state('cluster.monitoring', {
             url: '/monitoring',
-            templateUrl: 'src/app/cluster/cluster-monitoring.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-monitoring.tpl.html',
+            authenticate: true
         });
 })
 
@@ -184,6 +192,7 @@ angular.module('compass.cluster', [
                             }
                         })
                         $state.go('wizard', {
+                            "id": data.id,
                             "config": "true"
                         });
                         $scope.cluster = {};
