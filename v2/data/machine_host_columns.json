@@ -132,7 +132,7 @@
         "visible": false
     }, {
         "title": "Hostname",
-        "field": "name",
+        "field": "hostname",
         "visible": true
     }, {
         "title": "Clusters",
@@ -142,5 +142,71 @@
         "title": "Roles",
         "field": "roles",
         "visible": false
+    }],
+    "machines_hosts": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "name",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "OS",
+        "field": "os",
+        "visible": true
+    }, {
+        "title": "State",
+        "field": "state",
+        "visible": false
+    }, {
+        "title": "Date Created",
+        "field": "created_at",
+        "visible": true
+    }, {
+        "title": "Date Updated",
+        "field": "updated_at",
+        "visible": true
+    }],
+    "machines": [{
+        "title": "MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Date Created",
+        "field": "created_at",
+        "visible": true
+    }, {
+        "title": "Date Updated",
+        "field": "updated_at",
+        "visible": true
     }]
 }

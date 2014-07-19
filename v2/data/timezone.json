@@ -1,97 +1,97 @@
 [{
-    "value": "-12.00",
+    "value": "GMT -12:00",
     "timezone": "Eniwetok, Kwajalein"
 }, {
-    "value": "-11.00",
+    "value": "GMT -11:00",
     "timezone": "Midway Island, Samoa"
 }, {
-    "value": "-10.00",
+    "value": "GMT -10:00",
     "timezone": "Hawaii"
 }, {
-    "value": "-9.00",
+    "value": "GMT -9:00",
     "timezone": "Alaska"
 }, {
-    "value": "-8.00",
+    "value": "GMT -8:00",
     "timezone": "Pacific Time (US & Canada)"
 }, {
-    "value": "-7.00",
+    "value": "GMT -7:00",
     "timezone": "Mountain Time (US & Canada)"
 }, {
-    "value": "-6.00",
+    "value": "GMT -6:00",
     "timezone": "Central Time (US & Canada), Mexico City"
 }, {
-    "value": "-5.00",
+    "value": "GMT -5:00",
     "timezone": "Eastern Time (US & Canada), Bogota, Lima"
 }, {
-    "value": "-4.00",
+    "value": "GMT -4:00",
     "timezone": "Atlantic Time (Canada), Caracas, La Paz"
 }, {
-    "value": "-3:30",
+    "value": "GMT -3:30",
     "timezone": "Newfoundland"
 }, {
-    "value": "-3.00",
+    "value": "GMT -3:00",
     "timezone": "Brazil, Buenos Aires, Georgetow"
 }, {
-    "value": "-2.00",
+    "value": "GMT -2:00",
     "timezone": "Mid-Atlantic"
 }, {
-    "value": "-1.00",
+    "value": "GMT -1:00",
     "timezone": "Azores, Cape Verde Islands"
 }, {
-    "value": "0.00",
+    "value": "GMT 0:00",
     "timezone": "Western Europe Time, London, Lisbon, Casablanca"
 }, {
-    "value": "+1.00",
+    "value": "GMT +1:00",
     "timezone": "Brussels, Copenhagen, Madrid, Paris"
 }, {
-    "value": "+2.00",
+    "value": "GMT +2:00",
     "timezone": "Kaliningrad, South Africa"
 }, {
-    "value": "+3:00",
+    "value": "GMT +3:00",
     "timezone": "Baghdad, Riyadh, Moscow, St. Petersburg"
 }, {
-    "value": "+3:00",
+    "value": "GMT +3:00",
     "timezone": "Baghdad, Riyadh, Moscow, St. Petersburg"
 }, {
-    "value": "+3:30",
+    "value": "GMT +3:30",
     "timezone": "Tehran"
 }, {
-    "value": "+4:00",
+    "value": "GMT +4:00",
     "timezone": "Abu Dhabi, Muscat, Baku, Tbilisi"
 }, {
-    "value": "+4:30",
+    "value": "GMT +4:30",
     "timezone": "Kabul"
 }, {
-    "value": "+5:00",
+    "value": "GMT +5:00",
     "timezone": "Ekaterinburg, Islamabad, Karachi, Tashkent"
 }, {
-    "value": "+5:30",
+    "value": "GMT +5:30",
     "timezone": "Bombay, Calcutta, Madras, New Delhi"
 }, {
-    "value": "+5:45",
+    "value": "GMT +5:45",
     "timezone": "Kathmandu"
 }, {
-    "value": "+6:00",
+    "value": "GMT +6:00",
     "timezone": "Almaty, Dhaka, Colombo"
 }, {
-    "value": "+7:00",
+    "value": "GMT +7:00",
     "timezone": "Bangkok, Hanoi, Jakarta"
 }, {
-    "value": "+8:00",
+    "value": "GMT +8:00",
     "timezone": "Beijing, Perth, Singapore, Hong Kong"
 }, {
-    "value": "+9:00",
+    "value": "GMT +9:00",
     "timezone": "Tokyo, Seoul, Osaka, Sapporo, Yakutsk"
 }, {
-    "value": "+9:30",
+    "value": "GMT +9:30",
     "timezone": "Adelaide, Darwin"
 }, {
-    "value": "+10:00",
+    "value": "GMT +10:00",
     "timezone": "Eastern Australia, Guam, Vladivostok"
 }, {
-    "value": "+11:00",
+    "value": "GMT +11:00",
     "timezone": "Magadan, Solomon Islands, New Caledonia"
 }, {
-    "value": "+12:00",
+    "value": "GMT +12:00",
     "timezone": "Auckland, Wellington, Fiji, Kamchatka"
 }]

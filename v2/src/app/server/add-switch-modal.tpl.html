@@ -1,0 +1,40 @@
+<script type="text/ng-template" id="addSwitchModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Add Switch</h3>
+    </div>
+    <div class="modal-body">
+        <form name="addSwitchForm" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Switch IP</label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="newswitch.ip" placeholder="Switch IP" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Version</label>
+                <div class="col-sm-9">
+                    <select ng-model="newswitch.credentials.version" required>
+                        <option>1</option>
+                        <option>2c</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Community</label>
+                <div class="col-sm-9">
+                    <input type="password" ng-model="newswitch.credentials.community" placeholder="Community" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Port Filter</label>
+                <div class="col-sm-9">{{test}}
+                    <input type="text" ng-model="filters.ports" placeholder="Port Filter">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="addSwitch()" ng-disabled="addSwitchForm.$invalid">Add</button>
+        <button class="btn btn-grey" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

@@ -1,6 +1,6 @@
 {
     "cluster": {
-        "id": 2,
+        "id": 1,
         "name": "demo",
         "adapter_id": 1,
         "os_id": 1
@@ -41,11 +41,11 @@
         }
     },
     "general": {
-        "timezone": "-4.00",
+        "timezone": "GMT -8:00",
         "language": "en",
-        "http_proxy": [""],
-        "https_proxy": [""],
-        "default_no_proxy": [""],
+        "http_proxy": "",
+        "https_proxy": "",
+        "no_proxy": [""],
         "ntp_server": "",
         "dns_servers": [""],
         "search_path": ["compass.com"],

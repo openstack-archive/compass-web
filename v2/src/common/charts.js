@@ -118,3 +118,56 @@ angular.module('compass.charts', [])
         templateUrl: "src/common/progressbar.tpl.html"
     }
 })
+
+.directive('switchrow', function(dataService, $timeout) {
+    return {
+        restrict: 'A',
+        scope: {
+            finding: '=',
+            switchinfo: '=',
+            result: '=',
+            machines: '='
+        },
+        link: function(scope, element, attrs) {
+            var checkSwitchTimer;
+            var findingTriggered = scope.finding;
+
+            var getMachines = function() {
+                dataService.getSwitchMachines(scope.switchinfo.id).success(function(data) {
+                    scope.finding = false;
+                    scope.result = "success";
+                    scope.machines = data;
+                })
+                    .error(function(data) {
+                        scope.finding = false;
+                        scope.result = "error";
+                    })
+            };
+
+            var checkSwitchState = function() {
+                dataService.getSwitchById(scope.switchinfo.id).success(function(data) {
+                    if (data.state == "under_monitoring") {
+                        getMachines();
+                    } else {
+                        checkSwitchTimer = $timeout(checkSwitchState, 2000);
+                    }
+                })
+            };
+
+            scope.$watch('finding', function(val) {
+                if (val == true) {
+                    var findingAction = {
+                        "find_machines": null
+                    }
+                    dataService.postSwitchAction(scope.switchinfo.id, findingAction).success(function(data) {
+                        checkSwitchState();
+                    })
+                }
+            })
+
+            element.bind('$destroy', function() {
+                $timeout.cancel(checkSwitchTimer);
+            });
+        }
+    }
+})

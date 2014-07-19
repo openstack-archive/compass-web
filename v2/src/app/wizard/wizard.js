@@ -3,13 +3,13 @@ angular.module('compass.wizard', [
     'ui.bootstrap',
     'ngTable',
     'compass.charts',
-    'ngDragDrop',
+    'ngDragDrop'
 ])
 
 .config(function config($stateProvider) {
     $stateProvider
         .state('wizard', {
-            url: '/wizard?config',
+            url: '/wizard/{id}?config',
             controller: 'wizardCtrl',
             templateUrl: 'src/app/wizard/wizard.tpl.html',
             authenticate: true
@@ -17,13 +17,18 @@ angular.module('compass.wizard', [
 })
 
 .controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state) {
+    $scope.clusterId = $stateParams.id;
+    dataService.getClusterById($scope.clusterId).success(function(data) {
+        $scope.cluster = data;
+        wizardFactory.setClusterInfo($scope.cluster);
+    })
+
+
     if ($stateParams.config == "true") {
         dataService.getWizardPreConfig().success(function(data) {
             wizardFactory.preConfig(data);
-            $scope.cluster = wizardFactory.getClusterInfo();
+            //$scope.cluster = wizardFactory.getClusterInfo();
         });
-    } else {
-        $scope.cluster = wizardFactory.getClusterInfo();
     }
 
     // current step for create-cluster wizard
@@ -64,13 +69,16 @@ angular.module('compass.wizard', [
             $scope.$watch(function() {
                 return wizardFactory.getCommitState()
             }, function(newCommitState, oldCommitState) {
-                if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
-                    console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
-                    $scope.next();
-                } else if (newCommitState.state == "error") {
-                    // TODO: error handling / display error message
-                    console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
+                if (newCommitState != oldCommitState) {
+                    if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
+                        console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
+                        $scope.next();
+                    } else if (newCommitState.state == "error") {
+                        // TODO: error handling / display error message
+                        console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
+                    }
                 }
+
             })
         };
 
@@ -220,20 +228,12 @@ angular.module('compass.wizard', [
     if (!$scope.general["search_path"]) {
         $scope.general["search_path"] = [""];
     }
-    if (!$scope.general["http_proxy"]) {
-        $scope.general["http_proxy"] = [""];
-    }
-    if (!$scope.general["https_proxy"]) {
-        $scope.general["https_proxy"] = [""];
-    }
-    if (!$scope.general["default_no_proxy"]) {
-        $scope.general["default_no_proxy"] = [""];
+    if (!$scope.general["no_proxy"]) {
+        $scope.general["no_proxy"] = [""];
     }
 
     $scope.addValue = function(key) {
         $scope.general[key].push("");
-        console.log($scope.general);
-        console.log($scope.general.http_proxy.length)
     };
 
     dataService.getTimezones().success(function(data) {
@@ -526,20 +526,30 @@ angular.module('compass.wizard', [
                             // post host network
                             var updateNetwork = dataService.postHostNetwork(server.id, network).then(function(networkData) {
                                 // success callback
-                                console.log("post networkdata", networkData.data);
                                 var interface = networkData.data.interface;
                                 var networkId = networkData.data.id;
                                 server.network[interface].id = networkId;
                             }, function(response) {
                                 // error callback
                                 return $q.reject(response);
+                                // keep this part for later use
+                                /*
+                                if(response.status == 409) { // if (host_id, interface) already exists
+                                    var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
+                                        // success callback
+                                    }, function(response) {
+                                        // error callback
+                                        return $q.reject(response);
+                                    });
+                                    hostNetworkPromises.push(updateNetwork);
+                                }
+                                */
                             });
                             hostNetworkPromises.push(updateNetwork);
                         } else {
                             // put host network
                             var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
                                 // success callback
-                                console.log("put networkdata", networkData.data);
                             }, function(response) {
                                 // error callback
                                 return $q.reject(response);
@@ -552,7 +562,6 @@ angular.module('compass.wizard', [
                 $q.all(hostnamePromises.concat(hostNetworkPromises)).then(function() {
                     // update hostname and network for all hosts successfully
                     wizardFactory.setServers($scope.servers);
-                    console.info($scope.servers)
                     var commitState = {
                         "name": "network",
                         "state": "success",
@@ -691,7 +700,7 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('securityCtrl', function($scope, $window, wizardFactory, dataService) {
+.controller('securityCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
@@ -734,7 +743,7 @@ angular.module('compass.wizard', [
         } else if ($scope.mgmtAccordion.open == false) {
             $scope.mReset();
             $scope.mcloseAll();
-        } 
+        }
     }, true)
 
     $scope.mcloseAll = function() {
@@ -762,13 +771,12 @@ angular.module('compass.wizard', [
     }
 
     // Service Credentials
-    $scope.serverAccordion = {};
+    $scope.serviceAccordion = {};
 
-    $scope.$watch('serverAccordion', function(val) {
-        console.info($scope.serverAccordion);
-        if ($scope.serverAccordion.open == true) {
+    $scope.$watch('serviceAccordion', function(val) {
+        if ($scope.serviceAccordion.open == true) {
             $scope.sSave();
-        } else if ($scope.serverAccordion.open == false) {
+        } else if ($scope.serviceAccordion.open == false) {
             $scope.sReset();
             $scope.scloseAll();
         }
@@ -795,7 +803,7 @@ angular.module('compass.wizard', [
 
     $scope.sReset = function() {
         $scope.service_credentials = angular.copy($scope.originalServiceData);
-    } 
+    }
 
     $scope.commit = function() {
         var securityData = {

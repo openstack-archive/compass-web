@@ -24,7 +24,9 @@ html {
 .cssFade.ng-hide {
     opacity: 0;
 }*/
-
+.no-border {
+    border: 0px !important;
+}
 .nowrap {
     white-space: nowrap;
 }
@@ -54,6 +56,12 @@ html {
     transition: all 0.2s ease 0s;
     vertical-align: baseline;
     white-space: nowrap;
+}
+.cluster-search {
+    padding-left: 10px;
+    margin-left: 10px;
+    border-left: 1px solid rgb(216, 216, 216);
+    padding-bottom: 0px
 }
 .alert-dismissable .close {
     color: inherit;
@@ -118,6 +126,21 @@ select {
 .login-page {
     margin-top:60px;
 }
+.dashed-panel {
+    border: 1px dashed rgb(213, 213, 213);
+    border-radius: 10px;
+    padding: 5px 15px 20px 15px;
+}
+.widget-body .table {
+    border-top: 0px !important;
+}
+.navbar .navbar-nav > li {
+    border-style: none;
+}
+.new-servers-result {
+    overflow-y: scroll;
+    max-height:400px
+}
 .btn-clstr {
     border: none !important;
     background-color: inherit!important;
@@ -170,7 +193,7 @@ a:active {
     line-height: 80% !important;
     text-transform: lowercase !important;
     font-size: 100% !important;
-    padding: 0.2em 0 0 0 !important;
+    /*padding: 0.2em 0 0 0 !important;*/
 }
 .label:first-letter {
     text-transform: uppercase !important;

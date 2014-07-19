@@ -6,7 +6,6 @@ angular.module('compass.topnav', [
 .controller('topnavCtrl', function($scope, $http, dataService) {
     // get all clusters
     dataService.getClusters().success(function(data) {
-        console.log("====", data);
         $scope.clusters = data;
     });
 }).directive('topnav', function() {

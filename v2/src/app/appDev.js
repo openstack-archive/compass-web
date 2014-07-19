@@ -256,9 +256,115 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "network": {},
             "state": "Successful"
         }];
-        console.log(servers)
         return [200, servers, {}];
     });
+
+    $httpBackend.whenGET(settings.apiUrlBase + '/switches').respond(function(method, url, data) {
+        console.log(method, url, data);
+        var switches = [{
+            "id": 1,
+            "ip": "172.29.8.40",
+            "filters": {
+                "ports": "1-10;20-51"
+            },
+            "state": "under_mointoring"
+        }, {
+            "id": 2,
+            "ip": "172.29.8.41",
+            "filters": {
+                "ports": "1-100"
+            },
+            "state": "under_mointoring"
+        }];
+        return [200, switches, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/switches\/([0-9]|[1-9][0-9])$/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var index = url.indexOf("switches/");
+        var id = url.substring(index).split("/")[1];
+        var sw = {
+            "id": id,
+            "ip": "172.29.8.40",
+            "filters": {
+                "ports": "1-10;20-51"
+            },
+            "state": "under_monitoring"
+        };
+        return [200, sw, {}];
+    });
+
+    $httpBackend.whenPOST(settings.apiUrlBase + '/switches').respond(function(method, url, data) {
+        console.log(method, url, data);
+        var switchData = JSON.parse(data);
+        switchData.id = Math.floor(Math.random() * 100 + 1);
+        switchData.state = "initialized";
+        return [200, switchData, {}];
+    });
+
+    $httpBackend.whenPOST(/\.*\/switches\/([0-9]|[1-9][0-9])\/action$/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var switchState = {
+            "state": "initialized"
+        }
+        return [200, switchState, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/switches\/([0-9]|[1-9][0-9])\/machines$/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var index = url.indexOf("switches/");
+        var switchId = url.substring(index).split("/")[1];
+        var machines = [{
+            "id": Math.floor(Math.random() * 100 + 1),
+            "mac": "28.e5.ee.47.14.92",
+            "switch_ip": "172.29.8." + switchId,
+            "vlan": "1",
+            "port": "11"
+        }, {
+            "id": Math.floor(Math.random() * 100 + 1),
+            "mac": "28.e5.ee.47.a2.93",
+            "switch_ip": "172.29.8." + switchId,
+            "vlan": "2",
+            "port": "12"
+        }, {
+            "id": Math.floor(Math.random() * 100 + 1),
+            "mac": "28.e5.ee.47.ee.32",
+            "switch_ip": "172.29.8." + switchId,
+            "vlan": "2",
+            "port": "13"
+        }, {
+            "id": Math.floor(Math.random() * 100 + 1),
+            "mac": "28.e5.ee.47.33.66",
+            "switch_ip": "172.29.8." + switchId,
+            "vlan": "2",
+            "port": "14"
+        }, {
+            "id": Math.floor(Math.random() * 100 + 1),
+            "mac": "28.e5.ee.47.2c.22",
+            "switch_ip": "172.29.8." + switchId,
+            "vlan": "2",
+            "port": "15"
+        }, {
+            "id": Math.floor(Math.random() * 100 + 1),
+            "mac": "28.e5.ee.47.55.19",
+            "switch_ip": "172.29.8." + switchId,
+            "vlan": "2",
+            "port": "16"
+        }];
+        return [200, machines, {}];
+    });
+    /*
+    $httpBackend.whenPOST(settings.apiUrlBase + '/switch-filters').respond(function(method, url, data) {
+        console.log(method, url, data);
+        var filterData = JSON.parse(data);
+        return [200, filterData, {}];
+    });
+*/
+    $httpBackend.whenPUT(/\.*\/switch-filters\/([0-9]|[1-9][0-9])/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var filterData = JSON.parse(data);
+        return [200, filterData, {}];
+    })
 
     $httpBackend.whenPOST(settings.apiUrlBase + '/clusters').respond(function(method, url, data) {
         console.log(method, url, data);
@@ -530,7 +636,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             var host = {
                 "id": i,
                 "machine_id": i * 2 + 10,
-                "name": "host-" + i,
+                "hostname": "host-" + i,
                 "mac": "28.e5.ee.47.14." + (i < 10 ? "a" : "") + i,
                 "switch_ip": "172.29.8.40",
                 "port": i,
@@ -542,7 +648,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "display_name": "Storage",
                     "name": "os-block-storage-worker"
                 }],
-                "clusters": ["cluster1", "cluster2"]
+                "clusters": [{
+                    "id": 1,
+                    "name": "cluster1"
+                }, {
+                    "id": 2,
+                    "name": "cluster2"
+                }]
             };
             hosts.push(host);
         }
