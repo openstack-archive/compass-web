@@ -115,6 +115,9 @@ select {
     width: 100%;
     margin-top: -1px;
 }
+.login-page {
+    margin-top:60px;
+}
 .btn-clstr {
     border: none !important;
     background-color: inherit!important;

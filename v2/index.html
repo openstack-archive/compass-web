@@ -27,6 +27,7 @@
     
     <script type="text/javascript" src="src/app/app.js"></script>
     <script type="text/javascript" src="src/app/appDev.js"></script>
+    <script type="text/javascript" src="src/app/login/login.js"></script>
     <script type="text/javascript" src="src/app/services.js"></script>
     <script type="text/javascript" src="src/app/topnav/topnav.js"></script>
     <script type="text/javascript" src="src/app/wizard/wizard.js"></script>
@@ -36,10 +37,11 @@
     <script type="text/javascript" src="src/common/charts.js"></script>
 </head>
 
-<body ng-app="compass">
-
-    <div ng-controller="topnavCtrl">
-        <div topnav></div>
+<body ng-app="compass" ng-controller="appController">
+    <div ng-if="isAuthenticated">
+        <div ng-controller="topnavCtrl">
+            <div topnav></div>
+        </div>
     </div>
 
     <div class="main-container no-skin">

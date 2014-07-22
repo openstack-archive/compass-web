@@ -7,6 +7,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
     $httpBackend.whenGET(new RegExp('src\/.*')).passThrough();
     $httpBackend.whenGET(new RegExp('data\/.*')).passThrough();
 
+    $httpBackend.whenPOST(settings.apiUrlBase + '/login').respond(function(method, url, data) {
+        console.log(method, url, data);
+        var user = {
+            "name": "huawei"
+        }
+        return [200, user, {}];
+    });
+
     $httpBackend.whenGET(settings.apiUrlBase + '/adapters').respond(function(method, url, data) {
         console.log(method, url);
         var adapters = [{

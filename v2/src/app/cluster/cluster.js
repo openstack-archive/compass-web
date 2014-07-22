@@ -10,7 +10,8 @@ angular.module('compass.cluster', [
         .state('cluster', {
             url: '/cluster/{id}',
             controller: 'clusterCtrl',
-            templateUrl: 'src/app/cluster/cluster.tpl.html'
+            templateUrl: 'src/app/cluster/cluster.tpl.html',
+            authenticate: true
         })
         .state('cluster.overview', {
             url: '/overview',

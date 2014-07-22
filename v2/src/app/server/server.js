@@ -10,7 +10,8 @@ angular.module('compass.server', [
         .state('serverList', {
             url: '/serverlist',
             controller: 'serverCtrl',
-            templateUrl: 'src/app/server/server-list.tpl.html'
+            templateUrl: 'src/app/server/server-list.tpl.html',
+            authenticate: true
         });
 })
 

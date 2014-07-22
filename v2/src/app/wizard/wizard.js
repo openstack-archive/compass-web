@@ -11,7 +11,8 @@ angular.module('compass.wizard', [
         .state('wizard', {
             url: '/wizard?config',
             controller: 'wizardCtrl',
-            templateUrl: 'src/app/wizard/wizard.tpl.html'
+            templateUrl: 'src/app/wizard/wizard.tpl.html',
+            authenticate: true
         });
 })
 

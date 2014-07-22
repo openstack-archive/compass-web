@@ -30,6 +30,10 @@ angular.module('compass.services', [])
 .service('dataService', ['$http', 'settings',
     function($http, settings) {
 
+        this.login = function(user) {
+            return $http.post(settings.apiUrlBase + '/login', angular.toJson(user));
+        };
+
         this.getWizardPreConfig = function() {
             return $http.get(settings.metadataUrlBase + '/config.json');
         };
@@ -303,4 +307,22 @@ angular.module('compass.services', [])
 
         return wizard;
     }
-]);
+])
+
+.service('authService', ['$http', 'dataService',
+    function($http, dataService) {
+        this.isAuthenticated = false;
+
+        this.setLogin = function(isLogin) {
+            this.isAuthenticated = isLogin;
+        }
+
+        this.login = function(user) {
+            return dataService.login(user);
+        };
+
+        this.logout = function() {
+            this.isAuthenticated = false;
+        };
+    }
+])

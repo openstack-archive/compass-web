@@ -9,7 +9,8 @@ var app = angular.module('compass.clusterlist', [
         .state('clusterList', {
             url: '/clusterlist',
             controller: 'ClusterListCtrl',
-            templateUrl: 'src/app/cluster/cluster-list.tpl.html'
+            templateUrl: 'src/app/cluster/cluster-list.tpl.html',
+            authenticate: true
         });
 })
 
