@@ -13,7 +13,8 @@ var app = angular.module('compass', [
 
 app.constant('settings', {
     apiUrlBase: '/api/v2.0',
-    metadataUrlBase: 'data'
+    metadataUrlBase: 'data',
+    monitoringUrlBase: ''
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {

@@ -2,7 +2,8 @@ angular.module('compass.cluster', [
     'ui.router',
     'ui.bootstrap',
     'ngAnimate',
-    'ngTable'
+    'ngTable',
+    'angular-rickshaw'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -185,7 +186,117 @@ angular.module('compass.cluster', [
             };
         });
     }
-]);
+])
+
+.controller('monitoringCtrl', ['$scope',
+    function($scope) {
+        $scope.options = {
+            renderer: 'area'
+        };
+        $scope.features = {
+            hover: {
+                xFormatter: function(x) {
+                    return 't=' + x;
+                },
+                yFormatter: function(y) {
+                    return '$' + y;
+                }
+            }
+        };
+        $scope.series = [{
+            name: 'Series 1',
+            color: 'steelblue',
+            data: [{
+                x: 0,
+                y: 23
+            }, {
+                x: 1,
+                y: 15
+            }, {
+                x: 2,
+                y: 79
+            }, {
+                x: 3,
+                y: 31
+            }, {
+                x: 4,
+                y: 60
+            }]
+        }, {
+            name: 'Series 2',
+            color: 'lightblue',
+            data: [{
+                x: 0,
+                y: 30
+            }, {
+                x: 1,
+                y: 20
+            }, {
+                x: 2,
+                y: 64
+            }, {
+                x: 3,
+                y: 50
+            }, {
+                x: 4,
+                y: 15
+            }]
+        }];
+
+        $scope.options2 = {
+            renderer: 'line'
+        };
+        $scope.features2 = {
+            hover: {
+                xFormatter: function(x) {
+                    return 't=' + x;
+                },
+                yFormatter: function(y) {
+                    return '$' + y;
+                }
+            }
+        };
+        $scope.series2 = [{
+            name: 'Series 1',
+            color: 'steelblue',
+            data: [{
+                x: 0,
+                y: 23
+            }, {
+                x: 1,
+                y: 15
+            }, {
+                x: 2,
+                y: 79
+            }, {
+                x: 3,
+                y: 31
+            }, {
+                x: 4,
+                y: 60
+            }]
+        }, {
+            name: 'Series 2',
+            color: 'lightblue',
+            data: [{
+                x: 0,
+                y: 30
+            }, {
+                x: 1,
+                y: 20
+            }, {
+                x: 2,
+                y: 64
+            }, {
+                x: 3,
+                y: 50
+            }, {
+                x: 4,
+                y: 15
+            }]
+        }];
+    }
+])
 
 var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
     $scope.allAdapters = allAdapters;
