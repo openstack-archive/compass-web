@@ -153,32 +153,31 @@
             <thead>
                 <tr>
                     <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{
-                    'sort-asc': tableParams.isSortBy(column.field, 'asc'),
-                    'sort-desc': tableParams.isSortBy(column.field, 'desc')
-                  }" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
-                        {{column.title}}
+                'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                'sort-desc': tableParams.isSortBy(column.field, 'desc')
+              }" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                        <div>{{column.title}}</div>
                     </th>
-                    <th ng-repeat="(name, value) in interfaces" ng-mouseover="deleteView=true" ng-mouseleave="deleteView=false">
+                    <th class="networkDeleteView" ng-repeat="(name, value) in interfaces" ng-mouseover="deleteView=true" ng-mouseleave="deleteView=false">
                         {{name}}
-                        <span ng-class="{'opacity-zero': !deleteView}" ng-click="deleteInterface(name)" class="action"><i class="ace-icon fa fa-times-circle bigger-120 red"></i> 
+                        <span ng-click="deleteInterface(name)" class="action">
+                            <i ng-class="{'networkDeleteButton': deleteView}" class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
                         </span>
                     </th>
                 </tr>
             </thead>
-
             <tbody>
                 <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index">
-                    <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                    <td class="center-align" ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                         <span ng-if="column.field=='name'">
-                            <input ng-model="server[column.field]" placeholder="Hostname" class="form-control margin-bottom-10 max-width-200" type="text">
+                            <input ng-model="server[column.field]" placeholder="Hostname" class="form-control  max-width-150 margin-bottom-0" type="text">
                         </span>
                         <span ng-if="column.field!='name'">
                             {{server[column.field]}}
                         </span>
-
                     </td>
-                    <td ng-repeat="(name, value) in interfaces" ng-init="server.network[name] = server.network[name] === undefinded? {} : server.network[name]">
-                        <input ng-model="server.network[name].ip" placeholder="IP Address" class="form-control margin-bottom-10 max-width-200" type="text">
+                    <td class="eth-width" ng-repeat="(name, value) in interfaces" ng-init="server.network[name] = server.network[name] === undefinded? {} : server.network[name]">
+                        <input ng-model="server.network[name].ip" placeholder="IP Address" class="form-control max-width-150 margin-bottom-0" type="text">
                     </td>
 
                     <!-- Set IP, subnet and mgmt by each server. Keep this part for future use-->

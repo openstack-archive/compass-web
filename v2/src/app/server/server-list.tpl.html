@@ -1,1 +1,163 @@
-server list
+<div class="side-padding-30">
+    <div class="row side-padding-10">
+        <div class="pull-left">
+            <h1 class="blue-header">Discovered Servers</h1>
+        </div>
+        <div class="pull-right top-margin-14 center-align">
+            <!--Search Input-->
+            <span class="input-icon margin-right-5">
+                <input type="text" placeholder="Search" ng-model="search.$">
+                <i class="ace-icon fa fa-search blue"></i>
+            </span>
+            <!-- Column Show / Hide button -->
+            <div class="btn-group" dropdown>
+                <button type="button" class="btn btn-white btn-default dropdown-toggle">
+                    Column Show / Hide
+                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                        <a class="action">
+                            <span ng-class="{'opacity-zero': !column.visible}">
+                                <i class="ace-icon fa fa-check blue"></i>
+                            </span>
+                            {{column.title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group" dropdown>
+                <button type="button" class="btn btn-info btn-default dropdown-toggle">
+                    Actions
+                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-click="column.visible=!column.visible">
+                        <a class="action">
+                            <span ng-class="{'opacity-zero': !column.visible}">
+                                <i class="ace-icon fa fa-check blue"></i>
+                            </span>
+                            Additional Actions
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-info btn-default" ng-click="addInterfacePanel.isCollapsed = !addInterfacePanel.isCollapsed" ng-init="addInterfacePanel.isCollapsed = true;">
+                    Expand
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div collapse="addInterfacePanel.isCollapsed">
+            <div class="widget-box">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-8">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Interface</th>
+                                            <th>Subnet</th>
+                                            <th>Is Mgmt Network</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-init="network={};">
+                                        <tr>
+                                            <td>
+                                                <input type="text" ng-model="newInterface.name" placeholder="Interface" required />
+                                            </td>
+                                            <td>
+                                                <select ng-model="newInterface.subnet_id" class="max-width-200">
+                                                    <option ng-repeat="sub in subnetworks" value="{{sub.subnet_id}}">
+                                                        {{sub.name}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>-</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-info" ng-click="addInterface(newInterface)">
+                                                    Add
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="(name, value) in interfaces">
+                                            <td>
+                                                {{name}}
+                                            </td>
+                                            <td>
+                                                <span ng-repeat="sub in subnetworks">
+                                                    <span ng-if="sub.subnet_id == value.subnet_id">{{sub.name}}</span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input ng-model="value.is_mgmt" type="checkbox" name="is-mgmt" />
+                                            </td>
+                                            <td>
+                                                <!--Remove Action-->
+                                                <button class="btn btn-xs btn-danger" ng-click="deleteInterface(name)"><i class="fa fa-trash-o bigger-120"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row side-padding-40">
+    <div class="table-responsive">
+        <table ng-table="tableParams" class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <label>
+                            <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                    'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                        {{column.title}}
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="server in $data | filter:search">
+                    <td>
+                        <label>
+                            <input ng-model="server.selected" type="checkbox" class="ace">
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+                    <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                        <span ng-if="column.field=='os_installed'">
+                            <span ng-if="server['os']">
+                                <label>
+                                    <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                    <span class="lbl"></span>
+                                </label>
+                            </span>
+                            <span ng-if="!server['os']">
+                                -
+                            </span>
+                        </span>
+                        <span ng-if="column.field!='os_installed'">
+                            {{server[column.field]}}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

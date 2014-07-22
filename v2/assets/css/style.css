@@ -132,34 +132,39 @@ button.btn-clte:hover, button.btn-clstre:active {
 }
 th {
     background-color: #FFFFFF !important;
-    color: #000000 !important;
+    color: #000000;
 }
 a.darkfont:link: {
     font color: #000000 !important;
 }
-/* visited link */
-h1.cluster {
-    float: left !important;
-    line-height: 1.4 !important;
-}
-.header-margins{
-    margin-left: 0px !important; 
-    margin-right: 0px !important; 
-    margin-bottom: 15px !important;
-}
 a.darkfont:visited {
     color: #000000 !important;
+}
+/* visited link */
+
+h1.blue-header {
+    float: left !important;
+    line-height: 1.4 !important;
+    color: #2679b5;
+    font-size: 24px;
+    font-weight: lighter;
+    padding: 0;
+}
+.header-margins {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 15px !important;
 }
 a:active {
     color: #0000FF;
 }
 .page-header {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .label {
     border-radius: 0.25em !important;
-    line-height: 80% !important; 
+    line-height: 80% !important;
     text-transform: lowercase !important;
     font-size: 100% !important;
     padding: 0.2em 0 0 0 !important;
@@ -171,14 +176,13 @@ a:active {
     position: relative !important;
     float: right !important;
 }
-
 .btn-cltd {
     padding: 1px 3px 1px 4px !important;
 }
 .btn-create {
     line-height: 1.1 !important;
 }
-.input-icon{
+.input-icon {
     margin-top: 5px !important;
 }
 .ng-table th.sortable {
@@ -197,7 +201,7 @@ a:active {
     right: 8px;
     top: 50%;
     position: absolute;
-    /* opacity: .3; */
+    opacity: .3;
     margin-top: -4px
 }
 .ng-table th.sortable div:before {
@@ -208,7 +212,7 @@ a:active {
     border-top: 4px solid #000
 }
 .ng-table th.sortable div:hover:after, .ng-table th.sortable div:hover:before {
-    opacity: 1;
+    opacity: 0.8;
     visibility: visible
 }
 .ng-table th.sortable.sort-desc, .ng-table th.sortable.sort-asc {
@@ -241,4 +245,68 @@ a:active {
     -khtml-opacity: .6;
     -moz-opacity: .6;
     /* opacity: .6 */
+}
+.ng-table-pager {
+    display: none;
+}
+.btn-previous {
+    background-color: #abbac3 !important;
+    border-color: #abbac3 !important;
+}
+.first-prev {
+    cursor: not-allowed !important;
+    /* padding: 10px !important; */
+}
+.btn-light {
+    cursor: not-allowed !important;
+}
+.btn-prev-spacing {
+    margin-right: 10px;
+}
+.networkDeleteView {
+    border-bottom-color: #f3cdc6 !important;
+    background-color: #f5f5f5 !important;
+}
+.networkDeleteButton {
+    color: #dd5a43 !important;
+}
+.th-inhert {
+    vertical-align: auto;
+}
+.eth-width {
+    width: 13%;
+}
+.max-width-150 {
+    max-width: 150px !important;
+}
+.margin-bottom-8 {
+    margin-bottom: 0px;
+}
+td.center-align {
+    vertical-align: inherit !important;
+}
+.side-padding-30 {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+    padding-top: 10px;
+}
+.side-padding-40 {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+}
+.side-padding-10 {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+.top-margin-14 {
+    margin-top: 14px;
+}
+table {
+    margin-bottom: 0px !important;
+}
+div.center-align {
+    vertical-align: center !important;
+}
+.margin-right-5 {
+    margin-right: 10px;
 }
