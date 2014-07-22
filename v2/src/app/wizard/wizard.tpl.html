@@ -30,10 +30,12 @@
         </div>
 
         <div class="wizard-actions">
-            <button ng-click="stepBackward()" ng-disabled="currentStep==1" class="btn btn-prev">
-                <i class="ace-icon fa fa-arrow-left"></i>
-                Prev
-            </button>
+            <div class="inline" ng-class="{'first-prev' : currentStep == 1}">
+                <button ng-click="stepBackward()" ng-disabled="currentStep==1" class="btn btn-grey btn-prev-spacing" ng-class="{'btn-light' : currentStep == 1}">
+                    <i class="ace-icon fa fa-arrow-left"></i>
+                    Prev
+                </button>
+            </div>
             <button ng-click="stepForward()" class="btn btn-success btn-next">
                 <span ng-if="currentStep<steps.length">
                     Next
