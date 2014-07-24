@@ -3,7 +3,7 @@ angular.module('compass.wizard', [
     'ui.bootstrap',
     'ngTable',
     'compass.charts',
-    'ngDragDrop'
+    'ngDragDrop',
 ])
 
 .config(function config($stateProvider) {
@@ -691,11 +691,30 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('securityCtrl', function($scope, wizardFactory, dataService) {
+.controller('securityCtrl', function($scope, $window, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
     $scope.management_credentials = wizardFactory.getManagementCredentials();
+
+    $scope.mSave = function() {
+        $scope.originalMangementData = angular.copy($scope.management_credentials);
+    }
+    $scope.sSave = function() {
+        $scope.originalServiceData = angular.copy($scope.service_credentials);
+    }
+
+    $scope.mSave();
+    $scope.sSave();
+
+    var keyLength_service_credentials = Object.keys($scope.service_credentials).length;
+    $scope.editServiceMode = [];
+    $scope.editServiceMode.length = keyLength_service_credentials;
+
+
+    var keyLength_management_credentials = Object.keys($scope.management_credentials).length;
+    $scope.editMgntMode = [];
+    $scope.editMgntMode.length = keyLength_management_credentials;
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -706,6 +725,77 @@ angular.module('compass.wizard', [
             }
         }
     });
+
+    $scope.mgmtAccordion = {};
+
+    $scope.$watch('mgmtAccordion', function(val) {
+        if ($scope.mgmtAccordion.open == true) {
+            $scope.mSave();
+        } else if ($scope.mgmtAccordion.open == false) {
+            $scope.mReset();
+            $scope.mcloseAll();
+        } 
+    }, true)
+
+    $scope.mcloseAll = function() {
+        for (var i = 0; i < $scope.editMgntMode.length; i++) {
+            if ($scope.editMgntMode[i] == true) {
+                $scope.editMgntMode[i] = false;
+            } else {}
+        }
+    }
+
+    $scope.mEdit = function(index) {
+        for (var i = 0; i < $scope.editMgntMode.length; i++) {
+            if (i != index) {
+                $scope.editMgntMode[i] = false;
+            } else {
+                $scope.editMgntMode[i] = true;
+            }
+        }
+        $scope.mReset();
+    }
+
+
+    $scope.mReset = function() {
+        $scope.management_credentials = angular.copy($scope.originalMangementData);
+    }
+
+    // Service Credentials
+    $scope.serverAccordion = {};
+
+    $scope.$watch('serverAccordion', function(val) {
+        console.info($scope.serverAccordion);
+        if ($scope.serverAccordion.open == true) {
+            $scope.sSave();
+        } else if ($scope.serverAccordion.open == false) {
+            $scope.sReset();
+            $scope.scloseAll();
+        }
+    }, true)
+
+    $scope.scloseAll = function() {
+        for (var i = 0; i < $scope.editServiceMode.length; i++) {
+            if ($scope.editServiceMode[i] == true) {
+                $scope.editServiceMode[i] = false;
+            } else {}
+        }
+    }
+
+    $scope.sEdit = function(index) {
+        for (var i = 0; i < $scope.editServiceMode.length; i++) {
+            if (i != index) {
+                $scope.editServiceMode[i] = false;
+            } else {
+                $scope.editServiceMode[i] = true;
+            }
+        }
+        $scope.sReset();
+    }
+
+    $scope.sReset = function() {
+        $scope.service_credentials = angular.copy($scope.originalServiceData);
+    } 
 
     $scope.commit = function() {
         var securityData = {
@@ -1086,5 +1176,7 @@ angular.module('compass.wizard', [
         }).error(function(data) {
             console.warn("Review hosts error: ", data);
         })
+        //TODO: error handling
+
     };
 })

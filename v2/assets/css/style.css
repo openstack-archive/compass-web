@@ -313,3 +313,6 @@ div.center-align {
 .margin-right-5 {
     margin-right: 10px;
 }
+.rounded-button {
+border-radius: 4px !important;
+}
