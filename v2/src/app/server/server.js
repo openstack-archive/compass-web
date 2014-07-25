@@ -15,7 +15,7 @@ angular.module('compass.server', [
         });
 })
 
-.controller('serverCtrl', function($scope, ngTableParams, wizardFactory, dataService, $filter, ngTableParams) {
+.controller('serverCtrl', function($scope, ngTableParams, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
     $scope.hideunselected = '';
     $scope.search = {};
 
@@ -30,9 +30,29 @@ angular.module('compass.server', [
             counts: [], // hide count-per-page box
             total: $scope.allservers.length, // length of data
             getData: function($defer, params) {
-                // use build-in angular filter
+                var reverse = false;
+                var orderBy = params.orderBy()[0];
+                var orderBySort = "";
+                var orderByColumn = "";
+
+                if (orderBy) {
+                    orderByColumn = orderBy.substring(1);
+                    orderBySort = orderBy.substring(0, 1);
+                    if (orderBySort == "+") {
+                        reverse = false;
+                    } else {
+                        reverse = true;
+                    }
+                }
+
                 var orderedData = params.sorting() ?
-                    $filter('orderBy')($scope.allservers, params.orderBy()) : $scope.allservers;
+                    $filter('orderBy')($scope.allservers, function(item) {
+                        if (orderByColumn == "switch_ip") {
+                            return sortingService.ipAddressPre(item.switch_ip);
+                        } else {
+                            return item[orderByColumn];
+                        }
+                    }, reverse) : $scope.allservers;
 
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }

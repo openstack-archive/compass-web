@@ -104,7 +104,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var servers = [{
             "machine_id": 10,
             "mac": "28.e5.ee.47.14.92",
-            "switch_ip": "172.29.8.40",
+            "switch_ip": "172.29.8.1",
             "vlan": "1",
             "port": "1",
             "name": "sv-1",
@@ -117,7 +117,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "machine_id": 11,
             "mac": "28.e5.ee.47.a2.93",
-            "switch_ip": "172.29.8.40",
+            "switch_ip": "172.29.8.11",
             "vlan": "2",
             "port": "2",
             "name": "sv-2",
@@ -130,7 +130,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "machine_id": 12,
             "mac": "28.e5.ee.47.ee.32",
-            "switch_ip": "172.29.8.40",
+            "switch_ip": "172.29.8.10",
             "vlan": "2",
             "port": "3",
             "name": "sv-3",
@@ -143,7 +143,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "machine_id": 13,
             "mac": "28.e5.ee.47.33.66",
-            "switch_ip": "172.29.8.40",
+            "switch_ip": "172.29.8.2",
             "vlan": "2",
             "port": "4",
             "name": "sv-4",
@@ -156,7 +156,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "machine_id": 14,
             "mac": "28.e5.ee.47.2c.22",
-            "switch_ip": "172.29.8.40",
+            "switch_ip": "172.29.8.3",
             "vlan": "2",
             "port": "5",
             "name": "sv-5",
@@ -169,7 +169,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "machine_id": 15,
             "mac": "28.e5.ee.47.55.19",
-            "switch_ip": "172.29.8.40",
+            "switch_ip": "172.4.8.40",
             "vlan": "2",
             "port": "6",
             "name": "sv-6",
@@ -182,7 +182,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "machine_id": 16,
             "mac": "28.e5.ee.47.41.b2",
-            "switch_ip": "172.29.8.41",
+            "switch_ip": "172.29.8.20",
             "vlan": "2",
             "port": "7",
             "name": "sv-7",

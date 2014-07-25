@@ -105,7 +105,7 @@ angular.module('compass.wizard', [
 
 })
 
-.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams) {
+.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
     $scope.hideunselected = '';
     $scope.search = {};
 
@@ -142,13 +142,34 @@ angular.module('compass.wizard', [
         counts: [], // hide count-per-page box
         total: $scope.allservers.length, // length of data
         getData: function($defer, params) {
-            // use build-in angular filter
+            var reverse = false;
+            var orderBy = params.orderBy()[0];
+            var orderBySort = "";
+            var orderByColumn = "";
+
+            if (orderBy) {
+                orderByColumn = orderBy.substring(1);
+                orderBySort = orderBy.substring(0, 1);
+                if (orderBySort == "+") {
+                    reverse = false;
+                } else {
+                    reverse = true;
+                }
+            }
+
             var orderedData = params.sorting() ?
-                $filter('orderBy')($scope.allservers, params.orderBy()) : $scope.allservers;
+                $filter('orderBy')($scope.allservers, function(item) {
+                    if (orderByColumn == "switch_ip") {
+                        return sortingService.ipAddressPre(item.switch_ip);
+                    } else {
+                        return item[orderByColumn];
+                    }
+                }, reverse) : $scope.allservers;
 
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
     });
+
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -350,7 +371,7 @@ angular.module('compass.wizard', [
     */
 })
 
-.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, $q) {
+.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.subnetworks = wizardFactory.getSubnetworks();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -362,14 +383,34 @@ angular.module('compass.wizard', [
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
-        count: $scope.servers.length + 1 // count per page
+        count: $scope.servers.length // count per page       
     }, {
         counts: [], // hide count-per-page box
         total: $scope.servers.length, // length of data
         getData: function($defer, params) {
-            // use build-in angular filter
+            var reverse = false;
+            var orderBy = params.orderBy()[0];
+            var orderBySort = "";
+            var orderByColumn = "";
+
+            if (orderBy) {
+                orderByColumn = orderBy.substring(1);
+                orderBySort = orderBy.substring(0, 1);
+                if (orderBySort == "+") {
+                    reverse = false;
+                } else {
+                    reverse = true;
+                }
+            }
+
             var orderedData = params.sorting() ?
-                $filter('orderBy')($scope.servers, params.orderBy()) : $scope.servers;
+                $filter('orderBy')($scope.servers, function(item) {
+                    if (orderByColumn == "switch_ip") {
+                        return sortingService.ipAddressPre(item.switch_ip);
+                    } else {
+                        return item[orderByColumn];
+                    }
+                }, reverse) : $scope.servers;
 
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
@@ -687,7 +728,7 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, $q) {
+.controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
 
@@ -781,17 +822,36 @@ angular.module('compass.wizard', [
         })
         $scope.rolesTotalCount = count;
     }, true);
-
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
-        count: $scope.servers.length + 1 // count per page
+        count: $scope.servers.length // count per page       
     }, {
         counts: [], // hide count-per-page box
         total: $scope.servers.length, // length of data
         getData: function($defer, params) {
-            // use build-in angular filter
+            var reverse = false;
+            var orderBy = params.orderBy()[0];
+            var orderBySort = "";
+            var orderByColumn = "";
+
+            if (orderBy) {
+                orderByColumn = orderBy.substring(1);
+                orderBySort = orderBy.substring(0, 1);
+                if (orderBySort == "+") {
+                    reverse = false;
+                } else {
+                    reverse = true;
+                }
+            }
+
             var orderedData = params.sorting() ?
-                $filter('orderBy')($scope.servers, params.orderBy()) : $scope.servers;
+                $filter('orderBy')($scope.servers, function(item) {
+                    if (orderByColumn == "switch_ip") {
+                        return sortingService.ipAddressPre(item.switch_ip);
+                    } else {
+                        return item[orderByColumn];
+                    }
+                }, reverse) : $scope.servers;
 
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
@@ -911,7 +971,7 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams) {
+.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -948,14 +1008,34 @@ angular.module('compass.wizard', [
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
-        count: $scope.servers.length + 1 // count per page
+        count: $scope.servers.length // count per page       
     }, {
         counts: [], // hide count-per-page box
         total: $scope.servers.length, // length of data
         getData: function($defer, params) {
-            // use build-in angular filter
+            var reverse = false;
+            var orderBy = params.orderBy()[0];
+            var orderBySort = "";
+            var orderByColumn = "";
+
+            if (orderBy) {
+                orderByColumn = orderBy.substring(1);
+                orderBySort = orderBy.substring(0, 1);
+                if (orderBySort == "+") {
+                    reverse = false;
+                } else {
+                    reverse = true;
+                }
+            }
+
             var orderedData = params.sorting() ?
-                $filter('orderBy')($scope.servers, params.orderBy()) : $scope.servers;
+                $filter('orderBy')($scope.servers, function(item) {
+                    if (orderByColumn == "switch_ip") {
+                        return sortingService.ipAddressPre(item.switch_ip);
+                    } else {
+                        return item[orderByColumn];
+                    }
+                }, reverse) : $scope.servers;
 
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
@@ -982,13 +1062,13 @@ angular.module('compass.wizard', [
         });
 
         dataService.postClusterActions(cluster.id, deployAction).success(function(data) {
-                var commitState = {
-                    "name": "review",
-                    "state": "success",
-                    "message": ""
-                };
-                wizardFactory.setCommitState(commitState);
-            })
-            //TODO: error handling
+            var commitState = {
+                "name": "review",
+                "state": "success",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+        })
+        //TODO: error handling
     };
 })

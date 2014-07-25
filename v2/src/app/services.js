@@ -147,6 +147,26 @@ angular.module('compass.services', [])
     }
 ])
 
+.service('sortingService', function() {
+    this.ipAddressPre = function(a) {
+        var m = a.split("."),
+            x = "";
+
+        for (var i = 0; i < m.length; i++) {
+            var item = m[i];
+            if (item.length == 1) {
+                x += "00" + item;
+            } else if (item.length == 2) {
+                x += "0" + item;
+            } else {
+                x += item;
+            }
+        }
+        return x;
+    };
+})
+
+
 .factory('wizardFactory', [
 
     function() {
