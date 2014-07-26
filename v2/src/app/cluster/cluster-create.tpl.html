@@ -37,7 +37,7 @@
                 <div class="col-xs-12 col-sm-5">
                     <select name="targetsystem" class="width-100" ng-model="cluster.adapter_id" required>
                         <option value=""></option>
-                        <option ng-repeat="adapter in allAdapters" value="{{adapter.id}}"> {{adapter.display}}</option>
+                        <option ng-repeat="adapter in allAdapters" value="{{adapter.id}}"> {{adapter.display_name}}</option>
                     </select>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> Required </div>
@@ -49,7 +49,7 @@
                 <div class="col-xs-12 col-sm-5">
                     <select name="os" class="width-100" ng-model="cluster.os_id" required>
                         <option value=""></option>
-                        <option ng-repeat="os in compatible_os" value="{{os.os_id}}"> {{os.name}}</option>
+                        <option ng-repeat="os in supported_oses" value="{{os.os_id}}"> {{os.name}}</option>
                     </select>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> Required </div>

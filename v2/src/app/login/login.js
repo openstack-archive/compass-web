@@ -17,7 +17,7 @@ angular.module('compass.login', [
 .controller('loginCtrl', function($scope, authService, $state) {
     $scope.login = function() {
         var credentials = {
-            "username": $scope.username,
+            "email": $scope.email,
             "password": $scope.password
         };
         authService.login(credentials).success(function(data) {

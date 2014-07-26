@@ -306,7 +306,7 @@ var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
     $scope.$watch('cluster.adapter_id', function() {
         angular.forEach($scope.allAdapters, function(adapter) {
             if (adapter.id == $scope.cluster.adapter_id) {
-                $scope.compatible_os = adapter.compatible_os;
+                $scope.supported_oses = adapter.supported_oses;
             }
         })
     });

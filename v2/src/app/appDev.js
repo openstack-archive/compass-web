@@ -7,7 +7,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
     $httpBackend.whenGET(new RegExp('src\/.*')).passThrough();
     $httpBackend.whenGET(new RegExp('data\/.*')).passThrough();
 
-    $httpBackend.whenPOST(settings.apiUrlBase + '/login').respond(function(method, url, data) {
+    $httpBackend.whenPOST(settings.apiUrlBase + '/users/login').respond(function(method, url, data) {
         console.log(method, url, data);
         var user = {
             "name": "huawei"
@@ -19,7 +19,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url);
         var adapters = [{
             "id": 1,
-            "name": "openstack",
+            "display_name": "openstack",
             "display": "OpenStack",
             "os_installer": "cobbler",
             "package_installer": "chef",
@@ -36,7 +36,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "display_name": "Storage",
                 "name": "os-block-storage-worker"
             }],
-            "compatible_os": [{
+            "supported_oses": [{
                 "name": "CentOs",
                 "os_id": 1
             }, {
@@ -45,7 +45,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             }]
         }, {
             "id": 2,
-            "name": "hadoop",
+            "display_name": "hadoop",
             "display": "Hadoop",
             "os_installer": "cobbler",
             "package_installer": "chef",
@@ -59,7 +59,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "display_name": "Network",
                 "name": "os-network"
             }],
-            "compatible_os": [{
+            "supported_oses": [{
                 "name": "CentOs",
                 "os_id": 1
             }]
@@ -71,7 +71,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url);
         var adapter = {
             "id": 1,
-            "name": "openstack",
+            "display_name": "openstack",
             "display": "OpenStack",
             "os_installer": "cobbler",
             "package_installer": "chef",
@@ -88,7 +88,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "display_name": "Storage",
                 "name": "os-block-storage-worker"
             }],
-            "compatible_os": [{
+            "supported_oses": [{
                 "name": "CentOs",
                 "os_id": 1
             }, {
@@ -99,7 +99,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, adapter, {}];
     });
 
-    $httpBackend.whenGET(settings.apiUrlBase + '/machines-hosts').respond(function(method, url, data) {
+    $httpBackend.whenGET(/\.*\/switches-machines-hosts/).respond(function(method, url, data) {
         console.log(method, url);
         var servers = [{
             "machine_id": 10,
@@ -391,23 +391,21 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, config, {}];
     });
 
-    $httpBackend.whenGET(settings.apiUrlBase + '/subnetworks').respond(function(method, url, data) {
+    $httpBackend.whenGET(settings.apiUrlBase + '/subnets').respond(function(method, url, data) {
         console.log(method, url);
         var subnetworks = [{
-            "subnet_id": 1,
+            "id": 1,
             "name": "net1",
-            "subnet": "192.168.1.0",
-            "netmask": "255.255.255.0",
+            "subnet": "192.168.1.0"
         }, {
-            "subnet_id": 2,
+            "id": 2,
             "name": "net2",
-            "subnet": "172.165.1.0",
-            "netmask": "255.255.255.0",
+            "subnet": "172.165.1.0"
         }];
         return [200, subnetworks, {}];
     });
 
-    $httpBackend.whenPOST(settings.apiUrlBase + '/subnetworks').respond(function(method, url, data) {
+    $httpBackend.whenPOST(settings.apiUrlBase + '/subnets').respond(function(method, url, data) {
         console.log(method, url, data);
 
         var subnetConfig = JSON.parse(data);
@@ -417,7 +415,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, subnetConfig, {}];
     });
 
-    $httpBackend.whenPUT(/\.*\/subnetworks\/[1-9][0-9]*/).respond(function(method, url, data) {
+    $httpBackend.whenPUT(/\.*\/subnets\/[1-9][0-9]*/).respond(function(method, url, data) {
         console.log(method, url, data);
 
         var subnetConfig = JSON.parse(data);
@@ -472,14 +470,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, host_config, {}];
     });
 
-    $httpBackend.whenPOST(/\.*\/hosts\/[1-9][0-9]*\/network/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(/\.*\/hosts\/[1-9][0-9]*\/networks/).respond(function(method, url, data) {
         console.log(method, url, data);
         var network = JSON.parse(data);
         network.id = Math.floor((Math.random() * 100) + 1);
         return [200, network, {}];
     });
 
-    $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*\/network\/[1-9][0-9]/).respond(function(method, url, data) {
+    $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*\/networks\/[1-9][0-9]/).respond(function(method, url, data) {
         console.log(method, url, data);
         var network = JSON.parse(data);
         return [200, network, {}];

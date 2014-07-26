@@ -16,7 +16,7 @@
                             <input ng-model="newPartition.mount_point" type="text" placeholder="Mount Point" class="input-medium">
                         </td>
                         <td>
-                            <input ng-model="newPartition.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                            <input ng-model="newPartition.percentage" type="text" placeholder="Size Percentage" class="input-medium">
                         </td>
                         <td>
                             <input ng-model="newPartition.max_size" type="text" placeholder="Max Size" class="input-medium">
@@ -32,8 +32,8 @@
                             <span>{{key}}</span>
                         </td>
                         <td>
-                            <span ng-hide="editPartitionMode">{{data.size_percentage}}</span>
-                            <input ng-show="editPartitionMode" ng-model="data.size_percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                            <span ng-hide="editPartitionMode">{{data.percentage}}</span>
+                            <input ng-show="editPartitionMode" ng-model="data.percentage" type="text" placeholder="Size Percentage" class="input-medium">
                         </td>
                         <td>
                             <span ng-hide="editPartitionMode">{{data.max_size}}</span>
