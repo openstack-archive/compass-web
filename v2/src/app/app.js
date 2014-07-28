@@ -13,7 +13,7 @@ var app = angular.module('compass', [
 ]);
 
 app.constant('settings', {
-    apiUrlBase: '/api/v2.0',
+    apiUrlBase: '/api',
     metadataUrlBase: 'data',
     monitoringUrlBase: ''
 });

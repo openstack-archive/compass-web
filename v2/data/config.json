@@ -1,25 +1,25 @@
 {
     "cluster": {
-        "id": 10,
+        "id": 2,
         "name": "demo",
         "adapter_id": 1,
         "os_id": 1
     },
     "partition": {
         "/swap": {
-            "size_percentage": 10
+            "percentage": 10
         },
         "/boot": {
-            "size_percentage": 10
+            "percentage": 10
         },
         "/var": {
-            "size_percentage": 30
+            "percentage": 30
         },
         "/home": {
-            "size_percentage": 30
+            "percentage": 30
         },
         "/spare": {
-            "size_percentage": 20
+            "percentage": 20
         }
     },
     "interface": {

@@ -31,7 +31,7 @@ angular.module('compass.services', [])
     function($http, settings) {
 
         this.login = function(user) {
-            return $http.post(settings.apiUrlBase + '/login', angular.toJson(user));
+            return $http.post(settings.apiUrlBase + '/users/login', angular.toJson(user));
         };
 
         this.getWizardPreConfig = function() {
@@ -46,8 +46,12 @@ angular.module('compass.services', [])
             return $http.get(settings.metadataUrlBase + '/adapter_config');
         };
 
-        this.getAllMachineHosts = function() {
-            return $http.get(settings.apiUrlBase + '/machines-hosts');
+        this.getAllMachineHosts = function(os) {
+            if(os) {
+                return $http.get(settings.apiUrlBase + '/switches-machines-hosts?os_id=' + os);
+            } else {
+                return $http.get(settings.apiUrlBase + '/switches-machines-hosts');                
+            }
         };
 
         this.getServerColumns = function() {
@@ -87,15 +91,15 @@ angular.module('compass.services', [])
         };
 
         this.getSubnetConfig = function() {
-            return $http.get(settings.apiUrlBase + '/subnetworks');
+            return $http.get(settings.apiUrlBase + '/subnets');
         };
 
         this.postSubnetConfig = function(subnet_config) {
-            return $http.post(settings.apiUrlBase + '/subnetworks', angular.toJson(subnet_config));
+            return $http.post(settings.apiUrlBase + '/subnets', angular.toJson(subnet_config));
         };
 
         this.putSubnetConfig = function(id, subnet_config) {
-            return $http.put(settings.apiUrlBase + '/subnetworks/' + id, angular.toJson(subnet_config));
+            return $http.put(settings.apiUrlBase + '/subnets/' + id, angular.toJson(subnet_config));
         };
 
         // keep routing table for later use
@@ -122,11 +126,11 @@ angular.module('compass.services', [])
         };
 
         this.postHostNetwork = function(id, network) {
-            return $http.post(settings.apiUrlBase + '/hosts/' + id + '/network', angular.toJson(network));
+            return $http.post(settings.apiUrlBase + '/hosts/' + id + '/networks', angular.toJson(network));
         };
 
         this.putHostNetwork = function(id, networkId, network) {
-            return $http.put(settings.apiUrlBase + '/hosts/' + id + '/network/' + networkId, angular.toJson(network));
+            return $http.put(settings.apiUrlBase + '/hosts/' + id + '/networks/' + networkId, angular.toJson(network));
         };
 
         this.getClusterHostMachines = function(clusterId, hostId) {

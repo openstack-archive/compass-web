@@ -58,7 +58,7 @@
                                             </td>
                                             <td>
                                                 <select ng-model="newInterface.subnet_id" class="max-width-200">
-                                                    <option ng-repeat="sub in subnetworks" value="{{sub.subnet_id}}">
+                                                    <option ng-repeat="sub in subnetworks" value="{{sub.id}}">
                                                         {{sub.name}}
                                                     </option>
                                                 </select>
@@ -76,7 +76,7 @@
                                             </td>
                                             <td>
                                                 <span ng-repeat="sub in subnetworks">
-                                                    <span ng-if="sub.subnet_id == value.subnet_id">{{sub.name}}</span>
+                                                    <span ng-if="sub.id == value.subnet_id">{{sub.name}}</span>
                                                 </span>
                                             </td>
                                             <td>
@@ -148,7 +148,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row">{{server}}
         <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>
                 <tr>
@@ -167,7 +167,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index">
+                <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index; server.network = server.network === undefinded? {} : server.network">
                     <td class="center-align" ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                         <span ng-if="column.field=='name'">
                             <input ng-model="server[column.field]" placeholder="Hostname" class="form-control  max-width-150 margin-bottom-0" type="text">

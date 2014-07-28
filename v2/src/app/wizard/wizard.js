@@ -21,7 +21,23 @@ angular.module('compass.wizard', [
         dataService.getWizardPreConfig().success(function(data) {
             wizardFactory.preConfig(data);
             $scope.cluster = wizardFactory.getClusterInfo();
+            console.log($scope.cluster);
+            /*dataService.getAllMachineHosts($scope.cluster.os_id).success(function(data) {
+                wizardFactory.setAllMachinesHost(data);
+            });
+            dataService.getAllMachineHosts().success(function(data) {
+                wizardFactory.setAllMachinesHost(data);
+            });*/
         });
+    } else {
+        $scope.cluster = wizardFactory.getClusterInfo();
+        console.log($scope.cluster);
+        /*dataService.getAllMachineHosts($scope.cluster.os_id).success(function(data) {
+            wizardFactory.setAllMachinesHost(data);
+        });
+        dataService.getAllMachineHosts().success(function(data) {
+            wizardFactory.setAllMachinesHost(data);
+        });*/
     }
 
     // current step for create-cluster wizard
@@ -95,10 +111,6 @@ angular.module('compass.wizard', [
         };
     });
 
-    dataService.getAllMachineHosts().success(function(data) {
-        wizardFactory.setAllMachinesHost(data);
-    });
-
     dataService.getSubnetConfig().success(function(data) {
         wizardFactory.setSubnetworks(data);
     });
@@ -109,7 +121,46 @@ angular.module('compass.wizard', [
     $scope.hideunselected = '';
     $scope.search = {};
 
-    $scope.allservers = wizardFactory.getAllMachinesHost();
+    $scope.cluster = wizardFactory.getClusterInfo();
+    dataService.getAllMachineHosts($scope.cluster.os_id).success(function(data) {
+        wizardFactory.setAllMachinesHost(data);
+        $scope.allservers = wizardFactory.getAllMachinesHost();
+
+        $scope.tableParams = new ngTableParams({
+            page: 1, // show first page
+            count: $scope.allservers.length // count per page       
+        }, {
+            counts: [], // hide count-per-page box
+            total: $scope.allservers.length, // length of data
+            getData: function($defer, params) {
+                var reverse = false;
+                var orderBy = params.orderBy()[0];
+                var orderBySort = "";
+                var orderByColumn = "";
+
+                if (orderBy) {
+                    orderByColumn = orderBy.substring(1);
+                    orderBySort = orderBy.substring(0, 1);
+                    if (orderBySort == "+") {
+                        reverse = false;
+                    } else {
+                        reverse = true;
+                    }
+                }
+
+                var orderedData = params.sorting() ?
+                    $filter('orderBy')($scope.allservers, function(item) {
+                        if (orderByColumn == "switch_ip") {
+                            return sortingService.ipAddressPre(item.switch_ip);
+                        } else {
+                            return item[orderByColumn];
+                        }
+                    }, reverse) : $scope.allservers;
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+    });
 
     $scope.selectAllServers = function(flag) {
         if (flag) {
@@ -134,42 +185,6 @@ angular.module('compass.wizard', [
             delete $scope.search.selected;
         }
     };
-
-    $scope.tableParams = new ngTableParams({
-        page: 1, // show first page
-        count: $scope.allservers.length // count per page       
-    }, {
-        counts: [], // hide count-per-page box
-        total: $scope.allservers.length, // length of data
-        getData: function($defer, params) {
-            var reverse = false;
-            var orderBy = params.orderBy()[0];
-            var orderBySort = "";
-            var orderByColumn = "";
-
-            if (orderBy) {
-                orderByColumn = orderBy.substring(1);
-                orderBySort = orderBy.substring(0, 1);
-                if (orderBySort == "+") {
-                    reverse = false;
-                } else {
-                    reverse = true;
-                }
-            }
-
-            var orderedData = params.sorting() ?
-                $filter('orderBy')($scope.allservers, function(item) {
-                    if (orderByColumn == "switch_ip") {
-                        return sortingService.ipAddressPre(item.switch_ip);
-                    } else {
-                        return item[orderByColumn];
-                    }
-                }, reverse) : $scope.allservers;
-
-            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-    });
-
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -299,7 +314,7 @@ angular.module('compass.wizard', [
 
         var subnetworks = [];
         angular.forEach($scope.subnetworks, function(subnet) {
-            if (subnet.subnet_id === undefined) {
+            if (subnet.id === undefined) {
                 // post subnetworks
                 var updateSubnetConfig = dataService.postSubnetConfig(subnet).then(function(subnetData) {
                     subnetworks.push(subnetData.data);
@@ -309,7 +324,7 @@ angular.module('compass.wizard', [
                 promises.push(updateSubnetConfig);
             } else {
                 // put subnetworks
-                var updateSubnetConfig = dataService.putSubnetConfig(subnet.subnet_id, subnet).then(function(subnetData) {
+                var updateSubnetConfig = dataService.putSubnetConfig(subnet.id, subnet).then(function(subnetData) {
                     subnetworks.push(subnetData.data);
                 }, function(response) {
                     return $q.reject(response);
@@ -427,7 +442,7 @@ angular.module('compass.wizard', [
         if (!isExist) {
             $scope.interfaces[newInterface.name] = {
                 "subnet_id": newInterface.subnet_id,
-                "is_mgmt": false,
+                "is_mgmt": false
             }
         }
         $scope.newInterface = {};
@@ -463,6 +478,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        wizardFactory.setInterfaces($scope.interfaces);
         var addHostsAction = {
             "add_hosts": {
                 "machines": []
@@ -550,6 +566,7 @@ angular.module('compass.wizard', [
                 $q.all(hostnamePromises.concat(hostNetworkPromises)).then(function() {
                     // update hostname and network for all hosts successfully
                     wizardFactory.setServers($scope.servers);
+                    console.info($scope.servers)
                     var commitState = {
                         "name": "network",
                         "state": "success",
@@ -557,11 +574,14 @@ angular.module('compass.wizard', [
                     };
                     wizardFactory.setCommitState(commitState);
                 }, function(response) {
+                    wizardFactory.setServers($scope.servers);
+                    console.info($scope.servers)
                     var commitState = {
                         "name": "network",
                         "state": "error",
                         "message": response.statusText
                     };
+                    console.info(response);
                     wizardFactory.setCommitState(commitState);
                 });
             });
@@ -575,7 +595,6 @@ angular.module('compass.wizard', [
             var interval = parseInt($("#" + key + "-increase-num").val());
             $scope.fillIPBySequence(ip_start, interval, key);
         })
-
         // Autofill hostname
         var hostname_rule = $("#hostname-rule").val();
         $scope.fillHostname(hostname_rule);
@@ -638,7 +657,7 @@ angular.module('compass.wizard', [
     $scope.addPartition = function() {
         var mount_point = $scope.newPartition.mount_point;
         $scope.partition[mount_point] = {};
-        $scope.partition[mount_point].size_percentage = $scope.newPartition.size_percentage;
+        $scope.partition[mount_point].percentage = $scope.newPartition.percentage;
         $scope.partition[mount_point].max_size = $scope.newPartition.max_size;
         $scope.newPartition = {};
     };
@@ -652,7 +671,7 @@ angular.module('compass.wizard', [
         angular.forEach($scope.partition, function(value, key) {
             $scope.partitionarray.push({
                 "name": key,
-                "number": value.size_percentage
+                "number": value.percentage
             });
         });
     }, true);
