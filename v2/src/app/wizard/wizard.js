@@ -21,23 +21,9 @@ angular.module('compass.wizard', [
         dataService.getWizardPreConfig().success(function(data) {
             wizardFactory.preConfig(data);
             $scope.cluster = wizardFactory.getClusterInfo();
-            console.log($scope.cluster);
-            /*dataService.getAllMachineHosts($scope.cluster.os_id).success(function(data) {
-                wizardFactory.setAllMachinesHost(data);
-            });
-            dataService.getAllMachineHosts().success(function(data) {
-                wizardFactory.setAllMachinesHost(data);
-            });*/
         });
     } else {
         $scope.cluster = wizardFactory.getClusterInfo();
-        console.log($scope.cluster);
-        /*dataService.getAllMachineHosts($scope.cluster.os_id).success(function(data) {
-            wizardFactory.setAllMachinesHost(data);
-        });
-        dataService.getAllMachineHosts().success(function(data) {
-            wizardFactory.setAllMachinesHost(data);
-        });*/
     }
 
     // current step for create-cluster wizard
@@ -507,7 +493,7 @@ angular.module('compass.wizard', [
                 for (var i = 0; i < $scope.servers.length; i++) {
                     for (var j = 0; j < hosts.length; j++) {
                         if ($scope.servers[i].machine_id == hosts[j].machine_id) {
-                            $scope.servers[i].host_id = hosts[j].id;
+                            $scope.servers[i].id = hosts[j].id;
                             break;
                         }
                     }
@@ -521,7 +507,7 @@ angular.module('compass.wizard', [
                         "name": server["name"]
                     };
                     // update hostname
-                    var updateHostname = dataService.putHost(server.host_id, hostname).then(function(hostData) {
+                    var updateHostname = dataService.putHost(server.id, hostname).then(function(hostData) {
                         // success callback
                     }, function(response) {
                         // error callback
@@ -538,7 +524,7 @@ angular.module('compass.wizard', [
                         };
                         if (value.id === undefined) {
                             // post host network
-                            var updateNetwork = dataService.postHostNetwork(server.host_id, network).then(function(networkData) {
+                            var updateNetwork = dataService.postHostNetwork(server.id, network).then(function(networkData) {
                                 // success callback
                                 console.log("post networkdata", networkData.data);
                                 var interface = networkData.data.interface;
@@ -551,7 +537,7 @@ angular.module('compass.wizard', [
                             hostNetworkPromises.push(updateNetwork);
                         } else {
                             // put host network
-                            var updateNetwork = dataService.putHostNetwork(server.host_id, value.id, network).then(function(networkData) {
+                            var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
                                 // success callback
                                 console.log("put networkdata", networkData.data);
                             }, function(response) {
@@ -898,7 +884,7 @@ angular.module('compass.wizard', [
                     "roles": roles
                 }
             };
-            var updateRoles = dataService.updateClusterHostConfig(cluster.id, server.host_id, config).then(function(configData) {
+            var updateRoles = dataService.updateClusterHostConfig(cluster.id, server.id, config).then(function(configData) {
                 // success callback
             }, function(response) {
                 // error callback
@@ -1071,23 +1057,34 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        var reviewAction = {
+            "review": {
+                "hosts": []
+            }
+        };
         var deployAction = {
             "deploy": {
                 "hosts": []
             }
         };
         angular.forEach($scope.servers, function(server) {
-            deployAction.deploy.hosts.push(server.host_id);
+            reviewAction.review.hosts.push(server.id);
+            deployAction.deploy.hosts.push(server.id);
         });
 
-        dataService.postClusterActions(cluster.id, deployAction).success(function(data) {
-            var commitState = {
-                "name": "review",
-                "state": "success",
-                "message": ""
-            };
-            wizardFactory.setCommitState(commitState);
+        dataService.postClusterActions(cluster.id, reviewAction).success(function(data) {
+            dataService.postClusterActions(cluster.id, deployAction).success(function(data) {
+                var commitState = {
+                    "name": "review",
+                    "state": "success",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
+            }).error(function(data) {
+                console.warn("Deploy hosts error: ", data);
+            });
+        }).error(function(data) {
+            console.warn("Review hosts error: ", data);
         })
-        //TODO: error handling
     };
 })
