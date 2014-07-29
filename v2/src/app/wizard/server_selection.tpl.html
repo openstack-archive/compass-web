@@ -61,19 +61,26 @@
                             </label>
                         </td>
                         <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
-                            <span ng-if="column.field=='os_installed'">
-                                <span ng-if="server['os']">
-                                    <label>
-                                        <input ng-model="server.reinstallos" type="checkbox" class="ace">
-                                        <span class="lbl"></span>
-                                    </label>
+                            <span ng-switch on="column.field">
+                                <span ng-switch-when="os_installed">
+                                    <span ng-if="server['os']">
+                                        <label>
+                                            <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </span>
+                                    <span ng-if="!server['os']">
+                                        -
+                                    </span>
                                 </span>
-                                <span ng-if="!server['os']">
-                                    -
+                                <span ng-switch-when="clusters">
+                                    <span ng-repeat="cluster in server.clusters">
+                                        {{cluster.name}}&nbsp;
+                                    </span>
                                 </span>
-                            </span>
-                            <span ng-if="column.field!='os_installed'">
-                                {{server[column.field]}}
+                                <span ng-switch-default>
+                                    {{server[column.field]}}
+                                </span>
                             </span>
                         </td>
                     </tr>

@@ -84,6 +84,7 @@ angular.module('compass.charts', [])
             var clusterState = scope.clusterstate;
             var progress = 0;
             var progressTimer;
+            var fireTimer = true;
             scope.progressdata = 0;
             scope.progressSeverity = "INFO";
             var getProgress = function(num) {
@@ -91,7 +92,7 @@ angular.module('compass.charts', [])
                     //success
                     progress = parseInt(eval(progressData.data.percentage * 100));
                     scope.progressdata = progress;
-                    if (progress < 100 && num != 1) {
+                    if (fireTimer && progress < 100 && num != 1) {
                         progressTimer = $timeout(getProgress, 5000);
                     }
                     scope.message = progressData.data.message;
@@ -101,13 +102,18 @@ angular.module('compass.charts', [])
                 })
             };
 
-            if (clusterState == "DEPLOYING") {
+            scope.$watch('clusterstate', function(val) {
                 $timeout(getProgress, 1000);
-            } else {
-                getProgress(1);
-            }
+                /*
+                if (clusterState == "INSTALLING") {
+                    $timeout(getProgress, 1000);
+                } else {
+                    getProgress(1);
+                }*/
+            });
 
             element.bind('$destroy', function() {
+                fireTimer = false;
                 $timeout.cancel(progressTimer);
             });
         },

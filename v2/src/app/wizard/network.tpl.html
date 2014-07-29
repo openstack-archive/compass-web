@@ -1,40 +1,5 @@
 <div ng-controller="networkCtrl">
     <div class="row">
-        <div class="pull-left">
-            <!--Search Input-->
-            <span class="input-icon">
-                <input type="text" placeholder="Search" ng-model="search.$">
-                <i class="ace-icon fa fa-search blue"></i>
-            </span>
-            <!-- Column Show / Hide button -->
-            <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-white btn-default dropdown-toggle">
-                    Column Show / Hide
-                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
-                        <a class="action">
-                            <span ng-class="{'opacity-zero': !column.visible}">
-                                <i class="ace-icon fa fa-check blue"></i>
-                            </span>
-                            {{column.title}}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="pull-right">
-            <button class="btn btn-sm btn-info" ng-init="addInterfacePanel.isCollapsed = true;" ng-click="addInterfacePanel.isCollapsed = !addInterfacePanel.isCollapsed">
-                Add Interface&nbsp;&nbsp;
-                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !addInterfacePanel.isCollapsed}"></i>
-            </button>
-            <button class="btn btn-sm btn-info" ng-init="autoFillPanel.isCollapsed = true;" ng-click="autoFillPanel.isCollapsed = !autoFillPanel.isCollapsed">
-                Autofill&nbsp;&nbsp;<i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
-            </button>
-        </div>
-    </div>
-    <div class="row">
         <div collapse="addInterfacePanel.isCollapsed">
             <div class="widget-box">
                 <div class="widget-body">
@@ -148,7 +113,42 @@
             </div>
         </div>
     </div>
-    <div class="row">{{server}}
+    <div class="row">
+        <div class="pull-left">
+            <!--Search Input-->
+            <span class="input-icon">
+                <input type="text" placeholder="Search" ng-model="search.$">
+                <i class="ace-icon fa fa-search blue"></i>
+            </span>
+            <!-- Column Show / Hide button -->
+            <div class="btn-group" dropdown>
+                <button type="button" class="btn btn-white btn-default dropdown-toggle">
+                    Column Show / Hide
+                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                        <a class="action">
+                            <span ng-class="{'opacity-zero': !column.visible}">
+                                <i class="ace-icon fa fa-check blue"></i>
+                            </span>
+                            {{column.title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-sm btn-info" ng-init="addInterfacePanel.isCollapsed = true;" ng-click="addInterfacePanel.isCollapsed = !addInterfacePanel.isCollapsed">
+                Add Interface&nbsp;&nbsp;
+                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !addInterfacePanel.isCollapsed}"></i>
+            </button>
+            <button class="btn btn-sm btn-info" ng-init="autoFillPanel.isCollapsed = true;" ng-click="autoFillPanel.isCollapsed = !autoFillPanel.isCollapsed">
+                Autofill&nbsp;&nbsp;<i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
+            </button>
+        </div>
+    </div>
+    <div class="row">
         <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>
                 <tr>
@@ -169,11 +169,29 @@
             <tbody>
                 <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index; server.network = server.network === undefinded? {} : server.network">
                     <td class="center-align" ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
-                        <span ng-if="column.field=='name'">
-                            <input ng-model="server[column.field]" placeholder="Hostname" class="form-control  max-width-150 margin-bottom-0" type="text">
-                        </span>
-                        <span ng-if="column.field!='name'">
-                            {{server[column.field]}}
+                        <span ng-switch on="column.field">
+                            <span ng-switch-when="name">
+                                <input ng-model="server[column.field]" placeholder="Hostname" class="form-control  max-width-150 margin-bottom-0" type="text">
+                            </span>
+                            <span ng-switch-when="os_installed">
+                                <span ng-if="server['os']">
+                                    <label>
+                                        <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
+                                <span ng-if="!server['os']">
+                                    -
+                                </span>
+                            </span>
+                            <span ng-switch-when="clusters">
+                                <span ng-repeat="cluster in server.clusters">
+                                    {{cluster.name}}&nbsp;
+                                </span>
+                            </span>
+                            <span ng-switch-default>
+                                {{server[column.field]}}
+                            </span>
                         </span>
                     </td>
                     <td class="eth-width" ng-repeat="(name, value) in interfaces" ng-init="server.network[name] = server.network[name] === undefinded? {} : server.network[name]">

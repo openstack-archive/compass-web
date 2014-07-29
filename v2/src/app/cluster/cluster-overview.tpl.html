@@ -2,9 +2,9 @@
     <h1>
         {{clusterInfo.name}}
         <small>
-            <span class="badge" ng-class="{'badge-warning':clusterProgress.state==='UNDEPLOYED',
-            'badge-info':clusterProgress.state==='DEPLOYING',
-            'badge-danger':clusterProgress.state==='FAILED',
+            <span class="badge" ng-class="{'badge-warning':clusterProgress.state==='INITIALIZED',
+            'badge-info':clusterProgress.state==='INSTALLING',
+            'badge-danger':clusterProgress.state==='ERROR',
             'badge-success':clusterProgress.state==='SUCCESSFUL'}">
                 {{clusterProgress.state}}</span>
             <!--<i class="ace-icon fa fa-angle-double-right"></i>&nbsp;
@@ -94,7 +94,7 @@
                                 </th>
                                 <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
                                     'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
-                                    {{column.title}}
+                                    <div>{{column.title}}</div>
                                 </th>
                                 <th>Progress</th>
                                 <th class="align-right">Actions</th>
@@ -119,7 +119,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <hostprogressbar hostid="host.id" clusterid="clusterInfo.id" clusterstate="clusterProgress.state" progressdata="">
+                                    <hostprogressbar hostid="host.id" clusterid="clusterId" clusterstate="clusterProgress.state" progressdata="">
                                     </hostprogressbar>
                                 </td>
                                 <td class="align-right">

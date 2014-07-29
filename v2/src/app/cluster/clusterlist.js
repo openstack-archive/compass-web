@@ -16,12 +16,12 @@ var app = angular.module('compass.clusterlist', [
 
 .controller('ClusterListCtrl', function($scope, ngTableParams, $filter, dataService) {
 
-    clusters = []
+    var clusters = []
     dataService.getClusters().success(function(data) {
         clusters = data;
         angular.forEach(clusters, function(cluster) {
             dataService.getClusterProgress(cluster.id).success(function(data) {
-                cluster.progress = "Total: " + data.status.total_hosts + " |" + " Installing: " + data.status.installing_hosts + " |" + " Completed: " + data.status.completed_hosts + " |" + " Failed: " + data.status.failed_hosts + " |" + " Status: " + data.status.message;
+                cluster.progress = "Total: " + data.status.total_hosts + " |" + " Installing: " + data.status.installing_hosts + " |" + " Completed: " + data.status.completed_hosts + " |" + " Failed: " + data.status.failed_hosts;
                 cluster.state = data.state;
             });
 

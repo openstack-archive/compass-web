@@ -108,7 +108,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "1",
             "port": "1",
             "name": "sv-1",
-            "clusters": ["cluster1", "cluster2"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }, {
+                "id": 2,
+                "name": "cluster2"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -134,7 +140,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "2",
             "port": "3",
             "name": "sv-3",
-            "clusters": ["cluster1"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -147,7 +156,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "2",
             "port": "4",
             "name": "sv-4",
-            "clusters": ["cluster1"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -160,7 +172,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "2",
             "port": "5",
             "name": "sv-5",
-            "clusters": ["cluster1"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -173,7 +188,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "2",
             "port": "6",
             "name": "sv-6",
-            "clusters": ["cluster1"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -186,7 +204,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "2",
             "port": "7",
             "name": "sv-7",
-            "clusters": ["cluster1"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -199,7 +220,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "8",
             "port": "8",
             "name": "sv-8",
-            "clusters": ["cluster1"],
+            "clusters": [{
+                "id": 1,
+                "name": "cluster1"
+            }],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -212,7 +236,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "9",
             "port": "9",
             "name": "sv-9",
-            "clusters": ["cluster1"],
+            "clusters": [],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
@@ -225,13 +249,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "vlan": "10",
             "port": "10",
             "name": "sv-10",
-            "clusters": ["cluster1"],
+            "clusters": [],
             "os": "CentOS",
             "adapter": "OpenStack",
             "roles": [],
             "network": {},
             "state": "Successful"
         }];
+        console.log(servers)
         return [200, servers, {}];
     });
 
@@ -255,12 +280,12 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [201, mockResponse, {}];
     });
 
-    $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/progress/).respond(function(method, url, data) {
+    $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/state/).respond(function(method, url, data) {
         console.log(method, url, data);
-        var states = ["DEPLOYING", "SUCCESSFUL", "UNDEPLOYED", "FAILED"];
+        var states = ["UNINITIALIZED", "INITIALIZED", "INSTALLING", "SUCCESSFUL", "ERROR"];
         var progressData = {
             "id": 1,
-            "state": states[Math.floor((Math.random() * 4))], //states[0],
+            "state": states[Math.floor((Math.random() * 5))], //states[0],
             "config_step": "deploy",
             "status": {
                 "total_hosts": 4,
@@ -280,6 +305,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "name": "cluster_01",
             "adapter_id": 1,
             "os_id": 1,
+            "os_name": "CentOS",
+            "distributed_system_name": "OpenStack",
             "editable": true,
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
@@ -296,6 +323,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "name": "cluster_02",
             "adapter_id": 1,
             "os_id": 1,
+            "os_name": "CentOS",
+            "distributed_system_name": "OpenStack",
             "editable": true,
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
@@ -312,6 +341,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "name": "cluster_03",
             "adapter_id": 1,
             "os_id": 1,
+            "os_name": "CentOS",
+            "distributed_system_name": "OpenStack",
             "editable": true,
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
@@ -328,6 +359,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "name": "cluster_04",
             "adapter_id": 1,
             "os_id": 1,
+            "os_name": "CentOS",
+            "distributed_system_name": "OpenStack",
             "editable": true,
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
@@ -344,6 +377,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "name": "cluster_05",
             "adapter_id": 1,
             "os_id": 1,
+            "os_name": "CentOS",
+            "distributed_system_name": "OpenStack",
             "editable": true,
             "create_by": "user@someemail.com",
             "create_at": "2014-4-25 12:00:00",
@@ -459,7 +494,11 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             actionResponse = {
                 "hosts": machines
             };
-        } else if (postData["deploy"] !== undefined) {}
+        } else if (postData["deploy"] !== undefined) {
+
+        } else if (postData["review"] !== undefined) {
+
+        }
         return [200, actionResponse, {}];
 
     });
@@ -516,7 +555,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, config, {}];
     });
 
-    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/hosts\/([0-9]|[1-9][0-9])\/progress/).respond(function(method, url, data) {
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/hosts\/([0-9]|[1-9][0-9])\/state/).respond(function(method, url, data) {
         //console.log(method, url, data);
         var index = url.indexOf("clusters/");
         var hostId = url.substring(index).split("/")[3];

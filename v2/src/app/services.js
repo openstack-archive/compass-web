@@ -83,7 +83,7 @@ angular.module('compass.services', [])
         };
 
         this.getClusterProgress = function(id) {
-            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/progress');
+            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/state');
         };
 
         this.updateClusterConfig = function(id, config) {
@@ -142,7 +142,7 @@ angular.module('compass.services', [])
         };
 
         this.getClusterHostProgress = function(clusterId, hostId) {
-            return $http.get(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId + '/progress');
+            return $http.get(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId + '/state');
         };
 
         this.deleteHost = function(id) {

@@ -50,10 +50,10 @@ angular.module('compass.cluster', [
 })
 
 .controller('clusterCtrl', function($scope, $state, dataService, stateService, $stateParams) {
-    var clusterId = $stateParams.id;
+    $scope.clusterId = $stateParams.id;
     $scope.state = $state;
 
-    dataService.getClusterById(clusterId).success(function(data) {
+    dataService.getClusterById($scope.clusterId).success(function(data) {
         $scope.clusterInfo = data;
     });
 
@@ -71,13 +71,16 @@ angular.module('compass.cluster', [
 .controller('clusterProgressCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, $timeout, $modal) {
     var clusterId = $stateParams.id;
     var progressTimer;
+    var fireTimer = true;
 
     var getClusterProgress = function() {
         dataService.getClusterProgress(clusterId).success(function(data) {
             $scope.clusterProgress = data;
-            if ($scope.clusterProgress.state == "DEPLOYING") {
-                progressTimer = $timeout(getClusterProgress, 5000);
+            //if ($scope.clusterProgress.state == "INSTALLING") {
+            if(fireTimer) {
+                progressTimer = $timeout(getClusterProgress, 5000);                
             }
+            //}
         });
     }
 
@@ -144,8 +147,10 @@ angular.module('compass.cluster', [
     };
 
     $scope.$on('$destroy', function() {
+        fireTimer = false;
         $timeout.cancel(progressTimer);
     });
+
 })
 
 .controller('createClusterCtrl', ['$scope', '$state', '$modal', '$log', 'dataService', 'wizardFactory',
@@ -178,7 +183,7 @@ angular.module('compass.cluster', [
                                 wizardFactory.setAdapter(adapter);
                             }
                         })
-                        $state.go('wizard');
+                        $state.go('wizard', {"config": "true"});
                         $scope.cluster = {};
                     });
                 }, function() {

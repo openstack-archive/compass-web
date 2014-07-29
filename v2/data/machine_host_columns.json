@@ -14,7 +14,7 @@
     }, {
         "title": "VLAN",
         "field": "vlan",
-        "visible": true
+        "visible": false
     }, {
         "title": "Hostname",
         "field": "name",
@@ -30,10 +30,6 @@
     }, {
         "title": "OS Reinstall",
         "field": "os_installed",
-        "visible": true
-    }, {
-        "title": "Adapter",
-        "field": "adapter",
         "visible": true
     }, {
         "title": "State",
@@ -73,10 +69,6 @@
         "field": "os_installed",
         "visible": false
     }, {
-        "title": "Adapter",
-        "field": "adapter",
-        "visible": false
-    }, {
         "title": "State",
         "field": "state",
         "visible": false
@@ -112,10 +104,6 @@
     }, {
         "title": "OS Reinstall",
         "field": "os_installed",
-        "visible": false
-    }, {
-        "title": "Adapter",
-        "field": "adapter",
         "visible": false
     }, {
         "title": "Roles",
