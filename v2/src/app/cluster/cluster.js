@@ -196,58 +196,174 @@ angular.module('compass.cluster', [
     }
 ])
 
-.controller('monitoringCtrl', ['$scope',
-    function($scope) {
+.controller('monitoringCtrl', ['$scope', '$http', 
+    function($scope, $http) {
         $scope.options = {
-            renderer: 'area'
+            renderer: $scope.renderer
         };
         $scope.features = {
+            palette: 'spectrum14',
+            legend: {
+                toggle: true,
+                highlight: false
+            },
             hover: {
                 xFormatter: function(x) {
                     return 't=' + x;
                 },
                 yFormatter: function(y) {
-                    return '$' + y;
+                    return  y + ' load';
                 }
             }
         };
+
+        $scope.metrics = [
+            'interface.eth0.if_octets.tx',
+            'cpu.0.cpu.system.value',
+            'entropy.entropy.value',
+            'disk.sda.disk_ops.write'
+        ];
+
+        $scope.renderers = [{
+                id: 'area',
+                name: 'Area'
+            }, {
+                id: 'line',
+                name: 'Line'
+            }, {
+                id: 'bar',
+                name: 'Bar'
+            }, {
+                id: 'scatterplot',
+                name: 'Scatterplot'
+            }];
+
+        $scope.palettes = [
+            'spectrum14',
+            'spectrum2000',
+            'spectrum2001',
+            'colorwheel',
+            'cool',
+            'classic9',
+            'munin'
+        ];
+
+        $scope.rendererChanged = function(id) {
+            $scope.options = {
+                renderer: id
+            };
+        };
+
+        $scope.paletteChanged = function(id) {
+            $scope.features = {
+                palette: id,
+                legend: {
+                    toggle: true,
+                    highlight: false
+                },
+                hover: {
+                    xFormatter: function(x) {
+                        return 't=' + x;
+                    },
+                    yFormatter: function(y) {
+                        return  y + ' data';
+                    }
+                }
+            };
+        };
+
+        $scope.metricChanged = function(id) {
+            $scope.metric = id
+        };
+
+        $scope.changeSeriesData = function(id) {
+            //var seriesList = [];
+
+            var myChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var myLen = 24;
+            var myUrl = 'http://127.0.0.1:5000/monit/api/rshostgroup/nova-compute_local/metric/'
+            //var myMetric = 'interface.eth0.if_octets.tx'
+            //var myMetric = 'cpu.0.cpu.system.value'
+            var myMetric = 'entropy.entropy.value'
+            //var myMetric = 'disk.sda.disk_ops.write'
+            var myUrlArg = '?callback=JSON_CALLBACK'
+            var myCallbackId = '';
+
+            for (var i = myLen; i > 0; --i) myCallbackId += myChars[Math.round(Math.random() * (myChars.length - 1))];
+
+            //var urlsCallback = myUrl.concat(myMetric, myUrlArg, myCallbackId)
+            var urlsCallback = myUrl.concat($scope.metric, myUrlArg)
+
+            //$http.jsonp('http://127.0.0.1:5000/monit/api/rshostgroup/nova-compute_local/metric/interface.eth0.if_octets.tx?callback=JSON_CALLBACK').success(function(data){
+            $http.jsonp(urlsCallback).success(function(data){
+              $scope.series = data
+            }).error(function(response){
+              console.log("Error: ")
+              console.log(response)
+              $scope.series = [{ "name": "JSONP system.error", "data": [{ "x": 0, "y": 23 }, { "x": 1, "y": 15 }, { "x": 2, "y": 79 }, { "x": 3, "y": 31 }, { "x": 4, "y": 60 }]}]
+        
+            })
+
+            //new Rickshaw.Graph.JSONP({
+                //element: document.querySelector('#chart'),
+                //dataURL: 'http://127.0.0.1:5000/monit/api/rshostgroup/nova-compute_local/metric/interface.eth0.if_octets.tx'
+            //});
+            
+            //$scope['series' + id] = seriesList;
+        };
         $scope.series = [{
-            name: 'Series 1',
-            color: 'steelblue',
-            data: [{
-                x: 0,
-                y: 23
+            "name": ' Controller cpu.system.value',
+            "data": [{
+                "x": 0,
+                "y": 23
             }, {
-                x: 1,
-                y: 15
+                "x": 1,
+                "y": 15
             }, {
-                x: 2,
-                y: 79
+                "x": 2,
+                "y": 79
             }, {
-                x: 3,
-                y: 31
+                "x": 3,
+                "y": 31
             }, {
-                x: 4,
-                y: 60
+                "x": 4,
+                "y": 60
             }]
         }, {
-            name: 'Series 2',
-            color: 'lightblue',
-            data: [{
-                x: 0,
-                y: 30
+            "name": ' Nova-compute cpu.system.value',
+            "data": [{
+                "x": 0,
+                "y": 30
             }, {
-                x: 1,
-                y: 20
+                "x": 1,
+                "y": 20
             }, {
-                x: 2,
-                y: 64
+                "x": 2,
+                "y": 64
             }, {
-                x: 3,
-                y: 50
+                "x": 3,
+                "y": 50
             }, {
-                x: 4,
-                y: 15
+                "x": 4,
+                "y": 15
+            }]
+        }, {
+            "name": ' Neutron cpu.system.value',
+            "data": [{
+                "x": 0,
+                "y": 22
+            }, {
+                "x": 1,
+                "y": 78
+            }, {
+                "x": 2,
+                "y": 14
+            }, {
+                "x": 3,
+                "y": 26
+            }, {
+                "x": 4,
+                "y": 44
             }]
         }];
 

@@ -1,3 +1,25 @@
-hostgroups
+<div class="panel panel-default">
+<div class="panel-heading">
+Cluster Hostgroup CPU
+</div>
+<div class="panel-body">
+
 <rickshaw rickshaw-options="options" rickshaw-features="features" rickshaw-series="series">
 </rickshaw>
+</div>
+    <form class="form-inline ng-valid">
+        <select class="form-control ng-pristine ng-valid" ng-model="renderer"  ng-change="rendererChanged(renderer)" >
+            <option ng-repeat="render in renderers"  value="{{render.id}}" > {{render.name}} </option>
+        </select>
+
+        <select class="form-control ng-valid" ng-model="palette" ng-change="paletteChanged(palette)">
+            <option ng-repeat="palette in palettes"  value="{{palette}}" > {{palette}} </option>
+        </select>
+
+        <select class="form-control ng-valid" ng-model="metric" ng-change="metricChanged(metric)">
+            <option ng-repeat="metric in metrics"  value="{{metric}}" > {{metric}} </option>
+        </select>
+
+        <button class="btn btn-primary" ng-click="changeSeriesData(0)">Reload Chart</button>
+    </form>
+</div>

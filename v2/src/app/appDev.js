@@ -6,6 +6,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
     // Allow all calls not to the API to pass through normally
     $httpBackend.whenGET(new RegExp('src\/.*')).passThrough();
     $httpBackend.whenGET(new RegExp('data\/.*')).passThrough();
+    $httpBackend.whenJSONP(new RegExp('monit\/.*')).passThrough();
+    $httpBackend.whenJSONP(new RegExp('.*monit\/.*')).passThrough();
 
     $httpBackend.whenPOST(settings.apiUrlBase + '/users/login').respond(function(method, url, data) {
         console.log(method, url, data);
