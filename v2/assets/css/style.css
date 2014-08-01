@@ -141,6 +141,10 @@ select {
     overflow-y: scroll;
     max-height:400px
 }
+.padding-top-30 {
+    padding-top: 30px;
+}
+
 .btn-clstr {
     border: none !important;
     background-color: inherit!important;

@@ -208,5 +208,26 @@
         "title": "Date Updated",
         "field": "updated_at",
         "visible": true
+    }],
+    "roles": [{
+        "title": "MAC Addr",
+        "field": "mac",
+        "visible": false
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Roles",
+        "field": "roles",
+        "visible": true
     }]
 }

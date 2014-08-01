@@ -69,7 +69,7 @@ angular.module('compass.services', [])
         this.postSwitchFilters = function(filters) {
             return $http.post(settings.apiUrlBase + '/switch-filters', angular.toJson(filters));
         };
-*/
+        */
         this.putSwitchFilters = function(id, filters) {
             return $http.put(settings.apiUrlBase + '/switch-filters/' + id, angular.toJson(filters));
         };
@@ -112,6 +112,10 @@ angular.module('compass.services', [])
 
         this.getClusterProgress = function(id) {
             return $http.get(settings.apiUrlBase + '/clusters/' + id + '/state');
+        };
+
+        this.getClusterConfig = function(id) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/config');
         };
 
         this.updateClusterConfig = function(id, config) {
@@ -363,7 +367,7 @@ angular.module('compass.services', [])
 
 .service('authService', ['$http', 'dataService',
     function($http, dataService) {
-        this.isAuthenticated = false;
+        this.isAuthenticated = true;
 
         this.setLogin = function(isLogin) {
             this.isAuthenticated = isLogin;

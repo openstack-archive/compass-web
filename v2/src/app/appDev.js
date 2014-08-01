@@ -524,6 +524,126 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, cluster, {}];
     });
 
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])*\/config/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var config = {
+            "os_config": {
+                "server_credentials": {
+                    "username": "admin",
+                    "password": "admin"
+                },
+                "partition": {
+                    "/swap": {
+                        "percentage": 10
+                    },
+                    "/boot": {
+                        "percentage": 10
+                    },
+                    "/var": {
+                        "percentage": 30
+                    },
+                    "/home": {
+                        "percentage": 30
+                    },
+                    "/spare": {
+                        "percentage": 20
+                    }
+                }
+            },
+            "package_config": {
+                "security": {
+                    "service_credentials": {
+                        "rabbitmq": {
+                            "username": "guest",
+                            "password": "guest"
+                        },
+                        "compute": {
+                            "username": "nova",
+                            "password": "nova"
+                        },
+                        "dashboard": {
+                            "username": "dashboard",
+                            "password": "dashboard"
+                        },
+                        "identity": {
+                            "username": "keystone",
+                            "password": "keystone"
+                        },
+                        "image": {
+                            "username": "glance",
+                            "password": "glance"
+                        },
+                        "metering": {
+                            "username": "ceilometer",
+                            "password": "ceilometer"
+                        },
+                        "mysql": {
+                            "username": "root",
+                            "password": "root"
+                        },
+                        "volume": {
+                            "username": "cinder",
+                            "password": "cinder"
+                        }
+                    },
+                    "management_credentials": {
+                        "admin": {
+                            "username": "admin",
+                            "password": "admin"
+                        },
+                        "compute": {
+                            "username": "nova",
+                            "password": "nova"
+                        },
+                        "dashboard": {
+                            "username": "dashboard",
+                            "password": "dashboard"
+                        },
+                        "image": {
+                            "username": "glance",
+                            "password": "glance"
+                        },
+                        "metering": {
+                            "username": "ceilometer",
+                            "password": "ceilometer"
+                        },
+                        "network": {
+                            "username": "quantum",
+                            "password": "quantum"
+                        },
+                        "object-store": {
+                            "username": "swift",
+                            "password": "swift"
+                        },
+                        "volume": {
+                            "username": "cinder",
+                            "password": "cinder"
+                        }
+                    }
+                },
+                "network_mapping": {
+                    "management": {
+                        "display": "Management Network",
+                        "mapping_interface": "eth1"
+                    },
+                    "tenant": {
+                        "display": "Tenant Network",
+                        "mapping_interface": "eth1"
+                    },
+                    "storage": {
+                        "display": "Storage Network",
+                        "mapping_interface": "eth1"
+                    },
+                    "public": {
+                        "display": "Public Network",
+                        "mapping_interface": "eth2"
+                    }
+                }
+            }
+        };
+        return [200, config, {}];
+    });
+
     $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
         console.log(method, url, data);
         var config = JSON.parse(data);

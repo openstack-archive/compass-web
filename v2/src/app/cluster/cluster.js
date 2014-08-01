@@ -1,6 +1,7 @@
 angular.module('compass.cluster', [
     'ui.router',
     'ui.bootstrap',
+    'compass.charts',
     'ngAnimate',
     'ngTable',
     'angular-rickshaw'
@@ -22,6 +23,7 @@ angular.module('compass.cluster', [
         })
         .state('cluster.config', {
             url: '/config',
+            controller: 'configurationCtrl',
             templateUrl: 'src/app/cluster/cluster-config.tpl.html',
             authenticate: true
         })
@@ -312,6 +314,49 @@ angular.module('compass.cluster', [
                 y: 15
             }]
         }];
+    }
+])
+
+.controller('configurationCtrl', ['$scope', 'dataService', '$stateParams', '$filter', 'ngTableParams',
+    function($scope, dataService, $stateParams, $filter, ngTableParams) {
+        var clusterId = $stateParams.id;
+        $scope.partitionarray = [];
+        dataService.getClusterConfig(clusterId).success(function(data) {
+            $scope.configuration = data;
+
+
+            angular.forEach($scope.configuration.os_config.partition, function(value, key) {
+                $scope.partitionarray.push({
+                    "name": key,
+                    "number": value.percentage
+                });
+            });
+
+        });
+
+        dataService.getServerColumns().success(function(data) {
+            $scope.server_columns = data.roles;
+        });
+
+        dataService.getClusterHostMachines(clusterId).success(function(data) {
+            $scope.hosts = data;
+
+            $scope.tableParams = new ngTableParams({
+                page: 1, // show first page
+                count: $scope.hosts.length + 1 // count per page
+            }, {
+                counts: [], // hide count-per-page box
+                total: $scope.hosts.length, // length of data
+                getData: function($defer, params) {
+                    // use build-in angular filter
+                    var orderedData = params.sorting() ?
+                        $filter('orderBy')($scope.hosts, params.orderBy()) : $scope.hosts;
+
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+        });
+
     }
 ])
 
