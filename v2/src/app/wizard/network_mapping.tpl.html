@@ -9,6 +9,9 @@
                     <div class="widget-main">
                         <div ng-repeat="(interface_key, interface_value) in interfaces">
                             {{interface_key}}
+                            <span ng-if="interface_value.is_promiscuous == true">
+                                (Promisc)
+                            </span>
                             <div ui-on-Drop="onDrop($event, interface_key)" drag-hover-class="drag-enter" class="interface-placeholder">
 
                                 <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" class="external-event label-purple ui-draggable network-draggable" ng-if="network_value.mapping_interface==interface_key">

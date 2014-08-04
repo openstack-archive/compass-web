@@ -520,7 +520,8 @@ angular.module('compass.wizard', [
                             "interface": key,
                             "ip": value.ip,
                             "subnet_id": $scope.interfaces[key].subnet_id,
-                            "is_mgmt": $scope.interfaces[key].is_mgmt
+                            "is_mgmt": $scope.interfaces[key].is_mgmt,
+                            "is_promiscuous": $scope.interfaces[key].is_promiscuous
                         };
                         if (value.id === undefined) {
                             // post host network
@@ -816,7 +817,7 @@ angular.module('compass.wizard', [
             "package_config": {
                 "security": {
                     "service_credentials": $scope.service_credentials,
-                    "console_crendentials": $scope.management_credentials
+                    "console_credentials": $scope.management_credentials
                 }
             }
         };
@@ -1030,6 +1031,13 @@ angular.module('compass.wizard', [
     var cluster = wizardFactory.getClusterInfo();
     $scope.interfaces = wizardFactory.getInterfaces();
     $scope.networking = wizardFactory.getNetworkMapping();
+
+    angular.forEach($scope.interfaces, function(value, key) {
+        // The interface with promisc mode is required to be set as Public Network
+        if (value.is_promiscuous) {
+            $scope.networking["public"].mapping_interface = key;
+        }
+    });
 
     $scope.pendingInterface = "";
 

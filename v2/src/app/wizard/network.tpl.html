@@ -14,6 +14,7 @@
                                 <th>Interface</th>
                                 <th>Subnet</th>
                                 <th>Is Mgmt Network</th>
+                                <th>Promisc Mode</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -29,6 +30,7 @@
                                         </option>
                                     </select>
                                 </td>
+                                <td>-</td>
                                 <td>-</td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-info" ng-click="addInterface(newInterface)">
@@ -46,11 +48,20 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <input ng-model="value.is_mgmt" type="checkbox" name="is-mgmt" />
+                                    <label>
+                                        <input ng-model="value.is_mgmt" type="checkbox" class="ace" name="is-mgmt">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input ng-model="value.is_promiscuous" type="checkbox" class="ace" name="promisc">
+                                        <span class="lbl"></span>
+                                    </label>
                                 </td>
                                 <td>
                                     <!--Remove Action-->
-                                    <button class="btn btn-xs btn-danger" ng-click="deleteInterface(name)"><i class="fa fa-trash-o bigger-120"></i>
+                                    <button class="btn btn-xs" ng-click="deleteInterface(name)"><i class="fa fa-trash-o bigger-120"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -140,7 +151,8 @@
                 <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !addInterfacePanel.isCollapsed}"></i>
             </button>
             <button class="btn btn-sm btn-info" ng-init="autoFillPanel.isCollapsed = true;" ng-click="autoFillPanel.isCollapsed = !autoFillPanel.isCollapsed">
-                Autofill&nbsp;&nbsp;<i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
+                Autofill&nbsp;&nbsp;
+                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
             </button>
         </div>
     </div>

@@ -657,11 +657,11 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var subnetworks = [{
             "id": 1,
             "name": "net1",
-            "subnet": "192.168.1.0"
+            "subnet": "10.172.10.0/24"
         }, {
             "id": 2,
             "name": "net2",
-            "subnet": "172.165.1.0"
+            "subnet": "10.172.20.0/24"
         }];
         return [200, subnetworks, {}];
     });
