@@ -4,7 +4,7 @@
             <h1 class="blue-header">
                 My Clusters
                 <small>
-                    <span class="cluster-search">
+                    <span class="no-border-search">
                         <span class="input-icon">
                             <input class="no-border" type="text" placeholder="Search" ng-model="search.$">
                             <i class="ace-icon fa fa-search" style="top:-2px"></i>
@@ -21,11 +21,6 @@
                     Create New Cluster
                 </button>
             </span>
-            <!--span id="nav-search" class="nav-search">
-                <form class="form-search">
-
-                </form>
-            </span-->
         </div>
     </div>
     <div class="space-10"></div>
@@ -99,7 +94,12 @@
                             </span>
                         </td>
                         <td>
-                            {{cluster.progress}}
+                            <span ng-if="cluster.progress">
+                                Total: {{cluster.progress.total_hosts}} <br>
+                                Installing: {{cluster.progress.installing_hosts}} <br>
+                                Completed: {{cluster.progress.completed_hosts}} <br>
+                                Failed: {{cluster.progress.failed_hosts}}
+                            </span>
                         </td>
                         <td sortable="'distributed_system_name'">
                             {{cluster.distributed_system_name}}

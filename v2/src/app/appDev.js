@@ -755,6 +755,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         for (var i = 1; i <= num; i++) {
             var host = {
                 "id": i,
+                "host_id": i,
                 "machine_id": i * 2 + 10,
                 "hostname": "host-" + i,
                 "mac": "28.e5.ee.47.14." + (i < 10 ? "a" : "") + i,

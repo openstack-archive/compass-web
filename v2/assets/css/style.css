@@ -1,12 +1,21 @@
 html {
     overflow: -moz-scrollbars-vertical;
     overflow-y: scroll;
+    min-width: 768px;
 }
 .notification-msg {
     white-space: normal;
 }
 .nav-list > li.open .submenu {
     display: block;
+}
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+@media only screen and (min-width: 768px) and (max-width: 991px)  {
+    .table > tbody > tr {
+        height: 50px;
+    }
 }
 /*
 .cssSlideUp {
@@ -57,7 +66,7 @@ html {
     vertical-align: baseline;
     white-space: nowrap;
 }
-.cluster-search {
+.no-border-search {
     padding-left: 10px;
     margin-left: 10px;
     border-left: 1px solid rgb(216, 216, 216);
@@ -118,6 +127,9 @@ select {
 .navbar .navbar-nav > li {
     border-style: none;
 }
+.ace-nav > li {
+    border-left: none !important;
+}
 .new-servers-result {
     overflow-y: scroll;
     max-height:400px
@@ -128,6 +140,18 @@ select {
 .border-radius-4 {
     border-radius: 4px !important;
 }
+/* Remove inner shadow from inputs on mobile iOS */
+textarea, input[type="text"], input[type="password"] {
+    -webkit-appearance: none;
+}
+/* Fix ace checkbox/radio css */
+input.ace[type="checkbox"] + .lbl:before, input.ace[type="radio"] + .lbl:before {
+    content: "\00A0";
+}
+.progress {
+    position: relative;
+}
+
 .btn-black-white {
     border: none !important;
     background-color: inherit!important;
@@ -185,8 +209,9 @@ a:active {
     color: #0000FF;
 }
 .page-header {
-    padding-left: 15px;
-    padding-right: 15px;
+    border-bottom: 0px !important;
+    padding-top: 15px;
+    padding-bottom: 6px;
 }
 .label {
     border-radius: 0.25em !important;

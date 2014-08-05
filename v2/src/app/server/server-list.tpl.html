@@ -3,6 +3,16 @@
         <h1 class="blue-header">
             Discovered Servers&nbsp;
             <span class="badge">{{allservers.length}}</span>
+
+            <small>
+                <span class="no-border-search">
+                    <span class="input-icon">
+                        <input class="no-border" type="text" placeholder="Search" ng-model="search.$">
+                        <i class="ace-icon fa fa-search" style="top:-2px"></i>
+                    </span>
+                </span>
+            </small>
+
         </h1>
     </div>
     <div class="row">
@@ -16,11 +26,6 @@
     </div>
     <div class="row">
         <div class="pull-left top-margin-14 center-align">
-            <!--Search Input-->
-            <span class="input-icon margin-right-5">
-                <input type="text" placeholder="Search" ng-model="search.$">
-                <i class="ace-icon fa fa-search blue"></i>
-            </span>
             <!-- Column Show / Hide button -->
             <div class="btn-group" dropdown>
                 <button type="button" class="btn btn-white btn-default dropdown-toggle">
