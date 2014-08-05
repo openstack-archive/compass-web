@@ -78,6 +78,12 @@ select {
 .margin-bottom-10 {
     margin-bottom: 10px;
 }
+.margin-right-5 {
+    margin-right: 5px !important;
+}
+.margin-right-20 {
+    margin-right: 20px !important;
+}
 .max-width-200 {
     max-width: 200px;
 }
@@ -86,31 +92,6 @@ select {
 }
 .margin-top-minus10 {
     margin-top: -10px !important;
-}
-.drag-enter {
-    background: none repeat scroll 0 0 #F0F9FF;
-    border: 2px dashed #BED2DB !important;
-    box-sizing: border-box;
-    margin: 5px 0;
-    min-height: 50px;
-    padding: 0;
-}
-.network-draggable {
-    position: relative;
-    width: 200px;
-}
-.network-placeholder {
-    min-height: 200px;
-}
-.interface-placeholder {
-    border: 1px solid #BED2DB;
-    box-sizing: border-box;
-    margin: 5px 0;
-    min-height: 50px;
-    padding: 10px;
-}
-.border-radius-4 {
-    border-radius: 4px !important;
 }
 .cluster-progress {
     margin-top: -40px;
@@ -144,21 +125,36 @@ select {
 .padding-top-30 {
     padding-top: 30px;
 }
-
-.btn-clstr {
+.border-radius-4 {
+    border-radius: 4px !important;
+}
+.btn-black-white {
     border: none !important;
     background-color: inherit!important;
     color: #000000 !important
 }
-button.btn-cltd:hover, button.btn-clstrd:active {
+.btn-trash-hover {
+    /* Fixes padding on icon*/
+    padding: 1px 3px 1px 4px !important;
+}
+button.btn-trash-hover:hover, button.btn-trash-hover:active {
     background-color: #d15b47 !important;
     color: #FFFFFF !important;
-    border-radius: 4px !important;
 }
-button.btn-clte:hover, button.btn-clstre:active {
+button.btn-clte:hover, button.btn-clte:active {
     background-color: #3a87ad !important;
     color: #FFFFFF !important;
-    border-radius: 4px !important;
+}
+button.btn-edit-hover:hover, button.btn-edit-hover:active {
+    background-color: #87b87f !important;
+    color: #FFFFFF !important;
+}
+button.btn-sumbit-hover:hover, button.btn-sumbit-hover-hover:active {
+    background-color: #428bca !important;
+    color: #FFFFFF !important;
+}
+.btn-topmargin-8 {
+    margin-top: 5px;
 }
 th {
     background-color: #FFFFFF !important;
@@ -206,9 +202,7 @@ a:active {
     position: relative !important;
     float: right !important;
 }
-.btn-cltd {
-    padding: 1px 3px 1px 4px !important;
-}
+
 .btn-create {
     line-height: 1.1 !important;
 }
@@ -331,6 +325,7 @@ td.center-align {
 .top-margin-14 {
     margin-top: 14px;
 }
+
 table {
     margin-bottom: 0px !important;
 }
@@ -340,6 +335,46 @@ div.center-align {
 .margin-right-5 {
     margin-right: 10px;
 }
-.rounded-button {
-border-radius: 4px !important;
+.interface-placeholder-margin {
+    border: 1px solid rgba(190, 210, 219, .5) !important;
+    min-height: 60px !important;
+}
+.network-margin-border {
+    border: 1px solid rgba(190, 210, 219, .5) !important;
+}
+.network-margin {
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+}
+.widget-header-marginbottom {
+    border-bottom: 1px solid #bed2db !important;
+} 
+.network-background {
+    background-image:url();
+}
+/* adjustments to draggable */
+.network-draggable {
+    position: relative;
+    width: 132px !important;
+}
+.external-event {
+    float: left !important;
+}
+.drag-enter {
+    background: none repeat scroll 0 0 #F0F9FF;
+    border: 2px dashed #BED2DB !important;
+    box-sizing: border-box;
+    margin: 5px 0;
+    min-height: 50px;
+    padding: 0;
+}
+.network-placeholder {
+    min-height: 200px;
+}
+.interface-placeholder {
+    border: 1px solid #BED2DB;
+    box-sizing: border-box;
+    margin: 5px 0;
+    min-height: 50px;
+    padding: 10px;
 }

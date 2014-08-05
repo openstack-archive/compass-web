@@ -1032,22 +1032,36 @@ angular.module('compass.wizard', [
     $scope.interfaces = wizardFactory.getInterfaces();
     $scope.networking = wizardFactory.getNetworkMapping();
 
-    angular.forEach($scope.interfaces, function(value, key) {
-        // The interface with promisc mode is required to be set as Public Network
-        if (value.is_promiscuous) {
-            $scope.networking["public"].mapping_interface = key;
-        }
-    });
-
     $scope.pendingInterface = "";
 
     $scope.onDrop = function($event, key) {
         $scope.pendingInterface = key;
     };
 
+    angular.forEach($scope.interfaces, function(value, key) {
+        $scope.interfaces[key].dropChannel = "E";
+    })
+
+    angular.forEach($scope.networking, function(value, key) {
+        if (key == "public") {
+            $scope.networking[key].dragChannel = "P";
+        } else
+            $scope.networking[key].dragChannel = "E";
+    })
+
     $scope.dropSuccessHandler = function($event, key, dict) {
         dict[key].mapping_interface = $scope.pendingInterface;
+        console.log($scope.pendingInterface);
     };
+
+    angular.forEach($scope.interfaces, function(value, key) {
+        // The interface with promisc mode is required to be set as Public Network
+        if (value.is_promiscuous) {
+            $scope.networking["public"].mapping_interface = key;
+            $scope.interfaces[key].dropChannel = "P";
+        }
+    });
+
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()

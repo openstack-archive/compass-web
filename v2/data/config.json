@@ -130,19 +130,19 @@
     },
     "network_mapping": {
         "management": {
-            "display": "Management Network",
+            "display": "Management",
             "mapping_interface": ""
         },
         "tenant": {
-            "display": "Tenant Network",
+            "display": "Tenant",
             "mapping_interface": ""
         },
         "storage": {
-            "display": "Storage Network",
+            "display": "Storage",
             "mapping_interface": ""
         },
         "public": {
-            "display": "Public Network",
+            "display": "Public",
             "mapping_interface": ""
         }
     }
