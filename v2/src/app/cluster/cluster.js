@@ -72,9 +72,24 @@ angular.module('compass.cluster', [
         stateService.addStates($scope.monitoringNav);
     });
 
-}).directive('clusternav', function() {
+}).directive('clusternav', function($timeout) {
     return {
-        templateUrl: 'src/app/cluster/cluster-nav.tpl.html'
+        restrict: 'EAC',
+        templateUrl: 'src/app/cluster/cluster-nav.tpl.html',
+        link: function($scope, elem, attrs) {
+            console.log($scope, elem, attrs)
+            $timeout(function() {
+                $('.nav-list ul a').on('click touchend', function(e) {
+                    var el = $(this);
+                    var link = el.attr('href');
+                    window.location = link;
+                });
+            }, 0);
+
+            elem.bind('$destroy', function() {
+                $('.nav-list ul a').off('click touchend');
+            });
+        }
     }
 })
 
