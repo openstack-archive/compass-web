@@ -6,12 +6,6 @@
         "os_id": 1
     },
     "partition": {
-        "/swap": {
-            "percentage": 10
-        },
-        "/boot": {
-            "percentage": 10
-        },
         "/var": {
             "percentage": 30
         },
@@ -19,7 +13,7 @@
             "percentage": 30
         },
         "/spare": {
-            "percentage": 20
+            "percentage": 40
         }
     },
     "interface": {
