@@ -45,7 +45,7 @@
         }
     },
     "general": {
-        "timezone": "GMT -8:00",
+        "timezone": "America/Los_Angeles",
         "language": "en",
         "http_proxy": "",
         "https_proxy": "",
