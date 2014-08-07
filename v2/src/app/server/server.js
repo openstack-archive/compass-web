@@ -133,19 +133,11 @@ angular.module('compass.server', [
     var getSwitches = function() {
         dataService.getSwitches().success(function(data) {
             $scope.switches = data;
-            //if (fireTimer) {
-            //    switchTimer = $timeout(getSwitches, 10000);
-            //}
         })
     };
 
     getSwitches();
-    /*
-    $scope.$on('$destroy', function() {
-        fireTimer = false;
-        $timeout.cancel(switchTimer);
-    });
-    */
+
     $scope.selectAllSwitches = function(flag) {
         if (flag) {
             angular.forEach($scope.switches, function(sv) {
@@ -185,13 +177,13 @@ angular.module('compass.server', [
             angular.forEach($scope.switches, function(sw) {
                 if (sw.selected) {
                     sw.result = "";
+                    sw.finished = false;
                     sw.polling = true;
                 }
             });
         }
     };
 
-    //var data = clusters;
     $scope.tableParamsNewServer = new ngTableParams({
         page: 1, // show first page
         count: $scope.newFoundServers.length, // count per page
@@ -232,18 +224,18 @@ angular.module('compass.server', [
         var totalResultReady = true;
         if ($scope.findingNewServers) {
             angular.forEach($scope.switches, function(sw) {
-                if (sw.selected) {
+                if (sw.selected && !sw.finished) {
                     if (sw.result == "success") {
                         $scope.newFoundServers = $scope.newFoundServers.concat(angular.copy(sw.machines));
-                        sw.result = "finished";
+                        sw.finished = true;
 
                         if ($scope.tableParamsNewServer) {
                             $scope.tableParamsNewServer.$params.count = $scope.newFoundServers.length;
                             $scope.tableParamsNewServer.reload();
                         }
 
-                    } else if (sw.result == "finished") {
-
+                    } else if (sw.result == "error") {
+                        sw.finished = true;
                     } else {
                         totalResultReady = false;
                     }
