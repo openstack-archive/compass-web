@@ -8,41 +8,43 @@ var app = angular.module('compass.clusterlist', [
     $stateProvider
         .state('clusterList', {
             url: '/clusterlist',
-            controller: 'ClusterListCtrl',
+            controller: 'clustersListCtrl',
             templateUrl: 'src/app/cluster/cluster-list.tpl.html',
-            authenticate: true
+            authenticate: true,
+            resolve: {
+                allClusterData: function($q, dataService) {
+                    var deferred = $q.defer();
+                    dataService.getClusters().success(function(data) {
+                        deferred.resolve(data);
+                    });
+                    return deferred.promise;
+                }
+            }
         });
 })
 
-.controller('ClusterListCtrl', function($scope, ngTableParams, $filter, dataService) {
-
-    var clusters = []
-    dataService.getClusters().success(function(data) {
-        clusters = data;
-        angular.forEach(clusters, function(cluster) {
-            dataService.getClusterProgress(cluster.id).success(function(data) {
-                cluster.progress = data.status;
-                //cluster.progress = "Total: " + data.status.total_hosts + " |" + " Installing: " + data.status.installing_hosts + " |" + " Completed: " + data.status.completed_hosts + " |" + " Failed: " + data.status.failed_hosts;
-                cluster.state = data.state;
-            });
-
-        })
-
-        var data = clusters;
-        $scope.tableParams = new ngTableParams({
-            page: 1, // show first page
-            count: 10, // count per page
-        }, {
-            total: data.length, // length of data
-            getData: function($defer, params) {
-                // use build-in angular filter
-                var orderedData = params.sorting() ?
-                    $filter('orderBy')(data, params.orderBy()) :
-                    data;
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+.controller('clustersListCtrl', function($scope, ngTableParams, $filter, dataService, allClusterData) {
+    var clusters = allClusterData
+    angular.forEach(clusters, function(cluster) {
+        dataService.getClusterProgress(cluster.id).success(function(data) {
+            cluster.progress = data.status;
+            cluster.state = data.state;
         });
+    });
 
+    var data = clusters;
+    $scope.tableParams = new ngTableParams({
+        page: 1, // show first page
+        count: 10, // count per page
+    }, {
+        total: data.length, // length of data
+        getData: function($defer, params) {
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                $filter('orderBy')(data, params.orderBy()) :
+                data;
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
     });
 
     //button alerts
@@ -53,6 +55,5 @@ var app = angular.module('compass.clusterlist', [
     $scope.export = function(text) {
         alert('export?');
     }
-
 
 });
