@@ -123,49 +123,66 @@ angular.module('compass.charts', [])
     return {
         restrict: 'A',
         scope: {
-            finding: '=',
+            polling: '=',
             switchinfo: '=',
             result: '=',
             machines: '='
         },
         link: function(scope, element, attrs) {
             var checkSwitchTimer;
-            var findingTriggered = scope.finding;
+            var checkSwitchCount = 0;
+            //var pollingTriggered = scope.polling;
+            var fireTimer = true;
 
             var getMachines = function() {
                 dataService.getSwitchMachines(scope.switchinfo.id).success(function(data) {
-                    scope.finding = false;
+                    scope.polling = false;
                     scope.result = "success";
                     scope.machines = data;
+                }).error(function(data) {
+                    scope.polling = false;
+                    scope.result = "error";
                 })
-                    .error(function(data) {
-                        scope.finding = false;
-                        scope.result = "error";
-                    })
             };
 
+            // check switch state 15 times with the interval of 2 sec
             var checkSwitchState = function() {
+                checkSwitchCount++;
                 dataService.getSwitchById(scope.switchinfo.id).success(function(data) {
                     if (data.state == "under_monitoring") {
                         getMachines();
-                    } else {
-                        checkSwitchTimer = $timeout(checkSwitchState, 2000);
+                    } else if(data.state === "initialized" || data.state === "repolling")
+                        if (fireTimer && checkSwitchCount < 15) {
+                            checkSwitchTimer = $timeout(checkSwitchState, 2000);
+                        } else {
+                            scope.polling = false;
+                            scope.result = "error";
+                        }
+                    else {
+                        scope.polling = false;
+                        scope.result = "error";
                     }
                 })
             };
 
-            scope.$watch('finding', function(val) {
-                if (val == true) {
-                    var findingAction = {
-                        "find_machines": null
+            scope.$watch('polling', function(newval, oldval) {
+                if(newval != oldval) {
+                    if (newval == true) {
+                        checkSwitchCount = 0;
+                        fireTimer = true;
+
+                        var findingAction = {
+                            "find_machines": null
+                        };
+                        dataService.postSwitchAction(scope.switchinfo.id, findingAction).success(function(data) {
+                            checkSwitchState();
+                        })
                     }
-                    dataService.postSwitchAction(scope.switchinfo.id, findingAction).success(function(data) {
-                        checkSwitchState();
-                    })
                 }
             })
 
             element.bind('$destroy', function() {
+                fireTimer = false;
                 $timeout.cancel(checkSwitchTimer);
             });
         }

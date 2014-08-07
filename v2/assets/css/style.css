@@ -151,6 +151,10 @@ input.ace[type="checkbox"] + .lbl:before, input.ace[type="radio"] + .lbl:before 
 .progress {
     position: relative;
 }
+button[disabled] {
+    pointer-events:  auto !important;
+    cursor: not-allowed !important;
+}
 
 .btn-black-white {
     border: none !important;

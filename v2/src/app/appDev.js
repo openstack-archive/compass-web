@@ -275,6 +275,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "ports": "1-100"
             },
             "state": "under_mointoring"
+        }, {
+            "id": 3,
+            "ip": "172.29.8.42",
+            "filters": {
+                "ports": "1-100"
+            },
+            "state": "under_mointoring"
         }];
         return [200, switches, {}];
     });
@@ -283,13 +290,19 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
         var index = url.indexOf("switches/");
         var id = url.substring(index).split("/")[1];
+        var state = "repolling"
+        if (id == "1" || id == "2") {
+            state = "under_monitoring";
+        } else {
+            state = "repolling";
+        }
         var sw = {
             "id": id,
             "ip": "172.29.8.40",
             "filters": {
                 "ports": "1-10;20-51"
             },
-            "state": "under_monitoring"
+            "state": state
         };
         return [200, sw, {}];
     });

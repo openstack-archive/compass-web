@@ -11,13 +11,13 @@
                 <tr>
                     <th>
                         <label>
-                            <input ng-model="selectall" ng-change="selectAllSwitches(selectall)" type="checkbox" class="ace">
+                            <input ng-model="selectall" ng-change="selectAllSwitches(selectall)" type="checkbox" class="ace" ng-disabled="findingNewServers">
                             <span class="lbl"></span>
                         </label>
                     </th>
+                    <th></th>
                     <th>Switch IP</th>
                     <th>Port Filters</th>
-                    <th>State</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -25,16 +25,26 @@
                 <tr ng-show="switches.length==0">
                     <td colspan="5" class="center">No switches now. Please add switch first.</td>
                 </tr>
-                <tr ng-repeat="switch in switches" switchrow finding="switch.polling" machines="switch.machines" result="switch.result" switchinfo="switch">
-                    <td>{{switch.startfinding}}
+                <tr ng-repeat="switch in switches" switchrow polling="switch.polling" machines="switch.machines" result="switch.result" switchinfo="switch">
+                    <td>
                         <label>
-                            <input type="checkbox" class="ace" ng-model="switch.selected">
+                            <input type="checkbox" class="ace" ng-model="switch.selected" ng-disabled="findingNewServers && switch.selected && !switch.finished">
                             <span class="lbl"></span>
                         </label>
                     </td>
+                    <td>
+                        <span ng-if="switch.result == 'success'">
+                            <i class="ace-icon fa fa-smile-o bigger-125 green"></i>
+                        </span>
+                        <span ng-if="switch.result == 'error'">
+                            <i class="ace-icon fa fa-meh-o bigger-125 red"></i>
+                        </span>
+                        <span ng-if="findingNewServers && switch.selected && !switch.finished">
+                            <i class="ace-icon fa fa-spinner fa-spin bigger-125 orange"></i>
+                        </span>
+                    </td>
                     <td>{{switch.ip}}</td>
                     <td>{{switch.filters.ports}}</td>
-                    <td>{{switch.state}}</td>
                     <td>
                         <button class="btn btn-xs">
                             <i class="ace-icon fa fa-pencil bigger-120"></i>
@@ -50,13 +60,8 @@
                     Add Switch
                 </span>
             </button>
-            <button class="btn btn-sm btn-primary" ng-click="findServers()" ng-disabled="findingNewServers">
-                <span ng-if="findingNewServers == true">
-                    Finding ...
-                </span>
-                <span ng-if="findingNewServers == false">
-                    Find Servers
-                </span>
+            <button class="btn btn-sm btn-primary" ng-click="findServers()">
+                Find Servers
             </button>
         </div>
         <div ng-include="'src/app/server/add-switch-modal.tpl.html'"></div>
@@ -79,7 +84,7 @@
                 </thead>
                 <tbody>
                     <tr ng-show="tableParamsNewServer.data.length==0">
-                        <td colspan="6" class="center">No results</td>
+                        <td colspan="6" class="center">No results for selected switches</td>
                     </tr>
                     <tr ng-repeat="sv in $data | filter:search_new_server">
                         <td ng-repeat="column in server_columns" ng-show="column.visible">
