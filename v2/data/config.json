@@ -11,9 +11,6 @@
         },
         "/home": {
             "percentage": 30
-        },
-        "/spare": {
-            "percentage": 40
         }
     },
     "interface": {
@@ -52,7 +49,7 @@
     },
     "server_credentials": {
         "username": "root",
-        "password": "huawei"
+        "password": "root"
     },
     "service_credentials": {
         "rabbitmq": {
