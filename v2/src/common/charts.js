@@ -103,7 +103,7 @@ angular.module('compass.charts', [])
             };
 
             scope.$watch('clusterstate', function(val) {
-                if (clusterState == "INSTALLING") {
+                if (clusterState != "SUCCESSFUL" && clusterState != "ERROR") {
                     $timeout(getProgress, 1000);
                 } else {
                     getProgress(1);
