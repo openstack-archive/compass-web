@@ -12,17 +12,33 @@ angular.module('compass.wizard', [
             url: '/wizard/{id}?config',
             controller: 'wizardCtrl',
             templateUrl: 'src/app/wizard/wizard.tpl.html',
-            authenticate: true
+            authenticate: true,
+            resolve: {
+                clusterData: function($stateParams, $q, dataService) {
+                    var clusterId = $stateParams.id;
+                    var deferred = $q.defer();
+                    dataService.getClusterById(clusterId).success(function(data) {
+                        deferred.resolve(data);
+                    });
+                    return deferred.promise;
+                },
+                machinesHostsData: function($q, dataService, clusterData) {
+                    var deferred = $q.defer();
+                    dataService.getAllMachineHosts(clusterData.os_id).success(function(data) {
+                        deferred.resolve(data);
+                    });
+                    return deferred.promise;
+                }
+            }
         });
 })
 
-.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state) {
+.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, clusterData, machinesHostsData) {
     $scope.clusterId = $stateParams.id;
-    dataService.getClusterById($scope.clusterId).success(function(data) {
-        $scope.cluster = data;
-        wizardFactory.setClusterInfo($scope.cluster);
-    })
 
+    $scope.cluster = clusterData;
+    wizardFactory.setClusterInfo($scope.cluster); 
+    wizardFactory.setAllMachinesHost(machinesHostsData); 
 
     if ($stateParams.config == "true") {
         dataService.getWizardPreConfig().success(function(data) {
@@ -116,8 +132,7 @@ angular.module('compass.wizard', [
     $scope.search = {};
 
     $scope.cluster = wizardFactory.getClusterInfo();
-    dataService.getAllMachineHosts($scope.cluster.os_id).success(function(data) {
-        wizardFactory.setAllMachinesHost(data);
+
         $scope.allservers = wizardFactory.getAllMachinesHost();
 
         $scope.tableParams = new ngTableParams({
@@ -154,7 +169,7 @@ angular.module('compass.wizard', [
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
         });
-    });
+
 
     $scope.selectAllServers = function(flag) {
         if (flag) {

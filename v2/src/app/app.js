@@ -8,7 +8,8 @@ var app = angular.module('compass', [
     'compass.server',
     'ui.router',
     'ui.bootstrap',
-    'ngAnimate'
+    'ngAnimate',
+    'compassAppDev'
 ]);
 
 app.constant('settings', {

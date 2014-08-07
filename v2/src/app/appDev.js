@@ -1,6 +1,6 @@
 var compassAppDev = angular.module('compassAppDev', ['compass', 'ngMockE2E']);
 
-compassAppDev.run(function($httpBackend, settings, $http) {
+compassAppDev.run(function($httpBackend, settings, $http, $timeout) {
     var progressPercent = 0;
 
     // Allow all calls not to the API to pass through normally
