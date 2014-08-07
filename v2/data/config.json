@@ -11,9 +11,6 @@
         },
         "/home": {
             "percentage": 30
-        },
-        "/spare": {
-            "percentage": 40
         }
     },
     "interface": {
