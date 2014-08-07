@@ -51,8 +51,8 @@
         "default_gateway": "172.19.100.1"
     },
     "server_credentials": {
-        "username": "admin",
-        "password": "admin"
+        "username": "root",
+        "password": "huawei"
     },
     "service_credentials": {
         "rabbitmq": {
