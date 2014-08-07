@@ -1,4 +1,4 @@
-<div class="page-content">
+<div class="page-content" ng-swipe-right="stepForward()" ng-swipe-left="stepBackward()">
 
     <div class="page-header">
         <h1>Create Cluster Wizard</h1>
@@ -6,7 +6,7 @@
 
     <div id="create-cluster-wizard">
         <ul class="wizard-steps">
-            <li ng-repeat="step in steps" class="{{step.state}}" ng-click="goToStep(step.id)">
+            <li ng-repeat="step in steps" class="{{step.state}}" ng-click="skipForward(step.id)">
                 <span class="step">{{step.id}}</span>
                 <span class="title">{{step.title}}</span>
             </li>
@@ -37,13 +37,19 @@
                     Prev
                 </button>
             </div>
-            <button ng-click="stepForward()" class="btn btn-success btn-next">
-                <span ng-if="currentStep<steps.length">
+            <span ng-if="currentStep<steps.length">
+                <button ng-click="stepForward()" class="btn btn-success btn-next">
                     Next
                     <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                </span>
-                <span ng-if="currentStep==steps.length">Deploy</span>
-            </button>
+                </button>
+            </span>
+
+            <span ng-if="currentStep==steps.length">
+                <button ng-click="deploy()" class="btn btn-success btn-next">
+                    <span>Deploy</span>
+                </button>
+            </span>
+
         </div>
     </div>
 </div>
