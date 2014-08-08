@@ -3,7 +3,8 @@ angular.module('compass.wizard', [
     'ui.bootstrap',
     'ngTable',
     'compass.charts',
-    'ngDragDrop'
+    'ngDragDrop',
+    'ngTouch'
 ])
 
 .config(function config($stateProvider) {
@@ -47,8 +48,9 @@ angular.module('compass.wizard', [
         });
     }
 
-    // current step for create-cluster wizard
     $scope.currentStep = 1;
+    $scope.pendingStep = 1;
+    $scope.maxStep = 1;
 
     // get the wizard steps for create-cluster
     dataService.getWizardSteps().success(function(data) {
@@ -56,75 +58,138 @@ angular.module('compass.wizard', [
         $scope.steps = data["os_and_ts"];
         wizardFactory.setSteps($scope.steps);
 
-        // change ui steps css if currentStep changes
-        $scope.$watch('currentStep', function(newStep, oldStep) {
-            if (newStep > 0 && newStep <= $scope.steps.length) {
-                if (newStep > oldStep) {
-                    $scope.steps[newStep - 1].state = "active";
-                    for (var i = 0; i < newStep - 1; i++)
-                        $scope.steps[i].state = "complete";
-                } else if (newStep < oldStep) {
-                    $scope.steps[newStep - 1].state = "active";
-                    for (var j = newStep; j < $scope.steps.length; j++)
-                        $scope.steps[j].state = "";
+        $scope.$watch('pendingStep', function(newStep, oldStep) {
+            if (newStep != oldStep) {
+                if ($scope.pendingStep <= $scope.maxStep + 1) {
+                    if ((($scope.pendingStep == 6 || $scope.pendingStep == 7) && $scope.steps[2].state == "incomplete") || (($scope.pendingStep == 7 || $scope.pendingStep == 8) && $scope.steps[5].state == "incomplete") || ($scope.pendingStep == 8 && $scope.steps[6].state == "incomplete")) {
+                        alert("Please make sure pre-requisite steps are complete.");          
+                        previousStepsComplete = false;
+                        $scope.pendingStep = $scope.currentStep;
+                    } else {
+                        var previousStepsComplete = true;
+                        if (oldStep != 8 && previousStepsComplete == true) {
+                            var commitState = {
+                                "name": $scope.steps[oldStep - 1].name,
+                                "state": "triggered",
+                                "message": ""
+                            };
+                            wizardFactory.setCommitState(commitState);
+                        } else if (previousStepsComplete == true) {
+                            $scope.updateStepProgress($scope.pendingStep, $scope.currentStep);
+                            $scope.currentStep = $scope.pendingStep;
+                        }
+                    }
+                } else {
+                    alert("Please complete previous steps first");
+                    $scope.pendingStep = $scope.currentStep;
                 }
             }
         });
 
-        // go to next step
-        $scope.stepForward = function() {
-            // trigger commit for current step
-            var commitState = {
-                "name": $scope.steps[$scope.currentStep - 1].name,
-                "state": "triggered",
-                "message": ""
-            };
-            wizardFactory.setCommitState(commitState);
-
-            // watch commit state change
-            $scope.$watch(function() {
-                return wizardFactory.getCommitState()
-            }, function(newCommitState, oldCommitState) {
-                if (newCommitState != oldCommitState) {
-                    if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
-                        console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
-                        $scope.next();
-                    } else if (newCommitState.state == "error") {
-                        // TODO: error handling / display error message
-                        console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
+        // Watch commit state change
+        $scope.$watch(function() {
+            return wizardFactory.getCommitState()
+        }, function(newCommitState, oldCommitState) {
+            if ((newCommitState != oldCommitState) && (newCommitState.name == $scope.steps[$scope.currentStep - 1].name)) {
+                if (newCommitState.state == "success") {
+                    console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
+                    if (newCommitState.name == "review") {
+                        $state.go("cluster.overview", {
+                            'id': $scope.cluster.id
+                        });
                     }
+                    $scope.updateStepProgress($scope.pendingStep, $scope.currentStep);
+                    $scope.currentStep = $scope.pendingStep;
+                    if ($scope.currentStep > $scope.maxStep) {
+                        $scope.maxStep = $scope.currentStep;
+                    }
+                } else if (newCommitState.state == "error") {
+                    $scope.pendingStep = $scope.currentStep;
+                    // TODO: error handling / display error message
+                    console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 }
+            }
+        })
 
-            })
+        // Updates CSS Classes on Step state change
+        $scope.updateStepProgress = function(newStep, oldStep) {
+            $scope.steps[newStep - 1].state = "active";
+            $scope.steps[oldStep - 1].state = "complete";
+            if (newStep == 1) {
+                if ($scope.maxStep > 2) {
+                    $scope.steps[2].state = "incomplete";
+                }
+                if ($scope.maxStep > 5) {
+                    $scope.steps[5].state = "incomplete";
+                }
+                if ($scope.maxStep > 6) {
+                    $scope.steps[6].state = "incomplete";
+                }
+            }
+            if (newStep == 3) {
+                if ($scope.maxStep > 5) {
+                    $scope.steps[5].state = "incomplete";
+                }
+                if ($scope.maxStep > 6) {
+                    $scope.steps[6].state = "incomplete";
+                }
+                return;
+            }
+            if (newStep == 6) {
+                if ($scope.maxStep > 6) {
+                    $scope.steps[6].state = "incomplete";
+                }
+                return;
+            }
+            if (oldStep == 8) {
+                $scope.steps[7].state = "";
+                return;
+            }
         };
 
-        $scope.next = function() {
-            if ($scope.currentStep < $scope.steps.length)
-                $scope.currentStep = $scope.currentStep + 1;
-            else if ($scope.currentStep == $scope.steps.length) {
-                $state.go("cluster.overview", {
-                    'id': $scope.cluster.id
-                });
+        $scope.stepForward = function() {
+            if ($scope.currentStep != $scope.steps.length) {
+                if ($scope.pendingStep < $scope.steps.length)
+                    $scope.pendingStep = $scope.pendingStep + 1;
             }
-        }
+        };
 
         // go to previous step
         $scope.stepBackward = function() {
-            if ($scope.currentStep > 1) {
-                $scope.currentStep = $scope.currentStep - 1;
+            if ($scope.pendingStep > 1) {
+                $scope.pendingStep = $scope.pendingStep - 1;
             }
         };
 
         // go to step by stepId
-        $scope.goToStep = function(stepId) {
-            $scope.currentStep = stepId;
+        $scope.skipForward = function(stepId) {
+            $scope.pendingStep = stepId;
         };
+
+        $scope.deploy = function() {
+            var wizard_complete = true;
+            for (var i = 0; i < $scope.steps.length; i++)
+                if ($scope.steps[i].state == "incomplete") {
+                    wizard_complete = false;
+                }
+
+            if (wizard_complete == true) {
+                var commitState = {
+                    "name": $scope.steps[$scope.currentStep - 1].name,
+                    "state": "triggered",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
+            } else {
+                alert("Please finish incomplete steps.");
+            }
+        }
+
     });
 
     dataService.getSubnetConfig().success(function(data) {
         wizardFactory.setSubnetworks(data);
     });
-
 })
 
 .controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
@@ -216,7 +281,12 @@ angular.module('compass.wizard', [
         })
         if (noSelection) {
             alert("Please select at least one server");
-            wizardFactory.setCommitState({});
+            var commitState = {
+                "name": "sv_selection",
+                "state": "error",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
         } else {
             wizardFactory.setServers(selectedServers);
             wizardFactory.setAllMachinesHost($scope.allservers);
