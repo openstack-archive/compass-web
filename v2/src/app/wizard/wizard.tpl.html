@@ -46,4 +46,24 @@
             </button>
         </div>
     </div>
+
+    <div ng-repeat="alert in alerts" class="popup-alert">
+        <div class="gritter-item-wrapper gritter-error gritter-center">
+            <div class="gritter-top"></div>
+            <div class="gritter-item message">
+                <div class="gritter-close action pull-right" ng-click="alerts.splice($index, 1)"></div>
+                <div class="clearfix"></div>
+                <div class="gritter-without-image">
+                    <p>
+                        <span ng-if="!alert.message">Error</span>
+                        <span ng-if="alert.message">{{alert.message}}</span>
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="gritter-bottom">
+            </div>
+        </div>
+    </div>
+
 </div>

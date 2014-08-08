@@ -1,4 +1,5 @@
 <div class="side-padding-40">
+    <div class="space-2"></div>
     <div class="row">
         <div class="col-md-5 no-padding-left">
             <h1 class="blue-header">
@@ -16,10 +17,15 @@
         <div class="col-md-7 no-padding-right" style="margin-top:20px">
             <span ng-include="'src/app/cluster/cluster-create.tpl.html'"></span>
             <span ng-controller="createClusterCtrl" class="pull-right">
-                <button ng-click="open()" class="btn btn-info btn-create">
+                <!--button ng-click="open()" class="btn btn-primary no-border radius-4 btn-create">
                     <i class="glyphicon glyphicon-plus"></i>
                     Create New Cluster
-                </button>
+                </button-->
+                <button ng-click="open()" class="btn btn-app btn-sm btn-primary radius-4 btn-create">
+                    <!--i class="ace-icon fa fa-plus bigger-200"></i-->
+                    <i class="glyphicon glyphicon-plus"></i>
+                    New Cluster
+                </button>                
             </span>
         </div>
     </div>
@@ -95,10 +101,44 @@
                         </td>
                         <td>
                             <span ng-if="cluster.progress">
-                                Total: {{cluster.progress.total_hosts}} <br>
+                                <table>
+                                    <tr>
+                                        <td class="pull-right">
+                                            {{cluster.progress.total_hosts}}
+                                        </td>
+                                        <td class="padding-left-15">
+                                            Total Hosts
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pull-right">
+                                            {{cluster.progress.installing_hosts}}
+                                        </td>
+                                        <td class="padding-left-15">
+                                            Installing Hosts
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pull-right">
+                                            {{cluster.progress.completed_hosts}}
+                                        </td>
+                                        <td class="padding-left-15">
+                                            Completed Hosts
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pull-right">
+                                            {{cluster.progress.failed_hosts}}
+                                        </td>
+                                        <td class="padding-left-15">
+                                            Failed Hosts
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!--Total:  <br>
                                 Installing: {{cluster.progress.installing_hosts}} <br>
                                 Completed: {{cluster.progress.completed_hosts}} <br>
-                                Failed: {{cluster.progress.failed_hosts}}
+                                Failed: {{cluster.progress.failed_hosts}}-->
                             </span>
                         </td>
                         <td sortable="'distributed_system_name'">

@@ -35,7 +35,6 @@ angular.module('compass.wizard', [
 
 .controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, clusterData, machinesHostsData) {
     $scope.clusterId = $stateParams.id;
-
     $scope.cluster = clusterData;
     wizardFactory.setClusterInfo($scope.cluster);
     wizardFactory.setAllMachinesHost(machinesHostsData);
@@ -58,15 +57,17 @@ angular.module('compass.wizard', [
 
         // change ui steps css if currentStep changes
         $scope.$watch('currentStep', function(newStep, oldStep) {
-            if (newStep > 0 && newStep <= $scope.steps.length) {
-                if (newStep > oldStep) {
-                    $scope.steps[newStep - 1].state = "active";
-                    for (var i = 0; i < newStep - 1; i++)
-                        $scope.steps[i].state = "complete";
-                } else if (newStep < oldStep) {
-                    $scope.steps[newStep - 1].state = "active";
-                    for (var j = newStep; j < $scope.steps.length; j++)
-                        $scope.steps[j].state = "";
+            if(newStep != oldStep) {
+                if (newStep > 0 && newStep <= $scope.steps.length) {
+                    if (newStep > oldStep) {
+                        $scope.steps[newStep - 1].state = "active";
+                        for (var i = 0; i < newStep - 1; i++)
+                            $scope.steps[i].state = "complete";
+                    } else if (newStep < oldStep) {
+                        $scope.steps[newStep - 1].state = "active";
+                        for (var j = newStep; j < $scope.steps.length; j++)
+                            $scope.steps[j].state = "";
+                    }
                 }
             }
         });
@@ -89,12 +90,14 @@ angular.module('compass.wizard', [
                     if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
                         console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
                         $scope.next();
+                        $scope.alert = "";
                     } else if (newCommitState.state == "error") {
                         // TODO: error handling / display error message
                         console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
+                        $scope.alerts = [];
+                        $scope.alerts.push(newCommitState.message);
                     }
                 }
-
             })
         };
 
@@ -348,7 +351,7 @@ angular.module('compass.wizard', [
             var commitState = {
                 "name": "os_global",
                 "state": "error",
-                "message": response.statusText
+                "message": response.data
             };
             wizardFactory.setCommitState(commitState);
         });
@@ -712,8 +715,14 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
+        }).error(function(response) {
+            var commitState = {
+                "name": "partition",
+                "state": "error",
+                "message": response
+            };
+            wizardFactory.setCommitState(commitState);
         });
-        //TODO: error handling
     };
 })
 
@@ -782,7 +791,6 @@ angular.module('compass.wizard', [
         $scope.mReset();
     }
 
-
     $scope.mReset = function() {
         $scope.management_credentials = angular.copy($scope.originalMangementData);
     }
@@ -842,6 +850,13 @@ angular.module('compass.wizard', [
                 "name": "security",
                 "state": "success",
                 "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+        }).error(function(response) {
+            var commitState = {
+                "name": "security",
+                "state": "error",
+                "message": response
             };
             wizardFactory.setCommitState(commitState);
         });
@@ -1037,7 +1052,7 @@ angular.module('compass.wizard', [
             var commitState = {
                 "name": "role_assign",
                 "state": "error",
-                "message": response.statusText
+                "message": response.data
             };
             wizardFactory.setCommitState(commitState);
         });
@@ -1108,8 +1123,14 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
+        }).error(function(response) {
+            var commitState = {
+                "name": "network_mapping",
+                "state": "error",
+                "message": response
+            };
+            wizardFactory.setCommitState(commitState);
         });
-        //TODO: error handling
     };
 })
 
