@@ -412,6 +412,7 @@ angular.module('compass.wizard', [
                         return item[orderByColumn];
                     }
                 }, reverse) : $scope.servers;
+            $scope.servers = orderedData;
 
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
@@ -956,6 +957,7 @@ angular.module('compass.wizard', [
                         return item[orderByColumn];
                     }
                 }, reverse) : $scope.servers;
+            $scope.servers = orderedData;
 
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
