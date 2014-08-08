@@ -3,7 +3,9 @@ angular.module('compass.wizard', [
     'ui.bootstrap',
     'ngTable',
     'compass.charts',
-    'ngDragDrop'
+    'ngDragDrop',
+    'ngTouch',
+    'angularSpinner'
 ])
 
 .config(function config($stateProvider) {
@@ -33,7 +35,8 @@ angular.module('compass.wizard', [
         });
 })
 
-.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, clusterData, machinesHostsData) {
+.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, clusterData, machinesHostsData, usSpinnerService) {
+
     $scope.clusterId = $stateParams.id;
     $scope.cluster = clusterData;
     wizardFactory.setClusterInfo($scope.cluster);
@@ -46,8 +49,22 @@ angular.module('compass.wizard', [
         });
     }
 
-    // current step for create-cluster wizard
     $scope.currentStep = 1;
+    $scope.pendingStep = 1;
+    $scope.maxStep = 1;
+
+    // Functions used only in HTML
+    $scope.startSpin = function() {
+        usSpinnerService.spin('spinner-1');
+    }
+
+    $scope.stopSpin = function() {
+        usSpinnerService.stop('spinner-1');
+    }
+    $scope.testSpinClick = function() {
+        //usSpinnerService.stop('spinner-1');
+        usSpinnerService.spin('spinner-1');
+    }
 
     // get the wizard steps for create-cluster
     dataService.getWizardSteps().success(function(data) {
@@ -55,19 +72,37 @@ angular.module('compass.wizard', [
         $scope.steps = data["os_and_ts"];
         wizardFactory.setSteps($scope.steps);
 
-        // change ui steps css if currentStep changes
-        $scope.$watch('currentStep', function(newStep, oldStep) {
-            if(newStep != oldStep) {
-                if (newStep > 0 && newStep <= $scope.steps.length) {
-                    if (newStep > oldStep) {
-                        $scope.steps[newStep - 1].state = "active";
-                        for (var i = 0; i < newStep - 1; i++)
-                            $scope.steps[i].state = "complete";
-                    } else if (newStep < oldStep) {
-                        $scope.steps[newStep - 1].state = "active";
-                        for (var j = newStep; j < $scope.steps.length; j++)
-                            $scope.steps[j].state = "";
+        $scope.$watch('pendingStep', function(newStep, oldStep) {
+            if (newStep != oldStep) {
+                if ($scope.pendingStep <= $scope.maxStep + 1) {
+                    if ((($scope.pendingStep == 6 || $scope.pendingStep == 7) && $scope.steps[2].state == "incomplete") || (($scope.pendingStep == 7 || $scope.pendingStep == 8) && $scope.steps[5].state == "incomplete") || ($scope.pendingStep == 8 && $scope.steps[6].state == "incomplete")) {
+                        usSpinnerService.stop('spinner-1');
+                        alert("Please make sure pre-requisite steps are complete.");
+                        previousStepsComplete = false;
+                        $scope.pendingStep = $scope.currentStep;
+                        return;
+                    } else {
+                        var previousStepsComplete = true;
+                        //usSpinnerService.spin('spinner-1');
+                        if (previousStepsComplete == true) {
+                            if (oldStep != 8) {
+                                var commitState = {
+                                    "name": $scope.steps[oldStep - 1].name,
+                                    "state": "triggered",
+                                    "message": ""
+                                };
+                                wizardFactory.setCommitState(commitState);
+                            } else {
+                                $scope.updateStepProgress($scope.pendingStep, $scope.currentStep);
+                                $scope.currentStep = $scope.pendingStep;
+                                //usSpinnerService.stop('spinner-1');
+                            }
+                        }
                     }
+                } else {
+                    usSpinnerService.stop('spinner-1');
+                    alert("Please complete previous steps first");
+                    $scope.pendingStep = $scope.currentStep;
                 }
             }
         });
@@ -81,62 +116,139 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
-
-            // watch commit state change
-            $scope.$watch(function() {
-                return wizardFactory.getCommitState()
-            }, function(newCommitState, oldCommitState) {
-                if (newCommitState != oldCommitState) {
-                    if (newCommitState.name == $scope.steps[$scope.currentStep - 1].name && newCommitState.state == "success") {
-                        console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
-                        $scope.next();
-                        $scope.alert = "";
-                    } else if (newCommitState.state == "error") {
-                        // TODO: error handling / display error message
-                        console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
-                        $scope.alerts = [];
-                        $scope.alerts.push(newCommitState.message);
-                    }
-                }
-            })
         };
 
-        $scope.next = function() {
-            if ($scope.currentStep < $scope.steps.length)
-                $scope.currentStep = $scope.currentStep + 1;
-            else if ($scope.currentStep == $scope.steps.length) {
-                $state.go("cluster.overview", {
-                    'id': $scope.cluster.id
-                });
+        // Watch commit state change
+        $scope.$watch(function() {
+            return wizardFactory.getCommitState()
+        }, function(newCommitState, oldCommitState) {
+            if ((newCommitState != oldCommitState) && (newCommitState.name == $scope.steps[$scope.currentStep - 1].name)) {
+                if (newCommitState.state == "success") {
+                    console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
+                    $scope.alert = "";
+                    if (newCommitState.name == "review") {
+                        $state.go("cluster.overview", {
+                            'id': $scope.cluster.id
+                        });
+                    }
+                    $scope.updateStepProgress($scope.pendingStep, $scope.currentStep);
+                    $scope.currentStep = $scope.pendingStep;
+                    if ($scope.currentStep > $scope.maxStep) {
+                        $scope.maxStep = $scope.currentStep;
+                    }
+                    //usSpinnerService.stop('spinner-1');
+                } else if (newCommitState.state == "error") {
+                    $scope.pendingStep = $scope.currentStep;
+                    // TODO: error handling / display error message
+                    console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
+                    $scope.alerts = [];
+                    $scope.alerts.push(newCommitState.message);
+                    usSpinnerService.stop('spinner-1');
+
+                }
             }
-        }
+        })
+
+
+        // Updates CSS Classes on Step state change
+        $scope.updateStepProgress = function(newStep, oldStep) {
+            $scope.steps[newStep - 1].state = "active";
+            $scope.steps[oldStep - 1].state = "complete";
+            if (newStep == 1) {
+                if ($scope.maxStep > 2) {
+                    $scope.steps[2].state = "incomplete";
+                }
+                if ($scope.maxStep > 5) {
+                    $scope.steps[5].state = "incomplete";
+                }
+                if ($scope.maxStep > 6) {
+                    $scope.steps[6].state = "incomplete";
+                }
+            }
+            if (newStep == 3) {
+                if ($scope.maxStep > 5) {
+                    $scope.steps[5].state = "incomplete";
+                }
+                if ($scope.maxStep > 6) {
+                    $scope.steps[6].state = "incomplete";
+                }
+            }
+            if (newStep == 6) {
+                if ($scope.maxStep > 6) {
+                    $scope.steps[6].state = "incomplete";
+                }
+            }
+            if (oldStep == 8) {
+                $scope.steps[7].state = "";
+            }
+        };
+
+        $scope.stepForward = function() {
+            if ($scope.currentStep == $scope.steps.length) {
+                usSpinnerService.stop('spinner-1');
+            }
+            if ($scope.currentStep != $scope.steps.length) {
+                if ($scope.pendingStep < $scope.steps.length)
+                    $scope.pendingStep = $scope.pendingStep + 1;
+            }
+        };
 
         // go to previous step
         $scope.stepBackward = function() {
-            if ($scope.currentStep > 1) {
-                $scope.currentStep = $scope.currentStep - 1;
+            if ($scope.currentStep == 1) {
+                usSpinnerService.stop('spinner-1');
+            }
+            if ($scope.pendingStep > 1) {
+                $scope.pendingStep = $scope.pendingStep - 1;
+            }
+        };
+        // go to step by stepId
+        $scope.skipForward = function(stepId) {
+            $scope.pendingStep = stepId;
+            if ($scope.pendingStep == $scope.currentStep) {
+                usSpinnerService.stop('spinner-1');
+            }
+
+        };
+
+        $scope.deploy = function() {
+            var wizard_complete = true;
+            for (var i = 0; i < $scope.steps.length; i++)
+                if ($scope.steps[i].state == "incomplete") {
+                    wizard_complete = false;
+                }
+
+            if (wizard_complete == true) {
+                var commitState = {
+                    "name": $scope.steps[$scope.currentStep - 1].name,
+                    "state": "triggered",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
             }
         };
 
-        // go to step by stepId
-        $scope.goToStep = function(stepId) {
-            $scope.currentStep = stepId;
-        };
+
+
     });
+
+
+
 
     dataService.getSubnetConfig().success(function(data) {
         wizardFactory.setSubnetworks(data);
     });
-
 })
 
-.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
+.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, usSpinnerService) {
     $scope.hideunselected = '';
     $scope.search = {};
 
     $scope.cluster = wizardFactory.getClusterInfo();
 
     $scope.allservers = wizardFactory.getAllMachinesHost();
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
@@ -219,11 +331,15 @@ angular.module('compass.wizard', [
         })
         if (noSelection) {
             alert("Please select at least one server");
-            wizardFactory.setCommitState({});
+            var commitState = {
+                "name": "sv_selection",
+                "state": "error",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
         } else {
             wizardFactory.setServers(selectedServers);
             wizardFactory.setAllMachinesHost($scope.allservers);
-
             var commitState = {
                 "name": "sv_selection",
                 "state": "success",
@@ -234,7 +350,7 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('globalCtrl', function($scope, wizardFactory, dataService, $q) {
+.controller('globalCtrl', function($scope, wizardFactory, dataService, $q, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
 
     //For General Section
@@ -249,6 +365,8 @@ angular.module('compass.wizard', [
     if (!$scope.general["no_proxy"]) {
         $scope.general["no_proxy"] = [""];
     }
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.addValue = function(key) {
         $scope.general[key].push("");
@@ -390,7 +508,7 @@ angular.module('compass.wizard', [
     */
 })
 
-.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
+.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.subnetworks = wizardFactory.getSubnetworks();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -399,6 +517,8 @@ angular.module('compass.wizard', [
     dataService.getServerColumns().success(function(data) {
         $scope.server_columns = data.showless;
     });
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
@@ -488,6 +608,7 @@ angular.module('compass.wizard', [
                     "reinstall_os": server.reinstallos
                 });
             }
+            usSpinnerService.stop('spinner-1');
         });
 
         var interfaceCount = Object.keys($scope.interfaces).length;
@@ -653,7 +774,7 @@ angular.module('compass.wizard', [
     }
 })
 
-.controller('partitionCtrl', function($scope, wizardFactory, dataService) {
+.controller('partitionCtrl', function($scope, wizardFactory, dataService, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.partition = wizardFactory.getPartition();
 
@@ -673,7 +794,7 @@ angular.module('compass.wizard', [
         $scope.partitionarray = [];
         var total = 0;
         angular.forEach($scope.partition, function(value, key) {
-            total += parseFloat(value.percentage) ;
+            total += parseFloat(value.percentage);
             $scope.partitionarray.push({
                 "name": key,
                 "number": value.percentage
@@ -694,6 +815,8 @@ angular.module('compass.wizard', [
             }
         }
     });
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.commit = function() {
         var os_partition = {
@@ -720,7 +843,7 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('securityCtrl', function($scope, wizardFactory, dataService) {
+.controller('securityCtrl', function($scope, wizardFactory, dataService, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
@@ -855,9 +978,10 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
         });
     };
+    usSpinnerService.stop('spinner-1');
 })
 
-.controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
+.controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
 
@@ -869,6 +993,8 @@ angular.module('compass.wizard', [
     dataService.getServerColumns().success(function(data) {
         $scope.server_columns = data.showless;
     });
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.selectAllServers = function(flag) {
         if (flag) {
@@ -1053,10 +1179,12 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('networkMappingCtrl', function($scope, wizardFactory, dataService) {
+.controller('networkMappingCtrl', function($scope, wizardFactory, dataService, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.interfaces = wizardFactory.getInterfaces();
     $scope.networking = wizardFactory.getNetworkMapping();
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.pendingInterface = "";
 
@@ -1128,7 +1256,7 @@ angular.module('compass.wizard', [
     };
 })
 
-.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
+.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -1141,6 +1269,8 @@ angular.module('compass.wizard', [
     dataService.getServerColumns().success(function(data) {
         $scope.server_columns = data.review;
     });
+
+    usSpinnerService.stop('spinner-1');
 
     $scope.tabs = [{
         title: 'Database & Queue',
@@ -1239,6 +1369,5 @@ angular.module('compass.wizard', [
             console.warn("Review hosts error: ", data);
         })
         //TODO: error handling
-
     };
 })

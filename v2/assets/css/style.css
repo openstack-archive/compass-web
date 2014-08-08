@@ -549,3 +549,15 @@ div.center-align {
     min-height: 50px;
     padding: 10px;
 }
+.wizard-steps li.complete:before, .wizard-steps li.complete .step {
+     /* border-color: #93cbf9 !important;*/}
+.a.wizard-steps li.active:before, .wizard-steps li.active .step {
+    border-color: #80afd4 !important; 
+    color: #87ba21 !important; 
+    transform: scale(1.25) !important;
+    font-weight: bold;
+}
+li.incomplete:before, li.incomplete .step {
+    border-color: #d15b47 !important; 
+    font-weight: bold;
+}

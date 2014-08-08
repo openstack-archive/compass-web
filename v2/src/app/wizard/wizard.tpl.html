@@ -1,13 +1,14 @@
 <div class="main-content">
-    <div class="page-content">
+    <div class="page-content" ng-swipe-right="startSpin(); stepForward()" ng-swipe-left="startSpin(); stepBackward()">
 
         <div class="page-header">
             <h1>Create Cluster Wizard</h1>
+            <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span>
         </div>
 
         <div id="create-cluster-wizard">
             <ul class="wizard-steps">
-                <li ng-repeat="step in steps" class="{{step.state}}" ng-click="goToStep(step.id)">
+                <li ng-repeat="step in steps" class="{{step.state}}" ng-click="startSpin(); skipForward(step.id)">
                     <span class="step">{{step.id}}</span>
                     <span class="title">{{step.title}}</span>
                 </li>
@@ -65,6 +66,19 @@
                 <div class="gritter-bottom">
                 </div>
             </div>
+
+            <span ng-if="currentStep<steps.length">
+                <button ng-click="startSpin(); stepForward()" class="btn btn-success btn-next">
+                    Next
+                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                </button>
+            </span>
+
+            <span ng-if="currentStep==steps.length">
+                <button ng-click="deploy()" class="btn btn-success btn-next">
+                    <span>Deploy</span>
+                </button>
+            </span>
         </div>
 
     </div>
