@@ -19,7 +19,17 @@ angular.module('compass.cluster', [
             url: '/overview',
             controller: 'clusterProgressCtrl',
             templateUrl: 'src/app/cluster/cluster-overview.tpl.html',
-            authenticate: true
+            authenticate: true,
+            resolve: {
+                clusterhostsData: function($stateParams, $q, dataService) {
+                    var clusterId = $stateParams.id;
+                    var deferred = $q.defer();
+                    dataService.getClusterHostMachines(clusterId).success(function(data) {
+                        deferred.resolve(data);
+                    });
+                    return deferred.promise;
+                }
+            }
         })
         .state('cluster.config', {
             url: '/config',
@@ -92,21 +102,20 @@ angular.module('compass.cluster', [
     }
 })
 
-.controller('clusterProgressCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, $timeout, $modal) {
+.controller('clusterProgressCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData) {
     var clusterId = $stateParams.id;
     var progressTimer;
     var fireTimer = true;
+    $scope.hosts = clusterhostsData;
 
     var getClusterProgress = function() {
         dataService.getClusterProgress(clusterId).success(function(data) {
             $scope.clusterProgress = data;
-            //if ($scope.clusterProgress.state == "INSTALLING") {
             if (fireTimer) {
                 progressTimer = $timeout(getClusterProgress, 5000);
             }
-            //}
         });
-    }
+    };
 
     getClusterProgress();
 
@@ -114,30 +123,27 @@ angular.module('compass.cluster', [
         $scope.server_columns = data.progress;
     });
 
-    dataService.getClusterHostMachines(clusterId).success(function(data) {
-        $scope.hosts = data;
 
-        $scope.tableParams = new ngTableParams({
-            page: 1, // show first page
-            count: $scope.hosts.length + 1 // count per page
-        }, {
-            counts: [], // hide count-per-page box
-            total: $scope.hosts.length, // length of data
-            getData: function($defer, params) {
-                // use build-in angular filter
-                var orderedData = params.sorting() ?
-                    $filter('orderBy')($scope.hosts, params.orderBy()) : $scope.hosts;
+    $scope.tableParams = new ngTableParams({
+        page: 1, // show first page
+        count: $scope.hosts.length + 1 // count per page
+    }, {
+        counts: [], // hide count-per-page box
+        total: $scope.hosts.length, // length of data
+        getData: function($defer, params) {
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                $filter('orderBy')($scope.hosts, params.orderBy()) : $scope.hosts;
 
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
-        });
-
-        $scope.deleteHost = function(index) {
-            dataService.deleteHost($scope.hosts[index].id)
-            $scope.hosts.splice(index, 1);
-            $scope.tableParams.reload();
-        };
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
     });
+
+    $scope.deleteHost = function(index) {
+        dataService.deleteHost($scope.hosts[index].id)
+        $scope.hosts.splice(index, 1);
+        $scope.tableParams.reload();
+    };
 
     $scope.selectAllServers = function(flag) {
         if (flag) {
