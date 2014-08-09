@@ -460,18 +460,6 @@ angular.module('compass.wizard', [
         })
     };
 
-    $scope.$watch('addInterfacePanel', function(value) {
-        if (!$scope.addInterfacePanel.isCollapsed) {
-            $scope.autoFillPanel.isCollapsed = true;
-        }
-    }, true);
-
-    $scope.$watch('autoFillPanel', function(value) {
-        if (!$scope.autoFillPanel.isCollapsed) {
-            $scope.addInterfacePanel.isCollapsed = true;
-        }
-    }, true);
-
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
@@ -683,12 +671,18 @@ angular.module('compass.wizard', [
 
     $scope.$watch('partition', function() {
         $scope.partitionarray = [];
+        var total = 0;
         angular.forEach($scope.partition, function(value, key) {
+            total += parseFloat(value.percentage) ;
             $scope.partitionarray.push({
                 "name": key,
                 "number": value.percentage
             });
         });
+        $scope.partitionarray.push({
+            "name": "others",
+            "number": 100 - total
+        })
     }, true);
 
     $scope.$watch(function() {

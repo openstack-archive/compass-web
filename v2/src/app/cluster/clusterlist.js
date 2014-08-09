@@ -9,7 +9,7 @@ var app = angular.module('compass.clusterlist', [
         .state('clusterList', {
             url: '/clusterlist',
             controller: 'clustersListCtrl',
-            templateUrl: 'src/app/cluster/cluster-list.tpl.html',
+            templateUrl: 'src/app/cluster/cluster-all.tpl.html',
             authenticate: true,
             resolve: {
                 allClusterData: function($q, dataService) {
@@ -23,16 +23,16 @@ var app = angular.module('compass.clusterlist', [
         });
 })
 
-.controller('clustersListCtrl', function($scope, ngTableParams, $filter, dataService, allClusterData) {
-    var clusters = allClusterData
-    angular.forEach(clusters, function(cluster) {
+.controller('clustersListCtrl', function($scope, $state, ngTableParams, $filter, dataService, allClusterData) {
+    $scope.clusters = allClusterData
+    angular.forEach($scope.clusters, function(cluster) {
         dataService.getClusterProgress(cluster.id).success(function(data) {
             cluster.progress = data.status;
             cluster.state = data.state;
         });
     });
 
-    var data = clusters;
+    var data = $scope.clusters;
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
         count: 10, // count per page
@@ -46,6 +46,16 @@ var app = angular.module('compass.clusterlist', [
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
     });
+
+    $scope.goToCluster = function(id, state) {
+        if (state == "UNINITIALIZED") {
+            $state.go("wizard", {"id": id, "config": "true"});
+        } else {
+            $state.go("cluster.overview", {
+                "id": id
+            });
+        }
+    };
 
     //button alerts
 

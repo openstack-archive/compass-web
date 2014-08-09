@@ -36,7 +36,7 @@
             </span>
             <!-- Column Show / Hide button -->
             <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-white btn-default dropdown-toggle">
+                <button type="button" class="btn btn-default dropdown-toggle">
                     Column Show / Hide
                     <span class="ace-icon fa fa-caret-down icon-on-right"></span>
                 </button>
@@ -51,16 +51,16 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="pull-right">
             <span>
                 <input type="text" placeholder="HA VIP" ng-model="ha_vip">
             </span>
-        </div>
-        <div class="pull-right">
+            <button class="btn btn-sm btn-info" ng-init="autoAssignRoles.isCollapsed = true;" ng-click="autoAssignRoles.isCollapsed = !autoAssignRoles.isCollapsed">
+                Auto Assign&nbsp;
+                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoAssignRoles.isCollapsed}"></i>
+            </button>
             <div class="btn-group" dropdown>
-                <button class="btn btn-sm btn-info" ng-init="autoAssignRoles.isCollapsed = true;" ng-click="autoAssignRoles.isCollapsed = !autoAssignRoles.isCollapsed">
-                    Auto Assign&nbsp;
-                    <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoAssignRoles.isCollapsed}"></i>
-                </button>
                 <button type="button" class="btn btn-sm btn-info dropdown-toggle">
                     Manually Assign&nbsp;
                     <span class="ace-icon fa fa-caret-down icon-on-right"></span>
@@ -76,6 +76,7 @@
         </div>
     </div>
     <div class="row">
+        <div class="space-6"></div>
         <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>
                 <tr>

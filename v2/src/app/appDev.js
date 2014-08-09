@@ -742,6 +742,44 @@ compassAppDev.run(function($httpBackend, settings, $http) {
 
     });
 
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/metadata/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var metadata = {
+            "os_config": {
+                "general": {
+                    "domain": {
+                        "_self": {
+                            "default_value": "ods.com"
+                        }                        
+                    },
+                    "default_gateway": {
+                        "_self": {
+                            "default_value": "172.19.100.1"
+                        }
+                    },
+                    "search_path": {
+                        "_self": {
+                            "default_value": ["ods.com"]
+                        }
+                    },
+                    "ntp_server": {
+                        "_self": {
+                            "default_value": "10.192.88.40"
+                        }
+                    },
+                    "dns_servers": {
+                        "_self": {
+                            "default_value": ["10.192.8.1"]
+                        }
+                    }
+
+                }
+            }
+        };
+        return [200, metadata, {}];
+
+    });
+
     $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*/).respond(function(method, url, data) {
         console.log(method, url, data);
         var host_config = JSON.parse(data);
