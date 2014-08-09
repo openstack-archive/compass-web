@@ -122,6 +122,10 @@ angular.module('compass.services', [])
             return $http.put(settings.apiUrlBase + '/clusters/' + id + '/config', angular.toJson(config));
         };
 
+        this.getClusterMetadata = function(id) {
+            return $http.get(settings.apiUrlBase + '/clusters/' + id + '/metadata');
+        };
+
         this.getSubnetConfig = function() {
             return $http.get(settings.apiUrlBase + '/subnets');
         };

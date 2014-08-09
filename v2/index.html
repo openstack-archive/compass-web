@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="vendor/rickshaw/rickshaw.min.css" />
 
     <link rel="stylesheet" type="text/css" href="assets/css/ace.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/ace-skins.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/ace-fonts.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
@@ -42,14 +43,16 @@
 </head>
 
 <body ng-app="compass" ng-controller="appController">
-    <div ng-if="isAuthenticated">
+    <div ng-if="isAuthenticated && !state.includes('login')">
         <div ng-controller="topnavCtrl">
             <div topnav></div>
         </div>
     </div>
 
     <div class="main-container no-skin">
-        <div ui-view></div>
+
+            <div ui-view></div>
+
     </div>
 
 </body>

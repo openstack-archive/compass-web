@@ -1,27 +1,27 @@
 <div ng-controller="networkCtrl">
     <div class="row">
-        <div collapse="addInterfacePanel.isCollapsed" class="dashed-panel">
-            <span class="action pull-right" ng-click="addInterfacePanel.isCollapsed = true;">
+        <div collapse="autoFillPanel.isCollapsed" class="dashed-panel">
+            <span class="action pull-right" ng-click="autoFillPanel.isCollapsed = true;">
                 <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
             </span>
             <div class="clearfix"></div>
             <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-8">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <h4>Interfaces Management</h4>
                     <table class="table table-hover nowrap">
                         <thead>
                             <tr>
                                 <th>Interface</th>
                                 <th>Subnet</th>
                                 <th>Is Mgmt Network</th>
-                                <th>Promisc Mode</th>
+                                <th>Promisc</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody ng-init="network={};">
                             <tr>
                                 <td>
-                                    <input type="text" ng-model="newInterface.name" placeholder="Interface" required />
+                                    <input class="input-small" type="text" ng-model="newInterface.name" placeholder="Interface" required />
                                 </td>
                                 <td>
                                     <select ng-model="newInterface.subnet_id" class="max-width-200">
@@ -33,9 +33,9 @@
                                 <td>-</td>
                                 <td>-</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-info" ng-click="addInterface(newInterface)">
-                                        Add
-                                    </button>
+                                    <span ng-click="addInterface(newInterface)" class="action">
+                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                    </span>
                                 </td>
                             </tr>
                             <tr ng-repeat="(name, value) in interfaces">
@@ -61,25 +61,17 @@
                                 </td>
                                 <td>
                                     <!--Remove Action-->
-                                    <button class="btn btn-xs" ng-click="deleteInterface(name)"><i class="fa fa-trash-o bigger-120"></i>
-                                    </button>
+                                    <span class="action" ng-click="deleteInterface(name)">
+                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="space-10"></div>
                 </div>
-                <div class="col-lg-2"></div>
-            </div>
-        </div>
-        <div collapse="autoFillPanel.isCollapsed" class="dashed-panel">
-            <span class="action pull-right" ng-click="autoFillPanel.isCollapsed = true;">
-                <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
-            </span>
-            <div class="clearfix"></div>
-            <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-8">
-
+                <div class="col-lg-6 col-md-6 col-sm-6 autofill-section">
+                    <h4>Autofill</h4>
                     <form role="form" class="form-horizontal ng-pristine ng-valid" id="autoForm">
                         <div class="form-group">
                             <div>
@@ -87,7 +79,7 @@
                                     Hostname
                                 </label>
                                 <div class="col-sm-9">
-                                    <select id="hostname-rule" class="col-xs-10 col-sm-5 ng-pristine ng-valid">
+                                    <select id="hostname-rule" class="input-medium ng-pristine ng-valid">
                                         <option value="host">Host</option>
                                         <option value="switch_ip">Switch IP</option>
                                     </select>
@@ -99,7 +91,7 @@
                                 {{name}}&nbsp;IP
                             </label>
                             <div class="col-sm-9">
-                                <input id="{{name}}-ipstart" type="text" placeholder="IP Start">
+                                <input id="{{name}}-ipstart" type="text" class="input-medium" placeholder="IP Start">
                                 <select id="{{name}}-increase-num">
                                     <option value="1">Increase by 1</option>
                                     <option value="2">Increase by 2</option>
@@ -115,9 +107,10 @@
                             </button>
                         </div>
                     </form>
+                    <div class="space-10"></div>
                 </div>
-                <div class="col-lg-2"></div>
             </div>
+            <div class="space-10"></div>
         </div>
     </div>
     <div class="row">
@@ -129,7 +122,7 @@
             </span>
             <!-- Column Show / Hide button -->
             <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-white btn-default dropdown-toggle">
+                <button type="button" class="btn btn-default dropdown-toggle">
                     Column Show / Hide
                     <span class="ace-icon fa fa-caret-down icon-on-right"></span>
                 </button>
@@ -146,10 +139,6 @@
             </div>
         </div>
         <div class="pull-right">
-            <button class="btn btn-sm btn-info" ng-init="addInterfacePanel.isCollapsed = true;" ng-click="addInterfacePanel.isCollapsed = !addInterfacePanel.isCollapsed">
-                Add Interface&nbsp;&nbsp;
-                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !addInterfacePanel.isCollapsed}"></i>
-            </button>
             <button class="btn btn-sm btn-info" ng-init="autoFillPanel.isCollapsed = true;" ng-click="autoFillPanel.isCollapsed = !autoFillPanel.isCollapsed">
                 Autofill&nbsp;&nbsp;
                 <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
@@ -157,6 +146,7 @@
         </div>
     </div>
     <div class="row">
+        <div class="space-6"></div>
         <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>
                 <tr>

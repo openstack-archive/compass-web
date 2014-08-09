@@ -35,6 +35,7 @@ app.run(function($rootScope, $state, authService) {
 app.controller('appController', function($scope, authService, $state) {
     $scope.currentUser = null;
     $scope.isAuthenticated = authService.isAuthenticated;
+    $scope.state = $state;
 
     $scope.$watch(function() {
         return authService.isAuthenticated
