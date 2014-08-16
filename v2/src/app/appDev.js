@@ -23,18 +23,37 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display": "OpenStack",
             "os_installer": "cobbler",
             "package_installer": "chef",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
+            "flavors": [{
+                "display_name": "allinone",
+                "id": 1,
+                "name": "allinone",
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }]
             }, {
-                "display_name": "Controller",
-                "name": "os-controller"
-            }, {
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
+                "display_name": "multiroles",
+                "id": 2,
+                "name": "multiroles",
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }]
             }],
             "supported_oses": [{
                 "name": "CentOs",
@@ -49,20 +68,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display": "Hadoop",
             "os_installer": "cobbler",
             "package_installer": "chef",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
-            }, {
-                "display_name": "Controller",
-                "name": "os-controller"
-            }, {
-                "display_name": "Network",
-                "name": "os-network"
-            }],
             "supported_oses": [{
                 "name": "CentOs",
                 "os_id": 1
-            }]
+            }, {
+                "name": "Ubuntu",
+                "os_id": 2
+            }],
+            "flavors": []
         }];
         return [200, adapters, {}];
     });
@@ -75,18 +88,37 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display": "OpenStack",
             "os_installer": "cobbler",
             "package_installer": "chef",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
+            "flavors": [{
+                "display_name": "allinone",
+                "id": 1,
+                "name": "allinone",
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }]
             }, {
-                "display_name": "Controller",
-                "name": "os-controller"
-            }, {
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
+                "display_name": "multiroles",
+                "id": 2,
+                "name": "multiroles",
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }]
             }],
             "supported_oses": [{
                 "name": "CentOs",
@@ -388,6 +420,22 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "adapter_id": 1,
             "os_id": 1,
             "editable": true,
+            "flavor": {
+                "id": 1,
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }]
+            },
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-26 13:00:00",
@@ -398,6 +446,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         };
         return [201, mockResponse, {}];
     });
+
 
     $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/state/).respond(function(method, url, data) {
         console.log(method, url, data);
@@ -526,7 +575,23 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-26 13:00:00",
-            " links": [{
+            "flavor": {
+                "id": 1,
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }]
+            },
+            "links": [{
                 "href": "/clusters/" + id,
                 "rel": "self"
             }, {

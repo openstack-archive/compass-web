@@ -984,11 +984,7 @@ angular.module('compass.wizard', [
 .controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, usSpinnerService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
-
-    dataService.getAdapter(cluster.adapter_id).success(function(data) {
-        wizardFactory.setAdapter(data);
-        $scope.roles = data.roles;
-    });
+    $scope.roles = cluster.flavor.roles;
 
     dataService.getServerColumns().success(function(data) {
         $scope.server_columns = data.showless;
