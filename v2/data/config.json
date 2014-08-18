@@ -20,12 +20,12 @@
             "is_promiscuous": false
         },
         "eth1": {
-            "subnet_id": 1,
+            "subnet_id": 2,
             "is_mgmt": false,
             "is_promiscuous": true
         },
         "eth2": {
-            "subnet_id": 2,
+            "subnet_id": 1,
             "is_mgmt": false,
             "is_promiscuous": false
         },

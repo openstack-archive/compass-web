@@ -6,15 +6,19 @@
             </span>
             <div class="clearfix"></div>
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <h4>Interfaces Management</h4>
+                <div class="col-sm-12">
+                    <h4>
+                        Autofill IP Address for Each Interface
+                        <button class="btn btn-sm btn-info pull-right" ng-click="openAddSubnetModal()">Add Subnet</button>
+                    </h4>
                     <table class="table table-hover nowrap">
                         <thead>
                             <tr>
                                 <th>Interface</th>
-                                <th>Subnet</th>
                                 <th>Is Mgmt Network</th>
-                                <th>Promisc</th>
+                                <th>Promisc Mode</th>
+                                <th>Subnet</th>
+                                <th>Autofill Rules</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -23,29 +27,25 @@
                                 <td>
                                     <input class="input-small" type="text" ng-model="newInterface.name" placeholder="Interface" required />
                                 </td>
+                                <td></td>
+                                <td></td>
                                 <td>
                                     <select ng-model="newInterface.subnet_id" class="max-width-200">
                                         <option ng-repeat="sub in subnetworks" value="{{sub.id}}">
-                                            {{sub.name}}
+                                            {{sub.subnet}}
                                         </option>
                                     </select>
                                 </td>
-                                <td>-</td>
-                                <td>-</td>
+                                <td></td>
                                 <td>
                                     <span ng-click="addInterface(newInterface)" class="action">
                                         <i class="fa fa-plus-circle bigger-140 blue"></i>
                                     </span>
                                 </td>
                             </tr>
-                            <tr ng-repeat="(name, value) in interfaces">
+                            <tr ng-repeat="(interface_name, value) in interfaces track by $index">
                                 <td>
-                                    {{name}}
-                                </td>
-                                <td>
-                                    <span ng-repeat="sub in subnetworks">
-                                        <span ng-if="sub.id == value.subnet_id">{{sub.name}}</span>
-                                    </span>
+                                    {{interface_name}}
                                 </td>
                                 <td>
                                     <label>
@@ -60,54 +60,50 @@
                                     </label>
                                 </td>
                                 <td>
+                                    <select ng-model="value.subnet_id" class="max-width-200">
+                                        <option ng-repeat="sub in subnetworks" value="{{sub.id}}" ng-selected="sub.id == value.subnet_id">
+                                            {{sub.subnet}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input id="{{interface_name}}-ipstart" type="text" class="input-medium" placeholder="IP Start">
+                                    <select id="{{interface_name}}-increase-num">
+                                        <option value="1">Increase by 1</option>
+                                        <option value="2">Increase by 2</option>
+                                        <option value="3">Increase by 3</option>
+                                        <option value="4">Increase by 4</option>
+                                        <option value="5">Increase by 5</option>
+                                    </select>
+                                </td>
+                                <td>
                                     <!--Remove Action-->
-                                    <span class="action" ng-click="deleteInterface(name)">
+                                    <span class="action" ng-click="deleteInterface(interface_name)">
                                         <i class="fa fa-minus-circle bigger-140 blue"></i>
                                     </span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
                     <div class="space-10"></div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 autofill-section">
-                    <h4>Autofill</h4>
-                    <form role="form" class="form-horizontal ng-pristine ng-valid" id="autoForm">
-                        <div class="form-group">
-                            <div>
-                                <label class="col-sm-3 control-label no-padding-right">
-                                    Hostname
-                                </label>
-                                <div class="col-sm-9">
-                                    <select id="hostname-rule" class="input-medium ng-pristine ng-valid">
-                                        <option value="host">Host</option>
-                                        <option value="switch_ip">Switch IP</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div ng-repeat="(name, value) in interfaces" class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right">
-                                {{name}}&nbsp;IP
-                            </label>
-                            <div class="col-sm-9">
-                                <input id="{{name}}-ipstart" type="text" class="input-medium" placeholder="IP Start">
-                                <select id="{{name}}-increase-num">
-                                    <option value="1">Increase by 1</option>
-                                    <option value="2">Increase by 2</option>
-                                    <option value="3">Increase by 3</option>
-                                    <option value="4">Increase by 4</option>
-                                    <option value="5">Increase by 5</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-offset-4">
-                            <button ng-click="autofill()" class="btn btn-sm btn-primary">
-                                Fill Values
-                            </button>
-                        </div>
-                    </form>
+                    <hr>
                     <div class="space-10"></div>
+
+                    <h4>Autofill Hostname</h4>
+                    <select id="hostname-rule" class="input-large">
+                        <option value="">Please select a pattern</option>
+                        <option value="host">Host</option>
+                        <option value="switch_ip">Switch IP</option>
+                    </select>
+
+                    <div class="space-10"></div>
+
+                    <div class="center">
+                        <button ng-click="autofill()" class="btn btn-sm btn-primary">
+                            Fill Values
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="space-10"></div>
@@ -213,5 +209,53 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div>
+        <script type="text/ng-template" id="addSubnetModal.html">
+        < div class = "modal-header" >
+            < h3 class = "modal-title" >
+            Subnetwork < /h3>
+            </div >
+            < div class = "modal-body" >
+            < alert ng - repeat = "alert in alerts"
+        type = "danger"
+        close = "closeAlert()" > {
+            {
+                alert.message
+            }
+        } < /alert>
+
+                <table class="table table-hover nowrap">
+                    <thead>
+                        <tr>
+                            <th>Subnet</th >
+            < th > Actions < /th>
+                        </tr >
+            < /thead>
+                    <tbody>
+                        <tr ng-repeat="sub in subnetworks">
+                            <td>
+                                <input type="text" ng-model="sub.subnet" placeholder="Subnet" / >
+            < /td>
+                            <td>
+                                <span class="action" ng-click="addSubnetwork()">
+                                    <i class="fa fa-plus-circle bigger-140 blue"></i >
+            < /span>
+
+                                <span ng-show="subnetworks.length > 1" class="action" ng-click="removeSubnetwork($index)">
+                                    <i class="fa fa-minus-circle bigger-140 blue"></i >
+            < /span>
+                            </td >
+            < /tr>
+
+                    </tbody >
+            < /table>
+            </div >
+            < div class = "modal-footer" >
+            < button class = "btn btn-primary"
+        ng - click = "ok()" > OK < /button>
+                <button class="btn btn-grey" ng-click="cancel()">Cancel</button >
+            < /div>
+        </script>
     </div>
 </div>
