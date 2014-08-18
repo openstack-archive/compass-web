@@ -39,27 +39,13 @@
                         Prev
                     </button>
                 </div>
-
-                <span ng-if="currentStep<steps.length">
-                    <button ng-click="startSpin(); stepForward()" class="btn btn-success btn-next">
-                        Next
-                        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                    </button>
-                </span>
-
-                <span ng-if="currentStep==steps.length">
-                    <button ng-click="deploy()" class="btn btn-success btn-next">
-                        <span>Deploy</span>
-                    </button>
-                </span>
-
-                <!--button ng-click="stepForward()" class="btn btn-success btn-next">
+                <button ng-click="stepForward()" class="btn btn-success btn-next">
                     <span ng-if="currentStep<steps.length">
                         Next
                         <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     </span>
                     <span ng-if="currentStep==steps.length">Deploy</span>
-                </button-->
+                </button>
             </div>
         </div>
 
@@ -81,6 +67,18 @@
                 </div>
             </div>
 
+            <span ng-if="currentStep<steps.length">
+                <button ng-click="startSpin(); stepForward()" class="btn btn-success btn-next">
+                    Next
+                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                </button>
+            </span>
+
+            <span ng-if="currentStep==steps.length">
+                <button ng-click="deploy()" class="btn btn-success btn-next">
+                    <span>Deploy</span>
+                </button>
+            </span>
         </div>
 
     </div>
