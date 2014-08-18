@@ -23,6 +23,8 @@ angular.module('compass.login', [
         authService.login(credentials).success(function(data) {
             authService.isAuthenticated = true;
             $state.transitionTo("clusterList");
+        }).error(function(response) {
+            console.log(response);
         })
     }
 })
