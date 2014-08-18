@@ -35,9 +35,7 @@
                 <label class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">Target System</label>
 
                 <div class="col-xs-12 col-sm-5">
-                    <select name="targetsystem" class="width-100" ng-model="cluster.adapter_id" required>
-                        <option value=""></option>
-                        <option ng-repeat="adapter in allAdapters" value="{{adapter.id}}"> {{adapter.display_name}}</option>
+                    <select ng-options="adapter.display_name for adapter in allAdapters" ng-model="cluster.adapter" ng-change="updateSelectedAdapter()" name="targetsystem" class="width-100" required>
                     </select>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> Required </div>
@@ -47,12 +45,19 @@
                 <label class="col-xs-12 col-sm-3 control-label no-padding-right">OS</label>
 
                 <div class="col-xs-12 col-sm-5">
-                    <select name="os" class="width-100" ng-model="cluster.os_id" required>
-                        <option value=""></option>
-                        <option ng-repeat="os in supported_oses" value="{{os.os_id}}"> {{os.name}}</option>
+                    <select ng-options="os.name for os in supported_oses" ng-model="cluster.os" name="os" class="width-100" required>
                     </select>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> Required </div>
+            </div>
+
+            <div class="form-group" ng-hide="flavors.length == 0" ng-class="{'has-error':createClusterForm.flavors.$error.required&& !createClusterForm.flavors.$pristine}">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">Flavor</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <select ng-options="flavor.display_name for flavor in flavors" ng-model="cluster.flavor" name="os" class="width-100">
+                    </select>
+                </div>
             </div>
         </form>
     </div>

@@ -5,6 +5,7 @@ var app = angular.module('compass', [
     'compass.wizard',
     'compass.cluster',
     'compass.clusterlist',
+    'compass.monitoring',
     'compass.server',
     'ui.router',
     'ui.bootstrap',

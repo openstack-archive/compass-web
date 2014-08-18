@@ -17,7 +17,7 @@ angular.module('compass.services', [])
                     app.stateProvider.state(pst.name, {
                         url: pst.url,
                         //controller: pst.controller,
-                        templateUrl: 'src/app/cluster/cluster-' + pst.url.substring(1) + '.tpl.html'
+                        templateUrl: 'src/app/monitoring/' + pst.url.substring(1) + '.tpl.html'
                     });
                 }
                 alreadyExist = false;

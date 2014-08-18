@@ -1,6 +1,6 @@
 <div class="main-content">
-    <div class="page-content" ng-swipe-right="startSpin(); stepForward()" ng-swipe-left="startSpin(); stepBackward()">
-
+    <!--div class="page-content" ng-swipe-right="stepForward()" ng-swipe-left="stepBackward()"-->
+    <div class="page-content">
         <div class="page-header">
             <h1>Create Cluster Wizard</h1>
             <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span>
@@ -8,7 +8,7 @@
 
         <div id="create-cluster-wizard">
             <ul class="wizard-steps">
-                <li ng-repeat="step in steps" class="{{step.state}}" ng-click="startSpin(); skipForward(step.id)">
+                <li ng-repeat="step in steps" class="{{step.state}}" ng-click="skipForward(step.id)">
                     <span class="step">{{step.id}}</span>
                     <span class="title">{{step.title}}</span>
                 </li>
@@ -33,53 +33,45 @@
             <div class="space-10"></div>
 
             <div class="wizard-actions">
-                <div class="inline" ng-class="{'first-prev' : currentStep == 1}">
-                    <button ng-click="stepBackward()" ng-disabled="currentStep==1" class="btn btn-grey btn-prev-spacing" ng-class="{'btn-light' : currentStep == 1}">
-                        <i class="ace-icon fa fa-arrow-left"></i>
-                        Prev
-                    </button>
-                </div>
-                <button ng-click="stepForward()" class="btn btn-success btn-next">
-                    <span ng-if="currentStep<steps.length">
+                <button ng-click="stepBackward()" ng-disabled="currentStep == 1" class="btn btn-grey btn-prev-spacing" ng-class="{'btn-light' : currentStep == 1}">
+                    <i class="ace-icon fa fa-arrow-left"></i>
+                    Prev
+                </button>
+
+                <span ng-if="currentStep < steps.length">
+                    <button ng-click="stepForward()" class="btn btn-success btn-next">
                         Next
                         <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                    </span>
-                    <span ng-if="currentStep==steps.length">Deploy</span>
-                </button>
+                    </button>
+                </span>
+
+                <span ng-if="currentStep == steps.length">
+                    <button ng-click="deploy()" class="btn btn-success btn-next">
+                        <span>Deploy</span>
+                    </button>
+                </span>
             </div>
         </div>
-
-        <div ng-repeat="alert in alerts" class="popup-alert">
-            <div class="gritter-item-wrapper gritter-error gritter-center">
-                <div class="gritter-top"></div>
-                <div class="gritter-item message">
-                    <div class="gritter-close action pull-right" ng-click="alerts.splice($index, 1)"></div>
-                    <div class="clearfix"></div>
-                    <div class="gritter-without-image">
-                        <p>
-                            <span ng-if="!alert.message">Error</span>
-                            <span ng-if="alert.message">{{alert.message}}</span>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="gritter-bottom">
-                </div>
-            </div>
-
-            <span ng-if="currentStep<steps.length">
-                <button ng-click="startSpin(); stepForward()" class="btn btn-success btn-next">
-                    Next
-                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                </button>
-            </span>
-
-            <span ng-if="currentStep==steps.length">
-                <button ng-click="deploy()" class="btn btn-success btn-next">
-                    <span>Deploy</span>
-                </button>
-            </span>
-        </div>
-
     </div>
+</div>
+<div>
+    <script type="text/ng-template" id="messagemodal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="ace-icon fa fa-exclamation-triangle orange"></i>
+                Warning
+            </h3>
+        </div>
+        <div class="modal-body">
+            <span ng-if="warning.message">
+                {{warning.message}}
+            </span>
+            <span ng-if="warning.message === undefined">
+                Error occured.
+            </span>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+    </script>
 </div>
