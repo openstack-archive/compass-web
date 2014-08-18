@@ -78,6 +78,7 @@ angular.module('compass.charts', [])
             clusterstate: '=',
             progressdata: '@'
         },
+        templateUrl: "src/common/progressbar.tpl.html",
         link: function(scope, element, attrs) {
             var hostId = scope.hostid;
             var clusterId = scope.clusterid;
@@ -114,77 +115,7 @@ angular.module('compass.charts', [])
                 fireTimer = false;
                 $timeout.cancel(progressTimer);
             });
-        },
-        templateUrl: "src/common/progressbar.tpl.html"
-    }
-})
-
-.directive('switchrow', function(dataService, $timeout) {
-    return {
-        restrict: 'A',
-        scope: {
-            polling: '=',
-            switchinfo: '=',
-            result: '=',
-            machines: '='
-        },
-        link: function(scope, element, attrs) {
-            var checkSwitchTimer;
-            var checkSwitchCount = 0;
-            //var pollingTriggered = scope.polling;
-            var fireTimer = true;
-
-            var getMachines = function() {
-                dataService.getSwitchMachines(scope.switchinfo.id).success(function(data) {
-                    scope.polling = false;
-                    scope.result = "success";
-                    scope.machines = data;
-                }).error(function(data) {
-                    scope.polling = false;
-                    scope.result = "error";
-                })
-            };
-
-            // check switch state 15 times with the interval of 2 sec
-            var checkSwitchState = function() {
-                checkSwitchCount++;
-                dataService.getSwitchById(scope.switchinfo.id).success(function(data) {
-                    if (data.state == "under_monitoring") {
-                        getMachines();
-                    } else if(data.state === "initialized" || data.state === "repolling")
-                        if (fireTimer && checkSwitchCount < 15) {
-                            checkSwitchTimer = $timeout(checkSwitchState, 2000);
-                        } else {
-                            scope.polling = false;
-                            scope.result = "error";
-                        }
-                    else {
-                        scope.polling = false;
-                        scope.result = "error";
-                    }
-                })
-            };
-
-            scope.$watch('polling', function(newval, oldval) {
-                if(newval != oldval) {
-                    if (newval == true) {
-                        checkSwitchCount = 0;
-                        fireTimer = true;
-
-                        var findingAction = {
-                            "find_machines": null
-                        };
-                        dataService.postSwitchAction(scope.switchinfo.id, findingAction).success(function(data) {
-                            checkSwitchState();
-                        })
-                    }
-                }
-            })
-
-            element.bind('$destroy', function() {
-                fireTimer = false;
-                $timeout.cancel(checkSwitchTimer);
-            });
         }
     }
 })
+

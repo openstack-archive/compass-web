@@ -38,10 +38,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             }],
             "supported_oses": [{
                 "name": "CentOs",
-                "os_id": 1
+                "id": 1
             }, {
                 "name": "Ubuntu",
-                "os_id": 2
+                "id": 2
             }]
         }, {
             "id": 2,
@@ -61,8 +61,12 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             }],
             "supported_oses": [{
                 "name": "CentOs",
-                "os_id": 1
-            }]
+                "id": 1
+            }, {
+                "name": "Ubuntu",
+                "id": 2
+            }],
+            "flavors": []
         }];
         return [200, adapters, {}];
     });
@@ -90,10 +94,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             }],
             "supported_oses": [{
                 "name": "CentOs",
-                "os_id": 1
+                "id": 1
             }, {
                 "name": "Ubuntu",
-                "os_id": 2
+                "id": 2
             }]
         };
         return [200, adapter, {}];
@@ -329,31 +333,31 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var switchId = url.substring(index).split("/")[1];
         var machines = [{
             "id": Math.floor(Math.random() * 100 + 1),
-            "mac": "28.e5.ee.47.14.92",
+            "mac": "28.e5.ee.47.14.11",
             "switch_ip": "172.29.8." + switchId,
             "vlan": "1",
             "port": "11"
         }, {
             "id": Math.floor(Math.random() * 100 + 1),
-            "mac": "28.e5.ee.47.a2.93",
+            "mac": "28.e5.ee.47.a2.22",
             "switch_ip": "172.29.8." + switchId,
             "vlan": "2",
             "port": "12"
         }, {
             "id": Math.floor(Math.random() * 100 + 1),
-            "mac": "28.e5.ee.47.ee.32",
+            "mac": "28.e5.ee.47.ee.33",
             "switch_ip": "172.29.8." + switchId,
             "vlan": "2",
             "port": "13"
         }, {
             "id": Math.floor(Math.random() * 100 + 1),
-            "mac": "28.e5.ee.47.33.66",
+            "mac": "28.e5.ee.47.33.44",
             "switch_ip": "172.29.8." + switchId,
             "vlan": "2",
             "port": "14"
         }, {
             "id": Math.floor(Math.random() * 100 + 1),
-            "mac": "28.e5.ee.47.2c.22",
+            "mac": "28.e5.ee.47.2c.55",
             "switch_ip": "172.29.8." + switchId,
             "vlan": "2",
             "port": "15"
@@ -669,11 +673,11 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url);
         var subnetworks = [{
             "id": 1,
-            "name": "net1",
+            //"name": "10.172.10.0/24",
             "subnet": "10.172.10.0/24"
         }, {
             "id": 2,
-            "name": "net2",
+            //"name": "10.172.20.0/24",
             "subnet": "10.172.20.0/24"
         }];
         return [200, subnetworks, {}];
@@ -790,7 +794,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
         var network = JSON.parse(data);
         network.id = Math.floor((Math.random() * 100) + 1);
-        return [200, network, {}];
+        return [400, network, {}];
     });
 
     $httpBackend.whenPUT(/\.*\/hosts\/[1-9][0-9]*\/networks\/[1-9][0-9]/).respond(function(method, url, data) {

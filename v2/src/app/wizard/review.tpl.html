@@ -218,5 +218,34 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-globe"></i>
+                        OS Global Configurations
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isPartitionCollapsed = !isPartitionCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isPartitionCollapsed, 'fa-chevron-down': isPartitionCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isPartitionCollapsed">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in global_config">
+                                        <td>{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
     </div>
 </div>

@@ -231,6 +231,11 @@ button[disabled] {
 .wizard-steps li.error .title, .wizard-steps li.error .title {
     color: #2b3d53;
 }
+.wizard-steps li.incomplete:before, li.incomplete .step {
+    border-color: #d15b47 !important; 
+    font-weight: bold;
+}
+
 .popup-alert {
     position: fixed;
     z-index: 9;
@@ -282,6 +287,9 @@ button[disabled] {
     font-size: 15px;
     line-height: 1.5;
     padding: 4px 12px;
+}
+.btn-xs {
+    padding: 1px 5px !important;
 }
 .btn-white {
     border-width: 1px !important;
@@ -441,10 +449,6 @@ a:active {
     background-color: #abbac3 !important;
     border-color: #abbac3 !important;
 }
-.first-prev {
-    cursor: not-allowed !important;
-    /* padding: 10px !important; */
-}
 .btn-light {
     cursor: not-allowed !important;
 }
@@ -549,15 +553,4 @@ div.center-align {
     min-height: 50px;
     padding: 10px;
 }
-.wizard-steps li.complete:before, .wizard-steps li.complete .step {
-     /* border-color: #93cbf9 !important;*/}
-.a.wizard-steps li.active:before, .wizard-steps li.active .step {
-    border-color: #80afd4 !important; 
-    color: #87ba21 !important; 
-    transform: scale(1.25) !important;
-    font-weight: bold;
-}
-li.incomplete:before, li.incomplete .step {
-    border-color: #d15b47 !important; 
-    font-weight: bold;
-}
+

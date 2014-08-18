@@ -206,7 +206,13 @@ angular.module('compass.cluster', [
 
                 modalInstance.result.then(function(cluster) {
                     $scope.cluster = cluster;
-                    dataService.createCluster(cluster).success(function(data, status) {
+                    var postClusterData = {
+                        "name": cluster.name,
+                        "adapter_id": cluster.adapter.id,
+                        "os_id": cluster.os.id,
+                        "flavor_id": cluster.flavor.id
+                    };
+                    dataService.createCluster(postClusterData).success(function(data, status) {
                         wizardFactory.setClusterInfo(data);
                         angular.forEach($scope.allAdapters, function(adapter) {
                             if (adapter.id == $scope.cluster.adapter_id) {
@@ -384,13 +390,13 @@ var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
     $scope.allAdapters = allAdapters;
     $scope.cluster = cluster;
 
-    $scope.$watch('cluster.adapter_id', function() {
+    $scope.updateSelectedAdapter = function() {
         angular.forEach($scope.allAdapters, function(adapter) {
-            if (adapter.id == $scope.cluster.adapter_id) {
+            if(adapter.id == $scope.cluster.adapter.id) {
                 $scope.supported_oses = adapter.supported_oses;
             }
         })
-    });
+    };
 
     $scope.ok = function() {
         $scope.result = 'ok';
