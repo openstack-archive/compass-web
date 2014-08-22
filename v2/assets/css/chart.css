@@ -1,0 +1,59 @@
+/* circle packing */
+text {
+    font-size: 14px !important;
+    font-family: "Arial, Helvetica, sans-serif";
+    pointer-events: none;
+}
+text.parent {
+    fill: #1f77b4;
+}
+circle {
+    fill: #ccc;
+    stroke: #999;
+    fill-opacity: .8;
+    pointer-events: all;
+}
+circle.parent {
+    fill: #1f77b4;
+    fill-opacity: .3;
+    stroke: steelblue;
+}
+circle.parent:hover {
+    stroke: #ff7f0e;
+    stroke-width: 5px;
+}
+circle.child {
+    pointer-events: none;
+}
+circle[depth='0'] {
+    fill: #428bca;
+}
+circle[depth='1'] {
+    fill: #ffb752;
+}
+circle[depth='2'] {
+    fill: #d6487e;
+}
+circle[depth='3'] {
+    fill: #fee188;
+}
+circle[depth='4'] {
+    fill: #9585bf;
+}
+
+
+/* tree */
+.node circle {
+  cursor: pointer;
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+.node text {
+  font-size: 11px;
+}
+path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}

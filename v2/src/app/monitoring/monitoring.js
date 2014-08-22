@@ -3,7 +3,8 @@ angular.module('compass.monitoring', [
     'ui.bootstrap',
     'compass.charts',
     'ngAnimate',
-    'angular-rickshaw'
+    'angular-rickshaw',
+    'nvd3ChartDirectives'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -124,3 +125,190 @@ angular.module('compass.monitoring', [
         }];
     }
 ])
+
+.controller('moniOverviewCtrl', function($scope) {
+    $scope.logicalTopoData = {
+        "name": "cluster1",
+        "children": [{
+            "name": "compute",
+            "state": "error",
+            "children": [{
+                "name": "host1",
+                "state": "error",
+                "children": [{
+                    "name": "service1"
+                }, {
+                    "name": "service2"
+                }, {
+                    "name": "service3"
+                }, {
+                    "name": "service4"
+                }]
+            }, {
+                "name": "host2",
+                "state": "error",
+                "children": [{
+                    "name": "service1"
+                }, {
+                    "name": "service2"
+                }]
+            }, {
+                "name": "host3",
+                "state": "error",
+                "children": [{
+                    "name": "service1",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }]
+            }]
+        }, {
+            "name": "storage",
+            "state": "ok",
+            "children": [{
+                "name": "host7",
+                "state": "ok",
+                "children": [{
+                    "name": "service5",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }, {
+                    "name": "service6",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }]
+            }, {
+                "name": "host8",
+                "state": "ok",
+                "children": [{
+                    "name": "service7",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }]
+                }, {
+                    "name": "service8"
+                }]
+            }]
+        }, {
+            "name": "network",
+            "state": "warning",
+            "children": [{
+                "name": "host10",
+                "state": "warning",
+                "children": []
+            }, {
+                "name": "host11",
+                "state": "warning",
+                "children": []
+            }]
+        }, {
+            "name": "controller",
+            "state": "warning",
+            "children": [{
+                "name": "host12",
+                "state": "warning",
+                "children": []
+            }, {
+                "name": "host13",
+                "state": "warning",
+                "children": []
+            }]
+        }, {
+            "name": "database",
+            "state": "warning",
+            "children": [{
+                "name": "host14",
+                "children": []
+            }, {
+                "name": "host15",
+                "children": []
+            }]
+        }, {
+            "name": "image",
+            "state": "ok",
+            "children": [{
+                "name": "host16",
+                "children": []
+            }, {
+                "name": "host17",
+                "children": []
+            }]
+        }]
+    };
+
+    $scope.physicalTopoData = angular.copy($scope.logicalTopoData);
+
+    $scope.exampleData = [{
+        "key": "Series 1",
+        "values": [
+            [1, 0],
+            [2, 6],
+            [3, 5],
+            [4, 11],
+            [5, 5]
+        ]
+    }, {
+        "key": "Series 2",
+        "values": [
+            [1, 0],
+            [2, 10],
+            [3, 5],
+            [4, 5],
+            [5, 0]
+        ]
+    }, {
+        "key": "Series 3",
+        "values": [
+            [1, 0],
+            [2, 6],
+            [3, 5],
+            [4, 11],
+            [5, 5]
+        ]
+    }, {
+        "key": "Series 4",
+        "values": [
+            [1, 7],
+            [2, 14],
+            [3, 14],
+            [4, 23],
+            [5, 16]
+        ]
+    }];
+
+    $scope.xAxisTickFormat = function() {
+        return function(d) {
+            return d3.time.format('%x')(new Date(d));
+        }
+    };
+
+    $scope.toolTipContentFunction = function() {
+        return function(key, x, y, e, graph) {
+            console.log('tooltip content');
+            return 'Super New Tooltip' +
+                '<h1>' + key + '</h1>' +
+                '<p>' + y + ' at ' + x + '</p>'
+        }
+    };
+
+/*  // customize stack/line chart colors
+    $scope.colorFunction = function() {
+        var colors = ["#68bc31", "#2091cf", "#6fb3e0", "#fee074", "#f89406", "#af4e96"];
+        return function(d, i) {
+            return colors[i%6];
+        };
+    }
+*/
+
+})

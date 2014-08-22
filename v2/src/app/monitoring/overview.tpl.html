@@ -1,0 +1,61 @@
+<div class="page-header">
+    <h1>
+        Monitoring Overview
+    </h1>
+</div>
+<div class="row side-padding-10 top-padding-10" ng-controller="moniOverviewCtrl">
+    <div class="col-xs-12">
+        <div ng-repeat="role in logicalTopoData.children" class="well pull-left">
+            <span>{{role.name}}</span>
+            <span>{{role.children.length}}</span>
+            <span>{{role.state}}</span>
+        </div>
+    </div>
+
+    <div class="col-xs-12 top-padding-10" style="height: 300px">
+        <nvd3-stacked-area-chart
+                data="exampleData"
+                id="exampleId"
+                showXAxis="true"
+                showYAxis="true"
+                tooltips="true"
+                interactive="true"
+                useInteractiveGuideline="true"
+                toolTipContent="toolTipContentFunction()"
+                forceY="[0]">
+            <svg></svg>
+        </nvd3-stacked-area-chart>
+    </div>
+
+    <div class="col-xs-12 top-padding-10">
+        <div class="row">
+            <div class="col-lg-7">
+                <circlepacking data="logicalTopoData"></circlepacking>
+            </div>
+            <div class="col-lg-5">
+                <nvd3-line-chart
+                        data="exampleData"
+                        id="exampleId2"
+                        showXAxis="true"
+                        showYAxis="true"
+                        tooltips="true"
+                        interactive="true"
+                        useInteractiveGuideline="true"
+                        toolTipContent="toolTipContentFunction()"
+                        margin="{left:50,top:50,bottom:50,right:50}"
+                        forceY="[0]"
+                        showLegend="true"
+                        legendWidth="200"
+                        legendHeight="100">
+                    <svg></svg>
+                </nvd3-line-chart>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-xs-12 top-padding-10">
+        <tree data="logicalTopoData"></tree>
+    </div>
+
+</div>

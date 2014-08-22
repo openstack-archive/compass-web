@@ -1,4 +1,10 @@
 [{
+    "name": "cluster.monitoring.overview",
+    "url": "/overview",
+    "display": "Overview",
+    "controller": "",
+    "templateUrl": ""
+}, {
     "name": "cluster.monitoring.hostgroups",
     "url": "/hostgroups",
     "display": "Host Groups",
