@@ -247,7 +247,52 @@ angular.module('compass.monitoring', [
         }]
     };
 
-    $scope.physicalTopoData = angular.copy($scope.logicalTopoData);
+    $scope.physicalTopoData = {
+        "name": "Compass Server",
+        "children": [{
+            "name": "switch1",
+            "state": "error",
+            "children": [{
+                "name": "server1",
+                "state": "error"
+            }, {
+                "name": "server2",
+                "state": "ok"
+            }]
+        }, {
+            "name": "switch2",
+            "state": "ok",
+            "children": [{
+                "name": "server3",
+                "state": "ok"
+            }, {
+                "name": "server4",
+                "state": "ok"
+            }]
+        }, {
+            "name": "switch3",
+            "state": "warning",
+            "children": [{
+                "name": "server4",
+                "state": "ok"
+            }, {
+                "name": "server5",
+                "state": "ok"
+            }, {
+                "name": "server6",
+                "state": "warning"
+            }, {
+                "name": "server7",
+                "state": "ok"
+            }, {
+                "name": "server8"
+            }, {
+                "name": "server9",
+                "state": "warning"
+            }]
+        }]
+    };
+    $scope.serverCount = 9;
 
     $scope.exampleData = [{
         "key": "Series 1",
@@ -302,7 +347,7 @@ angular.module('compass.monitoring', [
         }
     };
 
-/*  // customize stack/line chart colors
+    /*  // customize stack/line chart colors
     $scope.colorFunction = function() {
         var colors = ["#68bc31", "#2091cf", "#6fb3e0", "#fee074", "#f89406", "#af4e96"];
         return function(d, i) {

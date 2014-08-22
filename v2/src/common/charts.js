@@ -147,7 +147,7 @@ angular.module('compass.charts', [])
                     }
                 })
 
-            var vis = d3.select("circlepacking").append("svg:svg", "h2") //("svg:svg", "h2")
+            var vis = d3.select("circlepacking").append("svg:svg", "h2")
                 .attr("width", w)
                 .attr("height", h)
                 .append("svg:g")
@@ -246,82 +246,91 @@ angular.module('compass.charts', [])
     };
 })
 
-
-.directive('tree', function() {
+.directive('treechart', function() {
     return {
         restrict: 'EAC',
         scope: {
-            data: '='
+            data: '=',
+            count: '=',
+            id: '@'
         },
         link: function(scope, elem, attrs) {
-            //console.log(scope, elem, attrs);
+            var id = scope.id;
 
-            var json = scope.data;
-            var imgWidth = 163;
-            var imgHeight = 32;
+            var margin = {
+                top: 0,
+                right: 120,
+                bottom: 0,
+                left: 130
+            };
 
-            var m = [20, 50, 20, 50],
-                w = 1280 - m[1] - m[3],
-                h = 800 - m[0] - m[2],
-                i = 0,
+            var serverCount = scope.count;
+
+            var serversHeight = serverCount * 68;
+            if (serversHeight < 500) {
+                serversHeight = 500;
+            }
+
+            var width = 1000 - margin.right - margin.left,
+                height = serversHeight - margin.top - margin.bottom;
+
+            imgWidth = 163;
+            imgHeight = 32;
+
+            var i = 0,
+                duration = 750,
                 root;
 
             var tree = d3.layout.tree()
-                .size([h, w]);
+                .size([height, width]);
 
             var diagonal = d3.svg.diagonal()
                 .projection(function(d) {
                     return [d.y, d.x];
                 });
 
-            var vis = d3.select("tree").append("svg:svg")
-                .attr("width", w + m[1] + m[3])
-                .attr("height", h + m[0] + m[2])
-                .append("svg:g")
-                .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+            var svg = d3.select("#" + id).append("svg")
+                .attr("width", width + margin.right + margin.left)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            root = json;
-            root.x0 = h / 2;
+            root = scope.data;
+            root.x0 = height / 2;
             root.y0 = 0;
-
-            function toggleAll(d) {
-                if (d.children) {
-                    d.children.forEach(toggleAll);
-                    toggle(d);
-                }
-            }
-
-            root.children.forEach(toggleAll);
 
             update(root);
 
+            d3.select(self.frameElement).style("height", "600px");
+
             function update(source) {
-                var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
                 // Compute the new tree layout.
-                var nodes = tree.nodes(root).reverse();
+                var nodes = tree.nodes(root).reverse(),
+                    links = tree.links(nodes);
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
-                    d.y = d.depth * 180;
+                    d.y = d.depth * 300;
                 });
 
                 // Update the nodes…
-                var node = vis.selectAll("g.node")
+                var node = svg.selectAll("g.node")
                     .data(nodes, function(d) {
                         return d.id || (d.id = ++i);
                     });
 
                 // Enter any new nodes at the parent's previous position.
-                var nodeEnter = node.enter().append("svg:g")
+                var nodeEnter = node.enter().append("g")
                     .attr("class", "node")
                     .attr("transform", function(d) {
-                        return "translate(" + source.y0 + "," + source.x0 + ")";
+                        var transX = parseFloat(source.y0) - 10;
+                        var transY = parseFloat(source.x0) - imgHeight / 2;
+                        return "translate(" + transX + "," + transY + ")";
                     })
-                    .on("click", function(d) {
-                        toggle(d);
-                        update(d);
-                    });
+                    .attr("width", imgWidth)
+                    .attr("height", imgHeight)
+                    .on("click", click);
 
                 nodeEnter.append("image")
                     .attr("xlink:href", function(d) {
@@ -332,37 +341,54 @@ angular.module('compass.charts', [])
                         else
                             return "assets/img/server.png";
                     })
-                    //.attr("class", function(d) {
-                    //    return d.type;
-                    //})
                     .attr("width", imgWidth)
                     .attr("height", imgHeight);
 
-
-                nodeEnter.append("svg:text")
-                    .attr("x", function(d) {
-                        return d.children || d._children ? -10 : 10;
+                nodeEnter.append("rect")
+                    .attr("width", imgWidth)
+                    .attr("height", imgHeight)
+                    .attr("data-state", function(d) {
+                        return d.state
                     })
-                    .attr("dy", ".35em")
+                    .style("opacity", function(d) {
+                        if (d.depth == 0)
+                            return 0;
+                        else
+                            return 0.4;
+                    });
+
+                nodeEnter.append("text")
+                    .attr("x", function(d) {
+                        if (d.depth == 0)
+                            return -5;
+                        else
+                            return d.children || d._children ? -8 : imgWidth + 10;
+                    })
+                    .attr("y", function(d) {
+                        if (d.depth == 0)
+                            return imgHeight / 2;
+                        else if (d.depth == 1)
+                            return 6;
+                        else
+                            return imgHeight / 2;
+                    })
+                    .attr("dy", ".25em")
                     .attr("text-anchor", function(d) {
                         return d.children || d._children ? "end" : "start";
                     })
                     .text(function(d) {
                         return d.name;
                     })
+                    .style("font-size", "15px")
                     .style("fill-opacity", 1e-6);
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
                     .duration(duration)
                     .attr("transform", function(d) {
-                        return "translate(" + d.y + "," + d.x + ")";
-                    });
-
-                nodeUpdate.select("circle")
-                    .attr("r", 4.5)
-                    .style("fill", function(d) {
-                        return d._children ? "lightsteelblue" : "#fff";
+                        var transX = parseFloat(d.y) - 10;
+                        var transY = parseFloat(d.x) - imgHeight / 2;
+                        return "translate(" + transX + "," + transY + ")";
                     });
 
                 nodeUpdate.select("text")
@@ -372,7 +398,9 @@ angular.module('compass.charts', [])
                 var nodeExit = node.exit().transition()
                     .duration(duration)
                     .attr("transform", function(d) {
-                        return "translate(" + source.y + "," + source.x + ")";
+                        var transX = parseFloat(source.y) - 10;
+                        var transY = parseFloat(source.x) - imgHeight / 2;
+                        return "translate(" + transX + "," + transY + ")";
                     })
                     .remove();
 
@@ -383,13 +411,13 @@ angular.module('compass.charts', [])
                     .style("fill-opacity", 1e-6);
 
                 // Update the links…
-                var link = vis.selectAll("path.link")
-                    .data(tree.links(nodes), function(d) {
+                var link = svg.selectAll("path.link")
+                    .data(links, function(d) {
                         return d.target.id;
                     });
 
                 // Enter any new links at the parent's previous position.
-                link.enter().insert("svg:path", "g")
+                link.enter().insert("path", "g")
                     .attr("class", "link")
                     .attr("d", function(d) {
                         var o = {
@@ -400,10 +428,7 @@ angular.module('compass.charts', [])
                             source: o,
                             target: o
                         });
-                    })
-                    .transition()
-                    .duration(duration)
-                    .attr("d", diagonal);
+                    });
 
                 // Transition links to their new position.
                 link.transition()
@@ -432,8 +457,8 @@ angular.module('compass.charts', [])
                 });
             }
 
-            // Toggle children.
-            function toggle(d) {
+            // Toggle children on click.
+            function click(d) {
                 if (d.children) {
                     d._children = d.children;
                     d.children = null;
@@ -441,8 +466,9 @@ angular.module('compass.charts', [])
                     d.children = d._children;
                     d._children = null;
                 }
+                update(d);
             }
 
         }
     }
-})
+});

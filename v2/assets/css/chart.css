@@ -1,4 +1,5 @@
 /* circle packing */
+
 text {
     font-size: 14px !important;
     font-family: "Arial, Helvetica, sans-serif";
@@ -42,18 +43,31 @@ circle[depth='4'] {
 }
 
 
-/* tree */
+/* tree chart*/
+
 .node circle {
-  cursor: pointer;
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+    cursor: pointer;
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }
 .node text {
-  font-size: 11px;
+    font-size: 11px;
 }
 path.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+treechart rect {
+    fill: none;
+}
+treechart rect[data-state='ok'] {
+    fill: green;
+}
+treechart rect[data-state='warning'] {
+    fill: yellow;
+}
+treechart rect[data-state='error'] {
+    fill: red;
 }
