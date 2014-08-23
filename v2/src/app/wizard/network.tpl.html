@@ -1,6 +1,6 @@
 <div ng-controller="networkCtrl">
     <div class="row">
-        <div collapse="autoFillPanel.isCollapsed" class="dashed-panel">
+        <div collapse="autoFillPanel.isCollapsed" class="dashed-panel" style="height: auto; background-color: rgba(224, 226, 227, 0.25);">
             <span class="action pull-right" ng-click="autoFillPanel.isCollapsed = true;">
                 <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
             </span>
@@ -118,7 +118,7 @@
             </span>
             <!-- Column Show / Hide button -->
             <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-default dropdown-toggle">
+                <button type="button" class="btn btn-default dropdown-toggle" style="border-radius:7px !important;">
                     Column Show / Hide
                     <span class="ace-icon fa fa-caret-down icon-on-right"></span>
                 </button>
@@ -211,51 +211,44 @@
         </table>
     </div>
     <div>
-        <script type="text/ng-template" id="addSubnetModal.html">
-        < div class = "modal-header" >
-            < h3 class = "modal-title" >
-            Subnetwork < /h3>
-            </div >
-            < div class = "modal-body" >
-            < alert ng - repeat = "alert in alerts"
-        type = "danger"
-        close = "closeAlert()" > {
-            {
-                alert.message
-            }
-        } < /alert>
+    <script type="text/ng-template" id="addSubnetModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title" >Subnetwork </h3>
+        </div >
+        <div class = "modal-body" >
+            <alert ng-repeat = "alert in alerts" type = "danger" close = "closeAlert()" > 
+                {{alert.message}} 
+            </alert>
+            <table class="table table-hover nowrap">
+                <thead>
+                    <tr>
+                        <th>Subnet</th >
+                        <th> Actions </th>
+                    </tr >
+                </thead>
+                <tbody>
+                    <tr ng-repeat="sub in subnetworks">
+                        <td>
+                            <input type="text" ng-model="sub.subnet" placeholder="Subnet" / >
+                        </td>
+                        <td>
+                            <span class="action" ng-click="addSubnetwork()">
+                                <i class="fa fa-plus-circle bigger-140 blue"></i>
+                            </span>
 
-                <table class="table table-hover nowrap">
-                    <thead>
-                        <tr>
-                            <th>Subnet</th >
-            < th > Actions < /th>
-                        </tr >
-            < /thead>
-                    <tbody>
-                        <tr ng-repeat="sub in subnetworks">
-                            <td>
-                                <input type="text" ng-model="sub.subnet" placeholder="Subnet" / >
-            < /td>
-                            <td>
-                                <span class="action" ng-click="addSubnetwork()">
-                                    <i class="fa fa-plus-circle bigger-140 blue"></i >
-            < /span>
+                            <span ng-show="subnetworks.length > 1" class="action" ng-click="removeSubnetwork($index)">
+                                <i class="fa fa-minus-circle bigger-140 blue"></i>
+                            </span>
+                        </td>
+                    </tr>
 
-                                <span ng-show="subnetworks.length > 1" class="action" ng-click="removeSubnetwork($index)">
-                                    <i class="fa fa-minus-circle bigger-140 blue"></i >
-            < /span>
-                            </td >
-            < /tr>
-
-                    </tbody >
-            < /table>
-            </div >
-            < div class = "modal-footer" >
-            < button class = "btn btn-primary"
-        ng - click = "ok()" > OK < /button>
-                <button class="btn btn-grey" ng-click="cancel()">Cancel</button >
-            < /div>
+                </tbody>
+            </table>
+        </div >
+        <div class = "modal-footer" >
+            <button class = "btn btn-primary" ng - click = "ok()" > OK </button>
+                <button class="btn btn-grey" ng-click="cancel()">Cancel</button>
+        </div>
         </script>
     </div>
 </div>
