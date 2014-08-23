@@ -13,7 +13,7 @@
                                 (Promisc)
                             </span>
                             <div ui-on-Drop="onDrop($event, interface_key)" drag-hover-class="drag-enter" drop-channel="{{interface_value.dropChannel}}" class="interface-placeholder interface-placeholder-margin">
-                                <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" drag-channel="{{network_value.dragChannel}}" class="external-event label-purple ui-draggable network-draggable margin-right-5" ng-if="network_value.mapping_interface==interface_key">
+                                <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" drag-channel="{{network_value.dragChannel}}" class="external-event ui-draggable network-draggable margin-right-5" ng-class="{'label-pink': network_key == 'management', 'label-success': network_key =='tenant', 'label-purple': network_key == 'public', 'label-warning': network_key == 'storage'}" ng-if="network_value.mapping_interface==interface_key">
                                     <i class="ace-icon fa fa-arrows"></i>
                                     {{network_value.display}}
                                 </div>
@@ -35,7 +35,7 @@
                 <div class="widget-body">
                     <div class="widget-main network-background">
                         <div ui-on-Drop="onDrop($event, interface_key)" drag-hover-class="drag-enter" class="network-placeholder network-margin-border" drop-channel="E">
-                            <div ng-repeat="(key, value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, key, networking);" class="external-event  label-purple ui-draggable network-draggable network-margin margin-right-20" drag-channel="{{value.dragChannel}}" ng-if="!value.mapping_interface">
+                            <div ng-repeat="(key, value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, key, networking);" class="external-event ui-draggable network-draggable network-margin margin-right-20" ng-class="{'label-pink': key == 'management', 'label-success': key =='tenant', 'label-purple': key == 'public', 'label-warning': key == 'storage'}" drag-channel="{{value.dragChannel}}" ng-if="!value.mapping_interface">
                                 <i class="ace-icon fa fa-arrows"></i>
                                 {{value.display}}
                             </div>

@@ -22,9 +22,9 @@
                             <input ng-model="newPartition.max_size" type="text" placeholder="Max Size" class="input-medium">
                         </td>
                         <td>
-                            <button ng-click="addPartition()" class="btn btn-sm btn-info" type="button">
-                                Add
-                            </button>
+                               <span ng-click="addPartition()" class="action" >
+                                        <i class="fa fa-plus-circle bigger-140 blue"S></i>
+                               </span>                           
                         </td>
                     </tr>
                     <tr ng-repeat="(key, data) in partition">
@@ -45,9 +45,9 @@
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                             </button>
                             <!--delete button-->
-                            <button ng-hide="editPartitionMode" ng-click="editPartitionMode = true; deletePartition(key)" class="btn btn-xs btn-black-white btn-trash-hover border-radius-4">
-                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                            </button>
+                            <span ng-hide="editPartitionMode" ng-click="editPartitionMode = true; deletePartition(key)" class="action border-radius-4">
+                                <i class="fa fa-minus-circle bigger-140 blue"></i>
+                            </span>
                             <!--save button-->
                             <button ng-show="editPartitionMode" ng-click="editPartitionMode = false;" class="btn btn-xs btn-black-white btn-topmargin-8 btn-sumbit-hover border-radius-4">
                                 <i class="ace-icon fa fa-check bigger-120"></i>

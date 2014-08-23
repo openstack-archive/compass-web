@@ -4,21 +4,35 @@ html {
     overflow-x: scroll;
     font-size: 14px !important;
     height: 100%;
+    font-family: "Trebuchet MS", san sarif !important;
+    color:rgba(83, 83, 83, 1) !important;
 }
 body {
     min-width: 1024px;
     font-size: 14px !important;
+    font-family:  "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif !important;
+    color:rgba(83, 83, 83, 1) !important;
+
 }
 .main-container {
     position: relative;
 }
 body, .main-content {
-    background: #fff;
-    /*background: #4a4f56;*/
-    /*background: url("../img/bg.png") repeat scroll 0 0 rgba(0, 0, 0, 0);*/
+    background: #fff;      
+   /* right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-size: cover;
+    top: 0px;
+    background-image: url('../img/body_bg3.jpg');*/
 }
 .page-content {
-    background: inherit !important;
+    background: inherit !important;    
+}
+
+.table-responsive
+{
+    background-color:white;
 }
 .notification-msg {
     white-space: normal;
@@ -36,6 +50,15 @@ body, .main-content {
     .table > tbody > tr {
         height: 50px;
     }
+}
+.btn-login {
+    border-radius:7px;
+}
+.btn-topdown{
+    border-radius:7px !important;
+}
+.btn-dropdown {
+    border-radius:7px !important;
 }
 /*
 .cssSlideUp {
@@ -101,6 +124,8 @@ body, .main-content {
 }
 select {
     padding-left: 1px !important;
+    border-radius: 7px;
+    height:33px;
 }
 .opacity-zero {
     opacity: 0;
@@ -141,6 +166,7 @@ select {
     border: 2px dashed #D0D0D0;
     border-radius: 10px;
     padding: 5px 15px 20px 15px;
+    margin-bottom: 20px;
 }
 .no-cluster-panel {
     text-align: center;
@@ -157,11 +183,13 @@ select {
 .widget-body .table {
     border-top: 0px !important;
 }
+.widget-main padding-32t
 .navbar .navbar-nav > li {
     border-style: none;
 }
 .ace-nav > li {
     border-left: none !important;
+    height: 60px;
 }
 .new-servers-result {
     overflow-y: scroll;
@@ -176,7 +204,8 @@ select {
 textarea, input[type="text"], input[type="password"] {
     -webkit-appearance: none;
     /* Remove inner shadow from inputs on mobile iOS */
-    background: inherit;
+    /*background: inherit;*/
+    border-radius: 7px !important;
 }
 /*
 input[type="text"]:focus, input[type="password"]:focus {
@@ -188,6 +217,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 input.ace[type="checkbox"] + .lbl:before, input.ace[type="radio"] + .lbl:before {
     content: "\00A0";
+    border-radius:4px !important;
 }
 .progress {
     position: relative;
@@ -245,6 +275,7 @@ button[disabled] {
     margin-bottom: 10px;
     background: rgba(0, 0, 0, 0.07);
     border: 2px dotted #ddd;
+    border-radius: 7px;
 }
 .infobox:hover {
     background: rgba(0, 0, 0, 0.2)
@@ -275,6 +306,10 @@ button[disabled] {
     font-size: 15px;
     line-height: 1.5;
     padding: 4px 12px;
+    border-radius:7px !important;
+}
+.btn-group > .btn {
+    border-radius: 7px !important;
 }
 .btn-xs {
     padding: 1px 5px !important;
@@ -343,7 +378,7 @@ a:active {
 .page-header {
     border-bottom: 0px !important;
     padding-top: 15px;
-    padding-bottom: 6px;
+    padding-bottom: 15px;
 }
 .label {
     border-radius: 0.25em !important;
@@ -367,7 +402,7 @@ a:active {
     margin-top: 26px !important;
 }
 .input-icon {
-    margin-top: 5px !important;
+   /* margin-top: 5px !important;*/
 }
 .ng-table th.sortable {
     cursor: pointer
@@ -481,6 +516,7 @@ td.center-align {
 .side-padding-20 {
     padding-left: 20px !important;
     padding-right: 20px !important;
+    /*padding-top:7px !important;*/
 }
 .top-margin-14 {
     margin-top: 14px;
@@ -500,9 +536,12 @@ div.center-align {
 .interface-placeholder-margin {
     border: 1px solid rgba(190, 210, 219, .5) !important;
     min-height: 60px !important;
+    border-radius: 4px;
+    background-color:rgba(221, 221, 221, 0.32);
 }
 .network-margin-border {
     border: 1px solid rgba(190, 210, 219, .5) !important;
+    border-radius:4px;
 }
 .network-margin {
     margin-left: 10px !important;
@@ -514,11 +553,13 @@ div.center-align {
 .network-background {
     background-image: url();
 }
+
 /* adjustments to draggable */
 
 .network-draggable {
     position: relative;
     width: 132px !important;
+    border-radius: 7px;
 }
 .external-event {
     float: left !important;
@@ -541,3 +582,165 @@ div.center-align {
     min-height: 50px;
     padding: 10px;
 }
+.wizard-steps li.complete:before, .wizard-steps li.complete .step {
+     /* border-color: #93cbf9 !important;*/}
+.a.wizard-steps li.active:before, .wizard-steps li.active .step {
+    border-color: #80afd4 !important; 
+    transform: scale(1.25) !important;
+    font-weight: bold;
+}
+li.incomplete:before, li.incomplete .step {
+    border-color: #d15b47 !important; 
+    font-weight: bold;
+}
+.modal-body
+{    
+    padding-top: 30px;
+    padding-right-value: 20px;
+    padding-bottom: 0px;
+    padding-left-value: 20px;
+    padding-left-ltr-source: physical;
+    padding-left-rtl-source: physical;
+    padding-right-ltr-source: physical;
+    padding-right-rtl-source: physical;
+}
+.modal-header
+{
+    /*background-color: #EFF3F8;*/
+    background-image: url('../img/test1.jpg');
+    
+}
+.bkg-fullscreen
+{
+    /*background-color:#EFF3F8;*/
+    background-image:url(../img/datacenter.jpg);
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-size: cover;
+    background-position: 50% 50%;
+    top: 0px;
+
+}
+
+.bkg-fullscreen:before
+{
+    content:"";
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(68, 57, 170, 0.3);
+    background-image:none;
+    opacity: 0.6;
+}
+
+.bar-white
+{
+    background-color:white;
+}
+.page-header h1
+{
+    font-weight:bold;
+    font-size: 20px !important;
+}
+.navbar
+{
+    background-image:url(../img/header.png);
+    /*position: fixed;*/
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-size: cover;
+    background-position: 50% 50%;
+    top: 0px;
+}
+.ace-nav > li > a 
+{
+    padding: 8px 8px; 
+}
+.modal-footer
+{
+    background-image: url('../img/test1.jpg');
+    
+}
+.modal-title
+{
+    color:white;
+}
+.gritter-error .gritter-close
+{
+    color: rgba(192, 116, 80, 1);
+}
+.gritter-close:hover
+{
+    color:rgba(219, 101, 68, 1) !important;
+}
+
+.gritter-item-wrapper.gritter-error
+{
+    background-image: url('../img/grey.png') !important;
+    background-size: cover;
+    border-radius: 7px;
+    opacity: 0.9;
+
+}
+.error-text
+{
+    color:rgba(219, 101, 68, 1);
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 10px;
+}
+#side
+{
+    position:absolute;
+    overflow:hidden;
+    right:30px;
+    width: 0px;
+    height: 30%;
+    content:"";
+    background:#fff;
+
+
+}
+#side-content
+{
+    position:absolute;
+    right:0px;
+    top:5px;
+    height:100%;
+    overflow:hidden;
+    width:200px;
+    background:#fff;
+    font-size: 13px;
+}
+#side-ctrl
+{ 
+    position: absolute; 
+    right:5px; 
+    top:0px;
+    height: 1.5%; 
+    width: 15px; 
+    /*background:yellow;*/
+}
+.label-lg.arrowed:before
+{
+    left: -11px;
+}
+.glyphicon
+{
+    top:0px;
+}
+.widget-main
+{
+    padding-top: 25px;
+    padding-bottom: 5px;
+}
+.login-form {
+    background-color: rgba(221, 221, 221, 0.6); 
+    padding: 20px 15px 10px;
+}
+>>>>>>> Prettify login/wizard/cluster list pages.
