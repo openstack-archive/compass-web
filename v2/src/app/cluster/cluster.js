@@ -277,8 +277,9 @@ var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
 
     $scope.updateSelectedAdapter = function() {
         angular.forEach($scope.allAdapters, function(adapter) {
-            if(adapter.id == $scope.cluster.adapter.id) {
+            if (adapter.id == $scope.cluster.adapter.id) {
                 $scope.supported_oses = adapter.supported_oses;
+		$scope.flavors = adapter.flavors;
             }
         })
     };
