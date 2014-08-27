@@ -14,13 +14,13 @@
                                 <input type="number" min="0" class="col-xs-10 col-sm-5" ng-model="role.count" placeholder="Count">
                             </div>
                         </div>
-                        <div class="col-md-offset-4 col-md-8">
-                            <button type="button" class="btn btn-sm btn-info" ng-click="autoAssignRoles()" ng-disabled="autoAssignForm.$invalid">
-                                Assign
-                            </button>
+                        <div class="col-md-offset-4 col-md-8" style="margin-left: 33%;">
                             <span>
                                 Total Hosts: {{servers.length}} | Total Roles: {{rolesTotalCount}}
-                            </span>
+                            </span> 
+                            <button style="margin-left: 18px;" type="button" class="btn btn-sm btn-info" ng-click="autoAssignRoles()" ng-disabled="autoAssignForm.$invalid">
+                                Assign
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -61,7 +61,7 @@
                 <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoAssignRoles.isCollapsed}"></i>
             </button>
             <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-sm btn-info dropdown-toggle">
+                <button type="button" style="border-bottom-width: 3px; border-top-width: 3px;" class="btn btn-sm btn-info dropdown-toggle">
                     Manually Assign&nbsp;
                     <span class="ace-icon fa fa-caret-down icon-on-right"></span>
                 </button>

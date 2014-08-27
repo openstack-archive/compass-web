@@ -142,10 +142,13 @@
                         </tbody>
                     </table>
                     <script type="text/ng-template" id="deleteHostConfirm.html">
-                        <div class="modal-body">
+                        <div class="modal-header ng-scope">
+                        <h3 class="modal-title">Create Cluster</h3>
+                        </div>
+                        <div class="modal-body"  style="padding-top: 30px; padding-bottom: 20px;" >
                             Are you sure to delete
                             <strong>{{host.name}}</strong>?
-                        </div>
+                        </div>                       
                         <div class="modal-footer">
                             <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                             <button class="btn btn-primary" ng-click="ok()">OK</button>
