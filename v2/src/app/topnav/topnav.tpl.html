@@ -1,13 +1,15 @@
 <div id="navbar" class="navbar navbar-default">
     <div id="navbar-container" class="navbar-container">
         <div class="navbar-header pull-left">
-        <a style="height: 50px; width: 200px;" class="navbar-brand" ui-sref="clusterList">
-            <img src="assets/img/logo-header.png" height="40px">
+        <a style="height: 50px; width: 190px; padding-left:5px;padding-top:8px;" class="navbar-brand" ui-sref="clusterList">    
+            <div class="pull-left">
+            <img src="assets/img/logo-pure.png" height="45px">
+            <img src="assets/img/logo-text.png" height="28px" width="115px">
+        </div>  
         </a>
             <!-- /.brand -->
         </div>
         <!-- /.navbar-header -->
-
         <nav class="navbar-header pull-left side-padding-20" role="navigation">
             <ul class="nav ace-nav">
                 <li class="transparent">
@@ -17,7 +19,6 @@
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </small>
                     </a>
-
                     <ul class="dropdown-menu dropdown-light-blue dropdown-caret">
                         <li ng-controller="createClusterCtrl" ng-click="open()">
                             <div ng-include="'src/app/cluster/cluster-create.tpl.html'"></div>
@@ -56,7 +57,6 @@
                         <i class="ace-icon fa fa-bell"></i>
                         <!--span class="badge badge-grey">4</span-->
                     </a>
-
                     <ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                         <li class="dropdown-header">
                             <i class="ace-icon fa fa-exclamation-triangle"></i>
