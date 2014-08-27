@@ -337,7 +337,7 @@ angular.module('compass.charts', [])
                         if (d.depth == 0)
                             return "assets/img/router.png";
                         else if (d.depth == 1)
-                            return "assets/img/switch.png";
+                            return "assets/img/switch1.png";
                         else
                             return "assets/img/server.png";
                     })
