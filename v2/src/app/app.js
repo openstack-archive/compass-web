@@ -7,9 +7,10 @@ var app = angular.module('compass', [
     'compass.clusterlist',
     'compass.monitoring',
     'compass.server',
+    'compass.userSetting',
     'ui.router',
     'ui.bootstrap',
-    //'compassAppDev',
+  //'compassAppDev',
     'ngAnimate'
 ]);
 

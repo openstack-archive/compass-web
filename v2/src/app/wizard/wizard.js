@@ -79,7 +79,6 @@ angular.module('compass.wizard', [
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
         if (newCommitState != oldCommitState && newCommitState.name == $scope.steps[$scope.currentStep - 1].name) {
-
             if (newCommitState.state == "success") {
                 console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
                 if (newCommitState.name == "review") {
