@@ -425,6 +425,67 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [201, mockResponse, {}];
     });
 
+    $httpBackend.whenPOST(/\.*\/users$/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var postData = JSON.parse(data)
+        return [201, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/users$/).respond(function(method, url, data) {
+        var userSetting = [{
+            "id": 1,
+            "email": "admin@compass.org",
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "active": false,
+            "is_admin": true,
+            "created_at": "2014-4-14",
+            "last_login_at": "2014-4-14"
+        }, {
+            "id": 2,
+            "email": "tsinghua@compass.org",
+            "username": "tsinghua",
+            "first_name": "",
+            "last_name": "",
+            "active": true,
+            "is_admin": true,
+            "created_at": "2014-4-14",
+            "last_login": "2014-3-14"
+        }, {
+            "id": 3,
+            "email": "ann@compass.org",
+            "username": "ann",
+            "first_name": "Ann",
+            "last_name": "",
+            "active": true,
+            "is_admin": false,
+            "created_at": "2014-4-14",
+            "last_login": "2014-3-14"
+        }, {
+            "id": 4,
+            "email": "john@compass.org",
+            "username": "jsmith",
+            "first_name": "John",
+            "last_name": "Smitch",
+            "active": true,
+            "is_admin": true,
+            "created_at": "2014-4-14",
+            "last_login": "2014-3-14"
+        }, {
+            "id": 5,
+            "email": "tom@compass.org",
+            "username": "tom",
+            "first_name": "Tom",
+            "last_name": "Jones",
+            "active": true,
+            "is_admin": false,
+            "created_at": "2014-4-14",
+            "last_login": "2014-3-14"
+        }];
+        return [201, userSetting, {}];
+    });
+
     $httpBackend.whenGET(/\.*\/clusters\/[1-9][0-9]*\/state/).respond(function(method, url, data) {
         console.log(method, url, data);
         var states = ["UNINITIALIZED", "INITIALIZED", "INSTALLING", "SUCCESSFUL", "ERROR"];
@@ -441,6 +502,35 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             }
         };
         return [200, progressData, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/users\/logs$/).respond(function(method, url, data) {
+        var userLog = [{
+            "user_id": 1,
+            "action": "Created New User",
+            "timestamp": "2012-12-30 12:22:00"
+            }, {
+            "user_id": 1,
+            "action": "Modified Admin Priviledges",
+            "timestamp": "2013-03-25 09:10:00"
+            }, {
+            "user_id": 3,
+            "action": "Test Cluster",
+            "timestamp": "2014-06-19 23:32:00"
+            }, {
+            "user_id": 3,
+            "action": "Deleted User",
+            "timestamp": "2014-06-20 09:10:00"
+            }, {
+            "user_id": 2,
+            "action": "Deleted Cluster",
+            "timestamp": "2014-07-26 16:22:00"
+            }, {
+            "user_id": 2,
+            "action": "Created New Cluster",
+            "timestamp": "2014-08-22 14:22:00"
+        }];
+        return [200, userLog, {}];
     });
 
     $httpBackend.whenGET(/\.*\/clusters$/).respond(function(method, url, data) {

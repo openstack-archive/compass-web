@@ -130,6 +130,9 @@ select {
 .margin-bottom-10 {
     margin-bottom: 10px;
 }
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
 .margin-right-5 {
     margin-right: 5px !important;
 }
@@ -268,6 +271,12 @@ button[disabled] {
 .padding-left-15 {
     padding-left: 15px;
 }
+.padding-left-1 {
+    padding-left: 1px;
+}
+.padding-left-2 {
+    padding-left: 2px;
+}
 .infobox {
     width: 260px !important;
     height: 160px !important;
@@ -321,14 +330,16 @@ button[disabled] {
 .btn-white {
     border-width: 1px !important;
 }
-.btn-black-white {
+.btn-black-white, .btn-black-white:focus {
     border: none !important;
     background-color: inherit!important;
     color: #000000 !important
 }
 .btn-trash-hover {
-    /* Fixes padding on icon*/
-    padding: 1px 3px 1px 4px !important;
+    padding: 4px 7px 2px 7px !important;
+}
+.btn-export-hover {
+    padding: 4px 8px 2px 8px !important;
 }
 button.btn-trash-hover:hover, button.btn-trash-hover:active {
     background-color: #d15b47 !important;
@@ -529,8 +540,8 @@ td.center-align {
 .top-margin-14 {
     margin-top: 14px;
 }
-.top-margin-26 {
-    margin-top: 26px;
+.top-margin-17 {
+    margin-top: 17px;
 }
 table {
     margin-bottom: 0px !important;
@@ -783,4 +794,129 @@ circle[depth='4'] {
 }
 .table > thead > tr > td.success, .table > tbody > tr > td.success, .table > tfoot > tr > td.success, .table > thead > tr > th.success, .table > tbody > tr > th.success, .table > tfoot > tr > th.success, .table > thead > tr.success > td, .table > tbody > tr.success > td, .table > tfoot > tr.success > td, .table > thead > tr.success > th, .table > tbody > tr.success > th, .table > tfoot > tr.success > th {
     background-color: rgba(239, 243, 252, 0.98);
+}
+.search-badge-adjustment {
+    float: left !important;
+    display: inline-block !important;
+    min-width: 400px !important;
+}
+.badge-adjustment {
+    padding-top: 23px !important;
+    padding-left: 0px !important;
+}
+.skinny-badge {
+    padding: 1px 7px 1px 7px !important;
+}
+.server-margin-adjustment {
+    padding-top: 17px !important;
+    padding-left: 0px !important;
+}
+.margin-right-7 {
+    margin-right: 7px !important;
+}
+.search-small {
+    font-size: 65% !important;
+}
+.top-padding-5 {
+    padding-top: 5px !important;
+}
+.margin-top-10 {
+    margin-top: 10px !important;
+}
+.margin-top-29 {
+    margin-top: 29px !important;
+}
+.margin-left-15 {
+    margin-left: 15px !important;
+}
+.margin-left-neg30 {
+    margin-left: -30px !important;
+}
+.margin-left-17 {
+    margin-left: 17px !important;
+}
+.margin-left-18 {
+    margin-left: 18px !important;
+}
+.margin-left-14 {
+    margin-left: 14px !important;
+}
+.new-user-form {
+    margin-left: 160px !important;
+}
+.input-width-200 {
+    width: 220px !important;
+}
+.date-picker-width {
+    width: 337px !important;
+}
+.opacity-50 {
+    opacity: 0.50 !important;
+}
+.cluster-margin-bottom-20 {
+    margin-bottom: 20px !important;
+}
+.padding-bottom-0 {
+    padding-bottom: 0px !important;
+}
+.user-form-note {
+    padding-left: 120px !important;
+}
+.date-picker-margin {
+    margin-bottom: 15px !important;
+}
+.user-row {
+    height: 50px;
+    line-height: 55px;
+    display: inline-block;
+}
+.row-action {
+    width: 27%;
+}
+.row-timestamp {
+    width: 40%;
+}
+.row-user-id {
+    margin-left: 1%;
+    width: 30%;
+}
+.log-row {
+    border-top: 1px solid #ddd;
+}
+.log-row:nth-child(2n+1) {
+    background-color: #f9f9f9;
+}
+.reload-servers-border {
+    padding: 4px 8px 4px 9px;
+}
+.cluster-overview-delete, .cluster-overview-delete:focus {
+    border: none !important;
+    background-color: inherit !important;
+    color: black !important;
+    font-size: 130%;
+}
+.cluster-overview-menu {
+    vertical-align: inherit !important;
+}
+.compass-menu-icon {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 400;
+    margin-right: 2px;
+    min-width: 30px;
+    text-align: center;
+    vertical-align: auto !important;
+}
+.iframe-fail {
+    display: none;
+}
+/* iPads (portrait and landscape) ----------- */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    iframe {
+        display: none;
+    }
+    .iframe-fail {
+        display: block !important;
+    }
 }

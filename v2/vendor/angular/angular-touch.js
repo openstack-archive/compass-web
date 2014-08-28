@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.16
+ * @license AngularJS v1.3.0-beta.2-build.local+sha.2935dad
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -105,7 +105,11 @@ ngTouch.factory('$swipe', [function() {
       // Whether a swipe is active.
       var active = false;
 
-      element.on('touchstart mousedown', function(event) {
+      var optionalMouseEventStart = '';
+      if(!eventHandlers.disableMouseEvents){
+        optionalMouseEventStart += ' mousedown';
+      }
+      element.on('touchstart' + optionalMouseEventStart, function(event) {
         startCoords = getCoordinates(event);
         active = true;
         totalX = 0;
@@ -119,7 +123,11 @@ ngTouch.factory('$swipe', [function() {
         eventHandlers['cancel'] && eventHandlers['cancel'](event);
       });
 
-      element.on('touchmove mousemove', function(event) {
+      var optionalMouseEventMove = '';
+      if(!eventHandlers.disableMouseEvents){
+        optionalMouseEventMove += ' mousemove';
+      }
+      element.on('touchmove' + optionalMouseEventMove, function(event) {
         if (!active) return;
 
         // Android will send a touchcancel if it thinks we're starting to scroll.
@@ -153,7 +161,11 @@ ngTouch.factory('$swipe', [function() {
         }
       });
 
-      element.on('touchend mouseup', function(event) {
+      var optionalMouseEventEnd = '';
+      if(!eventHandlers.disableMouseEvents){
+        optionalMouseEventEnd += ' mouseup';
+      }
+      element.on('touchend' + optionalMouseEventEnd, function(event) {
         if (!active) return;
         active = false;
         eventHandlers['end'] && eventHandlers['end'](getCoordinates(event), event);
@@ -215,7 +227,6 @@ ngTouch.directive('ngClick', ['$parse', '$timeout', '$rootElement',
   var ACTIVE_CLASS_NAME = 'ng-click-active';
   var lastPreventedTime;
   var touchCoordinates;
-  var lastLabelClickCoordinates;
 
 
   // TAP EVENTS AND GHOST CLICKS
@@ -287,22 +298,9 @@ ngTouch.directive('ngClick', ['$parse', '$timeout', '$rootElement',
     var y = touches[0].clientY;
     // Work around desktop Webkit quirk where clicking a label will fire two clicks (on the label
     // and on the input element). Depending on the exact browser, this second click we don't want
-    // to bust has either (0,0), negative coordinates, or coordinates equal to triggering label
-    // click event
+    // to bust has either (0,0) or negative coordinates.
     if (x < 1 && y < 1) {
       return; // offscreen
-    }
-    if (lastLabelClickCoordinates &&
-        lastLabelClickCoordinates[0] === x && lastLabelClickCoordinates[1] === y) {
-      return; // input click triggered by label click
-    }
-    // reset label click coordinates on first subsequent click
-    if (lastLabelClickCoordinates) {
-      lastLabelClickCoordinates = null;
-    }
-    // remember label click coordinates to prevent click busting of trigger click event on input
-    if (event.target.tagName.toLowerCase() === 'label') {
-      lastLabelClickCoordinates = [x, y];
     }
 
     // Look for an allowable region containing this click.
@@ -518,8 +516,8 @@ function makeSwipeDirective(directiveName, direction, eventName) {
     var MAX_VERTICAL_DISTANCE = 75;
     // Vertical distance should not be more than a fraction of the horizontal distance.
     var MAX_VERTICAL_RATIO = 0.3;
-    // At least a 30px lateral motion is necessary for a swipe.
-    var MIN_HORIZONTAL_DISTANCE = 30;
+    // At least a 160px lateral motion is necessary for a swipe.
+    var MIN_HORIZONTAL_DISTANCE = 160;
 
     return function(scope, element, attr) {
       var swipeHandler = $parse(attr[directiveName]);
@@ -546,6 +544,7 @@ function makeSwipeDirective(directiveName, direction, eventName) {
       }
 
       $swipe.bind(element, {
+        'disableMouseEvents': angular.isDefined(attr['ngSwipeDisableMouse']),
         'start': function(coords, event) {
           startCoords = coords;
           valid = true;

@@ -1,6 +1,6 @@
 <div class="main-content">
-    <!--div class="page-content" ng-swipe-right="stepForward()" ng-swipe-left="stepBackward()"-->
-    <div class="page-content">
+    <!--div class="page-content"-->
+    <div class="page-content" ng-swipe-disable-mouse ng-swipe-right="stepForward()" ng-swipe-left="stepBackward()" >
         <div class="page-header">
             <h1>Create Cluster Wizard</h1>
             <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span>
@@ -19,7 +19,6 @@
                 <div class="widget-header widget-header-flat widget-header-small">
                     <h5 class="widget-title">
                         {{steps[currentStep-1].title}}
-
                         <small ng-if="steps[currentStep-1].description"><i class="ace-icon fa fa-angle-double-right"></i> {{steps[currentStep-1].description}}</small>
                     </h5>
                 </div>
