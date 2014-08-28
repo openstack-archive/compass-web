@@ -79,7 +79,6 @@ angular.module('compass.wizard', [
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
         if (newCommitState != oldCommitState && newCommitState.name == $scope.steps[$scope.currentStep - 1].name) {
-
             if (newCommitState.state == "success") {
                 console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
                 if (newCommitState.name == "review") {
@@ -87,13 +86,10 @@ angular.module('compass.wizard', [
                         'id': $scope.cluster.id
                     });
                 }
-
                 $scope.stepControl();
-
                 if ($scope.currentStep > $scope.maxStep) {
                     $scope.maxStep = $scope.currentStep;
                 }
-
             } else if (newCommitState.state == "error") {
                 console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 $scope.openErrMessageModal(newCommitState.message);
@@ -192,7 +188,7 @@ angular.module('compass.wizard', [
 
     $scope.stepForward = function() {
         $scope.triggerCommit($scope.currentStep);
-        $scope.pendingStep = $scope.currentStep + 1;;
+        $scope.pendingStep = $scope.currentStep + 1;
 
     };
 
