@@ -1,42 +1,41 @@
 <div class="main-content">
     <div class="side-padding-40 top-padding-10">
-        <div class="row">
-            <div class="col-md-5 no-padding-left">
-                <h1 class="blue-header">
-                    <span style="font-family:Impact;">My Clusters</span>
-                    
+        <div class="row margin-bottom-10">
+            <div class="col-md-5 no-padding-left h1-inline margin-top-10">
+                <h1 class="blue-header margin-right-7">
+                    My Clusters
+                </h1>
+                <div class="server-margin-adjustment">
                     <span class="badge badge-yellow">{{clusters.length}}</span>
-                    <small>
-                        <span class="no-border-search">
+                        <span class="no-border-search search-small">
                             <span class="input-icon">
                                 <input class="no-border" type="text" placeholder="Search" ng-model="search.$">
-                                <i class="ace-icon fa fa-search" style="top:-2px"></i>
+                                <i class="ace-icon fa fa-search"></i>
                             </span>
                         </span>
-                    </small>
-                </h1>
+                </div>
             </div>
             <div class="col-md-7 no-padding-right">
-                <div class="pull-right">
 
-                    <span ng-controller="createClusterCtrl" class="pull-right">
-                        <button ng-click="open()" class="btn btn-app btn-sm btn-primary radius-4 btn-create">
-                            <i class="glyphicon glyphicon-plus"></i>
-                            New Cluster
-                        </button>
-                    </span>
-                </div>
-                <div class="pull-right clusters-view" ng-init="view = 'grid'">
-                    <span class="action grey" ng-click="view = 'grid'">
-                        <span class="glyphicon glyphicon-th-large" ng-class="{'blue': view == 'grid'}"></span>
-                    </span>
-                    <span class="action grey" ng-click="view = 'list'">
-                        <span class="glyphicon glyphicon-align-justify" ng-class="{'blue': view == 'list'}"></span>
-                    </span>
-                </div>
+                    <div class="pull-right applo">
+                        <span ng-controller="createClusterCtrl" class="pull-right">
+                            <button ng-click="open()" class="btn btn-app btn-sm btn-primary radius-4 btn-create">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                New Cluster
+                            </button>
+                        </span>
+                    </div>
+                    <div class="pull-right clusters-view top-padding-5" ng-init="view = 'grid'">
+                        <span class="action grey" ng-click="view = 'grid'">
+                            <span class="glyphicon glyphicon-th-large" ng-class="{'blue': view == 'grid'}"></span>
+                        </span>
+                        <span class="action grey" ng-click="view = 'list'">
+                            <span class="glyphicon glyphicon-align-justify" ng-class="{'blue': view == 'list'}"></span>
+                        </span>
+                    </div>
+
             </div>
         </div>
-        <div class="space-16"></div>
 
         <div class="row" ng-controller="createClusterCtrl">
             <div ng-if="clusters.length == 0" class="dashed-panel no-cluster-panel" ng-click="open()">

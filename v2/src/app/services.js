@@ -102,10 +102,22 @@ angular.module('compass.services', [])
             return $http.post(settings.apiUrlBase + '/clusters', angular.toJson(cluster));
         };
 
+        //postUser
+        this.createUser = function(newUser) {
+            return $http.post(settings.apiUrlBase + '/users', angular.toJson(newUser));
+        }; 
+
+        this.getUserSetting = function() {
+            return $http.get(settings.apiUrlBase + '/users');
+        };
+
+        this.getUserLog = function() {
+            return $http.get(settings.apiUrlBase + '/users/logs');
+        }
         this.getClusters = function() {
             return $http.get(settings.apiUrlBase + '/clusters');
         };
-
+        
         this.getClusterById = function(id) {
             return $http.get(settings.apiUrlBase + '/clusters/' + id);
         };
@@ -371,7 +383,7 @@ angular.module('compass.services', [])
 
 .service('authService', ['$http', 'dataService',
     function($http, dataService) {
-        this.isAuthenticated = false;
+        this.isAuthenticated = true;
 
         this.setLogin = function(isLogin) {
             this.isAuthenticated = isLogin;

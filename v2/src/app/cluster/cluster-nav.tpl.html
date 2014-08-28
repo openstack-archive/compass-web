@@ -1,20 +1,20 @@
 <ul class="nav nav-list">
     <li ng-class="{active:state.includes('cluster.overview')}">
         <a ui-sref="cluster.overview">
-            <i class="menu-icon fa fa-tachometer"></i>
+            <i class="compass-menu-icon fa fa-tachometer"></i>
             <span class="menu-text">Overview</span>
         </a>
     </li>
     <li ng-class="{'active open':state.includes('cluster.monitoring')}">
         <a href ng-click="isMonitoringNavOpen = !isMonitoringNavOpen">
-            <i class="menu-icon fa fa-bar-chart-o"></i>
+            <i class="compass-menu-icon fa fa-bar-chart-o"></i>
             <span class="menu-text">Monitoring</span>
             <b class="arrow fa fa-angle-down"></b>
         </a>
         <ul class="submenu" ng-show="isMonitoringNavOpen" style="display: block">
             <li ng-repeat="nav in monitoringNav" ng-class="{active:state.includes('{{nav.name}}')}">
                 <a ui-sref="{{nav.name}}">
-                    <i class="menu-icon fa fa-caret-right"></i>
+                    <i class="compass-menu-icon fa fa-caret-right"></i>
                     {{nav.display}}
                 </a>
             </li>
@@ -22,32 +22,32 @@
     </li>
     <li ng-class="{'active open':state.includes('cluster.config')}">
         <a href ng-click="isConfigNavOpen = !isConfigNavOpen">
-            <i class="menu-icon fa fa-cog"></i>
+            <i class="compass-menu-icon fa fa-cog"></i>
             <span class="menu-text">Configurations</span>
             <b class="arrow fa fa-angle-down"></b>
         </a>
         <ul class="submenu" ng-show="isConfigNavOpen" style="display: block">
             <li ng-class="{active:state.includes('cluster.config.security')}">
                 <a ui-sref="cluster.config.security">
-                    <i class="menu-icon fa fa-caret-right"></i>
+                    <i class="compass-menu-icon fa fa-caret-right"></i>
                     Security
                 </a>
             </li>
             <li ng-class="{active:state.includes('cluster.config.network')}">
                 <a ui-sref="cluster.config.network">
-                    <i class="menu-icon fa fa-caret-right"></i>
+                    <i class="compass-menu-icon fa fa-caret-right"></i>
                     Network
                 </a>
             </li>
             <li ng-class="{active:state.includes('cluster.config.partition')}">
                 <a ui-sref="cluster.config.partition">
-                    <i class="menu-icon fa fa-caret-right"></i>
+                    <i class="compass-menu-icon fa fa-caret-right"></i>
                     Partition
                 </a>
             </li>
             <li ng-class="{active:state.includes('cluster.config.roles')}">
                 <a ui-sref="cluster.config.roles">
-                    <i class="menu-icon fa fa-caret-right"></i>
+                    <i class="compass-menu-icon fa fa-caret-right"></i>
                     Roles
                 </a>
             </li>
@@ -55,7 +55,7 @@
     </li>
     <li ng-class="{active:state.includes('cluster.log')}">
         <a ui-sref="cluster.log">
-            <i class="menu-icon fa fa-list-alt"></i>
+            <i class="compass-menu-icon fa fa-list-alt"></i>
             <span class="menu-text">Log</span>
         </a>
     </li>
