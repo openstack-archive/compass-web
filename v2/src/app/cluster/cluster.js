@@ -59,6 +59,7 @@ angular.module('compass.cluster', [
         })
         .state('cluster.log', {
             url: '/log',
+            controller: "clusterLogCtrl",
             templateUrl: 'src/app/cluster/cluster-log.tpl.html',
             authenticate: true
         });
@@ -95,6 +96,10 @@ angular.module('compass.cluster', [
             });
         }
     }
+})
+
+.controller('clusterLogCtrl', function() {
+
 })
 
 .controller('clusterProgressCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData) {
@@ -187,7 +192,7 @@ angular.module('compass.cluster', [
             $scope.open = function(size) {
                 var modalInstance = $modal.open({
                     templateUrl: 'createClusterModal.html',
-                    controller: ModalInstanceCtrl,
+                    controller: ClusterModalCtrl,
                     size: size,
                     resolve: {
                         allAdapters: function() {
@@ -198,8 +203,9 @@ angular.module('compass.cluster', [
                         }
                     }
                 });
-
+                
                 modalInstance.result.then(function(cluster) {
+                    console.log(cluster)
                     $scope.cluster = cluster;
                     var postClusterData = {
                         "name": cluster.name,
@@ -271,7 +277,7 @@ angular.module('compass.cluster', [
     }
 ])
 
-var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
+var ClusterModalCtrl = function($scope, $modalInstance, allAdapters, cluster) {
     $scope.allAdapters = allAdapters;
     $scope.cluster = cluster;
 
