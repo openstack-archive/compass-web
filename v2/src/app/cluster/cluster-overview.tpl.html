@@ -1,32 +1,28 @@
-<div class="page-header">
-    <h1>
+<div>
+    <h1 class="blue-header margin-right-7">
         {{clusterInfo.name}}
-        <small>
-            <span class="badge" ng-class="{'badge-warning':clusterProgress.state==='INITIALIZED',
+    </h1>
+    <span class="badge margin-top-29" ng-class="{'badge-warning':clusterProgress.state==='INITIALIZED',
             'badge-info':clusterProgress.state==='INSTALLING',
             'badge-danger':clusterProgress.state==='ERROR',
             'badge-success':clusterProgress.state==='SUCCESSFUL'}">
-                {{clusterProgress.state}}
-            </span>
-            <!--<i class="ace-icon fa fa-angle-double-right"></i>&nbsp;
+        {{clusterProgress.state}}
+    </span>
+    <!--<i class="ace-icon fa fa-angle-double-right"></i>&nbsp;
             <a href="">OpenStack Dashboard Link</a>-->
-        </small>
-    </h1>
+</div>
+<div class="pull-right align-right">
+    <div class="cluster-progress">
+        <div>
+            <strong>{{clusterProgress.status.total_hosts}} Total Hosts</strong>
+        </div>
+        <div>{{clusterProgress.status.installing_hosts}} Installing Hosts</div>
+        <div>{{clusterProgress.status.completed_hosts}} Completed Hosts</div>
+        <div>{{clusterProgress.status.failed_hosts}} Failed Hosts</div>
+    </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <div class="row">
-            <div class="pull-right align-right">
-                <div class="cluster-progress">
-                    <div>
-                        <strong>{{clusterProgress.status.total_hosts}} Total Hosts</strong>
-                    </div>
-                    <div>{{clusterProgress.status.installing_hosts}} Installing Hosts</div>
-                    <div>{{clusterProgress.status.completed_hosts}} Completed Hosts</div>
-                    <div>{{clusterProgress.status.failed_hosts}} Failed Hosts</div>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-xs-12">
                 <div>
@@ -134,7 +130,7 @@
                                     </hostprogressbar>
                                 </td>
                                 <td class="align-right">
-                                    <button class="btn btn-xs" ng-click="openDeleteHostModal($index)">
+                                    <button class="btn btn-trash-hover cluster-overview-delete border-radius-4 btn-xs" ng-click="openDeleteHostModal($index)">
                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                     </button>
                                 </td>
