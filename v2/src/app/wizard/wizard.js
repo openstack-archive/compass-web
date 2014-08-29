@@ -963,9 +963,9 @@ angular.module('compass.wizard', [
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
 
-    dataService.getAdapter(cluster.adapter_id).success(function(data) {
-        wizardFactory.setAdapter(data);
-        $scope.roles = data.roles;
+    dataService.getClusterById(cluster.id).success(function(data) {
+        // wizardFactory.setAdapter(data);
+        $scope.roles = data.falvor.roles;
     });
 
     dataService.getServerColumns().success(function(data) {
