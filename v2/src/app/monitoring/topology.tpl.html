@@ -1,0 +1,18 @@
+<div class="page-header">
+    <h1>
+        Topology
+    </h1>
+</div>
+
+<div class="col-lg-10" ng-controller="moniOverviewCtrl" style="width: 100%;">
+  <tabset class="ng-isolate-scope" style="width: 100%;">
+    <tab heading="Physical View" > Layer 2/3 Topology 
+       <treechart id="physicalTopo" data="physicalTopoData" count="serverCount" style="width: 100%; height: 1280px; transition: 0.4s all ease-out;"> </treechart> 
+</tab>
+
+    <tab heading="Service View" > Service Diagram 
+<circlepacking id="logicalTopo" data="logicalTopoData" style="display: block; margin-left: auto; margin-right: auto; width: 100%; height: 1280px; transition: 0.4s all ease-out;"></circlepacking> 
+</tab>
+  </tabset>
+
+</div>

@@ -16,6 +16,190 @@ angular.module('compass.monitoring', [
         })
 })
 
+.controller('alertsCtrl', ['$scope',
+    function($scope) {
+        $scope.options = {
+            renderer: 'area'
+        };
+
+        $scope.alertsData = {"id":"server-1.huawei.com","name":"server-1.huawei.com","resource":"hosts","state":"running","type":"server",  "metrics":[],  "alarms":[
+                {"id":"critical","name":"critical","data":[
+                                {"start":1406831282409,"end":1406870037149},
+                                {"start":1406745382748,"end":1406761927670}
+                ]},
+                {"id":"minor","name":"minor","data":[
+                                {"start":1406873957790,"end":1406886655198},
+                                {"start":1406774590378,"end":1406850781190}
+                ]},
+                {"id":"positive","name":"positive","data":[
+                                {"start":1406873957790,"end":1406886655198},
+                                {"start":1406774590378,"end":1406850781190}
+                ]},
+                {"id":"info","name":"info","data":[
+                                {"start":1406873957790,"end":1406886655198},
+                                {"start":1406774590378,"end":1406850781190}
+                ]}
+        ]};
+    }
+])
+
+
+/*
+.value("graphConfigurations", {
+        apis: {
+                'simulation': {
+                    uri: { v : "/monit/api/1.0.0/", displayName: 'Testing Cluster'},
+                        metrics: true, alarms: true, topos: true,
+                },
+                'simulation.alarms': {
+                        uri: "/monit/api/1.0.0/hosts/uc-server-2.huawei.com/alarms"
+                },
+                '192.168.255.85.hostgroup': {
+                    uri: { v : '/monit/api/hostgroup/host1/metric/cpu.0.cpu.system.value',
+                            displayName: 'Cluster 1'},
+                        metrics: true, alarms: true
+                },
+                '192.168.255.85.topology': {
+                    uri: { v: '/monit/api/topologies/1', displayName: 'Cluster 1'}, topos:true
+                }
+        },
+        renderers:{
+                line: {
+                        name: "line",
+                        metrics: true,
+                        view: com.huawei.compass.LineGraph,
+                        model: com.huawei.compass.LineGraphModel
+                },
+                area: {
+                        name: "area",
+                        metrics: true,
+                        view: com.huawei.compass.AreaGraph,
+                        model: com.huawei.compass.AreaGraphModel
+                },
+                sparkline: {
+                        name: "sparkline",
+                        metrics: true,
+                        view: com.huawei.compass.SparkGraph,
+                        model: com.huawei.compass.SparkGraphModel
+                },
+                all: {
+                        name: "all",
+                        alarms: true,
+                        view: com.huawei.compass.BlockGraph,
+                        model: com.huawei.compass.BlockGraphModel,
+                        value:""
+                },
+
+                critical: {
+                        name: "critical",
+                        alarms: true,
+                        view: com.huawei.compass.BlockGraph,
+                        model: com.huawei.compass.BlockGraphModel,
+                        value:"critical"
+                },
+                warning: {
+                        name: "warning",
+                        alarms: true,
+                        view: com.huawei.compass.BlockGraph,
+                        model: com.huawei.compass.BlockGraphModel,
+                        value:"minor"
+                },
+                success: {
+                        name: "success",
+                        alarms: true,
+                        view: com.huawei.compass.BlockGraph,
+                        model: com.huawei.compass.BlockGraphModel,
+                        value:"positive"
+                },
+                unknown: {
+                        name: "unknown",
+                        alarms: true,
+                        view: com.huawei.compass.BlockGraph,
+                        model: com.huawei.compass.BlockGraphModel,
+                        value:"info"
+                },
+                tree: {
+                        name: "tree",
+                        topos: true,
+                        view: com.huawei.compass.TreeGraph,
+                        model: com.huawei.compass.TreeGraphModel,
+                        value:"info"
+                }
+        },
+        styles:{
+                "switch":"/assets/images/switch.png",
+                "server":"/assets/images/server.png",
+                "service":"/assets/images/switch.png",
+                "running":"#669900",
+                "error" : "#CC0000",
+            "warning" : "#ffff33",
+            "unknown" : "#33b5e5"
+        }
+})
+*/
+
+.controller('alarmsCtrl', ['$scope', '$http', 'graphConfigurations', 'graphService',
+    function($scope, $http, graphConfigurations, graphService) {
+                $scope.uris = graphService.getUris(graphConfigurations,"alarms");
+            $scope.renderers = graphService.getRenderers(graphConfigurations,"alarms");
+            $scope.rendererChanged = graphService.getRendererListener($scope);
+            $scope.uriChanged = graphService.getUriListener($scope);
+            $scope.alertsData = {"id":"server-1.huawei.com","name":"server-1.huawei.com","resource":"hosts","state":"running","type":"server",  "metrics":[],  "alarms":[
+                {"id":"critical","name":"critical","data":[
+                                {"start":1406831282409,"end":1406870037149},
+                                {"start":1406745382748,"end":1406761927670}
+                ]},
+                {"id":"minor","name":"minor","data":[
+                                {"start":1406873957790,"end":1406886655198},
+                                {"start":1406774590378,"end":1406850781190}
+                ]},
+                {"id":"positive","name":"positive","data":[
+                                {"start":1406873957790,"end":1406886655198},
+                                {"start":1406774590378,"end":1406850781190}
+                ]},
+                {"id":"info","name":"info","data":[
+                                {"start":1406873957790,"end":1406886655198},
+                                {"start":1406774590378,"end":1406850781190}
+                ]}
+           ]};
+           $scope.changeSeriesData = graphService.getDataListener($scope, function(data) {
+                var uri = $scope.uri;
+                console.log("URI is .....", uri);
+                var renderer = $scope.renderer;
+                var isValidApi = (uri == graphConfigurations.apis["192.168.255.85.hostgroup"].uri.v);
+                if (isValidApi) for (var i = 0; i < data.length; i++) data[i].name = data[i].id;
+                var gFormatter = com.huawei.compass.formatter.hourminute;
+                var gName = "Alarms";
+                var gData = isValidApi ? data : data.groups[0].hosts;
+                // TODO(jiahua): graphConfigurations.renderers[renderer] is undefined
+                var gProperty = graphConfigurations.renderers[renderer].value;
+                        var view = new graphConfigurations.renderers[renderer].view({
+                                name: gName,
+                                model: new graphConfigurations.renderers[renderer].model({data:gData, propertyKey:"alarms", propertyName:gProperty}).model,
+                                formatter: gFormatter,
+                                yFormatter: d3.format('.3e'),
+                                css: "chart-title",
+                                width: 500,
+                                height: 500,
+                                css: {
+                            "header":"chart-title",
+                            "critical" : "alarm-critical",
+                            "major" : "alarm-major",
+                            "minor" : "alarm-minor",
+                            "info" : "alarm-info",
+                            "positive" : "alarm-positive"
+                        },
+                        listener: function(d) {
+                                alert("Alarm Selected (" + d.startDate + ", " + d.endDate + ")");
+                        }
+                        });
+                        $.graphs.get("alarmsGraphContainer").innerHTML = "";
+                        $.graphs.get("alarmsGraphContainer").appendChild(view);
+                });
+    }
+])
+
+
 .controller('monitoringCtrl', ['$scope',
     function($scope) {
         $scope.options = {
@@ -293,6 +477,8 @@ angular.module('compass.monitoring', [
         }]
     };
     $scope.serverCount = 9;
+
+    //$scope.topoDropDown = 'service';
 
     $scope.exampleData = [{
         "key": "Series 1",

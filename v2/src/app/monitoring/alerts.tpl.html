@@ -1,0 +1,30 @@
+<div class="page-header">
+    <h1>
+        Alarming, Alerting, Event Log
+    </h1>
+</div>
+
+<div class="col-lg-10" ng-controller="alertsCtrl" style="width: 100%;">
+  <tabset class="ng-isolate-scope" style="width: 100%;">
+    <tab heading="Alerts"> Alerts
+        <form class="form-inline ng-valid">
+            <select class="form-control ng-pristine ng-valid" ng-model="renderer"  ng-change="rendererChanged(renderer)" >
+                <option ng-repeat="render in renderers" value="{{render}}"> {{render}} </option>
+            </select>
+            <select class="form-control ng-valid" ng-model="uri" ng-change="uriChanged(uri)">
+                <option ng-repeat="uri in uris" value="{{uri.v}}"> {{uri.displayName}} </option>
+            </select>
+            <button class="btn btn-primary" ng-click="changeSeriesData(0)">Generate Alarm Report</button>
+        </form>
+        <div class="panel-body" id="alarmsGraphContainer"> </div>
+    </tab>
+    <tab heading="Alarms"> 
+      <tab-heading>
+        <i class="glyphicon glyphicon-bell"></i> Alarms!
+      </tab-heading> 
+      Alarms - TBD
+    </tab>
+    <tab heading="Event Viewer"> Event Viewer - TBD
+    </tab>
+  </tabset>
+</div>
