@@ -758,4 +758,31 @@ li.incomplete:before, li.incomplete .step {
 .modal.in .modal-dialog {
     transform: translate(0px, 100px);
 }
-
+address, caption, cite, code, dfn, em, strong, th, var {
+    opacity: 0.8 !important; 
+}
+div.toc ul li a {
+    border-radius: 7px;
+}
+circle.parent {
+    fill-opacity: 1 !important;
+    stroke: none !important;
+    fill: #E6E6E6!important;
+}
+circle
+{
+    fill-opacity:1 !important;
+    stroke:none !important;
+}
+circle[depth='1'] {
+    fill: #27AA37 !important;
+}
+circle[depth='2'] {
+    fill: #FEE188 !important;
+}
+circle[depth='3'] {
+    fill: #6FB3E0 !important;
+}
+circle[depth='4'] {
+    fill: #D15B47 !important;
+}
