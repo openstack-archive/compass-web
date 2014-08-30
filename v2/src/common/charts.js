@@ -339,7 +339,7 @@ angular.module('compass.charts', [])
                         else if (d.depth == 1)
                             return "assets/img/switch1.png";
                         else
-                            return "assets/img/server.png";
+                            return "assets/img/server1.png";
                     })
                     .attr("width", imgWidth)
                     .attr("height", imgHeight);
@@ -354,7 +354,7 @@ angular.module('compass.charts', [])
                         if (d.depth == 0)
                             return 0;
                         else
-                            return 0.4;
+                            return 0.3;
                     });
 
                 nodeEnter.append("text")
