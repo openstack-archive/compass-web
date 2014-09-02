@@ -202,7 +202,7 @@ select {
 .border-radius-4 {
     border-radius: 4px !important;
 }
-textarea, input[type="text"], input[type="password"] {
+textarea, input[type="text"], input[type="password"], input[type="number"] {
     -webkit-appearance: none;
     /* Remove inner shadow from inputs on mobile iOS */
     /*background: inherit;*/
@@ -518,6 +518,10 @@ td.center-align {
     padding-left: 20px !important;
     padding-right: 20px !important;
     /*padding-top:7px !important;*/
+}
+.side-margin-3 {
+    margin-left: 3px !important;
+    margin-right: 3px !important;
 }
 .top-margin-14 {
     margin-top: 14px;

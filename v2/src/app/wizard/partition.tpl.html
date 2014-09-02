@@ -16,15 +16,15 @@
                             <input ng-model="newPartition.mount_point" type="text" placeholder="Mount Point" class="input-medium">
                         </td>
                         <td>
-                            <input ng-model="newPartition.percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                            <input ng-model="newPartition.percentage" type="number" min="1" max="100" placeholder="Size Percentage" class="input-medium">
                         </td>
                         <td>
-                            <input ng-model="newPartition.max_size" type="text" placeholder="Max Size" class="input-medium">
+                            <input ng-model="newPartition.max_size" type="number" min="1" max="100" placeholder="Max Size" class="input-medium">
                         </td>
                         <td>
-                               <span ng-click="addPartition()" class="action" style="padding-left: 31px;" >
-                                        <i class="fa fa-plus-circle bigger-140 blue"S></i>
-                               </span>                           
+                           <span ng-click="addPartition()" class="action" style="padding-left: 31px;" >
+                                <i class="fa fa-plus-circle bigger-140 blue"S></i>
+                           </span>                           
                         </td>
                     </tr>
                     <tr ng-repeat="(key, data) in partition">
@@ -33,11 +33,11 @@
                         </td>
                         <td>
                             <span ng-hide="editPartitionMode">{{data.percentage}}</span>
-                            <input ng-show="editPartitionMode" ng-model="data.percentage" type="text" placeholder="Size Percentage" class="input-medium">
+                            <input ng-show="editPartitionMode" ng-model="data.percentage" type="number"  min="1" max="100" placeholder="Size Percentage" class="input-medium">
                         </td>
                         <td>
                             <span ng-hide="editPartitionMode">{{data.max_size}}</span>
-                            <input ng-show="editPartitionMode" ng-model="data.max_size" type="text" placeholder="Max Size" class="input-medium">
+                            <input ng-show="editPartitionMode" ng-model="data.max_size" type="number"  min="1" max="100" placeholder="Max Size" class="input-medium">
                         </td>
                         <td>
                             <!--edit button-->

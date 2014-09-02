@@ -71,3 +71,42 @@ treechart rect[data-state='warning'] {
 treechart rect[data-state='error'] {
     fill: red;
 }
+
+
+/* gantt chart */
+
+ganttchart .chart {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin-top: 30px;
+}
+
+ganttchart text {
+    font-family: "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif !important;
+}
+
+ganttchart .axis path, ganttchart .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+ganttchart .bar {
+    fill: #33b5e5;
+}
+
+ganttchart .bar-failed {
+    fill: #CC0000;
+}
+
+ganttchart .bar-running {
+    fill: #669900;
+}
+
+ganttchart .bar-succeeded {
+    fill: #33b5e5;
+}
+
+ganttchart .bar-killed {
+    fill: #ffbb33;
+}
