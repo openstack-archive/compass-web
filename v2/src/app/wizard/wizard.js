@@ -79,7 +79,6 @@ angular.module('compass.wizard', [
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
         if (newCommitState != oldCommitState && newCommitState.name == $scope.steps[$scope.currentStep - 1].name) {
-
             if (newCommitState.state == "success") {
                 console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState);
                 if (newCommitState.name == "review") {
@@ -191,15 +190,14 @@ angular.module('compass.wizard', [
     };
 
     $scope.stepForward = function() {
-        $scope.triggerCommit($scope.currentStep);
         $scope.pendingStep = $scope.currentStep + 1;;
-
+        $scope.triggerCommit($scope.currentStep);
     };
 
     // go to previous step
     $scope.stepBackward = function() {
-        $scope.triggerCommit($scope.currentStep);
         $scope.pendingStep = $scope.currentStep - 1;
+        $scope.triggerCommit($scope.currentStep);
     };
 
     // go to step by stepId
@@ -1106,12 +1104,10 @@ angular.module('compass.wizard', [
             angular.forEach(server.roles, function(role) {
                 roles.push(role.name);
             });
-            var config = {
-                "package_config": {
-                    "roles": roles
-                }
+            var data = {
+                "roles": roles
             };
-            var updateRoles = dataService.updateClusterHostConfig(cluster.id, server.id, config).then(function(configData) {
+            var updateRoles = dataService.updateClusterHost(cluster.id, server.id, data).then(function(configData) {
                 // success callback
             }, function(response) {
                 // error callback

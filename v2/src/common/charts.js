@@ -471,4 +471,97 @@ angular.module('compass.charts', [])
 
         }
     }
-});
+})
+
+app.directive('ganttchart', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            data: '=',
+            hosts: '='
+        },
+        template: '<div class="pull-right"><button type="button" class="btn btn-xs side-margin-3" ng-click="changeTimeDomain(\'1hr\')">1 HR</button>'
+                + '<button type="button" class="btn btn-xs side-margin-3" ng-click="changeTimeDomain(\'3hr\')">3 HR</button>'
+                + '<button type="button" class="btn btn-xs side-margin-3" ng-click="changeTimeDomain(\'6hr\')">6 HR</button>'
+                + '<button type="button" class="btn btn-xs side-margin-3" ng-click="changeTimeDomain(\'1day\')">1 DAY</button>'
+                + '<button type="button" class="btn btn-xs side-margin-3" ng-click="changeTimeDomain(\'1week\')">1 WEEK</button>'
+                + '</div>'
+                + '<div class="clear-fix"></div>',
+        link: function(scope, element, attrs) {
+            var tasks = scope.data;
+            var hostnames = scope.hosts;
+            var taskStatus = {
+                "SUCCEEDED": "bar",
+                "CRITICAL": "bar-failed",
+                "WARNING": "bar-running",
+                "UNKNOWN": "bar-killed"
+            };
+
+            tasks.sort(function(a, b) {
+                return a.endDate - b.endDate;
+            });
+            var maxDate = tasks[tasks.length - 1].endDate;
+            tasks.sort(function(a, b) {
+                return a.startDate - b.startDate;
+            });
+            var minDate = tasks[0].startDate;
+
+            var format = "%H:%M";
+            var timeDomainString = "1day";
+
+            var gantt = d3.gantt().taskTypes(hostnames).taskStatus(taskStatus).tickFormat(format).height(450).width(800);
+
+            scope.changeTimeDomain = function(timeDomainString) {
+                this.timeDomainString = timeDomainString;
+                switch (timeDomainString) {
+                    case "1hr":
+                        format = "%H:%M:%S";
+                        gantt.timeDomain([d3.time.hour.offset(getEndDate(), -1), getEndDate()]);
+                        break;
+                    case "3hr":
+                        format = "%H:%M";
+                        gantt.timeDomain([d3.time.hour.offset(getEndDate(), -3), getEndDate()]);
+                        break;
+
+                    case "6hr":
+                        format = "%H:%M";
+                        gantt.timeDomain([d3.time.hour.offset(getEndDate(), -6), getEndDate()]);
+                        break;
+
+                    case "1day":
+                        format = "%H:%M";
+                        gantt.timeDomain([d3.time.day.offset(getEndDate(), -1), getEndDate()]);
+                        break;
+
+                    case "1week":
+                        format = "%a %H:%M";
+                        gantt.timeDomain([d3.time.day.offset(getEndDate(), -7), getEndDate()]);
+                        break;
+                    default:
+                        format = "%H:%M"
+
+                }
+                gantt.tickFormat(format);
+                gantt.redraw(tasks);
+            }
+
+            gantt.timeDomainMode("fixed");
+            scope.changeTimeDomain(timeDomainString);
+
+            gantt(tasks);
+
+
+
+            function getEndDate() {
+                var lastEndDate = Date.now();
+                if (tasks.length > 0) {
+                    lastEndDate = tasks[tasks.length - 1].endDate;
+                }
+
+                return lastEndDate;
+            }
+
+        }
+    }
+
+})

@@ -173,6 +173,10 @@ angular.module('compass.services', [])
             return $http.get(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts');
         };
 
+        this.updateClusterHost = function(clusterId, hostId, data) {
+            return $http.put(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId, angular.toJson(data));
+        };
+
         this.updateClusterHostConfig = function(clusterId, hostId, config) {
             return $http.put(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId + '/config', angular.toJson(config));
         };
@@ -217,7 +221,7 @@ angular.module('compass.services', [])
             wizard.commit = {};
             wizard.servers = [];
             wizard.allServers = [];
-            wizard.adapter = {}; //
+            //wizard.adapter = {}; //
             wizard.generalConfig = {};
             wizard.subnetworks = [];
             wizard.routingtable = [];
@@ -282,7 +286,7 @@ angular.module('compass.services', [])
         wizard.getServers = function() {
             return angular.copy(wizard.servers);
         };
-
+/*
         wizard.setAdapter = function(adapter) { ////
             wizard.adapter = adapter;
         };
@@ -290,7 +294,7 @@ angular.module('compass.services', [])
         wizard.getAdapter = function() { /////
             return angular.copy(wizard.adapter);
         };
-
+*/
         wizard.setGeneralConfig = function(config) {
             wizard.generalConfig = config;
         };

@@ -23,25 +23,47 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display": "OpenStack",
             "os_installer": "cobbler",
             "package_installer": "chef",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
-            }, {
-                "display_name": "Controller",
-                "name": "os-controller"
-            }, {
-                "display_name": "Network",
-                "name": "os-network"
-            }, {
-                "display_name": "Storage",
-                "name": "os-block-storage-worker"
-            }],
             "supported_oses": [{
                 "name": "CentOs",
                 "id": 1
             }, {
                 "name": "Ubuntu",
                 "id": 2
+            }],
+            "flavors": [{
+                "display_name": "allinone",
+                "id": 1,
+                "name": "allinone",
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }]
+            }, {
+                "display_name": "multiroles",
+                "id": 2,
+                "name": "multiroles",
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }]
             }]
         }, {
             "id": 2,
@@ -434,7 +456,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-26 13:00:00",
-            " links": [{
+            "links": [{
                 "href": "/clusters/1",
                 "rel": "self"
             }, {
@@ -452,7 +474,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-28 14:00:00",
-            " links": [{
+            "links": [{
                 "href": "/clusters/1",
                 "rel": "self"
             }, {
@@ -470,7 +492,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-5-26 09:00:00",
-            " links": [{
+            "links": [{
                 "href": "/clusters/1",
                 "rel": "self"
             }, {
@@ -488,7 +510,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-19 08:00:00",
-            " links": [{
+            "links": [{
                 "href": "/clusters/1",
                 "rel": "self"
             }, {
@@ -506,7 +528,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-4-25 12:00:00",
             "updated_at": "2014-2-27 20:00:00",
-            " links": [{
+            "links": [{
                 "href": "/clusters/2",
                 "rel": "self"
             }, {
@@ -530,7 +552,19 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-26 13:00:00",
-            " links": [{
+            "flavor": {
+                "roles": [{
+                    "display_name": "Compute",
+                    "name": "os-compute-worker"
+                }, {
+                    "display_name": "Controller",
+                    "name": "os-controller"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
+                }]
+            },
+            "links": [{
                 "href": "/clusters/" + id,
                 "rel": "self"
             }, {
@@ -836,6 +870,11 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }
         return [200, hosts, {}];
     });
+
+    $httpBackend.whenPUT(/\.*\/clusters\/([0-9]|[1-9][0-9])\/hosts\/([0-9]|[1-9][0-9])$/).respond(function(method, url, data) {
+        var updateData = JSON.parse(data);
+        return [200, updateData, {}];
+    })
 
     $httpBackend.whenPUT(/\.*\/clusters\/[1-9][0-9]*\/hosts\/[1-9][0-9]*\/config/).respond(function(method, url, data) {
         console.log(method, url, data);
