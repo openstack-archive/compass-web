@@ -56,13 +56,13 @@
 </div>
 <div>
     <script type="text/ng-template" id="messagemodal.html">
-        <div class="modal-header">
+        <div class="modal-header modal-warning-header">
             <h3 class="modal-title">
                 <i class="ace-icon fa fa-exclamation-triangle orange"></i>
                 Warning
             </h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body modal-warning-body">
             <span ng-if="warning.message">
                 {{warning.message}}
             </span>
@@ -70,8 +70,8 @@
                 Error occured.
             </span>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <div class="modal-footer modal-warning-footer">
+            <button class="btn btn-primary" ng-click="ok()" style="padding-left: 25px; padding-right: 25px; margin-left: 0px; margin-right: -3px;" >OK</button>
         </div>
     </script>
 </div>

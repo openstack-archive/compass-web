@@ -308,7 +308,15 @@ button[disabled] {
     line-height: 1.5;
     padding: 4px 12px;
     border-radius:7px !important;
+
 }
+
+.btn-cancel
+{
+    border-color: #909AA1;
+    background-color: #909AA1 !important;
+}
+
 .btn-group > .btn {
     border-radius: 7px !important;
 }
@@ -608,9 +616,24 @@ li.incomplete:before, li.incomplete .step {
 .modal-header
 {
     /*background-color: #EFF3F8;*/
-    background-image: url('../img/dialogue-bar.jpg');
+    background-image: url('../img/dialogue-bar1.jpg');
     background-size:cover;
     /*background-position: 50% 50%;*/
+}
+.modal-warning-header
+{
+    padding-top: 13px; 
+    padding-bottom: 13px;
+}
+.modal-warning-body
+{
+    padding-top: 30px; 
+    padding-bottom: 20px;
+}
+.modal-warning-footer
+{
+    padding-top: 8px; 
+    padding-bottom: 8px;
 }
 .bkg-fullscreen
 {
@@ -665,7 +688,7 @@ li.incomplete:before, li.incomplete .step {
 }
 .modal-footer
 {
-    background-image: url('../img/dialogue-bar.jpg');
+    background-image: url('../img/dialogue-bar1.jpg');
     background-size:cover;
 }
 .modal-title
@@ -785,4 +808,24 @@ circle[depth='3'] {
 }
 circle[depth='4'] {
     fill: #D15B47 !important;
+}
+.table-hover > tbody > tr > td.success:hover,
+.table-hover > tbody > tr > th.success:hover,
+.table-hover > tbody > tr.success:hover > td,
+.table-hover > tbody > tr.success:hover > th {
+  background-color:rgba(194, 221, 240, 1);
+}
+.table > thead > tr > td.success,
+.table > tbody > tr > td.success,
+.table > tfoot > tr > td.success,
+.table > thead > tr > th.success,
+.table > tbody > tr > th.success,
+.table > tfoot > tr > th.success,
+.table > thead > tr.success > td,
+.table > tbody > tr.success > td,
+.table > tfoot > tr.success > td,
+.table > thead > tr.success > th,
+.table > tbody > tr.success > th,
+.table > tfoot > tr.success > th {
+  background-color:rgba(239, 243, 252, 0.98);
 }
