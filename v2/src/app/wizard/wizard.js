@@ -960,10 +960,16 @@ angular.module('compass.wizard', [
 .controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
-
+    var colors = ['#8EA16C','#C2CF30', '#FEC700', '#FF8900', '#D3432B','#BB2952','#8E1E5F','#DE4AB6','#9900EC','#3A1AA8','#3932FE','#278BC0','#35B9F6','#91E0CB','#42BC6A','#5B4141'];
     dataService.getClusterById(cluster.id).success(function(data) {
         // wizardFactory.setAdapter(data);
         $scope.roles = data.flavor.roles;
+        var i = 0;
+        angular.forEach($scope.roles, function(role) {
+            role.color = colors[i];
+            i++;
+        })
+        console.log($scope.roles);
     });
 
     dataService.getServerColumns().success(function(data) {

@@ -94,8 +94,8 @@ body, .main-content {
     color: white;
 }
 .role-tag {
-    background-color: #6fb3e0 !important;
-    border-color: #6fb3e0 !important;
+    background-color: #6fb3e0; 
+    border-color: rgba(0,0,0,0);
     border-radius: 10px;
     color: #fff;
     display: inline-block;

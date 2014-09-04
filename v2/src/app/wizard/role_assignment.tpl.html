@@ -125,7 +125,7 @@
                         </span>
                     </td>
                     <td>
-                        <alert ng-repeat="role in server['roles']" class="role-tag" close="removeRole(server, role)">
+                        <alert ng-repeat="role in server['roles']" class="role-tag" ng-style="{'background-color': role.color}" close="removeRole(server, role)">
                             {{role.display_name}}
                         </alert>
                     </td>

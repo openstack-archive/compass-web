@@ -375,7 +375,7 @@ angular.module('compass.services', [])
 
 .service('authService', ['$http', 'dataService',
     function($http, dataService) {
-        this.isAuthenticated = true;
+        this.isAuthenticated = false;
 
         this.setLogin = function(isLogin) {
             this.isAuthenticated = isLogin;
