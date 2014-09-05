@@ -169,7 +169,7 @@ angular.module('compass.services', [])
             return $http.put(settings.apiUrlBase + '/hosts/' + id + '/networks/' + networkId, angular.toJson(network));
         };
 
-        this.getClusterHostMachines = function(clusterId, hostId) {
+        this.getClusterHosts = function(clusterId, hostId) {
             return $http.get(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts');
         };
 
@@ -230,7 +230,7 @@ angular.module('compass.services', [])
             wizard.partition = {};
             wizard.server_credentials = {};
             wizard.service_credentials = {};
-            wizard.management_credentials = {};
+            wizard.console_credentials = {};
             wizard.network_mapping = {};
         };
 
@@ -243,7 +243,7 @@ angular.module('compass.services', [])
             wizard.setPartition(config.partition);
             wizard.setServerCredentials(config.server_credentials);
             wizard.setServiceCredentials(config.service_credentials);
-            wizard.setManagementCredentials(config.management_credentials);
+            wizard.setConsoleCredentials(config.console_credentials);
             wizard.setNetworkMapping(config.network_mapping);
         };
 
@@ -353,12 +353,12 @@ angular.module('compass.services', [])
             return angular.copy(wizard.service_credentials);
         };
 
-        wizard.setManagementCredentials = function(credentials) {
-            wizard.management_credentials = credentials;
+        wizard.setConsoleCredentials = function(credentials) {
+            wizard.console_credentials = credentials;
         };
 
-        wizard.getManagementCredentials = function() {
-            return angular.copy(wizard.management_credentials);
+        wizard.getConsoleCredentials = function() {
+            return angular.copy(wizard.console_credentials);
         };
 
         wizard.setNetworkMapping = function(mapping) {

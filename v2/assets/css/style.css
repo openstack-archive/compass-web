@@ -184,7 +184,9 @@ select {
 .widget-body .table {
     border-top: 0px !important;
 }
-.widget-main padding-32t
+.widget-body .table thead:first-child tr {
+    background-color: #f2f2f2;
+}
 .navbar .navbar-nav > li {
     border-style: none;
 }

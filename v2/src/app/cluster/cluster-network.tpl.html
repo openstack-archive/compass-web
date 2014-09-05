@@ -14,8 +14,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="(key, value) in configuration.package_config.network_mapping">
-                    <td>{{value.display}}</td>
-                    <td>{{value.mapping_interface}}</td>
+                    <td class="capitalize">{{key}} Network</td>
+                    <td>{{value}}</td>
                 </tr>
             </tbody>
         </table>

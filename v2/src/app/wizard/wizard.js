@@ -38,23 +38,65 @@ angular.module('compass.wizard', [
                         deferred.resolve(data);
                     });
                     return deferred.promise;
+                },
+                clusterConfigData: function($stateParams, $q, dataService) {
+                    var clusterId = $stateParams.id;
+                    var deferred = $q.defer();
+                    dataService.getClusterConfig(clusterId).success(function(data) {
+                        deferred.resolve(data);
+                    });
+                    return deferred.promise;
                 }
             }
         });
 })
 
-.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, $modal, clusterData, machinesHostsData, wizardStepsData, usSpinnerService) {
+.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, $modal, clusterData, machinesHostsData, wizardStepsData, clusterConfigData, usSpinnerService) {
     $scope.clusterId = $stateParams.id;
     $scope.cluster = clusterData;
     wizardFactory.setClusterInfo($scope.cluster);
     wizardFactory.setAllMachinesHost(machinesHostsData);
 
+    var oldConfig = clusterConfigData;
+
     // get pre-config data for wizard
     if ($stateParams.config == "true") {
         dataService.getWizardPreConfig().success(function(data) {
             wizardFactory.preConfig(data);
+
+            console.log("@@@", data)
+            console.log("~@@~~", wizardFactory.getConsoleCredentials())
+
+            if(oldConfig.os_config) {
+                if(oldConfig.os_config.general) {
+                    wizardFactory.setGeneralConfig(oldConfig.os_config.general);
+                }
+                if(oldConfig.os_config.partition) {
+                    wizardFactory.setPartition(oldConfig.os_config.partition);
+                }
+                if(oldConfig.os_config.server_credentials) {
+                    wizardFactory.setServerCredentials(oldConfig.os_config.server_credentials);
+                }                
+            }
+            if(oldConfig.package_config) {
+                if(oldConfig.package_config.security) {
+                    if(oldConfig.package_config.security.service_credentials) {
+                        wizardFactory.setServiceCredentials(oldConfig.package_config.security.service_credentials);
+                    }
+                    if(oldConfig.package_config.security.console_credentials) {
+                        console.log("hereeee")
+                        wizardFactory.setConsoleCredentials(oldConfig.package_config.security.console_credentials);
+                    }
+                }
+                if(oldConfig.package_config.network_mapping) {
+                    wizardFactory.setNetworkMapping(oldConfig.package_config.network_mapping);
+                }
+            }
+
         });
     }
+
+    console.log("~~~", wizardFactory.getConsoleCredentials())
 
     $scope.currentStep = 1;
     $scope.maxStep = 1;
@@ -234,7 +276,7 @@ angular.module('compass.wizard', [
     $scope.hideunselected = '';
     $scope.search = {};
 
-    $scope.cluster = wizardFactory.getClusterInfo();
+    var cluster = wizardFactory.getClusterInfo();
 
     $scope.allservers = wizardFactory.getAllMachinesHost();
 
@@ -328,14 +370,45 @@ angular.module('compass.wizard', [
             };
             wizardFactory.setCommitState(commitState);
         } else {
-            wizardFactory.setServers(selectedServers);
-            wizardFactory.setAllMachinesHost($scope.allservers);
-            var commitState = {
-                "name": "sv_selection",
-                "state": "success",
-                "message": ""
+            var addHostsAction = {
+                "add_hosts": {
+                    "machines": []
+                }
             };
-            wizardFactory.setCommitState(commitState);
+            angular.forEach($scope.allservers, function(server) {
+                if(server.selected) {
+                    if (server.reinstallos === undefined) {
+                        addHostsAction.add_hosts.machines.push({
+                            "machine_id": server.machine_id
+                        });
+                    } else {
+                        addHostsAction.add_hosts.machines.push({
+                            "machine_id": server.machine_id,
+                            "reinstall_os": server.reinstallos
+                        });
+                    }
+                }
+            });
+
+            // add hosts
+            dataService.postClusterActions(cluster.id, addHostsAction).success(function(data) {
+                var commitState = {
+                    "name": "sv_selection",
+                    "state": "success",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
+                wizardFactory.setAllMachinesHost($scope.allservers);
+
+            }).error(function(response) {
+                var commitState = {
+                    "name": "sv_selection",
+                    "state": "success",
+                    "message": response
+                };
+                wizardFactory.setCommitState(commitState);                
+            });
+            //wizardFactory.setServers(selectedServers);
         }
     };
 
@@ -476,46 +549,49 @@ angular.module('compass.wizard', [
     var cluster = wizardFactory.getClusterInfo();
     $scope.subnetworks = wizardFactory.getSubnetworks();
     $scope.interfaces = wizardFactory.getInterfaces();
-    $scope.servers = wizardFactory.getServers();
+    //$scope.servers = wizardFactory.getServers();
 
     dataService.getServerColumns().success(function(data) {
         $scope.server_columns = data.showless;
     });
 
-    $scope.tableParams = new ngTableParams({
-        page: 1, // show first page
-        count: $scope.servers.length + 1 // count per page
-    }, {
-        counts: [], // hide count-per-page box
-        total: $scope.servers.length, // length of data
-        getData: function($defer, params) {
-            var reverse = false;
-            var orderBy = params.orderBy()[0];
-            var orderBySort = "";
-            var orderByColumn = "";
+    dataService.getClusterHosts(cluster.id).success(function(data) {
+        $scope.servers = data;
+        $scope.tableParams = new ngTableParams({
+            page: 1, // show first page
+            count: $scope.servers.length + 1 // count per page
+        }, {
+            counts: [], // hide count-per-page box
+            total: $scope.servers.length, // length of data
+            getData: function($defer, params) {
+                var reverse = false;
+                var orderBy = params.orderBy()[0];
+                var orderBySort = "";
+                var orderByColumn = "";
 
-            if (orderBy) {
-                orderByColumn = orderBy.substring(1);
-                orderBySort = orderBy.substring(0, 1);
-                if (orderBySort == "+") {
-                    reverse = false;
-                } else {
-                    reverse = true;
-                }
-            }
-
-            var orderedData = params.sorting() ?
-                $filter('orderBy')($scope.servers, function(item) {
-                    if (orderByColumn == "switch_ip") {
-                        return sortingService.ipAddressPre(item.switch_ip);
+                if (orderBy) {
+                    orderByColumn = orderBy.substring(1);
+                    orderBySort = orderBy.substring(0, 1);
+                    if (orderBySort == "+") {
+                        reverse = false;
                     } else {
-                        return item[orderByColumn];
+                        reverse = true;
                     }
-                }, reverse) : $scope.servers;
-            $scope.servers = orderedData;
+                }
 
-            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
+                var orderedData = params.sorting() ?
+                    $filter('orderBy')($scope.servers, function(item) {
+                        if (orderByColumn == "switch_ip") {
+                            return sortingService.ipAddressPre(item.switch_ip);
+                        } else {
+                            return item[orderByColumn];
+                        }
+                    }, reverse) : $scope.servers;
+                $scope.servers = orderedData;
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
     });
 
     $scope.addInterface = function(newInterface) {
@@ -538,7 +614,7 @@ angular.module('compass.wizard', [
     $scope.deleteInterface = function(delInterface) {
         delete $scope.interfaces[delInterface];
         angular.forEach($scope.servers, function(sv) {
-            delete sv.network[delInterface];
+            delete sv.networks[delInterface];
         })
     };
 
@@ -554,121 +630,93 @@ angular.module('compass.wizard', [
 
     $scope.commit = function() {
         wizardFactory.setInterfaces($scope.interfaces);
-        var addHostsAction = {
-            "add_hosts": {
-                "machines": []
-            }
-        };
-        angular.forEach($scope.servers, function(server) {
-            if (server.reinstallos === undefined) {
-                addHostsAction.add_hosts.machines.push({
-                    "machine_id": server.machine_id
-                });
-            } else {
-                addHostsAction.add_hosts.machines.push({
-                    "machine_id": server.machine_id,
-                    "reinstall_os": server.reinstallos
-                });
-            }
-        });
+
 
         var interfaceCount = Object.keys($scope.interfaces).length;
         if (interfaceCount == 0) {
             alert("Please add interface");
         } else {
-            // add hosts
-            dataService.postClusterActions(cluster.id, addHostsAction).success(function(data) {
-                var hosts = data.hosts;
-                for (var i = 0; i < $scope.servers.length; i++) {
-                    for (var j = 0; j < hosts.length; j++) {
-                        if ($scope.servers[i].machine_id == hosts[j].machine_id) {
-                            $scope.servers[i].id = hosts[j].id;
-                            break;
-                        }
-                    }
-                }
+            var hostnamePromises = [];
+            var hostNetworkPromises = [];
 
-                var hostnamePromises = [];
-                var hostNetworkPromises = [];
-
-                angular.forEach($scope.servers, function(server) {
-                    var hostname = {
-                        "name": server["name"]
-                    };
-                    // update hostname
-                    var updateHostname = dataService.putHost(server.id, hostname).then(function(hostData) {
-                        // success callback
-                    }, function(response) {
-                        // error callback
-                        return $q.reject(response);
-                    });
-                    hostnamePromises.push(updateHostname);
-
-                    angular.forEach(server.network, function(value, key) {
-                        var network = {
-                            "interface": key,
-                            "ip": value.ip,
-                            "subnet_id": parseInt($scope.interfaces[key].subnet_id),
-                            "is_mgmt": $scope.interfaces[key].is_mgmt,
-                            "is_promiscuous": $scope.interfaces[key].is_promiscuous
-                        };
-                        if (value.id === undefined) {
-                            // post host network
-                            var updateNetwork = dataService.postHostNetwork(server.id, network).then(function(networkData) {
-                                // success callback
-                                var interface = networkData.data.interface;
-                                var networkId = networkData.data.id;
-                                server.network[interface].id = networkId;
-                            }, function(response) {
-                                // error callback
-                                return $q.reject(response);
-                                // keep this part for later use
-                                /*
-                                if(response.status == 409) { // if (host_id, interface) already exists
-                                    var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
-                                        // success callback
-                                    }, function(response) {
-                                        // error callback
-                                        return $q.reject(response);
-                                    });
-                                    hostNetworkPromises.push(updateNetwork);
-                                }
-                                */
-                            });
-                            hostNetworkPromises.push(updateNetwork);
-                        } else {
-                            // put host network
-                            var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
-                                // success callback
-                            }, function(response) {
-                                // error callback
-                                return $q.reject(response);
-                            });
-                            hostNetworkPromises.push(updateNetwork);
-                        }
-                    });
-                });
-
-                $q.all(hostnamePromises.concat(hostNetworkPromises)).then(function() {
-                    // update hostname and network for all hosts successfully
-                    wizardFactory.setServers($scope.servers);
-                    var commitState = {
-                        "name": "network",
-                        "state": "success",
-                        "message": ""
-                    };
-                    wizardFactory.setCommitState(commitState);
+            angular.forEach($scope.servers, function(server) {
+                var hostname = {
+                    "name": server["hostname"]
+                };
+                // update hostname
+                var updateHostname = dataService.putHost(server.id, hostname).then(function(hostData) {
+                    // success callback
                 }, function(response) {
-                    wizardFactory.setServers($scope.servers);
-                    var commitState = {
-                        "name": "network",
-                        "state": "error",
-                        "message": response.data
+                    // error callback
+                    return $q.reject(response);
+                });
+                hostnamePromises.push(updateHostname);
+
+                angular.forEach(server.networks, function(value, key) {
+                    var network = {
+                        "interface": key,
+                        "ip": value.ip,
+                        "subnet_id": parseInt($scope.interfaces[key].subnet_id),
+                        "is_mgmt": $scope.interfaces[key].is_mgmt,
+                        "is_promiscuous": $scope.interfaces[key].is_promiscuous
                     };
-                    console.info(response.data);
-                    wizardFactory.setCommitState(commitState);
+                    if (value.id === undefined) {
+                        // post host network
+                        var updateNetwork = dataService.postHostNetwork(server.id, network).then(function(networkData) {
+                            // success callback
+                            var interface = networkData.data.interface;
+                            var networkId = networkData.data.id;
+                            server.networks[interface].id = networkId;
+                        }, function(response) {
+                            // error callback
+                            return $q.reject(response);
+                            // keep this part for later use
+                            /*
+                            if(response.status == 409) { // if (host_id, interface) already exists
+                                var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
+                                    // success callback
+                                }, function(response) {
+                                    // error callback
+                                    return $q.reject(response);
+                                });
+                                hostNetworkPromises.push(updateNetwork);
+                            }
+                            */
+                        });
+                        hostNetworkPromises.push(updateNetwork);
+                    } else {
+                        // put host network
+                        var updateNetwork = dataService.putHostNetwork(server.id, value.id, network).then(function(networkData) {
+                            // success callback
+                        }, function(response) {
+                            // error callback
+                            return $q.reject(response);
+                        });
+                        hostNetworkPromises.push(updateNetwork);
+                    }
                 });
             });
+
+            $q.all(hostnamePromises.concat(hostNetworkPromises)).then(function() {
+                // update hostname and network for all hosts successfully
+                wizardFactory.setServers($scope.servers);
+                var commitState = {
+                    "name": "network",
+                    "state": "success",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
+            }, function(response) {
+                wizardFactory.setServers($scope.servers);
+                var commitState = {
+                    "name": "network",
+                    "state": "error",
+                    "message": response.data
+                };
+                console.info(response.data);
+                wizardFactory.setCommitState(commitState);
+            });
+
         }
     };
 
@@ -742,11 +790,11 @@ angular.module('compass.wizard', [
                 ipParts[0]++;
             }
             if (ipParts[0] > 255) {
-                server.network[interface].ip = "";
+                server.networks[interface].ip = "";
                 return;
             } else {
                 var ip = ipParts[0] + "." + ipParts[1] + "." + ipParts[2] + "." + ipParts[3]
-                server.network[interface].ip = ip;
+                server.networks[interface].ip = ip;
                 ipParts[3] = ipParts[3] + interval;
             }
         })
@@ -824,10 +872,14 @@ angular.module('compass.wizard', [
     var cluster = wizardFactory.getClusterInfo();
     $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
-    $scope.management_credentials = wizardFactory.getManagementCredentials();
+    $scope.console_credentials = wizardFactory.getConsoleCredentials();
+
+
+    console.log($scope.console_credentials);
+    console.log($scope.service_credentials);
 
     $scope.mSave = function() {
-        $scope.originalMangementData = angular.copy($scope.management_credentials);
+        $scope.originalMangementData = angular.copy($scope.console_credentials);
     }
     $scope.sSave = function() {
         $scope.originalServiceData = angular.copy($scope.service_credentials);
@@ -840,10 +892,9 @@ angular.module('compass.wizard', [
     $scope.editServiceMode = [];
     $scope.editServiceMode.length = keyLength_service_credentials;
 
-
-    var keyLength_management_credentials = Object.keys($scope.management_credentials).length;
+    var keyLength_console_credentials = Object.keys($scope.console_credentials).length;
     $scope.editMgntMode = [];
-    $scope.editMgntMode.length = keyLength_management_credentials;
+    $scope.editMgntMode.length = keyLength_console_credentials;
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -886,7 +937,7 @@ angular.module('compass.wizard', [
     }
 
     $scope.mReset = function() {
-        $scope.management_credentials = angular.copy($scope.originalMangementData);
+        $scope.console_credentials = angular.copy($scope.originalMangementData);
     }
 
     // Service Credentials
@@ -935,7 +986,7 @@ angular.module('compass.wizard', [
             "package_config": {
                 "security": {
                     "service_credentials": $scope.service_credentials,
-                    "console_credentials": $scope.management_credentials
+                    "console_credentials": $scope.console_credentials
                 }
             }
         };
@@ -960,16 +1011,10 @@ angular.module('compass.wizard', [
 .controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
-    var colors = ['#8EA16C','#C2CF30', '#FEC700', '#FF8900', '#D3432B','#BB2952','#8E1E5F','#DE4AB6','#9900EC','#3A1AA8','#3932FE','#278BC0','#35B9F6','#91E0CB','#42BC6A','#5B4141'];
+
     dataService.getClusterById(cluster.id).success(function(data) {
         // wizardFactory.setAdapter(data);
         $scope.roles = data.flavor.roles;
-        var i = 0;
-        angular.forEach($scope.roles, function(role) {
-            role.color = colors[i];
-            i++;
-        })
-        console.log($scope.roles);
     });
 
     dataService.getServerColumns().success(function(data) {
@@ -1160,8 +1205,7 @@ angular.module('compass.wizard', [
 .controller('networkMappingCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.interfaces = wizardFactory.getInterfaces();
-    $scope.networking = wizardFactory.getNetworkMapping();
-
+    $scope.original_networking = wizardFactory.getNetworkMapping();
     $scope.pendingInterface = "";
 
     $scope.onDrop = function($event, key) {
@@ -1172,7 +1216,11 @@ angular.module('compass.wizard', [
         $scope.interfaces[key].dropChannel = "E";
     })
 
-    angular.forEach($scope.networking, function(value, key) {
+
+    $scope.networking = {};
+    angular.forEach($scope.original_networking, function(value, key) {
+        $scope.networking[key] = {};
+        $scope.networking[key].mapping_interface = value;
         if (key == "public") {
             $scope.networking[key].dragChannel = "P";
         } else
@@ -1240,7 +1288,7 @@ angular.module('compass.wizard', [
     $scope.network_mapping = wizardFactory.getNetworkMapping();
     $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
-    $scope.management_credentials = wizardFactory.getManagementCredentials();
+    $scope.console_credentials = wizardFactory.getConsoleCredentials();
     $scope.global_config = wizardFactory.getGeneralConfig();
 
     dataService.getServerColumns().success(function(data) {
@@ -1403,7 +1451,6 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
 
     $scope.addSubnetwork = function() {
         $scope.subnetworks.push({});
-        console.log($scope.subnetworks);
     };
 
     $scope.removeSubnetwork = function(index) {

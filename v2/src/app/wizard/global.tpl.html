@@ -20,8 +20,8 @@
                         </label>
                         <div class="col-sm-8">
                             <select ng-model="general.language" name="language" class="col-xs-10 col-sm-5">
-                                <option value="en">English</option>
-                                <option value="cn">Chinese</option>
+                                <option value="en" ng-selected="general.language == 'en'">English</option>
+                                <option value="cn" ng-selected="general.language == 'cn'">Chinese</option>
                             </select>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         </label>
                         <div class="col-sm-8">
                             <select ng-model="general.timezone" name="timezone" class="col-xs-10 col-sm-5">
-                                <option ng-repeat="tm in timezones" value="{{tm.value}}">{{tm.timezone}}</option>
+                                <option ng-repeat="tm in timezones" value="{{tm.value}}" ng-selected="tm.value == general.timezone">{{tm.timezone}}</option>
                             </select>
                         </div>
                     </div>

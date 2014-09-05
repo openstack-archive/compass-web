@@ -584,20 +584,11 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "password": "admin"
                 },
                 "partition": {
-                    "/swap": {
-                        "percentage": 10
-                    },
-                    "/boot": {
-                        "percentage": 10
-                    },
                     "/var": {
                         "percentage": 30
                     },
                     "/home": {
                         "percentage": 30
-                    },
-                    "/spare": {
-                        "percentage": 20
                     }
                 }
             },
@@ -637,7 +628,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                             "password": "cinder"
                         }
                     },
-                    "management_credentials": {
+                    "console_credentials": {
                         "admin": {
                             "username": "admin",
                             "password": "admin"
@@ -673,22 +664,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     }
                 },
                 "network_mapping": {
-                    "management": {
-                        "display": "Management Network",
-                        "mapping_interface": "eth1"
-                    },
-                    "tenant": {
-                        "display": "Tenant Network",
-                        "mapping_interface": "eth1"
-                    },
-                    "storage": {
-                        "display": "Storage Network",
-                        "mapping_interface": "eth1"
-                    },
-                    "public": {
-                        "display": "Public Network",
-                        "mapping_interface": "eth2"
-                    }
+                    "management": "eth0",
+                    "tenant": "eth0",
+                    "storage": "eth0",
+                    "public": "eth1"
                 }
             }
         };
