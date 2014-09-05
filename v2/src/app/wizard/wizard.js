@@ -237,6 +237,7 @@ angular.module('compass.wizard', [
     $scope.cluster = wizardFactory.getClusterInfo();
 
     $scope.allservers = wizardFactory.getAllMachinesHost();
+    console.log("Chi:"+ $scope.allservers);
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
@@ -756,27 +757,81 @@ angular.module('compass.wizard', [
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.partition = wizardFactory.getPartition();
+    $scope.partitionInforArray = [];
+    $scope.duplicated = false;
+    $scope.duplicatedIndexArray = [];
 
-    $scope.addPartition = function() {
+     angular.forEach($scope.partition, function(value, key) {
+            $scope.partitionInforArray.push({
+                "name": key,
+                "percentage": value.percentage,
+                "max_size": value.max_size
+            });
+        });
+
+
+    /*$scope.addPartition = function() {
         var mount_point = $scope.newPartition.mount_point;
         $scope.partition[mount_point] = {};
         $scope.partition[mount_point].percentage = $scope.newPartition.percentage;
         $scope.partition[mount_point].max_size = $scope.newPartition.max_size;
         $scope.newPartition = {};
+    };*/
+    $scope.addPartition = function(){
+        var newRowExist = false;
+        angular.forEach($scope.partitionInforArray,function(partitionInfo){
+            if(partitionInfo.name =="")
+            {
+                newRowExist = true;
+            }
+
+        });
+        if(newRowExist == false && $scope.duplicated == false)
+        {
+             $scope.partitionInforArray.push({"name":"","percentage":"0","max_size":"0"})
+        }
+       
+    }
+
+    $scope.deletePartition = function(index) {
+        var emptyRowIndex = -1; // no empty row
+        if($scope.partitionInforArray.length <= 2)
+        {
+            if($scope.partitionInforArray[0]['name']=="")
+            {
+                emptyRowIndex = 0;
+            }else  if($scope.partitionInforArray[1]['name']=="")
+            {
+                emptyRowIndex = 1;
+            }
+
+            if(emptyRowIndex == index || emptyRowIndex == -1)
+            {
+                $scope.partitionInforArray.splice(index,1);
+            }     
+
+        }
+        else
+        {
+             $scope.partitionInforArray.splice(index,1);
+        }
+       
+
+        if($scope.duplicatedIndexArray.indexOf(index) >= 0)
+        {
+            $scope.duplicated = false;
+
+        }
     };
 
-    $scope.deletePartition = function(mount_point) {
-        delete $scope.partition[mount_point];
-    };
-
-    $scope.$watch('partition', function() {
+    $scope.$watch('partitionInforArray', function() {
         $scope.partitionarray = [];
         var total = 0;
-        angular.forEach($scope.partition, function(value, key) {
-            total += parseFloat(value.percentage);
+        angular.forEach($scope.partitionInforArray, function(partitionInfo) {
+            total += parseFloat(partitionInfo.percentage);
             $scope.partitionarray.push({
-                "name": key,
-                "number": value.percentage
+                "name": partitionInfo.name,
+                "number": partitionInfo.percentage
             });
         });
         $scope.partitionarray.push({
@@ -784,6 +839,30 @@ angular.module('compass.wizard', [
             "number": 100 - total
         })
     }, true);
+
+    $scope.mount_point_change = function(index,name)
+    {
+        var duplicatedIndexContainer=[];
+        $scope.duplicatedIndexArray=[];
+        var count = 0;
+        $scope.duplicated = false;
+         var numberOfNames= 0;
+         angular.forEach($scope.partitionInforArray,function(partitionInfo){
+            
+            if(partitionInfo.name == name)
+            {
+                numberOfNames++;
+                duplicatedIndexContainer.push(count);
+            }
+            count++;
+        });
+         if(numberOfNames > 1)
+         {
+            $scope.duplicated = true;
+            $scope.duplicatedIndexArray = angular.copy(duplicatedIndexContainer);
+         }
+
+    }
 
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
@@ -796,27 +875,55 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-        var os_partition = {
-            "os_config": {
-                "partition": $scope.partition
+        
+        if($scope.duplicated == true)
+        {
+            var message = {
+                "message": "Mount Point cannot be the same"
             }
-        };
-        dataService.updateClusterConfig(cluster.id, os_partition).success(function(configData) {
-            wizardFactory.getPartition(configData["os_config"]["partition"]);
             var commitState = {
-                "name": "partition",
-                "state": "success",
-                "message": ""
-            };
+                    "name": "partition",
+                    "state": "error",
+                    "message": message
+                };
             wizardFactory.setCommitState(commitState);
-        }).error(function(response) {
-            var commitState = {
-                "name": "partition",
-                "state": "error",
-                "message": response
-            };
-            wizardFactory.setCommitState(commitState);
-        });
+
+        }
+        else
+        {
+            var newPartition = {};
+            var data = {};
+            angular.forEach($scope.partitionInforArray,function(partitionInfo){
+                newPartition[partitionInfo['name']] ={};
+                newPartition[partitionInfo['name']]['percentage']= partitionInfo['percentage'];
+                newPartition[partitionInfo['name']]['max_size']= partitionInfo['max_size'];
+
+
+            });
+            $scope.partition = angular.copy(newPartition);
+            var os_partition = {
+                "os_config": {
+                    "partition": $scope.partition
+                }
+             };
+
+            dataService.updateClusterConfig(cluster.id, os_partition).success(function(configData) {
+                wizardFactory.setPartition(configData["os_config"]["partition"]);
+                var commitState = {
+                    "name": "partition",
+                    "state": "success",
+                    "message": ""
+                };
+                wizardFactory.setCommitState(commitState);
+            }).error(function(response) {
+                var commitState = {
+                    "name": "partition",
+                    "state": "error",
+                    "message": response
+                };
+                wizardFactory.setCommitState(commitState);
+            });
+        }
     };
 })
 
