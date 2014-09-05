@@ -815,7 +815,10 @@ circle[depth='3'] {
 circle[depth='4'] {
     fill: #D15B47 !important;
 }
-.table-hover > tbody > tr > td.success:hover,
+.red-border{
+
+    border-color:red !important;
+}.table-hover > tbody > tr > td.success:hover,
 .table-hover > tbody > tr > th.success:hover,
 .table-hover > tbody > tr.success:hover > td,
 .table-hover > tbody > tr.success:hover > th {
