@@ -729,6 +729,7 @@ angular.module('compass.wizard', [
         })
     };
 
+
     $scope.autofill = function() {
         // Autofill IP for each interface
         angular.forEach($scope.interfaces, function(value, key) {
@@ -816,6 +817,7 @@ angular.module('compass.wizard', [
         $scope.partition[mount_point].max_size = $scope.newPartition.max_size;
         $scope.newPartition = {};
     };*/
+
     $scope.addPartition = function() {
         var newRowExist = false;
         angular.forEach($scope.partitionInforArray, function(partitionInfo) {
@@ -892,7 +894,6 @@ angular.module('compass.wizard', [
             $scope.duplicated = true;
             $scope.duplicatedIndexArray = angular.copy(duplicatedIndexContainer);
         }
-
     }
 
     $scope.$watch(function() {
@@ -906,7 +907,6 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
-
         if ($scope.duplicated == true) {
             var message = {
                 "message": "Mount Point cannot be the same"
@@ -925,8 +925,6 @@ angular.module('compass.wizard', [
                 newPartition[partitionInfo['name']] = {};
                 newPartition[partitionInfo['name']]['percentage'] = partitionInfo['percentage'];
                 newPartition[partitionInfo['name']]['max_size'] = partitionInfo['max_size'];
-
-
             });
             $scope.partition = angular.copy(newPartition);
             var os_partition = {
@@ -1481,7 +1479,7 @@ angular.module('compass.wizard', [
         })
         //TODO: error handling
     };
-});
+})
 
 var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
     $scope.warning = warning;
@@ -1491,8 +1489,34 @@ var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
     };
 };
 
-var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, dataService) {
+var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, dataService, $filter) {
     $scope.subnetworks = subnets;
+    $scope.subnetAllValid = true;
+
+    angular.forEach($scope.subnetworks, function(subnet) {
+        subnet['valid'] = true;
+    });
+
+    var allValid = function() {
+        var invalid = 0;
+        angular.forEach($scope.subnetworks, function(subnet) {
+            if (subnet['valid'] == false) {
+                invalid = 1;
+            }
+        });
+        if (invalid == 0) {
+            $scope.subnetAllValid = true;
+        } else {
+
+            $scope.subnetAllValid = false;
+        }
+    }
+    $scope.subnet_change = function(index, subnet) {
+        var subnetRegExp = /(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(\/){1}([0-9]|[0-2][0-9]|3[0-2])$/;
+        var valid = subnetRegExp.test(subnet);
+        $scope.subnetworks[index]['valid'] = valid;
+        allValid();
+    };
 
     $scope.ok = function() {
         var subnetworks = [];
@@ -1530,7 +1554,12 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
     };
 
     $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+
+        $scope.subnetworks = $filter('filter')($scope.subnetworks, {
+            valid: true
+        }, true);
+        $modalInstance.close($scope.subnetworks);
+
     };
 
     $scope.closeAlert = function() {
@@ -1538,11 +1567,16 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
     };
 
     $scope.addSubnetwork = function() {
-        $scope.subnetworks.push({});
+        $scope.subnetworks.push({
+            valid: false
+        });
+        allValid();
+        console.log($scope.subnetworks);
     };
 
     $scope.removeSubnetwork = function(index) {
-        $scope.subnetworks.splice(index, 1)
+        $scope.subnetworks.splice(index, 1);
+        allValid();
     };
 
     $scope.$watch('subnetworks', function() {
