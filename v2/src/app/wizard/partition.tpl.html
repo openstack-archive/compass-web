@@ -11,51 +11,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr ng-repeat="partitionInfo in partitionInforArray">
                         <td>
-                            <input ng-model="newPartition.mount_point" type="text" placeholder="Mount Point" class="input-medium">
+                            <input  ng-class="{'red-border': duplicated == true && duplicatedIndexArray.indexOf($index) >= 0}" ng-model="partitionInfo.name" ng-change="mount_point_change($index,partitionInfo.name)" type="text" placeholder="Mount Point">
                         </td>
                         <td>
-                            <input ng-model="newPartition.percentage" type="number" min="1" max="100" placeholder="Size Percentage" class="input-medium">
+                            <input ng-model="partitionInfo.percentage" type="number"  min="1" max="100" placeholder="Size Percentage" class="input-medium">
                         </td>
                         <td>
-                            <input ng-model="newPartition.max_size" type="number" min="1" max="100" placeholder="Max Size" class="input-medium">
+                            <input ng-model="partitionInfo.max_size" type="number"  min="1" max="100" placeholder="Max Size" class="input-medium">
                         </td>
                         <td>
-                           <span ng-click="addPartition()" class="action" style="padding-left: 31px;" >
+                            <!-- add button -->
+                            <span ng-click="addPartition()" class="action" style="padding-left: 31px;" >
                                 <i class="fa fa-plus-circle bigger-140 blue"S></i>
                            </span>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="(key, data) in partition">
-                        <td>
-                            <span>{{key}}</span>
-                        </td>
-                        <td>
-                            <span ng-hide="editPartitionMode">{{data.percentage}}</span>
-                            <input ng-show="editPartitionMode" ng-model="data.percentage" type="number"  min="1" max="100" placeholder="Size Percentage" class="input-medium">
-                        </td>
-                        <td>
-                            <span ng-hide="editPartitionMode">{{data.max_size}}</span>
-                            <input ng-show="editPartitionMode" ng-model="data.max_size" type="number"  min="1" max="100" placeholder="Max Size" class="input-medium">
-                        </td>
-                        <td>
-                            <!--edit button-->
-                            <button ng-hide="editPartitionMode" ng-click="editPartitionMode = true;" class="btn btn-xs btn-black-white btn-edit-hover border-radius-4">
-                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                            </button>
                             <!--delete button-->
-                            <span ng-hide="editPartitionMode" ng-click="editPartitionMode = true; deletePartition(key)" class="action border-radius-4">
+                            <span ng-if="partitionInforArray.length > 1" ng-click="deletePartition($index)" class="action border-radius-4">
                                 <i class="fa fa-minus-circle bigger-140 blue"></i>
                             </span>
-                            <!--save button-->
-                            <button ng-show="editPartitionMode" ng-click="editPartitionMode = false;" class="btn btn-xs btn-black-white btn-topmargin-8 btn-sumbit-hover border-radius-4">
-                                <i class="ace-icon fa fa-check bigger-120"></i>
-                            </button>   
-                            <!--cancel button-->
-                            <button ng-show="editPartitionMode" ng-click="editPartitionMode = false; cancel()" class="btn btn-xs btn-black-white btn-topmargin-8 btn-trash-hover border-radius-4">
-                                <i class="ace-icon fa fa-times bigger-120"></i>
-                            </button>
                         </td>
                     </tr>
                 </tbody>
