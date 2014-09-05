@@ -9,14 +9,14 @@
                                 <fieldset>
                                     <label class="block clearfix">
                                         <span class="block input-icon input-icon-right">
-                                            <input type="text" placeholder="Email" ng-model="email" class="form-control" required>
+                                            <input type="text" placeholder="Email" ng-model="email" class="form-control" ng-enter="login()" set-Focus required>
                                             <i class="ace-icon fa fa-user"></i>
                                         </span>
                                     </label>
 
                                     <label class="block clearfix" style="margin-top: 8px">
                                         <span class="block input-icon input-icon-right">
-                                            <input type="password" placeholder="Password" ng-model="password" class="form-control" required>
+                                            <input type="password" placeholder="Password" ng-model="password" class="form-control" ng-enter="login()" required>
                                             <i class="ace-icon fa fa-lock"></i>
                                         </span>
                                     </label>
