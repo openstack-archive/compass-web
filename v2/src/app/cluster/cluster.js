@@ -13,23 +13,23 @@ angular.module('compass.cluster', [
             url: '/cluster/{id}',
             controller: 'clusterCtrl',
             templateUrl: 'src/app/cluster/cluster.tpl.html',
-            authenticate: true
-        })
-        .state('cluster.overview', {
-            url: '/overview',
-            controller: 'clusterProgressCtrl',
-            templateUrl: 'src/app/cluster/cluster-overview.tpl.html',
             authenticate: true,
             resolve: {
                 clusterhostsData: function($stateParams, $q, dataService) {
                     var clusterId = $stateParams.id;
                     var deferred = $q.defer();
-                    dataService.getClusterHostMachines(clusterId).success(function(data) {
+                    dataService.getClusterHosts(clusterId).success(function(data) {
                         deferred.resolve(data);
                     });
                     return deferred.promise;
                 }
             }
+        })
+        .state('cluster.overview', {
+            url: '/overview',
+            controller: 'clusterProgressCtrl',
+            templateUrl: 'src/app/cluster/cluster-overview.tpl.html',
+            authenticate: true
         })
         .state('cluster.config', {
             url: '/config',
@@ -228,48 +228,43 @@ angular.module('compass.cluster', [
     }
 ])
 
-.controller('configurationCtrl', ['$scope', 'dataService', '$stateParams', '$filter', 'ngTableParams',
-    function($scope, dataService, $stateParams, $filter, ngTableParams) {
-        var clusterId = $stateParams.id;
-        $scope.partitionarray = [];
-        dataService.getClusterConfig(clusterId).success(function(data) {
-            $scope.configuration = data;
+.controller('configurationCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, clusterhostsData) {
+    var clusterId = $stateParams.id;
+    $scope.partitionarray = [];
+    dataService.getClusterConfig(clusterId).success(function(data) {
+        $scope.configuration = data;
 
 
-            angular.forEach($scope.configuration.os_config.partition, function(value, key) {
-                $scope.partitionarray.push({
-                    "name": key,
-                    "number": value.percentage
-                });
-            });
-
-        });
-
-        dataService.getServerColumns().success(function(data) {
-            $scope.server_columns = data.roles;
-        });
-
-        dataService.getClusterHostMachines(clusterId).success(function(data) {
-            $scope.hosts = data;
-
-            $scope.tableParams = new ngTableParams({
-                page: 1, // show first page
-                count: $scope.hosts.length + 1 // count per page
-            }, {
-                counts: [], // hide count-per-page box
-                total: $scope.hosts.length, // length of data
-                getData: function($defer, params) {
-                    // use build-in angular filter
-                    var orderedData = params.sorting() ?
-                        $filter('orderBy')($scope.hosts, params.orderBy()) : $scope.hosts;
-
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                }
+        angular.forEach($scope.configuration.os_config.partition, function(value, key) {
+            $scope.partitionarray.push({
+                "name": key,
+                "number": value.percentage
             });
         });
 
-    }
-])
+    });
+
+    dataService.getServerColumns().success(function(data) {
+        $scope.server_columns = data.roles;
+    });
+
+    $scope.hosts = clusterhostsData;
+
+    $scope.tableParams = new ngTableParams({
+        page: 1, // show first page
+        count: $scope.hosts.length + 1 // count per page
+    }, {
+        counts: [], // hide count-per-page box
+        total: $scope.hosts.length, // length of data
+        getData: function($defer, params) {
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                $filter('orderBy')($scope.hosts, params.orderBy()) : $scope.hosts;
+
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
+})
 
 var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
     $scope.allAdapters = allAdapters;
@@ -279,7 +274,7 @@ var ModalInstanceCtrl = function($scope, $modalInstance, allAdapters, cluster) {
         angular.forEach($scope.allAdapters, function(adapter) {
             if (adapter.id == $scope.cluster.adapter.id) {
                 $scope.supported_oses = adapter.supported_oses;
-		$scope.flavors = adapter.flavors;
+                $scope.flavors = adapter.flavors;
             }
         })
     };

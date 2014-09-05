@@ -113,7 +113,7 @@
                                     </thead>
                                     <tbody>
                                         <form name="managementCredForm">
-                                            <tr ng-repeat="(service, credential) in management_credentials">
+                                            <tr ng-repeat="(service, credential) in console_credentials">
                                                 <td>
                                                     <span ng-hide="editMgntMode[$index]">{{service}}</span>
                                                     <input ng-show="editMgntMode[$index]" ng-model="service" placeholder="Service" type="text" ng-required />

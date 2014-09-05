@@ -43,8 +43,8 @@
         "no_proxy": [""],
         "ntp_server": "",
         "dns_servers": [""],
-        "search_path": ["compass.com"],
-        "domain": "compass.com",
+        "search_path": ["ods.com"],
+        "domain": "ods.com",
         "default_gateway": "172.19.100.1"
     },
     "server_credentials": {
@@ -85,7 +85,7 @@
             "password": "cinder"
         }
     },
-    "management_credentials": {
+    "console_credentials": {
         "admin": {
             "username": "admin",
             "password": "admin"

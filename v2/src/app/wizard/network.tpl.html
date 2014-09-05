@@ -22,7 +22,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody ng-init="network={};">
+                        <tbody>
                             <tr>
                                 <td>
                                     <input class="input-small" type="text" ng-model="newInterface.name" placeholder="Interface" required />
@@ -161,10 +161,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index; server.network = server.network === undefinded? {} : server.network">
+                <tr ng-repeat="server in $data | filter: search" ng-init="serverIndex = $index; server.networks = server.networks === undefinded? {} : server.networks">
                     <td class="center-align" ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                         <span ng-switch on="column.field">
-                            <span ng-switch-when="name">
+                            <span ng-switch-when="hostname">
                                 <input ng-model="server[column.field]" placeholder="Hostname" class="form-control  max-width-150 margin-bottom-0" type="text">
                             </span>
                             <span ng-switch-when="os_installed">
@@ -188,21 +188,21 @@
                             </span>
                         </span>
                     </td>
-                    <td class="eth-width" ng-repeat="(name, value) in interfaces" ng-init="server.network[name] = server.network[name] === undefinded? {} : server.network[name]">
-                        <input ng-model="server.network[name].ip" placeholder="IP Address" class="form-control max-width-150 margin-bottom-0" type="text">
+                    <td class="eth-width" ng-repeat="(name, value) in interfaces" ng-init="server.networks[name] = server.networks[name] === undefinded? {} : server.networks[name]">
+                        <input ng-model="server.networks[name].ip" placeholder="IP Address" class="form-control max-width-150 margin-bottom-0" type="text">
                     </td>
 
                     <!-- Set IP, subnet and mgmt by each server. Keep this part for future use-->
                     <!--
-                    <td ng-repeat="interface in interfaces" ng-init="server.network[interface]={};">
-                        <input ng-model="server.network[interface].ip" placeholder="IP Address" class="form-control margin-bottom-10 max-width-200" type="text">
-                        <select ng-model="server.network[interface].subnet_id" class="form-control margin-bottom-10 max-width-200">
+                    <td ng-repeat="interface in interfaces" ng-init="server.networks[interface]={};">
+                        <input ng-model="server.networks[interface].ip" placeholder="IP Address" class="form-control margin-bottom-10 max-width-200" type="text">
+                        <select ng-model="server.networks[interface].subnet_id" class="form-control margin-bottom-10 max-width-200">
                             <option ng-repeat="sub in subnetworks" value="{{sub.subnet_id}}">
                                 Subnetwork: {{sub.name}}
                             </option>
                         </select>
                         <span>
-                            <input ng-model="server.network[interface].is_mgmt" name="mgmt-{{serverIndex}}" type="checkbox"> Is Mgmt Network
+                            <input ng-model="server.networks[interface].is_mgmt" name="mgmt-{{serverIndex}}" type="checkbox"> Is Mgmt Network
                         </span>
                     </td>
                     -->

@@ -17,7 +17,7 @@
         "visible": false
     }, {
         "title": "Hostname",
-        "field": "name",
+        "field": "hostname",
         "visible": true
     }, {
         "title": "Clusters",
@@ -54,7 +54,7 @@
         "visible": false
     }, {
         "title": "Hostname",
-        "field": "name",
+        "field": "hostname",
         "visible": true
     }, {
         "title": "Clusters",
@@ -91,7 +91,7 @@
         "visible": false
     }, {
         "title": "Hostname",
-        "field": "name",
+        "field": "hostname",
         "visible": true
     }, {
         "title": "Clusters",
@@ -161,7 +161,7 @@
         "visible": false
     }, {
         "title": "Hostname",
-        "field": "name",
+        "field": "hostname",
         "visible": true
     }, {
         "title": "Clusters",

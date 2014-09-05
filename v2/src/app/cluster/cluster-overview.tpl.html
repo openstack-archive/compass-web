@@ -2,8 +2,8 @@
     <h1>
         {{clusterInfo.name}}
         <small>
-            <span class="badge" ng-class="{'badge-warning':clusterProgress.state==='INITIALIZED',
-            'badge-info':clusterProgress.state==='INSTALLING',
+            <span class="badge" ng-class="{'badge-info':clusterProgress.state==='INITIALIZED',
+            'badge-warning':clusterProgress.state==='INSTALLING',
             'badge-danger':clusterProgress.state==='ERROR',
             'badge-success':clusterProgress.state==='SUCCESSFUL'}">
                 {{clusterProgress.state}}
@@ -18,12 +18,40 @@
         <div class="row">
             <div class="pull-right align-right">
                 <div class="cluster-progress">
-                    <div>
-                        <strong>{{clusterProgress.status.total_hosts}} Total Hosts</strong>
-                    </div>
-                    <div>{{clusterProgress.status.installing_hosts}} Installing Hosts</div>
-                    <div>{{clusterProgress.status.completed_hosts}} Completed Hosts</div>
-                    <div>{{clusterProgress.status.failed_hosts}} Failed Hosts</div>
+                    <table>
+                        <tr>
+                            <td class="pull-right">
+                                Total Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-info">{{clusterProgress.status.total_hosts}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">
+                                Installing Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-warning">{{clusterProgress.status.installing_hosts}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">
+                                Completed Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-success">{{clusterProgress.status.completed_hosts}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">
+                                Failed Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-danger">{{clusterProgress.status.failed_hosts}}</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -54,7 +82,7 @@
                     </div>
                     <div class="pull-right">
                         <div class="btn-group" dropdown>
-                            <button type="button" class="btn btn-info dropdown-toggle">
+                            <button type="button" class="btn btn-info dropdown-toggle" ng-disabled="clusterProgress.state == 'INSTALLING'">
                                 Actions
                                 <span class="ace-icon fa fa-caret-down icon-on-right"></span>
                             </button>
@@ -134,7 +162,7 @@
                                     </hostprogressbar>
                                 </td>
                                 <td class="align-right">
-                                    <button class="btn btn-xs" ng-click="openDeleteHostModal($index)">
+                                    <button class="btn btn-xs" ng-click="openDeleteHostModal($index)" ng-disabled="clusterProgress.state == 'INSTALLING'">
                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                     </button>
                                 </td>
@@ -143,14 +171,14 @@
                     </table>
                     <script type="text/ng-template" id="deleteHostConfirm.html">
                         <div class="modal-header ng-scope">
-                        <h3 class="modal-title">Delete Cluster</h3>
+                        <h3 class="modal-title">Create Cluster</h3>
                         </div>
                         <div class="modal-body"  style="padding-top: 30px; padding-bottom: 20px;" >
                             Are you sure to delete
                             <strong>{{host.name}}</strong>?
                         </div>                       
                         <div class="modal-footer">
-                            <button class="btn btn-default btn-cancel" ng-click="cancel()">Cancel</button>
+                            <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                             <button class="btn btn-primary" ng-click="ok()">OK</button>
                         </div>
                     </script>
