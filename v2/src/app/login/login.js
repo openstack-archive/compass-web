@@ -28,3 +28,22 @@ angular.module('compass.login', [
         })
     }
 })
+    .directive('setFocus', function() {
+        return function(scope, element) {
+            element[0].focus();
+        };
+    })
+    .directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if (event.which === 13) { // 13 is enter key
+
+                    if (scope.email.trim() != "" && scope.password.trim() != "") {
+                        scope.$eval(attrs.ngEnter);
+                    }
+
+                    event.preventDefault();
+                }
+            });
+        };
+    });

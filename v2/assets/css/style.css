@@ -5,21 +5,20 @@ html {
     font-size: 14px !important;
     height: 100%;
     font-family: "Trebuchet MS", san sarif !important;
-    color:rgba(83, 83, 83, 1) !important;
+    color: rgba(83, 83, 83, 1) !important;
 }
 body {
     min-width: 1024px;
     font-size: 14px !important;
-    font-family:  "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif !important;
-    color:rgba(83, 83, 83, 1) !important;
-
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif !important;
+    color: rgba(83, 83, 83, 1) !important;
 }
 .main-container {
     position: relative;
 }
 body, .main-content {
-    background: #fff;      
-   /* right: 0px;
+    background: #fff;
+    /* right: 0px;
     bottom: 0px;
     left: 0px;
     background-size: cover;
@@ -27,12 +26,10 @@ body, .main-content {
     background-image: url('../img/body_bg3.jpg');*/
 }
 .page-content {
-    background: inherit !important;    
+    background: inherit !important;
 }
-
-.table-responsive
-{
-    background-color:white;
+.table-responsive {
+    background-color: white;
 }
 .notification-msg {
     white-space: normal;
@@ -52,13 +49,13 @@ body, .main-content {
     }
 }
 .btn-login {
-    border-radius:7px;
+    border-radius: 7px;
 }
-.btn-topdown{
-    border-radius:7px !important;
+.btn-topdown {
+    border-radius: 7px !important;
 }
 .btn-dropdown {
-    border-radius:7px !important;
+    border-radius: 7px !important;
 }
 /*
 .cssSlideUp {
@@ -94,8 +91,8 @@ body, .main-content {
     color: white;
 }
 .role-tag {
-    background-color: #6fb3e0; 
-    border-color: rgba(0,0,0,0);
+    background-color: #6fb3e0;
+    border-color: rgba(0, 0, 0, 0);
     border-radius: 10px;
     color: #fff;
     display: inline-block;
@@ -125,7 +122,7 @@ body, .main-content {
 select {
     padding-left: 1px !important;
     border-radius: 7px;
-    height:33px;
+    height: 33px;
 }
 .opacity-zero {
     opacity: 0;
@@ -220,7 +217,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 input.ace[type="checkbox"] + .lbl:before, input.ace[type="radio"] + .lbl:before {
     content: "\00A0";
-    border-radius:4px !important;
+    border-radius: 4px !important;
 }
 .progress {
     position: relative;
@@ -309,16 +306,12 @@ button[disabled] {
     font-size: 15px;
     line-height: 1.5;
     padding: 4px 12px;
-    border-radius:7px !important;
-
+    border-radius: 7px !important;
 }
-
-.btn-cancel
-{
+.btn-cancel {
     border-color: #909AA1;
     background-color: #909AA1 !important;
 }
-
 .btn-group > .btn {
     border-radius: 7px !important;
 }
@@ -413,7 +406,7 @@ a:active {
     margin-top: 26px !important;
 }
 .input-icon {
-   /* margin-top: 5px !important;*/
+    /* margin-top: 5px !important;*/
 }
 .ng-table th.sortable {
     cursor: pointer
@@ -552,11 +545,11 @@ div.center-align {
     border: 1px solid rgba(190, 210, 219, .5) !important;
     min-height: 60px !important;
     border-radius: 4px;
-    background-color:rgba(221, 221, 221, 0.32);
+    background-color: rgba(221, 221, 221, 0.32);
 }
 .network-margin-border {
     border: 1px solid rgba(190, 210, 219, .5) !important;
-    border-radius:4px;
+    border-radius: 4px;
 }
 .network-margin {
     margin-left: 10px !important;
@@ -568,7 +561,6 @@ div.center-align {
 .network-background {
     background-image: url();
 }
-
 /* adjustments to draggable */
 
 .network-draggable {
@@ -598,18 +590,18 @@ div.center-align {
     padding: 10px;
 }
 .wizard-steps li.complete:before, .wizard-steps li.complete .step {
-     /* border-color: #93cbf9 !important;*/}
+    /* border-color: #93cbf9 !important;*/
+}
 .a.wizard-steps li.active:before, .wizard-steps li.active .step {
-    border-color: #80afd4 !important; 
+    border-color: #80afd4 !important;
     transform: scale(1.25) !important;
     font-weight: bold;
 }
 li.incomplete:before, li.incomplete .step {
-    border-color: #d15b47 !important; 
+    border-color: #d15b47 !important;
     font-weight: bold;
 }
-.modal-body
-{    
+.modal-body {
     padding-top: 30px;
     padding-right-value: 20px;
     padding-bottom: 0px;
@@ -619,32 +611,27 @@ li.incomplete:before, li.incomplete .step {
     padding-right-ltr-source: physical;
     padding-right-rtl-source: physical;
 }
-.modal-header
-{
+.modal-header {
     /*background-color: #EFF3F8;*/
     background-image: url('../img/header.png');
-    background-size:cover;
+    background-size: cover;
     /*background-position: 50% 50%;*/
 }
-.modal-warning-header
-{
-    padding-top: 13px; 
+.modal-warning-header {
+    padding-top: 13px;
     padding-bottom: 13px;
 }
-.modal-warning-body
-{
-    padding-top: 30px; 
+.modal-warning-body {
+    padding-top: 30px;
     padding-bottom: 20px;
 }
-.modal-warning-footer
-{
-    padding-top: 8px; 
+.modal-warning-footer {
+    padding-top: 8px;
     padding-bottom: 8px;
 }
-.bkg-fullscreen
-{
+.bkg-fullscreen {
     /*background-color:#EFF3F8;*/
-    background-image:url(../img/datacenter.jpg);
+    background-image: url(../img/datacenter.jpg);
     position: fixed;
     right: 0px;
     bottom: 0px;
@@ -652,34 +639,27 @@ li.incomplete:before, li.incomplete .step {
     background-size: cover;
     background-position: 50% 50%;
     top: 0px;
-
 }
-
-.bkg-fullscreen:before
-{
-    content:"";
+.bkg-fullscreen:before {
+    content: "";
     position: fixed;
     top: 0px;
     right: 0px;
     bottom: 0px;
     left: 0px;
     background-color: rgba(68, 57, 170, 0.3);
-    background-image:none;
+    background-image: none;
     opacity: 0.6;
 }
-
-.bar-white
-{
-    background-color:white;
+.bar-white {
+    background-color: white;
 }
-.page-header h1
-{
-    font-weight:bold;
+.page-header h1 {
+    font-weight: bold;
     font-size: 20px !important;
 }
-.navbar
-{
-    background-image:url('../img/header.png');
+.navbar {
+    background-image: url('../img/header.png');
     /*position: fixed;*/
     right: 0px;
     bottom: 0px;
@@ -688,99 +668,80 @@ li.incomplete:before, li.incomplete .step {
     background-position: 50% 50%;
     top: 0px;
 }
-.ace-nav > li > a 
-{
-    padding: 8px 8px; 
+.ace-nav > li > a {
+    padding: 8px 8px;
 }
-.modal-footer
-{
+.modal-footer {
     /*background-image: url('../img/dialogue-bar1.jpg');*/
-    background-size:cover;
+    background-size: cover;
 }
-.modal-title
-{
-    color:white;
+.modal-title {
+    color: white;
 }
-.gritter-error .gritter-close
-{
+.gritter-error .gritter-close {
     color: rgba(192, 116, 80, 1);
 }
-.gritter-close:hover
-{
-    color:rgba(219, 101, 68, 1) !important;
+.gritter-close:hover {
+    color: rgba(219, 101, 68, 1) !important;
 }
-
-.gritter-item-wrapper.gritter-error
-{
+.gritter-item-wrapper.gritter-error {
     background-image: url('../img/grey.png') !important;
     background-size: cover;
     border-radius: 7px;
     opacity: 0.9;
-
 }
-.error-text
-{
-    color:rgba(219, 101, 68, 1);
+.error-text {
+    color: rgba(219, 101, 68, 1);
     font-size: 20px;
     font-weight: bold;
     padding-left: 10px;
 }
-#side
-{
-    position:absolute;
-    overflow:hidden;
-    right:30px;
+#side {
+    position: absolute;
+    overflow: hidden;
+    right: 30px;
     width: 0px;
     height: 30%;
-    content:"";
-    background:#fff;
-
-
+    content: "";
+    background: #fff;
 }
-#side-content
-{
-    position:absolute;
-    right:0px;
-    top:5px;
-    height:100%;
-    overflow:hidden;
-    width:200px;
-    background:#fff;
+#side-content {
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    height: 100%;
+    overflow: hidden;
+    width: 200px;
+    background: #fff;
     font-size: 13px;
 }
-#side-ctrl
-{ 
-    position: absolute; 
-    right:5px; 
-    top:0px;
-    height: 1.5%; 
-    width: 15px; 
+#side-ctrl {
+    position: absolute;
+    right: 5px;
+    top: 0px;
+    height: 1.5%;
+    width: 15px;
     /*background:yellow;*/
 }
-.label-lg.arrowed:before
-{
+.label-lg.arrowed:before {
     left: -11px;
 }
-.glyphicon
-{
-    top:0px;
+.glyphicon {
+    top: 0px;
 }
-.widget-main
-{
+.widget-main {
     padding-top: 25px;
     padding-bottom: 5px;
 }
 .login-form {
-    background-color: rgba(221, 221, 221, 0.6); 
+    background-color: rgba(221, 221, 221, 0.6);
     padding: 20px 15px 10px;
 }
-
-.login-dialogue
-{
-    margin:0 auto; 
-    top:10%; 
-    position:relative; 
-    width:400px;
+.login-dialogue {
+    margin: 0 auto;
+    top: 10%;
+    position: relative;
+    width: 400px;
     /*margin-top: -241px;*/
     padding: 50px 30px 30px;
 }
@@ -788,7 +749,7 @@ li.incomplete:before, li.incomplete .step {
     transform: translate(0px, 100px);
 }
 address, caption, cite, code, dfn, em, strong, th, var {
-    opacity: 0.8 !important; 
+    opacity: 0.8 !important;
 }
 div.toc ul li a {
     border-radius: 7px;
@@ -798,10 +759,9 @@ circle.parent {
     stroke: none !important;
     fill: #E6E6E6!important;
 }
-circle
-{
-    fill-opacity:1 !important;
-    stroke:none !important;
+circle {
+    fill-opacity: 1 !important;
+    stroke: none !important;
 }
 circle[depth='1'] {
     fill: #27AA37 !important;
@@ -815,23 +775,12 @@ circle[depth='3'] {
 circle[depth='4'] {
     fill: #D15B47 !important;
 }
-.table-hover > tbody > tr > td.success:hover,
-.table-hover > tbody > tr > th.success:hover,
-.table-hover > tbody > tr.success:hover > td,
-.table-hover > tbody > tr.success:hover > th {
-  background-color:rgba(194, 221, 240, 1);
+.red-border {
+    border-color: red !important;
 }
-.table > thead > tr > td.success,
-.table > tbody > tr > td.success,
-.table > tfoot > tr > td.success,
-.table > thead > tr > th.success,
-.table > tbody > tr > th.success,
-.table > tfoot > tr > th.success,
-.table > thead > tr.success > td,
-.table > tbody > tr.success > td,
-.table > tfoot > tr.success > td,
-.table > thead > tr.success > th,
-.table > tbody > tr.success > th,
-.table > tfoot > tr.success > th {
-  background-color:rgba(239, 243, 252, 0.98);
+.table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr.success:hover > th {
+    background-color: rgba(194, 221, 240, 1);
+}
+.table > thead > tr > td.success, .table > tbody > tr > td.success, .table > tfoot > tr > td.success, .table > thead > tr > th.success, .table > tbody > tr > th.success, .table > tfoot > tr > th.success, .table > thead > tr.success > td, .table > tbody > tr.success > td, .table > tfoot > tr.success > td, .table > thead > tr.success > th, .table > tbody > tr.success > th, .table > tfoot > tr.success > th {
+    background-color: rgba(239, 243, 252, 0.98);
 }
