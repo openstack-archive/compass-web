@@ -13,23 +13,22 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5 no-padding-left">
-                <h1 class="blue-header">
-                    Servers&nbsp;
-                    <span class="badge badge-yellow">{{allservers.length}}</span>
-
-                    <small>
-                        <span class="no-border-search">
+            <div class="col-md-5 no-padding-left search-badge-adjustment">
+                <h1 class="blue-header margin-right-7">
+                    Servers
+                </h1>
+                <div class="badge-adjustment">
+                    <span class="badge badge-yellow skinny-badge">{{allservers.length}}</span>
+                        <span class="no-border-search search-small">
                             <span class="input-icon">
                                 <input class="no-border" type="text" placeholder="Search" ng-model="search.$">
-                                <i class="ace-icon fa fa-search" style="top:-2px"></i>
+                                <i class="ace-icon fa fa-search"></i>
                             </span>
                         </span>
-                    </small>
-                </h1>
+                </div>
             </div>
             <div class="col-md-7 no-padding-right">
-                <div class="pull-right top-margin-26 center-align">
+                <div class="pull-right top-margin-17 center-align">
                     <!-- Column Show / Hide button -->
                     <div class="btn-group" dropdown>
                         <button type="button" class="btn btn-default dropdown-toggle">
@@ -47,7 +46,7 @@
                             </li>
                         </ul>
                     </div>
-                    <button class="btn btn-success" ng-click="reloadServers()">
+                    <button class="btn btn-success border-radius-4 reload-servers-border" ng-click="reloadServers()">
                         <i class="ace-icon fa fa-refresh"></i>
                     </button>
                     <!--div class="btn-group" dropdown>
@@ -66,12 +65,11 @@
                             </li>
                         </ul>
                     </div-->
-                    <button class="btn btn-info" ng-click="findNewServersPanel.isCollapsed = !findNewServersPanel.isCollapsed" ng-init="findNewServersPanel.isCollapsed = true;">
+                    <button class="btn btn-info border-radius-4" ng-click="findNewServersPanel.isCollapsed = !findNewServersPanel.isCollapsed" ng-init="findNewServersPanel.isCollapsed = true;">
                         Discover Servers&nbsp;&nbsp;
                         <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !findNewServersPanel.isCollapsed}"></i>
                     </button>
                 </div>
-
             </div>
         </div>
         <div class="row">

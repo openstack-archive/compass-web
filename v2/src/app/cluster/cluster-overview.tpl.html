@@ -8,10 +8,10 @@
             'badge-success':clusterProgress.state==='SUCCESSFUL'}">
                 {{clusterProgress.state}}
             </span>
-            <!--<i class="ace-icon fa fa-angle-double-right"></i>&nbsp;
-            <a href="">OpenStack Dashboard Link</a>-->
         </small>
     </h1>
+    <!--<i class="ace-icon fa fa-angle-double-right"></i>&nbsp;
+            <a href="">OpenStack Dashboard Link</a>-->
 </div>
 <div class="row">
     <div class="col-xs-12">
@@ -162,7 +162,7 @@
                                     </hostprogressbar>
                                 </td>
                                 <td class="align-right">
-                                    <button class="btn btn-xs" ng-click="openDeleteHostModal($index)" ng-disabled="clusterProgress.state == 'INSTALLING'">
+                                    <button class="btn btn-trash-hover cluster-overview-delete border-radius-4 btn-xs" ng-click="openDeleteHostModal($index)" ng-disabled="clusterProgress.state == 'INSTALLING'">
                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                     </button>
                                 </td>

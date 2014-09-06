@@ -9,13 +9,14 @@
                         Cluster Name
                     </div>
                 </th>
-                <th class="sortable" ng-class="{
+                <!-- With icons doesn't make sense to have sorting
+                class="sortable" ng-class="{
             'sort-asc': tableParams.isSortBy('state', 'asc'),
             'sort-desc': tableParams.isSortBy('state', 'desc')
-          }" ng-click="tableParams.sorting({'state' : tableParams.isSortBy('state', 'asc') ? 'desc' : 'asc'})">
-                    <div>
-                        State
-                    </div>
+          }" ng-click="tableParams.sorting({'state' : tableParams.isSortBy('state', 'asc') ? 'desc' : 'asc'})"
+            -->
+                <th>
+                    State
                 </th>
                 <th>
                     Deployment Details
@@ -92,11 +93,11 @@
                     {{cluster.updated_at}}
                 </td>
                 <td>
+                    <button ng-click="export()" class="btn btn-xs btn-black-white btn-clte btn-export-hover border-radius-4">
+                        <i class="glyphicon glyphicon-export bigger-130"></i>
+                    </button>
                     <button ng-click="alert()" class="btn btn-xs btn-black-white btn-trash-hover border-radius-4">
                         <span class="glyphicon glyphicon-trash bigger-130"></span>
-                    </button>
-                    <button ng-click="export()" class="btn btn-xs btn-black-white btn-clte border-radius-4">
-                        <i class="glyphicon glyphicon-export bigger-130"></i>
                     </button>
                 </td>
             </tr>

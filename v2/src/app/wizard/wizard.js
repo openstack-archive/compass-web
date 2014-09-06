@@ -6,7 +6,8 @@ angular.module('compass.wizard', [
     'compass.findservers',
     'ngDragDrop',
     'ngTouch',
-    'angularSpinner'
+    'angularSpinner',
+    'ngAnimate'
 ])
 
 .config(function config($stateProvider) {
@@ -122,13 +123,10 @@ angular.module('compass.wizard', [
                         'id': $scope.cluster.id
                     });
                 }
-
                 $scope.stepControl();
-
                 if ($scope.currentStep > $scope.maxStep) {
                     $scope.maxStep = $scope.currentStep;
                 }
-
             } else if (newCommitState.state == "error") {
                 console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 $scope.openErrMessageModal(newCommitState.message);

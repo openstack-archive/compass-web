@@ -102,6 +102,17 @@ angular.module('compass.services', [])
             return $http.post(settings.apiUrlBase + '/clusters', angular.toJson(cluster));
         };
 
+        this.createUser = function(newUser) {
+            return $http.post(settings.apiUrlBase + '/users', angular.toJson(newUser));
+        };
+
+        this.getUserSetting = function() {
+            return $http.get(settings.apiUrlBase + '/users');
+        };
+
+        this.getUserLog = function() {
+            return $http.get(settings.apiUrlBase + '/users/logs');
+        }
         this.getClusters = function() {
             return $http.get(settings.apiUrlBase + '/clusters');
         };
