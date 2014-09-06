@@ -1352,7 +1352,7 @@ angular.module('compass.wizard', [
             }
         };
         dataService.updateClusterConfig(cluster.id, network_mapping).success(function(data) {
-            wizardFactory.setNetworkMapping($scope.networking);
+            wizardFactory.setNetworkMapping(networks);
             var commitState = {
                 "name": "network_mapping",
                 "state": "success",

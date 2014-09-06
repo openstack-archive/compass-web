@@ -81,38 +81,38 @@ address, caption, cite, code, dfn, em, strong, th, var {
     width: 600px;
 }
 .toc .tiles li:nth-child(1) a {
-    background-color: rgb(81, 107, 238);
+    background-color: #6C9842;
 }
 .toc .tiles li:nth-child(2) {
     width: 200px;
 }
 .toc .tiles li:nth-child(2) a {
-    background-color: rgb(36, 16, 51);
+    background-color: #D6487E;
 }
 .toc .tiles li:nth-child(3) {
     height: 400px;
     width: 200px;
 }
 .toc .tiles li:nth-child(3) a {
-    background-color: rgb(46, 147, 45);
+    background-color: #FFB752;
 }
 .toc .tiles li:nth-child(4), .toc .tiles li:nth-child(5) {
     width: 300px;
 }
 .toc .tiles li:nth-child(4) a, .toc .tiles li:nth-child(5) a {
-    background-color: rgb(106, 106, 106);
+    background-color: #7B68AF;
 }
 .toc .tiles li:nth-child(6), .toc .tiles li:nth-child(7), .toc .tiles li:nth-child(8) {
     width: 200px;
 }
 .toc .tiles li:nth-child(6) a, .toc .tiles li:nth-child(7) a, .toc .tiles li:nth-child(8) a {
-    background-color: rgb(104, 52, 160);
+    background-color: #A0A0A0;
 }
 .toc .tiles li:nth-child(9), .toc .tiles li:nth-child(10), .toc .tiles li:nth-child(11), .toc .tiles li:nth-child(12) {
     width: 200px;
 }
 .toc .tiles li:nth-child(9) a, .toc .tiles li:nth-child(10) a, .toc .tiles li:nth-child(11) a, .toc .tiles li:nth-child(12) a {
-    background-color: rgb(11, 151, 202);
+    background-color: #6FB3E0;
 }
 @media (max-width: 915px) {
     div.container {

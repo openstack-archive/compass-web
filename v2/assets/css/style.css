@@ -394,6 +394,9 @@ a:active {
 .label:first-letter {
     text-transform: uppercase !important;
 }
+.capitalize {
+    text-transform: capitalize;
+}
 .nav-search {
     position: relative !important;
     float: right !important;

@@ -122,21 +122,9 @@
         }
     },
     "network_mapping": {
-        "management": {
-            "display": "Management",
-            "mapping_interface": ""
-        },
-        "tenant": {
-            "display": "Tenant",
-            "mapping_interface": ""
-        },
-        "storage": {
-            "display": "Storage",
-            "mapping_interface": ""
-        },
-        "public": {
-            "display": "Public",
-            "mapping_interface": ""
-        }
+        "management": "",
+        "tenant": "",
+        "storage": "",
+        "public": ""
     }
 }

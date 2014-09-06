@@ -22,51 +22,182 @@ angular.module('compass.monitoring', [
             renderer: 'area'
         };
 
-        $scope.alertsData = {"id":"server-1.huawei.com","name":"server-1.huawei.com","resource":"hosts","state":"running","type":"server",  "metrics":[],  "alarms":[
-                {"id":"critical","name":"critical","data":[
-                                {"start":1406831282409,"end":1406870037149},
-                                {"start":1406745382748,"end":1406761927670}
-                ]},
-                {"id":"minor","name":"minor","data":[
-                                {"start":1406873957790,"end":1406886655198},
-                                {"start":1406774590378,"end":1406850781190}
-                ]},
-                {"id":"positive","name":"positive","data":[
-                                {"start":1406873957790,"end":1406886655198},
-                                {"start":1406774590378,"end":1406850781190}
-                ]},
-                {"id":"info","name":"info","data":[
-                                {"start":1406873957790,"end":1406886655198},
-                                {"start":1406774590378,"end":1406850781190}
-                ]}
-        ]};
+        $scope.alertsData = {
+            "id": "server-1.huawei.com",
+            "name": "server-1.huawei.com",
+            "resource": "hosts",
+            "state": "running",
+            "type": "server",
+            "metrics": [],
+            "alarms": [{
+                "id": "critical",
+                "name": "critical",
+                "data": [{
+                    "start": 1406831282409,
+                    "end": 1406870037149
+                }, {
+                    "start": 1406745382748,
+                    "end": 1406761927670
+                }]
+            }, {
+                "id": "minor",
+                "name": "minor",
+                "data": [{
+                    "start": 1406873957790,
+                    "end": 1406886655198
+                }, {
+                    "start": 1406774590378,
+                    "end": 1406850781190
+                }]
+            }, {
+                "id": "positive",
+                "name": "positive",
+                "data": [{
+                    "start": 1406873957790,
+                    "end": 1406886655198
+                }, {
+                    "start": 1406774590378,
+                    "end": 1406850781190
+                }]
+            }, {
+                "id": "info",
+                "name": "info",
+                "data": [{
+                    "start": 1406873957790,
+                    "end": 1406886655198
+                }, {
+                    "start": 1406774590378,
+                    "end": 1406850781190
+                }]
+            }]
+        };
 
-        $scope.alerts = [
-        {"startDate":new Date("Sun Dec 09 01:36:45 EST 2012"),"endDate":new Date("Sun Dec 09 02:36:45 EST 2012"),"name":"host-01","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 04:56:32 EST 2012"),"endDate":new Date("Sun Dec 09 06:35:47 EST 2012"),"name":"host-05","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 06:29:53 EST 2012"),"endDate":new Date("Sun Dec 09 06:34:04 EST 2012"),"name":"host-02","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 05:35:21 EST 2012"),"endDate":new Date("Sun Dec 09 06:21:22 EST 2012"),"name":"host-01","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 05:00:06 EST 2012"),"endDate":new Date("Sun Dec 09 05:05:07 EST 2012"),"name":"host-03","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 03:46:59 EST 2012"),"endDate":new Date("Sun Dec 09 04:54:19 EST 2012"),"name":"host-01","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 04:02:45 EST 2012"),"endDate":new Date("Sun Dec 09 04:48:56 EST 2012"),"name":"host-02","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 03:27:35 EST 2012"),"endDate":new Date("Sun Dec 09 03:58:43 EST 2012"),"name":"host-03","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 01:40:11 EST 2012"),"endDate":new Date("Sun Dec 09 03:26:35 EST 2012"),"name":"host-04","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 03:00:03 EST 2012"),"endDate":new Date("Sun Dec 09 03:09:51 EST 2012"),"name":"host-05","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 01:21:00 EST 2012"),"endDate":new Date("Sun Dec 09 02:51:42 EST 2012"),"name":"host-01","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 01:08:42 EST 2012"),"endDate":new Date("Sun Dec 09 01:33:42 EST 2012"),"name":"host-04","status":"CRITICAL"},
-        {"startDate":new Date("Sun Dec 09 00:27:15 EST 2012"),"endDate":new Date("Sun Dec 09 00:54:56 EST 2012"),"name":"host-04","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 00:29:48 EST 2012"),"endDate":new Date("Sun Dec 09 00:44:50 EST 2012"),"name":"host-01","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 07:39:21 EST 2012"),"endDate":new Date("Sun Dec 09 07:43:22 EST 2012"),"name":"host-03","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 07:00:06 EST 2012"),"endDate":new Date("Sun Dec 09 07:05:07 EST 2012"),"name":"host-02","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 08:46:59 EST 2012"),"endDate":new Date("Sun Dec 09 09:54:19 EST 2012"),"name":"host-02","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 09:02:45 EST 2012"),"endDate":new Date("Sun Dec 09 09:48:56 EST 2012"),"name":"host-01","status":"WARNING"},
-        {"startDate":new Date("Sun Dec 09 08:27:35 EST 2012"),"endDate":new Date("Sun Dec 09 08:58:43 EST 2012"),"name":"host-05","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 08:40:11 EST 2012"),"endDate":new Date("Sun Dec 09 08:46:35 EST 2012"),"name":"host-03","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 08:00:03 EST 2012"),"endDate":new Date("Sun Dec 09 08:09:51 EST 2012"),"name":"host-02","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 10:21:00 EST 2012"),"endDate":new Date("Sun Dec 09 10:51:42 EST 2012"),"name":"host-04","status":"SUCCEEDED"},
-        {"startDate":new Date("Sun Dec 09 11:08:42 EST 2012"),"endDate":new Date("Sun Dec 09 11:33:42 EST 2012"),"name":"host-04","status":"CRITICAL"},
-        {"startDate":new Date("Sun Dec 09 12:27:15 EST 2012"),"endDate":new Date("Sun Dec 09 12:54:56 EST 2012"),"name":"host-02","status":"SUCCEEDED"},
-        {"startDate":new Date("Sat Dec 08 23:12:24 EST 2012"),"endDate":new Date("Sun Dec 09 00:26:13 EST 2012"),"name":"host-01","status":"UNKNOWN"}];
+        $scope.alerts = [{
+            "startDate": new Date("Sun Dec 09 01:36:45 EST 2012"),
+            "endDate": new Date("Sun Dec 09 02:36:45 EST 2012"),
+            "name": "host-01",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 04:56:32 EST 2012"),
+            "endDate": new Date("Sun Dec 09 06:35:47 EST 2012"),
+            "name": "host-05",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 06:29:53 EST 2012"),
+            "endDate": new Date("Sun Dec 09 06:34:04 EST 2012"),
+            "name": "host-02",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 05:35:21 EST 2012"),
+            "endDate": new Date("Sun Dec 09 06:21:22 EST 2012"),
+            "name": "host-01",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 05:00:06 EST 2012"),
+            "endDate": new Date("Sun Dec 09 05:05:07 EST 2012"),
+            "name": "host-03",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 03:46:59 EST 2012"),
+            "endDate": new Date("Sun Dec 09 04:54:19 EST 2012"),
+            "name": "host-01",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 04:02:45 EST 2012"),
+            "endDate": new Date("Sun Dec 09 04:48:56 EST 2012"),
+            "name": "host-02",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 03:27:35 EST 2012"),
+            "endDate": new Date("Sun Dec 09 03:58:43 EST 2012"),
+            "name": "host-03",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 01:40:11 EST 2012"),
+            "endDate": new Date("Sun Dec 09 03:26:35 EST 2012"),
+            "name": "host-04",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 03:00:03 EST 2012"),
+            "endDate": new Date("Sun Dec 09 03:09:51 EST 2012"),
+            "name": "host-05",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 01:21:00 EST 2012"),
+            "endDate": new Date("Sun Dec 09 02:51:42 EST 2012"),
+            "name": "host-01",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 01:08:42 EST 2012"),
+            "endDate": new Date("Sun Dec 09 01:33:42 EST 2012"),
+            "name": "host-04",
+            "status": "CRITICAL"
+        }, {
+            "startDate": new Date("Sun Dec 09 00:27:15 EST 2012"),
+            "endDate": new Date("Sun Dec 09 00:54:56 EST 2012"),
+            "name": "host-04",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 00:29:48 EST 2012"),
+            "endDate": new Date("Sun Dec 09 00:44:50 EST 2012"),
+            "name": "host-01",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 07:39:21 EST 2012"),
+            "endDate": new Date("Sun Dec 09 07:43:22 EST 2012"),
+            "name": "host-03",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 07:00:06 EST 2012"),
+            "endDate": new Date("Sun Dec 09 07:05:07 EST 2012"),
+            "name": "host-02",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 08:46:59 EST 2012"),
+            "endDate": new Date("Sun Dec 09 09:54:19 EST 2012"),
+            "name": "host-02",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 09:02:45 EST 2012"),
+            "endDate": new Date("Sun Dec 09 09:48:56 EST 2012"),
+            "name": "host-01",
+            "status": "WARNING"
+        }, {
+            "startDate": new Date("Sun Dec 09 08:27:35 EST 2012"),
+            "endDate": new Date("Sun Dec 09 08:58:43 EST 2012"),
+            "name": "host-05",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 08:40:11 EST 2012"),
+            "endDate": new Date("Sun Dec 09 08:46:35 EST 2012"),
+            "name": "host-03",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 08:00:03 EST 2012"),
+            "endDate": new Date("Sun Dec 09 08:09:51 EST 2012"),
+            "name": "host-02",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 10:21:00 EST 2012"),
+            "endDate": new Date("Sun Dec 09 10:51:42 EST 2012"),
+            "name": "host-04",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sun Dec 09 11:08:42 EST 2012"),
+            "endDate": new Date("Sun Dec 09 11:33:42 EST 2012"),
+            "name": "host-04",
+            "status": "CRITICAL"
+        }, {
+            "startDate": new Date("Sun Dec 09 12:27:15 EST 2012"),
+            "endDate": new Date("Sun Dec 09 12:54:56 EST 2012"),
+            "name": "host-02",
+            "status": "SUCCEEDED"
+        }, {
+            "startDate": new Date("Sat Dec 08 23:12:24 EST 2012"),
+            "endDate": new Date("Sun Dec 09 00:26:13 EST 2012"),
+            "name": "host-01",
+            "status": "UNKNOWN"
+        }];
 
         $scope.hosts = ["host-01", "host-02", "host-03", "host-04", "host-05"];
 
@@ -170,177 +301,171 @@ angular.module('compass.monitoring', [
 
 .controller('alarmsCtrl', ['$scope', '$http', 'graphConfigurations', 'graphService',
     function($scope, $http, graphConfigurations, graphService) {
-                $scope.uris = graphService.getUris(graphConfigurations,"alarms");
-            $scope.renderers = graphService.getRenderers(graphConfigurations,"alarms");
-            $scope.rendererChanged = graphService.getRendererListener($scope);
-            $scope.uriChanged = graphService.getUriListener($scope);
-            $scope.alertsData = {"id":"server-1.huawei.com","name":"server-1.huawei.com","resource":"hosts","state":"running","type":"server",  "metrics":[],  "alarms":[
-                {"id":"critical","name":"critical","data":[
-                                {"start":1406831282409,"end":1406870037149},
-                                {"start":1406745382748,"end":1406761927670}
-                ]},
-                {"id":"minor","name":"minor","data":[
-                                {"start":1406873957790,"end":1406886655198},
-                                {"start":1406774590378,"end":1406850781190}
-                ]},
-                {"id":"positive","name":"positive","data":[
-                                {"start":1406873957790,"end":1406886655198},
-                                {"start":1406774590378,"end":1406850781190}
-                ]},
-                {"id":"info","name":"info","data":[
-                                {"start":1406873957790,"end":1406886655198},
-                                {"start":1406774590378,"end":1406850781190}
-                ]}
-           ]};
-           $scope.changeSeriesData = graphService.getDataListener($scope, function(data) {
-                var uri = $scope.uri;
-                console.log("URI is .....", uri);
-                var renderer = $scope.renderer;
-                var isValidApi = (uri == graphConfigurations.apis["192.168.255.85.hostgroup"].uri.v);
-                if (isValidApi) for (var i = 0; i < data.length; i++) data[i].name = data[i].id;
-                var gFormatter = com.huawei.compass.formatter.hourminute;
-                var gName = "Alarms";
-                var gData = isValidApi ? data : data.groups[0].hosts;
-                // TODO(jiahua): graphConfigurations.renderers[renderer] is undefined
-                var gProperty = graphConfigurations.renderers[renderer].value;
-                        var view = new graphConfigurations.renderers[renderer].view({
-                                name: gName,
-                                model: new graphConfigurations.renderers[renderer].model({data:gData, propertyKey:"alarms", propertyName:gProperty}).model,
-                                formatter: gFormatter,
-                                yFormatter: d3.format('.3e'),
-                                css: "chart-title",
-                                width: 500,
-                                height: 500,
-                                css: {
-                            "header":"chart-title",
-                            "critical" : "alarm-critical",
-                            "major" : "alarm-major",
-                            "minor" : "alarm-minor",
-                            "info" : "alarm-info",
-                            "positive" : "alarm-positive"
-                        },
-                        listener: function(d) {
-                                alert("Alarm Selected (" + d.startDate + ", " + d.endDate + ")");
-                        }
-                        });
-                        $.graphs.get("alarmsGraphContainer").innerHTML = "";
-                        $.graphs.get("alarmsGraphContainer").appendChild(view);
-                });
+        $scope.uris = graphService.getUris(graphConfigurations, "alarms");
+        $scope.renderers = graphService.getRenderers(graphConfigurations, "alarms");
+        $scope.rendererChanged = graphService.getRendererListener($scope);
+        $scope.uriChanged = graphService.getUriListener($scope);
+        $scope.alertsData = {
+            "id": "server-1.huawei.com",
+            "name": "server-1.huawei.com",
+            "resource": "hosts",
+            "state": "running",
+            "type": "server",
+            "metrics": [],
+            "alarms": [{
+                "id": "critical",
+                "name": "critical",
+                "data": [{
+                    "start": 1406831282409,
+                    "end": 1406870037149
+                }, {
+                    "start": 1406745382748,
+                    "end": 1406761927670
+                }]
+            }, {
+                "id": "minor",
+                "name": "minor",
+                "data": [{
+                    "start": 1406873957790,
+                    "end": 1406886655198
+                }, {
+                    "start": 1406774590378,
+                    "end": 1406850781190
+                }]
+            }, {
+                "id": "positive",
+                "name": "positive",
+                "data": [{
+                    "start": 1406873957790,
+                    "end": 1406886655198
+                }, {
+                    "start": 1406774590378,
+                    "end": 1406850781190
+                }]
+            }, {
+                "id": "info",
+                "name": "info",
+                "data": [{
+                    "start": 1406873957790,
+                    "end": 1406886655198
+                }, {
+                    "start": 1406774590378,
+                    "end": 1406850781190
+                }]
+            }]
+        };
+        $scope.changeSeriesData = graphService.getDataListener($scope, function(data) {
+            var uri = $scope.uri;
+            console.log("URI is .....", uri);
+            var renderer = $scope.renderer;
+            var isValidApi = (uri == graphConfigurations.apis["192.168.255.85.hostgroup"].uri.v);
+            if (isValidApi)
+                for (var i = 0; i < data.length; i++) data[i].name = data[i].id;
+            var gFormatter = com.huawei.compass.formatter.hourminute;
+            var gName = "Alarms";
+            var gData = isValidApi ? data : data.groups[0].hosts;
+            // TODO(jiahua): graphConfigurations.renderers[renderer] is undefined
+            var gProperty = graphConfigurations.renderers[renderer].value;
+            var view = new graphConfigurations.renderers[renderer].view({
+                name: gName,
+                model: new graphConfigurations.renderers[renderer].model({
+                    data: gData,
+                    propertyKey: "alarms",
+                    propertyName: gProperty
+                }).model,
+                formatter: gFormatter,
+                yFormatter: d3.format('.3e'),
+                css: "chart-title",
+                width: 500,
+                height: 500,
+                css: {
+                    "header": "chart-title",
+                    "critical": "alarm-critical",
+                    "major": "alarm-major",
+                    "minor": "alarm-minor",
+                    "info": "alarm-info",
+                    "positive": "alarm-positive"
+                },
+                listener: function(d) {
+                    alert("Alarm Selected (" + d.startDate + ", " + d.endDate + ")");
+                }
+            });
+            $.graphs.get("alarmsGraphContainer").innerHTML = "";
+            $.graphs.get("alarmsGraphContainer").appendChild(view);
+        });
     }
 ])
 
 
-.controller('monitoringCtrl', ['$scope',
-    function($scope) {
-        $scope.options = {
-            renderer: 'area'
-        };
-        $scope.features = {
-            hover: {
-                xFormatter: function(x) {
-                    return 't=' + x;
-                },
-                yFormatter: function(y) {
-                    return '$' + y;
-                }
-            }
-        };
-        $scope.series = [{
-            name: 'Series 1',
-            color: 'steelblue',
-            data: [{
-                x: 0,
-                y: 23
-            }, {
-                x: 1,
-                y: 15
-            }, {
-                x: 2,
-                y: 79
-            }, {
-                x: 3,
-                y: 31
-            }, {
-                x: 4,
-                y: 60
-            }]
-        }, {
-            name: 'Series 2',
-            color: 'lightblue',
-            data: [{
-                x: 0,
-                y: 30
-            }, {
-                x: 1,
-                y: 20
-            }, {
-                x: 2,
-                y: 64
-            }, {
-                x: 3,
-                y: 50
-            }, {
-                x: 4,
-                y: 15
-            }]
-        }];
-
-        $scope.options2 = {
-            renderer: 'line'
-        };
-        $scope.features2 = {
-            hover: {
-                xFormatter: function(x) {
-                    return 't=' + x;
-                },
-                yFormatter: function(y) {
-                    return '$' + y;
-                }
-            }
-        };
-        $scope.series2 = [{
-            name: 'Series 1',
-            color: 'steelblue',
-            data: [{
-                x: 0,
-                y: 23
-            }, {
-                x: 1,
-                y: 15
-            }, {
-                x: 2,
-                y: 79
-            }, {
-                x: 3,
-                y: 31
-            }, {
-                x: 4,
-                y: 60
-            }]
-        }, {
-            name: 'Series 2',
-            color: 'lightblue',
-            data: [{
-                x: 0,
-                y: 30
-            }, {
-                x: 1,
-                y: 20
-            }, {
-                x: 2,
-                y: 64
-            }, {
-                x: 3,
-                y: 50
-            }, {
-                x: 4,
-                y: 15
-            }]
-        }];
-    }
-])
 
 .controller('moniOverviewCtrl', function($scope) {
+    $scope.moniOverviewData = [{
+        "name": "cluster_summary",
+        "display_name": "Cluster Summary",
+        "state": "ok"
+    }, {
+        "name": "controller",
+        "display_name": "Controller",
+        "state": "error"
+    }, {
+        "name": "alert",
+        "display_name": "Alert",
+        "state": "",
+        "alerts": [{
+            "type": "critical",
+            "name": "host-1"
+        }, {
+            "type": "warning",
+            "name": "host-22",
+        }, {
+            "type": "warning",
+            "name": "host-13"
+        }, {
+            "type": "critical",
+            "name": "host-20"
+        }, {
+            "type": "warning",
+            "name": "host-20"
+        }]
+    }, {
+        "name": "compute",
+        "display_name": "Compute",
+        "state": "ok"
+    }, {
+        "name": "security",
+        "display_name": "Security",
+        "state": "warning"
+    }, {
+        "name": "database",
+        "display_name": "Database",
+        "state": "warning"
+    }, {
+        "name": "image",
+        "display_name": "Image",
+        "state": "warning"
+    }, {
+        "name": "store",
+        "display_name": "Store",
+        "state": "ok"
+    }, {
+        "name": "messagebus",
+        "display_name": "Message Bus",
+        "state": "ok"
+    }, {
+        "name": "processes",
+        "display_name": "Processes",
+        "state": "ok"
+    }, {
+        "name": "monitoring",
+        "display_name": "Monitoring",
+        "state": "ok"
+    }, {
+        "name": "users",
+        "display_name": "Users",
+        "state": "ok"
+    }];
+
+
     $scope.logicalTopoData = {
         "name": "cluster1",
         "children": [{

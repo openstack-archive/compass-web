@@ -133,7 +133,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.400",
             "vlan": 1,
             "port": 1,
-            "name": "sv-1",
+            "hostname": "sv-1",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -152,7 +152,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.1.20.100",
             "vlan": 2,
             "port": 2,
-            "name": "sv-2",
+            "hostname": "sv-2",
             "clusters": [],
             "os": "CentOS",
             "adapter": "OpenStack",
@@ -165,7 +165,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.9.20.8",
             "vlan": 2,
             "port": 3,
-            "name": "sv-3",
+            "hostname": "sv-3",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -181,7 +181,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.40",
             "vlan": 2,
             "port": 4,
-            "name": "sv-4",
+            "hostname": "sv-4",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -197,7 +197,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.40",
             "vlan": 2,
             "port": 5,
-            "name": "sv-5",
+            "hostname": "sv-5",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -213,7 +213,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.40",
             "vlan": 2,
             "port": 6,
-            "name": "sv-6",
+            "hostname": "sv-6",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -229,7 +229,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.7.41",
             "vlan": 2,
             "port": 7,
-            "name": "sv-7",
+            "hostname": "sv-7",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -245,7 +245,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.41",
             "vlan": 8,
             "port": 8,
-            "name": "sv-8",
+            "hostname": "sv-8",
             "clusters": [{
                 "id": 1,
                 "name": "cluster1"
@@ -261,7 +261,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.41",
             "vlan": 9,
             "port": 9,
-            "name": "sv-9",
+            "hostname": "sv-9",
             "clusters": [],
             "os": "CentOS",
             "adapter": "OpenStack",
@@ -274,7 +274,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "switch_ip": "172.29.8.41",
             "vlan": 10,
             "port": 10,
-            "name": "sv-10",
+            "hostname": "sv-10",
             "clusters": [],
             "os": "CentOS",
             "adapter": "OpenStack",
