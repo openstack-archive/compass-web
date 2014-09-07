@@ -162,7 +162,7 @@
                                     </hostprogressbar>
                                 </td>
                                 <td class="align-right">
-                                    <button class="btn btn-trash-hover cluster-overview-delete border-radius-4 btn-xs" ng-click="openDeleteHostModal($index)" ng-disabled="clusterProgress.state == 'INSTALLING'">
+                                    <button class="btn border-radius-4 btn-xs" ng-click="openDeleteHostModal($index)" ng-disabled="clusterProgress.state == 'INSTALLING'">
                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                     </button>
                                 </td>
@@ -175,7 +175,7 @@
                         </div>
                         <div class="modal-body"  style="padding-top: 30px; padding-bottom: 20px;" >
                             Are you sure to delete
-                            <strong>{{host.name}}</strong>?
+                            <strong>{{host.hostname}}</strong>?
                         </div>                       
                         <div class="modal-footer">
                             <button class="btn btn-default" ng-click="cancel()">Cancel</button>

@@ -75,131 +75,131 @@ angular.module('compass.monitoring', [
         $scope.alerts = [{
             "startDate": new Date("Sun Dec 09 01:36:45 EST 2012"),
             "endDate": new Date("Sun Dec 09 02:36:45 EST 2012"),
-            "name": "host-01",
+            "name": "os-controller",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 04:56:32 EST 2012"),
             "endDate": new Date("Sun Dec 09 06:35:47 EST 2012"),
-            "name": "host-05",
+            "name": "os-db-node",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 06:29:53 EST 2012"),
             "endDate": new Date("Sun Dec 09 06:34:04 EST 2012"),
-            "name": "host-02",
+            "name": "os-db-node",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 05:35:21 EST 2012"),
             "endDate": new Date("Sun Dec 09 06:21:22 EST 2012"),
-            "name": "host-01",
+            "name": "os-controller",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 05:00:06 EST 2012"),
             "endDate": new Date("Sun Dec 09 05:05:07 EST 2012"),
-            "name": "host-03",
+            "name": "os-keystone",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 03:46:59 EST 2012"),
             "endDate": new Date("Sun Dec 09 04:54:19 EST 2012"),
-            "name": "host-01",
+            "name": "os-image",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 04:02:45 EST 2012"),
             "endDate": new Date("Sun Dec 09 04:48:56 EST 2012"),
-            "name": "host-02",
+            "name": "os-image",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 03:27:35 EST 2012"),
             "endDate": new Date("Sun Dec 09 03:58:43 EST 2012"),
-            "name": "host-03",
-            "status": "SUCCEEDED"
+            "name": "os-controller",
+            "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 01:40:11 EST 2012"),
             "endDate": new Date("Sun Dec 09 03:26:35 EST 2012"),
-            "name": "host-04",
-            "status": "SUCCEEDED"
+            "name": "os-db-node",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 03:00:03 EST 2012"),
             "endDate": new Date("Sun Dec 09 03:09:51 EST 2012"),
-            "name": "host-05",
-            "status": "SUCCEEDED"
+            "name": "os-keystone",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 01:21:00 EST 2012"),
             "endDate": new Date("Sun Dec 09 02:51:42 EST 2012"),
-            "name": "host-01",
-            "status": "SUCCEEDED"
+            "name": "os-mq",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 01:08:42 EST 2012"),
             "endDate": new Date("Sun Dec 09 01:33:42 EST 2012"),
-            "name": "host-04",
+            "name": "os-keystone",
             "status": "CRITICAL"
         }, {
             "startDate": new Date("Sun Dec 09 00:27:15 EST 2012"),
             "endDate": new Date("Sun Dec 09 00:54:56 EST 2012"),
-            "name": "host-04",
-            "status": "SUCCEEDED"
+            "name": "os-controller",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 00:29:48 EST 2012"),
             "endDate": new Date("Sun Dec 09 00:44:50 EST 2012"),
-            "name": "host-01",
-            "status": "SUCCEEDED"
+            "name": "os-image",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 07:39:21 EST 2012"),
             "endDate": new Date("Sun Dec 09 07:43:22 EST 2012"),
-            "name": "host-03",
+            "name": "os-image",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 07:00:06 EST 2012"),
             "endDate": new Date("Sun Dec 09 07:05:07 EST 2012"),
-            "name": "host-02",
+            "name": "os-compute2",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 08:46:59 EST 2012"),
             "endDate": new Date("Sun Dec 09 09:54:19 EST 2012"),
-            "name": "host-02",
+            "name": "os-compute1",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 09:02:45 EST 2012"),
             "endDate": new Date("Sun Dec 09 09:48:56 EST 2012"),
-            "name": "host-01",
+            "name": "os-controller",
             "status": "WARNING"
         }, {
             "startDate": new Date("Sun Dec 09 08:27:35 EST 2012"),
             "endDate": new Date("Sun Dec 09 08:58:43 EST 2012"),
-            "name": "host-05",
-            "status": "SUCCEEDED"
+            "name": "os-compute2",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 08:40:11 EST 2012"),
             "endDate": new Date("Sun Dec 09 08:46:35 EST 2012"),
-            "name": "host-03",
-            "status": "SUCCEEDED"
+            "name": "os-mq",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 08:00:03 EST 2012"),
             "endDate": new Date("Sun Dec 09 08:09:51 EST 2012"),
-            "name": "host-02",
-            "status": "SUCCEEDED"
+            "name": "os-compute2",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 10:21:00 EST 2012"),
             "endDate": new Date("Sun Dec 09 10:51:42 EST 2012"),
-            "name": "host-04",
-            "status": "SUCCEEDED"
+            "name": "os-compute1",
+            "status": "SUCCESSFUL"
         }, {
             "startDate": new Date("Sun Dec 09 11:08:42 EST 2012"),
             "endDate": new Date("Sun Dec 09 11:33:42 EST 2012"),
-            "name": "host-04",
+            "name": "os-network",
             "status": "CRITICAL"
         }, {
             "startDate": new Date("Sun Dec 09 12:27:15 EST 2012"),
             "endDate": new Date("Sun Dec 09 12:54:56 EST 2012"),
-            "name": "host-02",
-            "status": "SUCCEEDED"
+            "name": "os-mq",
+            "status": "WARNING"
         }, {
             "startDate": new Date("Sat Dec 08 23:12:24 EST 2012"),
             "endDate": new Date("Sun Dec 09 00:26:13 EST 2012"),
-            "name": "host-01",
+            "name": "os-controller",
             "status": "UNKNOWN"
         }];
 
-        $scope.hosts = ["host-01", "host-02", "host-03", "host-04", "host-05"];
+        $scope.hosts = ["os-controller", "os-db-node", "os-keystone", "os-network", "os-image", "os-mq", "os-compute1", "os-compute2"];
 
     }
 ])
@@ -467,12 +467,12 @@ angular.module('compass.monitoring', [
 
 
     $scope.logicalTopoData = {
-        "name": "cluster1",
+        "name": "cluster",
         "children": [{
             "name": "compute",
             "state": "error",
             "children": [{
-                "name": "host1",
+                "name": "os-compute1",
                 "state": "error",
                 "children": [{
                     "name": "service1"
@@ -484,30 +484,19 @@ angular.module('compass.monitoring', [
                     "name": "service4"
                 }]
             }, {
-                "name": "host2",
+                "name": "os-compute2",
                 "state": "error",
                 "children": [{
                     "name": "service1"
                 }, {
                     "name": "service2"
                 }]
-            }, {
-                "name": "host3",
-                "state": "error",
-                "children": [{
-                    "name": "service1",
-                    "children": [{
-                        "name": "metric1"
-                    }, {
-                        "name": "metric2"
-                    }]
-                }]
             }]
         }, {
-            "name": "storage",
+            "name": "controller",
             "state": "ok",
             "children": [{
-                "name": "host7",
+                "name": "os-controller",
                 "state": "ok",
                 "children": [{
                     "name": "service5",
@@ -543,51 +532,101 @@ angular.module('compass.monitoring', [
             "name": "network",
             "state": "warning",
             "children": [{
-                "name": "host10",
+                "name": "os-network",
                 "state": "warning",
-                "children": []
-            }, {
-                "name": "host11",
-                "state": "warning",
-                "children": []
+                "children": [{
+                    "name": "service5",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }, {
+                    "name": "service6",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }]
             }]
         }, {
-            "name": "controller",
+            "name": "image",
             "state": "warning",
             "children": [{
-                "name": "host12",
+                "name": "os-image",
                 "state": "warning",
-                "children": []
-            }, {
-                "name": "host13",
-                "state": "warning",
-                "children": []
+                "children": [{
+                    "name": "service5",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }, {
+                    "name": "service6",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }]
             }]
         }, {
             "name": "database",
             "state": "warning",
             "children": [{
-                "name": "host14",
-                "children": []
-            }, {
-                "name": "host15",
-                "children": []
+                "name": "os-db-node",
+                "children": [{
+                    "name": "service5",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }, {
+                    "name": "service6",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }]
             }]
         }, {
-            "name": "image",
+            "name": "message queue",
             "state": "ok",
             "children": [{
-                "name": "host16",
-                "children": []
-            }, {
-                "name": "host17",
-                "children": []
+                "name": "os-mq",
+                "children": [{
+                    "name": "service5",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }, {
+                    "name": "service6",
+                    "state": "ok",
+                    "children": [{
+                        "name": "metric1"
+                    }, {
+                        "name": "metric2"
+                    }]
+                }]
             }]
         }]
     };
-
+/*
     $scope.physicalTopoData = {
-        "name": "Compass Server",
+        "name": "compass-dc1",
         "children": [{
             "name": "switch1",
             "state": "error",
@@ -631,7 +670,40 @@ angular.module('compass.monitoring', [
             }]
         }]
     };
-    $scope.serverCount = 9;
+*/
+    $scope.physicalTopoData = {
+        "name": "compass-dc1",
+        "children": [{
+            "name": "172.29.8.40",
+            "state": "warning",
+            "children": [{
+                "name": "os-controller",
+                "state": "warning"
+            }, {
+                "name": "os-db-node",
+                "state": "ok"
+            }, {
+                "name": "os-keystone",
+                "state": "ok"
+            }, {
+                "name": "os-network",
+                "state": "ok"
+            }, {
+                "name": "os-image",
+                "state": "ok"
+            }, {
+                "name": "os-mq",
+                "state": "ok"
+            }, {
+                "name": "os-compute1",
+                "state": "warning"
+            }, {
+                "name": "os-compute2",
+                "state": "ok"
+            }]
+        }]
+    };
+    $scope.serverCount = 8;
 
     //$scope.topoDropDown = 'service';
 
