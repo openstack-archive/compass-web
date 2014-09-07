@@ -47,7 +47,7 @@
         "dns_servers": [""],
         "search_path": ["ods.com"],
         "domain": "ods.com",
-        "default_gateway": "172.19.100.1"
+        "default_gateway": "10.145.88.1"
     },
     "server_credentials": {
         "username": "root",

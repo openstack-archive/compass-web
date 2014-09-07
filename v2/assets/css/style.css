@@ -605,6 +605,7 @@ div.center-align {
 }
 .wizard-steps li .step {
     transform: scale(1.6);
+    -webkit-transform: scale(1.6);
     background-color: #AEAEAE;
     border-style:none;
 }
@@ -620,11 +621,13 @@ div.center-align {
 .a.wizard-steps li.active:before, .wizard-steps li.active .step {
     border-color: #80afd4 !important;
     transform: scale(1.25) !important;
+    -webkit-transform: scale(1.25) !important;
     background-color:rgba(52, 109, 153, 1);
      /*border-color: #93cbf9 !important;*/}
 .a.wizard-steps li.active:before, .wizard-steps li.active .step {
     /*border-color: #80afd4 !important;*/ 
     transform: scale(1.7) !important;
+    -webkit-transform: scale(1.7) !important;
     font-weight: bold;
 }
 li.incomplete:before, li.incomplete .step {

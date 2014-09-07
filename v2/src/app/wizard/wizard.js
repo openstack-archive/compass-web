@@ -747,13 +747,13 @@ angular.module('compass.wizard', [
                 case "host":
                     var server_index = 1;
                     angular.forEach($scope.servers, function(server) {
-                        server.name = "host-" + server_index;
+                        server.hostname = "host-" + server_index;
                         server_index++;
                     })
                     break;
                 case "switch_ip":
                     angular.forEach($scope.servers, function(server) {
-                        server.name = server.switch_ip.replace(/\./g, "-") + "-p" + server.port;
+                        server.hostname = server.switch_ip.replace(/\./g, "-") + "-p" + server.port;
                     })
                     break;
             }
