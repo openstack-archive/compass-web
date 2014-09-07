@@ -178,6 +178,10 @@ angular.module('compass.charts', [])
                 .on("click", function(d) {
                     return zoom(node == d ? root : d);
                 })
+                .on("contextmenu", function(d) {
+                    //stop showing browser menu
+                    d3.event.preventDefault();
+                })
                 .on("mouseover", function(d) {
                     //console.log("mouseover ", d)
                 });
@@ -192,7 +196,14 @@ angular.module('compass.charts', [])
                     return d.x;
                 })
                 .attr("y", function(d) {
-                    return d.children ? d.y + d.r + 10 : d.y;
+                        if(d.depth == 0 || d.depth == 1) {
+                            return y(d.y + d.r + 20);
+                        } else if(d.depth == 2 || d.depth == 3) {
+                            return y(d.y + d.r + 5);
+                        } else {
+                            return y(d.y);
+                        }                    
+                    //return d.children ? d.y + d.r + 10 : d.y;
                 })
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
@@ -232,7 +243,15 @@ angular.module('compass.charts', [])
                         return x(d.x);
                     })
                     .attr("y", function(d) {
-                        return d.children ? y(d.y + d.r + 10) : y(d.y);
+                        if(d.depth == 0 || d.depth == 1) {
+                            return y(d.y + d.r + 20);
+                        } else if(d.depth == 2 || d.depth == 3) {
+                            return y(d.y + d.r + 5);
+                        } else {
+                            return y(d.y);
+                        }
+
+                        //return d.children ? y(d.y + d.r + 10) : y(d.y);
                     })
                     .style("opacity", function(d) {
                         return k * d.r > 20 ? 1 : 0;
@@ -491,10 +510,10 @@ app.directive('ganttchart', function() {
             var tasks = scope.data;
             var hostnames = scope.hosts;
             var taskStatus = {
-                "SUCCEEDED": "bar",
+                "SUCCESSFUL": "bar-successful",
                 "CRITICAL": "bar-failed",
-                "WARNING": "bar-running",
-                "UNKNOWN": "bar-killed"
+                "WARNING": "bar-warning",
+                "UNKNOWN": "bar-unknown"
             };
 
             tasks.sort(function(a, b) {

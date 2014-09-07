@@ -92,21 +92,21 @@ ganttchart .axis path, ganttchart .axis line {
 }
 
 ganttchart .bar {
-    fill: #33b5e5;
 }
 
 ganttchart .bar-failed {
-    fill: #CC0000;
+    fill: #CC0000; /*red*/
 }
 
-ganttchart .bar-running {
-    fill: #669900;
+ganttchart .bar-warning {
+    fill: #ffbb33; /*yellow*/
 }
 
-ganttchart .bar-succeeded {
-    fill: #33b5e5;
+ganttchart .bar-successful {
+    fill: #669900; /*green*/
 }
 
-ganttchart .bar-killed {
-    fill: #ffbb33;
+ganttchart .bar-unknown {
+    fill: #33b5e5; /*blue*/
+    /*fill: #B8B8B8; grey*/
 }
