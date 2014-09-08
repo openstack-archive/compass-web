@@ -13,7 +13,7 @@ function (Settings) {
     datasources: {
       metricsdb: {
         type: 'kairosdb',
-        url: "http://os-monit-serv:8080",
+        url: "http://metrics:8080",
         default: true
       },
 /*
@@ -36,6 +36,7 @@ function (Settings) {
     // used for storing and loading dashboards, optional
     // For Basic authentication use: http://username:password@domain.com:9200
     elasticsearch: "http://"+window.location.hostname+":9200",
+    // elasticsearch: "http://elasticsearch:9200",
 
     // default start dashboard
     default_route: '/dashboard/file/default.json',
@@ -64,7 +65,9 @@ function (Settings) {
 
     // Add your own custom pannels
     plugins: {
-      panels: []
+      panels: [
+
+      ]
     }
 
   });
