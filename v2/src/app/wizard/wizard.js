@@ -1522,9 +1522,12 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
         var subnetworks = [];
         var promises = [];
         angular.forEach($scope.subnetworks, function(subnet) {
+            var requestData = {
+                "subnet": subnet.subnet
+            }
             if (subnet.id === undefined) {
                 // post subnetworks
-                var updateSubnetConfig = dataService.postSubnetConfig(subnet).then(function(subnetData) {
+                var updateSubnetConfig = dataService.postSubnetConfig(requestData).then(function(subnetData) {
                     subnetworks.push(subnetData.data);
                 }, function(response) {
                     return $q.reject(response);
@@ -1532,7 +1535,7 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
                 promises.push(updateSubnetConfig);
             } else {
                 // put subnetworks
-                var updateSubnetConfig = dataService.putSubnetConfig(subnet.id, subnet).then(function(subnetData) {
+                var updateSubnetConfig = dataService.putSubnetConfig(subnet.id, requestData).then(function(subnetData) {
                     subnetworks.push(subnetData.data);
                 }, function(response) {
                     return $q.reject(response);
