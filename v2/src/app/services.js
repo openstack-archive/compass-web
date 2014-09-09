@@ -33,6 +33,10 @@ angular.module('compass.services', [])
         this.login = function(user) {
             return $http.post(settings.apiUrlBase + '/users/login', angular.toJson(user));
         };
+        this.authenticate = function(user) {
+
+
+        }
 
         this.getWizardPreConfig = function() {
             return $http.get(settings.metadataUrlBase + '/config.json');
@@ -309,7 +313,7 @@ angular.module('compass.services', [])
         wizard.getServers = function() {
             return angular.copy(wizard.servers);
         };
-/*
+        /*
         wizard.setAdapter = function(adapter) { ////
             wizard.adapter = adapter;
         };
@@ -398,7 +402,7 @@ angular.module('compass.services', [])
 
 .service('authService', ['$http', 'dataService',
     function($http, dataService) {
-        this.isAuthenticated = false;
+        this.isAuthenticated = true;
 
         this.setLogin = function(isLogin) {
             this.isAuthenticated = isLogin;
@@ -413,3 +417,45 @@ angular.module('compass.services', [])
         };
     }
 ])
+.factory('authenticationInterceptor', ['$q', '$location',
+    function($q, $location) {
+        return {
+            response: function(response) {
+                return response;
+            },
+            responseError: function(rejection) {
+                if (rejection.status === 401) {
+                    console.log("Response Error 401", rejection);
+
+                    $location.path('/login');
+                }
+                return $q.reject(rejection);
+            }
+        }
+
+    }
+])
+.service('rememberMe', function() {
+
+    this.setCookies = function(key, value, exdays, remember) {
+        if (remember) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = key + "=" + value + "; " + expires;
+        }else{
+            document.cookie = key + "=" + value;
+        }
+
+    }
+    this.getCookie = function(key) {
+        var name = key + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+})
