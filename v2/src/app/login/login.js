@@ -14,14 +14,16 @@ angular.module('compass.login', [
         });
 })
 
-.controller('loginCtrl', function($scope, authService, $state) {
+.controller('loginCtrl', function($scope, authService, $state, rememberMe) {
     $scope.login = function() {
         var credentials = {
             "email": $scope.email,
             "password": $scope.password
         };
         authService.login(credentials).success(function(data) {
+            rememberMe.setCookies("isAuthenticated","true",365,Boolean($scope.remember));
             authService.isAuthenticated = true;
+            
             $state.transitionTo("clusterList");
         }).error(function(response) {
             console.log(response);
@@ -29,18 +31,19 @@ angular.module('compass.login', [
     }
 })
 .directive('setFocus', function() {
-  return function(scope, element){ element[0].focus();};
+    return function(scope, element) {
+        element[0].focus();
+    };
 })
 .directive('ngEnter', function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function(event) {
-            if(event.which === 13) {   // 13 is enter key
+            if (event.which === 13) { // 13 is enter key
 
-                if(scope.email.trim() !="" && scope.password.trim() != "")
-                {
-                     scope.$eval(attrs.ngEnter);
+                if (scope.email.trim() != "" && scope.password.trim() != "") {
+                    scope.$eval(attrs.ngEnter);
                 }
-                    
+
                 event.preventDefault();
             }
         });

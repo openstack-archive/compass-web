@@ -11,7 +11,7 @@ var app = angular.module('compass', [
     'compass.userProfile',
     'ui.router',
     'ui.bootstrap',
-    //'compassAppDev',
+ //   'compassAppDev',
     'ngAnimate'
 ]);
 
@@ -23,12 +23,20 @@ app.constant('settings', {
 
 app.config(function($stateProvider, $urlRouterProvider) {
     app.stateProvider = $stateProvider;
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/clusterlist');
 });
 
-app.run(function($rootScope, $state, authService) {
+
+app.config(function($httpProvider) {
+    $httpProvider.interceptors.push('authenticationInterceptor');
+});
+
+app.run(function($rootScope, $state, authService, rememberMe) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-        if (toState.authenticate && !authService.isAuthenticated) {
+        if (authService.isAuthenticated == false) {
+            rememberMe.setCookies("isAuthenticated", "false", -365);
+        }
+        if (toState.authenticate && rememberMe.getCookie('isAuthenticated') != "true") {
             // User isn't authenticated
             $state.transitionTo("login");
             event.preventDefault();
