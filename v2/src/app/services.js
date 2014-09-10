@@ -207,6 +207,10 @@ angular.module('compass.services', [])
         this.monitoredHost = function(id) {
             //return $http.jsonp(settings.monitoringUrlBase: + '/hosts/' + id);
         };
+
+        this.getMetricsTreeNodes = function() {
+            return $http.get(settings.metadataUrlBase + '/metrics_tree.json');
+        };
     }
 ])
 
