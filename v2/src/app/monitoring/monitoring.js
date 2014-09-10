@@ -4,7 +4,8 @@ angular.module('compass.monitoring', [
     'compass.charts',
     'ngAnimate',
     'angular-rickshaw',
-    'nvd3ChartDirectives'
+    'nvd3ChartDirectives',
+    'ui.tree'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -397,6 +398,103 @@ angular.module('compass.monitoring', [
 ])
 
 
+.controller('metricsCtrl', function($scope, dataService) {
+
+    $scope.toggle = function(scope) {
+      scope.toggle();
+    };
+
+    var getRootNodesScope = function() {
+      return angular.element(document.getElementById("tree-root")).scope();
+    };
+
+    $scope.collapseAll = function() {
+      var scope = getRootNodesScope();
+      scope.collapseAll();
+    };
+
+    $scope.expandAll = function() {
+      var scope = getRootNodesScope();
+      scope.expandAll();
+    };
+
+    $scope.metricsTree = [];
+
+    dataService.getMetricsTreeNodes().success(function(data) {
+        $scope.metricsTree = data;
+    }).error(function(response) {
+        $scope.metricsTree = [];
+    });
+    
+    $scope.generate = function(node) {
+        console.log(node);
+        // call metric api here to get data for chart
+    };
+
+    $scope.metricsData = [{
+        "key": "Series 1",
+        "values": [
+            [1, 0],
+            [2, 6],
+            [3, 5],
+            [4, 11],
+            [5, 5]
+        ]
+    }, {
+        "key": "Series 2",
+        "values": [
+            [1, 0],
+            [2, 10],
+            [3, 5],
+            [4, 5],
+            [5, 0]
+        ]
+    }, {
+        "key": "Series 3",
+        "values": [
+            [1, 0],
+            [2, 6],
+            [3, 5],
+            [4, 11],
+            [5, 5]
+        ]
+    }, {
+        "key": "Series 4",
+        "values": [
+            [1, 7],
+            [2, 14],
+            [3, 14],
+            [4, 23],
+            [5, 16]
+        ]
+    }];
+
+    $scope.xAxisTickFormat = function() {
+        return function(d) {
+            return d3.time.format('%x')(new Date(d));
+        }
+    };
+
+    $scope.toolTipContentFunction = function() {
+        return function(key, x, y, e, graph) {
+            console.log('tooltip content');
+            return 'Super New Tooltip' +
+                '<h1>' + key + '</h1>' +
+                '<p>' + y + ' at ' + x + '</p>'
+        }
+    };
+
+    /* 
+    // customize stack/line chart colors
+    $scope.colorFunction = function() {
+        var colors = ["#68bc31", "#2091cf", "#6fb3e0", "#fee074", "#f89406", "#af4e96"];
+        return function(d, i) {
+            return colors[i%6];
+        };
+    }
+    */
+
+})
 
 .controller('moniOverviewCtrl', function($scope) {
 
@@ -728,53 +826,6 @@ angular.module('compass.monitoring', [
             }]
         }]
     };
-/*
-    $scope.physicalTopoData = {
-        "name": "compass-dc1",
-        "children": [{
-            "name": "switch1",
-            "state": "error",
-            "children": [{
-                "name": "server1",
-                "state": "error"
-            }, {
-                "name": "server2",
-                "state": "ok"
-            }]
-        }, {
-            "name": "switch2",
-            "state": "ok",
-            "children": [{
-                "name": "server3",
-                "state": "ok"
-            }, {
-                "name": "server4",
-                "state": "ok"
-            }]
-        }, {
-            "name": "switch3",
-            "state": "warning",
-            "children": [{
-                "name": "server4",
-                "state": "ok"
-            }, {
-                "name": "server5",
-                "state": "ok"
-            }, {
-                "name": "server6",
-                "state": "warning"
-            }, {
-                "name": "server7",
-                "state": "ok"
-            }, {
-                "name": "server8"
-            }, {
-                "name": "server9",
-                "state": "warning"
-            }]
-        }]
-    };
-*/
     $scope.physicalTopoData = {
         "name": "compass-dc1",
         "children": [{
@@ -811,66 +862,6 @@ angular.module('compass.monitoring', [
 
     //$scope.topoDropDown = 'service';
 
-    $scope.exampleData = [{
-        "key": "Series 1",
-        "values": [
-            [1, 0],
-            [2, 6],
-            [3, 5],
-            [4, 11],
-            [5, 5]
-        ]
-    }, {
-        "key": "Series 2",
-        "values": [
-            [1, 0],
-            [2, 10],
-            [3, 5],
-            [4, 5],
-            [5, 0]
-        ]
-    }, {
-        "key": "Series 3",
-        "values": [
-            [1, 0],
-            [2, 6],
-            [3, 5],
-            [4, 11],
-            [5, 5]
-        ]
-    }, {
-        "key": "Series 4",
-        "values": [
-            [1, 7],
-            [2, 14],
-            [3, 14],
-            [4, 23],
-            [5, 16]
-        ]
-    }];
 
-    $scope.xAxisTickFormat = function() {
-        return function(d) {
-            return d3.time.format('%x')(new Date(d));
-        }
-    };
-
-    $scope.toolTipContentFunction = function() {
-        return function(key, x, y, e, graph) {
-            console.log('tooltip content');
-            return 'Super New Tooltip' +
-                '<h1>' + key + '</h1>' +
-                '<p>' + y + ' at ' + x + '</p>'
-        }
-    };
-
-    /*  // customize stack/line chart colors
-    $scope.colorFunction = function() {
-        var colors = ["#68bc31", "#2091cf", "#6fb3e0", "#fee074", "#f89406", "#af4e96"];
-        return function(d, i) {
-            return colors[i%6];
-        };
-    }
-*/
 
 })

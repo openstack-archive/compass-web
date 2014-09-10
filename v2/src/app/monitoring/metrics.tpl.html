@@ -4,15 +4,10 @@
     </h1>
 </div>
 
-
-
-
-
-
-<div class="col-lg-10" style="width: 100%;">
+<div class="col-lg-10" style="width: 100%;" ng-controller="metricsCtrl">
   <tabset class="ng-isolate-scope" style="width: 100%;">
-    <tab heading="Metrics"> Metrics
-        <form class="form-inline ng-valid">
+    <tab heading="Metrics">
+        <!--form class="form-inline ng-valid">
             <select class="form-control ng-pristine ng-valid" ng-model="renderer"  ng-change="rendererChanged(renderer)" >
                 <option ng-repeat="render in renderers" value="{{render}}"> {{render}} </option>
             </select>
@@ -20,8 +15,78 @@
                 <option ng-repeat="uri in uris" value="{{uri.v}}"> {{uri.displayName}} </option>
             </select>
             <button class="btn btn-primary" ng-click="changeSeriesData(0)">Generate Metrics Report</button>
-        </form>
-        <div class="panel-body" id="metricsGraphContainer"> </div>
+        </form-->
+        <!--div class="panel-body" id="metricsGraphContainer"> </div-->
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <h3>
+                    Metrics Browser
+                    <a href="" class="btn btn-default pull-right" ng-click="collapseAll()">Collapse all</a>
+                    <a href="" class="btn btn-default pull-right margin-right-5" ng-click="expandAll()">Expand all</a>
+                </h3>
+
+                <!-- Nested node template -->
+                <script type="text/ng-template" id="nodes_renderer.html">
+                    <div ui-tree-handle class="tree-node tree-node-content">
+                        <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" ng-class="{'opacity-zero': node.nodes.length == 0 || !node.nodes}">
+                            <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
+                        </a>
+                        {{node.title}}
+                        <a style="margin-right: 8px;" ng-click="generate(node)" data-nodrag="" class="pull-right btn btn-primary btn-xs no-border" ng-hide="node.nodes.length != 0">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </div>
+                    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                        <li ng-repeat="node in node.nodes" ui-tree-node data-collapsed="true" ng-include="'nodes_renderer.html'">
+                        </li>
+                    </ol>
+                </script>
+                <div ui-tree id="tree-root" data-drag-enabled="false">
+                  <ol ui-tree-nodes="" ng-model="metricsTree">
+                    <li ng-repeat="node in metricsTree" ui-tree-node data-collapsed="true" ng-include="'nodes_renderer.html'"></li>
+                  </ol>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-sm-6">
+                <h3>Metrics Chart</h3>
+                <div class="row" style="height: 400px">
+                    <nvd3-line-chart 
+                        id="metrics-chart"
+                        data="metricsData"
+                        height="350"
+                        showXAxis="true"
+                        showYAxis="true"
+                        tooltips="true"
+                        interactive="true"
+                        useInteractiveGuideline="true"
+                        toolTipContent="toolTipContentFunction()"
+                        margin="{left:50,top:50,bottom:50,right:50}"
+                        forceY="[0]"
+                        showLegend="true"
+                        legendWidth="200"
+                        legendHeight="100">
+                        <svg></svg> 
+                    </nvd3-line-chart>
+
+                    <!--nvd3-stacked-area-chart    
+                        id="metrics-chart2"
+                        data="exampleData"
+                        showXAxis="true"
+                        showYAxis="true"
+                        tooltips="true"
+                        interactive="true"
+                        useInteractiveGuideline="true"
+                        toolTipContent="toolTipContentFunction()"
+                        forceY="[0]">
+                    <svg></svg> 
+                    </nvd3-stacked-area-chart-->
+                </div>
+
+            </div>
+        </div>
+
+
     </tab>
     <tab heading="Metrics Database"> 
         <iframe src="http://10.145.81.205:8080/designer.html" border="0px" height="900px" width="99%" scrolling="auto" frameborder="0"><font face="Arial, Helvetica, sans-serif" size="1">Sorry your browser does not support IFRAMES.</font></iframe>
