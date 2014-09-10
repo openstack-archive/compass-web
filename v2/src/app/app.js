@@ -11,14 +11,14 @@ var app = angular.module('compass', [
     'compass.userProfile',
     'ui.router',
     'ui.bootstrap',
-    //'compassAppDev',
+    'compassAppDev',
     'ngAnimate'
 ]);
 
 app.constant('settings', {
     apiUrlBase: '/api',
     metadataUrlBase: 'data',
-    monitoringUrlBase: ''
+    monitoringUrlBase: 'http://metrics-api/monit/api/v1'
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {

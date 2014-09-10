@@ -8,7 +8,8 @@
     <div class="toc info-icons">
         <ul class="tiles">
             <li ng-repeat="tile in moniOverviewData">
-                <a href="javascript:getSummary({{tile.name}})">
+                <!-- <a ng-href='/#/cluster/2/monitoring/charts' ng-click="goDash(tile.dash)"> -->
+                <a ng-href="{{tile.base_url}}" ng-click="goDash(tile.dash)">
                     <span>
                         <img src="assets/img/moni/{{tile.name}}.png" width="100" height="100" style="margin-left: 4px; margin-bottom: 40px; margin-top: 5px">
                     </span>
@@ -63,7 +64,9 @@
                 </a>
             </li>
             <li>
-                <a href="javascript::getSummary(02_quickstart);" style="background-color: #D6487E;">
+                <!-- <a href="javascript::getSummary(01_intro);" style="background-color: #7B68AF;"> -->
+                <a ng-href='/#/cluster/2/monitoring/charts ng-click='go("/dash/#/dashboard/file/Controller")' style="background-color: #7B68AF;">
+
                     <em>
                         <image src="assets/img/controller.png" width="110" height="110" style="margin-left: -8px; margin-bottom: 40px;"></image>
                     </em>

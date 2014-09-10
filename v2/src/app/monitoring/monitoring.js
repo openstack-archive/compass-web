@@ -399,17 +399,38 @@ angular.module('compass.monitoring', [
 
 
 .controller('moniOverviewCtrl', function($scope) {
+
+
+    $scope.goAlarms =  function(){
+        //document.getElementById('dashboards').src = "/#/d/file/".concat(locs);
+    }
+
+    $scope.goDash =  function(locs){
+	//alert(locs);
+        setTimeout(function(){document.getElementById('dashboards').src = "/dash/#/dashboard/file/"+locs;},600);
+    }
+
     $scope.moniOverviewData = [{
         "name": "cluster_summary",
         "display_name": "Cluster Summary",
+
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Metrics%20Dashboard",
+
         "state": "ok"
     }, {
         "name": "controller",
         "display_name": "Controller",
+
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Controller",
+
         "state": "error"
     }, {
         "name": "alert",
         "display_name": "Alert",
+        "base_url": "/#/cluster/2/monitoring/alerts",
+        "dash": "",
         "state": "",
         "alerts": [{
             "type": "critical",
@@ -433,38 +454,56 @@ angular.module('compass.monitoring', [
     }, {
         "name": "compute",
         "display_name": "Compute",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Compute",
         "state": "ok"
     }, {
         "name": "security",
         "display_name": "Security",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Security",
         "state": "warning"
     }, {
         "name": "database",
         "display_name": "Database",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Database",
         "state": "warning"
     }, {
         "name": "image",
         "display_name": "Image",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Image",
         "state": "warning"
     }, {
         "name": "store",
         "display_name": "Store",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Storage",
         "state": "ok"
     }, {
         "name": "messagebus",
         "display_name": "Message Bus",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Message%20Bus",
         "state": "ok"
     }, {
         "name": "processes",
         "display_name": "Processes",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Processes",
         "state": "ok"
     }, {
         "name": "monitoring",
         "display_name": "Monitoring",
+        "base_url": "/#/cluster/2/monitoring/charts",
+        "dash": "Metrics%20Dashboard",
         "state": "ok"
     }, {
         "name": "users",
         "display_name": "Users",
+        "base_url": "/#/users",
+        "dash": "",
         "state": "ok"
     }];
 

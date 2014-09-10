@@ -1,0 +1,1199 @@
+{
+  "title": "Metrics Dasboard",
+  "services": {
+    "filter": {
+      "list": [],
+      "time": {
+        "from": "2014-09-04T21:59:52.065Z",
+        "to": "2014-09-04T22:01:09.479Z"
+      }
+    }
+  },
+  "rows": [
+    {
+      "title": "test",
+      "height": "350px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "none",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "thresholdLine": true
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 5,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": true
+          },
+          "percentage": true,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.idle.value",
+              "hide": false,
+              "currentTagKey": "",
+              "currentGroupByType": "tag",
+              "sampling": "",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.nice.value",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.wait.value",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.softirq.value",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.interrupt.value",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.system.value",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "cpu.0.cpu.user.value",
+              "currentHorizontalAggregatorName": "rate"
+            }
+          ],
+          "aliasColors": {
+            "cpu.0.cpu.idle.value ( ) ": "#052B51",
+            "cpu.0.cpu.steal.value ( ) ": "#CFFAFF",
+            "cpu.0.cpu.user.value ( ) ": "#64B0C8",
+            "cpu.0.cpu.interrupt.value ( ) ": "#0A50A1"
+          },
+          "aliasYAxis": {},
+          "title": "cpu"
+        },
+        {
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 1,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": true,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.cinder-api.ps_count.processes"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.cinder-scheduler.ps_count.processes"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.nova-api.ps_count.processes"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.nova-cert.ps_count.processes"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Process"
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "Compass Monitoring",
+      "height": "450px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 5,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": true,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": false,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "load.load.longterm"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "load.load.midterm"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "load.load.shortterm"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.fork_rate.value"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Loads"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "rabbitmq_info.gauge.ctl_consumers.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "rabbitmq_info.gauge.pmap_used.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "rabbitmq_info.gauge.pmap_mapped.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "rabbitmq_info.gauge.ctl_consumers_cert.value"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "rabbit"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 5,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": true,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": false,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "target": "",
+              "downsampling": "sum",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "memory.memory.used.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "memory.memory.free.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "memory.memory.buffered.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "memory.memory.cached.value"
+            }
+          ],
+          "aliasColors": {
+            "memory.memory.used.value ( ) ": "#E5A8E2",
+            "memory.memory.buffered.value ( ) ": "#6D1F62",
+            "memory.memory.free.value ( ) ": "#D683CE",
+            "memory.memory.cached.value ( ) ": "#6D1F62"
+          },
+          "aliasYAxis": {},
+          "title": "Memory"
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "New row",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "text",
+          "mode": "markdown",
+          "content": "this is a basic sample of notes which can be added",
+          "style": {},
+          "title": "Info"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 3,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": true,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {
+                "groupBy": {
+                  "groupCount": "Group count must be an integer"
+                }
+              },
+              "groupBy": {
+                "timeInterval": "1s",
+                "tagKey": "role"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.fork_rate.value",
+              "currentTagKey": "",
+              "currentTagValue": "",
+              "tags": {
+                "host": [
+                  "host1"
+                ]
+              },
+              "currentGroupByType": "time"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {
+                "tags": null
+              },
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.fork_rate.value",
+              "currentTagKey": "host",
+              "currentTagValue": "host2"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {
+                "tags": null
+              },
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.fork_rate.value",
+              "currentTagKey": "host",
+              "currentTagValue": "host3"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {
+                "tags": null
+              },
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.fork_rate.value",
+              "currentTagKey": "host",
+              "currentTagValue": "host4"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "rightYAxisLabel": "time",
+          "title": "Fork Rate"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 4,
+          "linewidth": 3,
+          "points": false,
+          "pointradius": 5,
+          "bars": true,
+          "stack": true,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "sum",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.quantum-dhcp-agent.ps_count.processes",
+              "currentTagKey": "host",
+              "currentTagValue": "host3"
+            },
+            {
+              "target": "",
+              "downsampling": "sum",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.quantum-l3-agent.ps_count.processes"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Quantum Processes"
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "Networking",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "individual",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "interface.if_packets.eth1.rx",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "interface.if_packets.eth1.tx",
+              "currentHorizontalAggregatorName": "rate"
+            }
+          ],
+          "aliasColors": {
+            "interface.if_packets.eth1.rx ( ) ": "#3F6833",
+            "interface.if_packets.eth1.tx ( ) ": "#7EB26D"
+          },
+          "aliasYAxis": {},
+          "title": "Packet Rate"
+        },
+        {
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": 5000000,
+            "threshold2": 6000000,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 3,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": true,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": true,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {
+                "tags": null
+              },
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "disk.vda.disk_ops.read",
+              "currentHorizontalAggregatorName": "avg",
+              "currentTagKey": "cluster",
+              "tags": {},
+              "currentTagValue": "1"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "disk.vda.disk_ops.write"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Disk Ops"
+        }
+      ],
+      "notice": false
+    }
+  ],
+  "editable": true,
+  "failover": false,
+  "panel_hints": true,
+  "style": "light",
+  "pulldowns": [
+    {
+      "type": "filtering",
+      "collapse": false,
+      "notice": false,
+      "enable": false
+    },
+    {
+      "type": "annotations",
+      "enable": false
+    }
+  ],
+  "nav": [
+    {
+      "type": "timepicker",
+      "collapse": false,
+      "notice": false,
+      "enable": true,
+      "status": "Stable",
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ],
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "now": false
+    }
+  ],
+  "loader": {
+    "save_gist": false,
+    "save_elasticsearch": true,
+    "save_local": true,
+    "save_default": true,
+    "save_temp": true,
+    "save_temp_ttl_enable": true,
+    "save_temp_ttl": "30d",
+    "load_gist": false,
+    "load_elasticsearch": true,
+    "load_elasticsearch_size": 20,
+    "load_local": false,
+    "hide": false
+  },
+  "refresh": false,
+  "tags": [],
+  "timezone": "browser"
+}

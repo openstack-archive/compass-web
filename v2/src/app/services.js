@@ -199,6 +199,14 @@ angular.module('compass.services', [])
         this.deleteHost = function(id) {
             return $http.delete(settings.apiUrlBase + '/hosts/' + id);
         };
+
+        this.monitoredHosts = function() {
+            //return $http.jsonp(settings.monitoringUrlBase: + '/hosts/');
+        };
+
+        this.monitoredHost = function(id) {
+            //return $http.jsonp(settings.monitoringUrlBase: + '/hosts/' + id);
+        };
     }
 ])
 
