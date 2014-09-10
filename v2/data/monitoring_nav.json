@@ -25,7 +25,7 @@
 }, {
     "name": "cluster.monitoring.charts",
     "url": "/charts",
-    "display": "Chart Grid",
+    "display": "Dashboards",
     "controller": "",
     "templateUrl": ""
 }]

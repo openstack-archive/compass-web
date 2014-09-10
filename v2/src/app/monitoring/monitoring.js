@@ -413,19 +413,22 @@ angular.module('compass.monitoring', [
         "state": "",
         "alerts": [{
             "type": "critical",
-            "name": "host-1"
+            "name": "os-keystone"
         }, {
             "type": "warning",
-            "name": "host-22",
+            "name": "os-mq",
         }, {
             "type": "warning",
-            "name": "host-13"
+            "name": "os-db-node"
         }, {
             "type": "critical",
-            "name": "host-20"
+            "name": "os-network"
         }, {
             "type": "warning",
-            "name": "host-20"
+            "name": "os-keystone"
+        }, {
+            "type": "warning",
+            "name": "os-compute2"
         }]
     }, {
         "name": "compute",
@@ -475,21 +478,44 @@ angular.module('compass.monitoring', [
                 "name": "os-compute1",
                 "state": "error",
                 "children": [{
-                    "name": "service1"
+                    "name": "nova-compute",
+                    "state": "ok"
                 }, {
-                    "name": "service2"
+                    "name": "nova-api-metadata",
                 }, {
-                    "name": "service3"
+                    "name": "nova-consoleauth",
+                    "state": "ok"
                 }, {
-                    "name": "service4"
+                    "name": "ceilometer-agent-compute",
+                    "state": "ok"
+                }, {
+                    "name": "neutron-openvswitch-agent",
+                    "state": "ok"
+                }, {
+                    "name": "nova-novncproxy",
+                    "state": "ok"
                 }]
             }, {
                 "name": "os-compute2",
                 "state": "error",
                 "children": [{
-                    "name": "service1"
+                    "name": "nova-compute",
+                    "state": "ok"
                 }, {
-                    "name": "service2"
+                    "name": "nova-api-metadata",
+                    "state": "ok"
+                }, {
+                    "name": "nova-consoleauth",
+                    "state": "ok"
+                }, {
+                    "name": "ceilometer-agent-compute",
+                    "state": "ok"
+                }, {
+                    "name": "neutron-openvswitch-agent",
+                    "state": "ok"
+                }, {
+                    "name": "nova-novncproxy",
+                    "state": "ok"
                 }]
             }]
         }, {
@@ -499,33 +525,66 @@ angular.module('compass.monitoring', [
                 "name": "os-controller",
                 "state": "ok",
                 "children": [{
-                    "name": "service5",
+                    "name": "glance-api",
+                    "state": "ok"
+                }, {
+                    "name": "glance-registry",
+                    "state": "ok"
+                }, {
+                    "name": "heat-api",
+                    "state": "ok"
+                }, {
+                    "name": "heat-api-cfn",
+                    "state": "ok"
+                }, {
+                    "name": "heat-engine",
+                    "state": "ok"
+                }, {
+                    "name": "keystone-all",
+                    "state": "ok"
+                }, {
+                    "name": "neutron-server",
+                    "state": "ok"
+                }, {
+                    "name": "nova-api",
+                    "state": "ok"
+                }, {
+                    "name": "nova-cert",
+                    "state": "ok"
+                }, {
+                    "name": "nova-conductor",
+                    "state": "ok"
+                }, {
+                    "name": "nova-consoleauth",
+                    "state": "ok"
+                }, {
+                    "name": "nova-novncproxy",
+                    "state": "ok"
+                }, {
+                    "name": "nova-objectstore",
+                    "state": "ok"
+                }, {
+                    "name": "nova-scheduler",
+                    "state": "ok"
+                }, {
+                    "name": "ceilometer-api",
+                    "state": "ok"
+                }, {
+                    "name": "ceilometer-agent-central",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "cpu"
                     }, {
-                        "name": "metric2"
+                        "name": "memory"
                     }]
                 }, {
-                    "name": "service6",
+                    "name": "ceilometer-collector",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "process count"
                     }, {
-                        "name": "metric2"
+                        "name": "load"
                     }]
-                }]
-            }, {
-                "name": "host8",
-                "state": "ok",
-                "children": [{
-                    "name": "service7",
-                    "state": "ok",
-                    "children": [{
-                        "name": "metric1"
-                    }]
-                }, {
-                    "name": "service8"
                 }]
             }]
         }, {
@@ -535,20 +594,20 @@ angular.module('compass.monitoring', [
                 "name": "os-network",
                 "state": "warning",
                 "children": [{
-                    "name": "service5",
+                    "name": "openvswitch",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "interface tx"
                     }, {
-                        "name": "metric2"
+                        "name": "interface xx"
                     }]
                 }, {
-                    "name": "service6",
+                    "name": "neutron",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "process status"
                     }, {
-                        "name": "metric2"
+                        "name": "memory"
                     }]
                 }]
             }]
@@ -559,21 +618,27 @@ angular.module('compass.monitoring', [
                 "name": "os-image",
                 "state": "warning",
                 "children": [{
-                    "name": "service5",
+                    "name": "glance",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "image count"
                     }, {
-                        "name": "metric2"
+                        "name": "process status"
                     }]
                 }, {
-                    "name": "service6",
+                    "name": "cinder-volume",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "storage capacity"
                     }, {
-                        "name": "metric2"
+                        "name": "process status"
                     }]
+                }, {
+                    "name": "cinder-api",
+                    "state": "ok"
+                }, {
+                    "name": "cinder-scheduler",
+                    "state": "ok"
                 }]
             }]
         }, {
@@ -582,20 +647,20 @@ angular.module('compass.monitoring', [
             "children": [{
                 "name": "os-db-node",
                 "children": [{
-                    "name": "service5",
+                    "name": "mysql",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "queries per second"
                     }, {
-                        "name": "metric2"
+                        "name": "response time"
                     }]
                 }, {
-                    "name": "service6",
+                    "name": "redis",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "queries per second"
                     }, {
-                        "name": "metric2"
+                        "name": "response time"
                     }]
                 }]
             }]
@@ -605,20 +670,20 @@ angular.module('compass.monitoring', [
             "children": [{
                 "name": "os-mq",
                 "children": [{
-                    "name": "service5",
+                    "name": "rabbit-mq",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "process count"
                     }, {
-                        "name": "metric2"
+                        "name": "messages tx"
                     }]
                 }, {
-                    "name": "service6",
+                    "name": "mysql",
                     "state": "ok",
                     "children": [{
-                        "name": "metric1"
+                        "name": "status"
                     }, {
-                        "name": "metric2"
+                        "name": "connection"
                     }]
                 }]
             }]

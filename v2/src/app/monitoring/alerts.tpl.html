@@ -6,7 +6,10 @@
 
 <div class="col-lg-10" ng-controller="alertsCtrl" style="width: 100%;">
     <tabset style="width: 100%;">
-        <tab heading="Alerts">
+        <tab>
+            <tab-heading>
+                <i class="ace-icon fa fa-bell"></i>Alarms
+            </tab-heading>
             <form class="form-inline">
                 <select class="form-control" ng-model="renderer" ng-change="rendererChanged(renderer)">
                     <option ng-repeat="render in renderers" value="{{render}}">{{render}}</option>
@@ -19,12 +22,6 @@
             <div class="panel-body" id="alarmsGraphContainer">
                 <ganttchart data="alerts" hosts="hosts"></ganttchart>
             </div>
-        </tab>
-        <tab>
-            <tab-heading>
-                <i class="ace-icon fa fa-bell"></i>Alarms
-            </tab-heading>
-            Alarms - TBD
         </tab>
         <tab>
             <tab-heading>
