@@ -9,6 +9,25 @@ angular.module('compass.wizard', [
     'angularSpinner',
     'ngAnimate'
 ])
+.directive('ngKeypress', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown keypress", function(event) {
+            if (event.which === 9) { // 9 is tab key
+
+                var current = attrs.position;
+                var result = current.split('_');
+                var next = result[0] + "_" + (parseInt(result[1]) + 1);
+                if ($("input[data-position=" + next + "]").length) {
+
+                    $("input[data-position=" + next + "]").focus();
+                } else {
+                    $(".btn-next").focus();
+                }
+                event.preventDefault();
+            }
+        });
+    };
+})
 
 .config(function config($stateProvider) {
     $stateProvider
@@ -1480,6 +1499,7 @@ angular.module('compass.wizard', [
         //TODO: error handling
     };
 })
+
 
 var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
     $scope.warning = warning;
