@@ -6,7 +6,7 @@
                 <i class="ace-icon fa" ng-class="{'fa-check': cluster.state == 'SUCCESSFUL', ' fa-times': cluster.state == 'ERROR', 'fa-spinner': cluster.state == 'INSTALLING', ' fa-circle-o': cluster.state == 'INITIALIZED', 'fa-gear': cluster.state == 'UNINITIALIZED'}"></i>
             </div>
             <div class="pull-left">
-                <span style="font-size: 22px; padding-left: 20px; text-transform: uppercase;font-family:Impact,'Arial Black','Open-Sans', sans-serif;">{{cluster.name}}</span>
+                <span style="font-size: 22px; padding-left: 20px; text-transform: uppercase;font-family:Impact,'Arial Black','Open-Sans', sans-serif; width:200px; overflow: hidden; display:block; white-space: nowrap" tooltip="{{cluster.name}}">{{cluster.name}}</span>
             </div>
             <div class="clearfix"></div>
 
