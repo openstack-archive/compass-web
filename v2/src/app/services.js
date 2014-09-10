@@ -199,6 +199,10 @@ angular.module('compass.services', [])
         this.deleteHost = function(id) {
             return $http.delete(settings.apiUrlBase + '/hosts/' + id);
         };
+
+        this.getMetricsTreeNodes = function() {
+            return $http.get(settings.metadataUrlBase + '/metrics_tree.json');
+        };
     }
 ])
 
