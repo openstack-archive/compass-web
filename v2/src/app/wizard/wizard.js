@@ -549,6 +549,16 @@ angular.module('compass.wizard', [
 
     dataService.getClusterHosts(cluster.id).success(function(data) {
         $scope.servers = data;
+
+        // Assume all hosts in the same cluster have same interface settings
+        if($scope.servers[0].networks) {
+            if(Object.keys($scope.servers[0].networks).length != 0) {
+                $scope.interfaces = $scope.servers[0].networks;
+                wizardFactory.setInterfaces($scope.interfaces);
+            }
+        }
+
+
         $scope.tableParams = new ngTableParams({
             page: 1, // show first page
             count: $scope.servers.length + 1 // count per page
