@@ -8,11 +8,11 @@
     "partition": {
         "/var": {
             "percentage": 30,
-            "max_size": 10
+            "max_size": "10G"
         },
         "/home": {
             "percentage": 30,
-            "max_size": 10
+            "max_size": "20G"
         }
     },
     "interface": {

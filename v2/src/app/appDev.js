@@ -675,10 +675,12 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 },
                 "partition": {
                     "/var": {
-                        "percentage": 30
+                        "percentage": 30,
+                        "max_size": "10G"
                     },
                     "/home": {
-                        "percentage": 30
+                        "percentage": 30,
+                        "max_size": "10G"
                     }
                 }
             },
