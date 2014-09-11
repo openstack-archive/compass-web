@@ -133,7 +133,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="host in $data | filter:search">
+                            <tr ng-repeat="host in $data | filter:search" ng-class="{'hightlight': host.selected}">
                                 <td>
                                     <label>
                                         <input type="checkbox" ng-model="host.selected" class="ace">

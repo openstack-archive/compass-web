@@ -517,6 +517,12 @@ a:active {
 .ng-table-pager {
     display: none;
 }
+tr.hightlight {
+    background-color: #e4efc9 !important;
+}
+tr.hightlight td{
+    background-color: #e4efc9 !important;
+}
 .btn-previous {
     background-color: #abbac3 !important;
     border-color: #abbac3 !important;
