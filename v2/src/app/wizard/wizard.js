@@ -332,6 +332,16 @@ angular.module('compass.wizard', [
         }
     };
 
+    $scope.ifPreSelect = function(server) {
+        if(server.clusters) {
+            angular.forEach(server.clusters, function(svCluster) {
+                if(svCluster.id == cluster.id) {
+                    server.selected = true;
+                }
+            })
+        }
+    };
+
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
