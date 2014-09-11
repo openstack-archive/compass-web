@@ -71,9 +71,9 @@
                 </thead>
 
                 <tbody>
-                    <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new}">
+                    <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new, 'hightlight': server.selected}">
                         <td>
-                            <label>
+                            <label ng-init="ifPreSelect(server)">
                                 <input ng-model="server.selected" type="checkbox" class="ace">
                                 <span class="lbl"></span>
                             </label>

@@ -94,7 +94,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="server in $data | filter: search" ng-init="server.roles = server.roles === undefinded? [] : server.roles">
+                <tr ng-repeat="server in $data | filter: search" ng-init="server.roles = server.roles === undefinded? [] : server.roles" ng-class="{'hightlight': server.checked}">
                     <td>
                         <label>
                             <input ng-model="server.checked" type="checkbox" class="ace">
