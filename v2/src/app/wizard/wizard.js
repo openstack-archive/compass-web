@@ -1324,6 +1324,10 @@ angular.module('compass.wizard', [
             $scope.networking["public"].mapping_interface = key;
             $scope.interfaces[key].dropChannel = "P";
         }
+        // The interface marked as management is required to be set as Management Network
+        if (value.is_mgmt) {
+            $scope.networking["management"].mapping_interface = key;
+        }
     });
 
 
