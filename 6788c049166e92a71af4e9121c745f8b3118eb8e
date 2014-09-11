@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Shuo Yang <shuo.yang@huawei.com>
+Workflow+1: Shuo Yang <shuo.yang@huawei.com>
+Submitted-by: Jenkins
+Submitted-at: Thu, 11 Sep 2014 00:42:26 +0000
+Reviewed-on: https://review.openstack.org/120597
+Project: stackforge/compass-web
+Branch: refs/heads/master
