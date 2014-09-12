@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Weidong Shao <weidong.shao@huawei.com>
+Workflow+1: Weidong Shao <weidong.shao@huawei.com>
+Submitted-by: Jenkins
+Submitted-at: Fri, 12 Sep 2014 01:34:14 +0000
+Reviewed-on: https://review.openstack.org/120947
+Project: stackforge/compass-web
+Branch: refs/heads/master
