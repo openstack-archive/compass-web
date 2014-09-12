@@ -15,7 +15,10 @@ angular.module('compass.login', [
 })
 
 .controller('loginCtrl', function($scope, authService, $state) {
+    $scope.alerts = [];
+
     $scope.login = function() {
+        $scope.alerts = [];
         var credentials = {
             "email": $scope.email,
             "password": $scope.password
@@ -25,12 +28,20 @@ angular.module('compass.login', [
             $state.transitionTo("clusterList");
         }).error(function(response) {
             console.log(response);
+            $scope.alerts.push(response);
         })
-    }
+    };
+
+    $scope.closeAlert = function() {
+        $scope.alerts = [];
+    };
+
 })
+
 .directive('setFocus', function() {
   return function(scope, element){ element[0].focus();};
 })
+
 .directive('ngEnter', function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function(event) {
