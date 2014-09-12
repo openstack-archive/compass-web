@@ -1605,7 +1605,14 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
     };
 
     $scope.removeSubnetwork = function(index) {
-        $scope.subnetworks.splice(index, 1);
+        dataService.deleteSubnet($scope.subnetworks[index].id).success(function(data) {
+            $scope.subnetworks.splice(index, 1);
+        }).error(function(response) {
+            $scope.alerts = [];
+            $scope.alerts.push({
+                "message": response
+            });
+        });
         allValid();
     };
 

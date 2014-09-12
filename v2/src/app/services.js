@@ -149,6 +149,10 @@ angular.module('compass.services', [])
             return $http.put(settings.apiUrlBase + '/subnets/' + id, angular.toJson(subnet_config));
         };
 
+        this.deleteSubnet = function(id) {
+            return $http.delete(settings.apiUrlBase + '/subnets/' + id);
+        };
+
         // keep routing table for later use
         /*
         this.postRoutingTable = function(id, routing_table) {

@@ -807,6 +807,11 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, subnetConfig, {}];
     });
 
+    $httpBackend.whenDELETE(/\.*\/subnets\/([0-9]|[1-9][0-9])*/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        return [200, {}, {}];
+    })
+
     // keep routing table for later use
     /*
     $httpBackend.whenPOST(/\.*\/clusters\/[1-9][0-9]*\/routing-table/).respond(function(method, url, data) {
