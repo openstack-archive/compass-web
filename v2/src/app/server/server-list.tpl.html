@@ -95,6 +95,9 @@
                     </thead>
 
                     <tbody>
+                        <tr ng-show="$data.length==0">
+                            <td colspan="7" class="center">No servers yet. Please click Discover Servers to discover available servers.</td>
+                        </tr>
                         <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new}">
                             <!--td>
                                 <label>
