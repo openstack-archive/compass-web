@@ -537,7 +537,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url);
         var clusters = [{
             "id": 1,
-            "name": "cluster_01",
+            "name": "cluster_01 long string",
             "adapter_id": 1,
             "os_id": 1,
             "os_name": "CentOS",
