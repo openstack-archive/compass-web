@@ -1,7 +1,7 @@
 <div ng-controller="globalCtrl">
     <div class="row">
         <div class="col-xs-12">
-            <form id="generalForm" class="form-horizontal" role="form">
+            <form id="generalForm" name="generalForm" class="form-horizontal" role="form">
                 <!-- Use metadata to generate the form. might be used later -->
                 <!--<div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
                 <div ng-if="key!='_self'">
@@ -91,7 +91,7 @@
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-8">
-                            <input ng-model="general.ntp_server" type="text" class="col-xs-10 col-sm-5" placeholder="NTP Server" name="ntp_server">
+                            <input ng-model="general.ntp_server" type="text" class="col-xs-10 col-sm-5" placeholder="NTP Server" name="ntp_server" required>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                             </span>
                         </label>
                         <div class="col-sm-8">
-                            <input ng-model="general.dns_servers[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="DNS Server" name="dns_servers">
+                            <input ng-model="general.dns_servers[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="DNS Server" name="dns_servers" required>
                             <span class="col-xs-2 col-sm-3">
                                 <!--Add Action-->
                                 <span class="action" ng-click="addValue('dns_servers')">
@@ -127,7 +127,7 @@
                             </span>
                         </label>
                         <div class="col-sm-8">
-                            <input ng-model="general.search_path[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Search Path" name="search_path">
+                            <input ng-model="general.search_path[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Search Path" name="search_path" required>
                             <span class="col-xs-2 col-sm-3">
                                 <!--Add Action-->
                                 <span class="action" ng-click="addValue('search_path')">
@@ -148,7 +148,7 @@
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-8">
-                            <input ng-model="general.domain" type="text" class="col-xs-10 col-sm-5" placeholder="Domain" name="domain">
+                            <input ng-model="general.domain" type="text" class="col-xs-10 col-sm-5" placeholder="Domain" name="domain" required>
                         </div>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-8">
-                            <input ng-model="general.default_gateway" type="text" class="col-xs-10 col-sm-5" placeholder="Gateway" name="gateway">
+                            <input ng-model="general.default_gateway" type="text" class="col-xs-10 col-sm-5" placeholder="Gateway" name="gateway" required>
                         </div>
                     </div>
                 </div>
