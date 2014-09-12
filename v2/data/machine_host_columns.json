@@ -25,7 +25,7 @@
         "visible": true
     }, {
         "title": "OS",
-        "field": "os",
+        "field": "os_name",
         "visible": true
     }, {
         "title": "OS Reinstall",
@@ -62,11 +62,7 @@
         "visible": false
     }, {
         "title": "OS",
-        "field": "os",
-        "visible": false
-    }, {
-        "title": "OS Reinstall",
-        "field": "os_installed",
+        "field": "os_name",
         "visible": false
     }, {
         "title": "State",
@@ -99,7 +95,7 @@
         "visible": false
     }, {
         "title": "OS",
-        "field": "os",
+        "field": "os_name",
         "visible": false
     }, {
         "title": "OS Reinstall",
@@ -139,6 +135,10 @@
         "field": "clusters",
         "visible": false
     }, {
+        "title": "OS",
+        "field": "os_name",
+        "visible": false
+    }, {
         "title": "Roles",
         "field": "roles",
         "visible": false
@@ -169,7 +169,7 @@
         "visible": false
     }, {
         "title": "OS",
-        "field": "os",
+        "field": "os_name",
         "visible": true
     }, {
         "title": "State",
