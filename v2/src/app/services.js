@@ -200,17 +200,133 @@ angular.module('compass.services', [])
             return $http.delete(settings.apiUrlBase + '/hosts/' + id);
         };
 
-        this.monitoredHosts = function() {
-            //return $http.jsonp(settings.monitoringUrlBase: + '/hosts/');
-        };
-
-        this.monitoredHost = function(id) {
-            //return $http.jsonp(settings.monitoringUrlBase: + '/hosts/' + id);
-        };
 
         this.getMetricsTreeNodes = function() {
             return $http.get(settings.metadataUrlBase + '/metrics_tree.json');
         };
+
+        this.monitorHosts = function() {
+            // /monit/api/hosts
+            return $http.get(settings.monitoringUrlBase + '/hosts');
+/*
+            return $http.jsonp(settings.monitoringUrlBase + '/hosts' + settings.jsonpSuffix);
+            var url = settings.monitoringUrlBase + '/hosts' ;
+            $http.jsonp(url).success(function (data, status, headers, config) {
+                console.log(data);
+		return data;
+            }).error(function (data, status, headers, config) {
+                //this always gets called
+                console.log(status);
+                deferred.reject(status);
+		return 'undefined';
+            });
+*/
+        };
+
+        this.monitorRsHostGroupMetric = function(groupName, metricName) {
+            // /monit/api/rshostgroup/<hostgroup>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/rshostgroup/' + groupName + '/metric/' + metricName);
+        };
+
+        this.monitorAlerts = function() {
+            // /monit/api/alarms
+            //return $http.get(settings.monitoringUrlBase + '/alarms');
+            var url = settings.monitoringUrlBase + '/alarms' ;
+            return $http.get(settings.monitoringUrlBase + '/hosts/');
+        };
+
+        this.monitorTest = function() {
+            return $http.get(settings.monitoringUrlBase + '/');
+        };
+
+        this.monitorProxy = function(px_url) {
+            // /monit/api/proxy/<path:url>
+            return $http.get(settings.monitoringUrlBase + '/proxy/' + px_url);
+        };
+
+        this.monitorMetrics = function() {
+            // /monit/api/metrics
+            return $http.get(settings.monitoringUrlBase + '/metrics');
+        };
+
+        this.monitorMetricsTree = function() {
+            // /monit/api/metricstree
+            return $http.get(settings.monitoringUrlBase + '/metricstree');
+        };
+
+        this.monitorHostMetric = function(hostName, metricName) {
+            // /monit/api/host/<hostname>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/host/' + hostName + '/metric/' + metricName);
+        };
+
+        this.monitorHostGroupMetric = function(groupName, metricName) {
+            // /monit/api/hostgroup/<hostgroup>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/hostgroup/' + groupName + '/metric/' + metricName);
+        };
+
+        this.monitorRsHostMetric = function(hostName, metricName) {
+            // /monit/api/rshost/<hostname>/metric/<metricname>
+            var url = settings.monitoringUrlBase + '/alarms');
+        };
+
+        this.monitorRsHostGroupMetric = function(groupName, metricName) {
+            // /monit/api/rshostgroup/<hostgroup>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/rshostgroup/' + groupName + '/metric/' + metricName);
+        };
+
+        this.monitorAlarms = function() {
+            // /monit/api/alarms
+            return  $http.get(settings.monitoringUrlBase + '/alarms');
+/*
+            var url = settings.monitoringUrlBase + '/alarms' ;
+            $http.get(url).success(function (data, status, headers, config) {
+                console.log(data);
+		return data;
+            }).error(function (data, status, headers, config) {
+                //this always gets called
+                console.log(status);
+                //deferred.reject(status);
+		return 'undefined';
+            });
+*/
+
+        };
+
+        this.monitorServices = function() {
+            // /monit/api/services
+            return $http.get(settings.monitoringUrlBase + '/services');
+        };
+
+        this.monitorTopology = function() {
+            // /monit/api/topologies/1
+            return $http.get(settings.monitoringUrlBase + '/topologies/1');
+        };
+
+        this.monitorEvents = function() {
+            // /monit/api/events
+            return $http.get(settings.monitoringUrlBase + '/events');
+        };
+
+        this.monitorEvents = function(eventID) {
+            // /monit/api/event/<eventId>
+            return $http.get(settings.monitoringUrlBase + '/event' + eventID);
+        };
+
+        this.monitorOverview = function() {
+            // /monit/api/overview
+            return $http.get(settings.monitoringUrlBase + '/overview');
+        };
+
+        this.monitorUsers = function() {
+            // /monit/api/users
+            return $http.get(settings.monitoringUrlBase + '/users');
+        };
+
+        this.monitorEvents = function(userName) {
+            // /monit/api/user/<username>
+            return $http.get(settings.monitoringUrlBase + '/user' + userName);
+        };
+
     }
 ])
 

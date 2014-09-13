@@ -498,11 +498,6 @@ angular.module('compass.monitoring', [
 
 .controller('moniOverviewCtrl', function($scope) {
 
-
-    $scope.goAlarms =  function(){
-        //document.getElementById('dashboards').src = "/#/d/file/".concat(locs);
-    }
-
     $scope.goDash =  function(locs){
 	//alert(locs);
         setTimeout(function(){document.getElementById('dashboards').src = "/dash/#/dashboard/file/"+locs;},600);
