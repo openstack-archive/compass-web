@@ -84,13 +84,13 @@
                         <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                             <span ng-switch on="column.field">
                                 <span ng-switch-when="os_installed">
-                                    <span ng-if="server['os']">
+                                    <span ng-if="server['os_name']">
                                         <label>
                                             <input ng-model="server.reinstallos" type="checkbox" class="ace">
                                             <span class="lbl"></span>
                                         </label>
                                     </span>
-                                    <span ng-if="!server['os']">
+                                    <span ng-if="!server['os_name']">
                                         -
                                     </span>
                                 </span>
