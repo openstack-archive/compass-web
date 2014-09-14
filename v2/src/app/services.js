@@ -270,7 +270,7 @@ angular.module('compass.services', [])
 
         this.monitorRsHostMetric = function(hostName, metricName) {
             // /monit/api/rshost/<hostname>/metric/<metricname>
-            var url = settings.monitoringUrlBase + '/alarms');
+            var url = settings.monitoringUrlBase + '/alarms';
         };
 
         this.monitorRsHostGroupMetric = function(groupName, metricName) {
