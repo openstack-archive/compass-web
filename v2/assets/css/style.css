@@ -309,14 +309,13 @@ li.incomplete:before, li.incomplete .step {
     padding-left: 2px;
 }
 .infobox {
-    width: 300px !important;
-    height: 180px !important;
+    width: 260px !important;
+    height: 160px !important;
     margin-right: 10px;
     margin-bottom: 10px;
     background: rgba(0, 0, 0, 0.07);
     border: 2px dotted #ddd;
     border-radius: 7px;
-    padding-top: 18px;
 }
 .infobox:hover {
     background: rgba(0, 0, 0, 0.2)
@@ -517,6 +516,12 @@ a:active {
 }
 .ng-table-pager {
     display: none;
+}
+tr.hightlight {
+    background-color: #e4efc9 !important;
+}
+tr.hightlight td{
+    background-color: #e4efc9 !important;
 }
 .btn-previous {
     background-color: #abbac3 !important;
