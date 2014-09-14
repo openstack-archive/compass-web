@@ -607,19 +607,22 @@ angular.module('compass.wizard', [
 
     $scope.addInterface = function(newInterface) {
         var isExist = false;
-        angular.forEach($scope.interfaces, function(value, key) {
-            if (key == newInterface.name) {
-                isExist = true;
-                alert("This interface already exists. Please try another one");
+        if (newInterface) {
+            angular.forEach($scope.interfaces, function(value, key) {
+                if (key == newInterface.name) {
+                    isExist = true;
+                    alert("This interface already exists. Please try another one");
+                }
+            })
+
+            if (!isExist) {
+                $scope.interfaces[newInterface.name] = {
+                    "subnet_id": parseInt(newInterface.subnet_id),
+                    "is_mgmt": false
+                }
             }
-        })
-        if (!isExist) {
-            $scope.interfaces[newInterface.name] = {
-                "subnet_id": parseInt(newInterface.subnet_id),
-                "is_mgmt": false
-            }
+            $scope.newInterface = {};
         }
-        $scope.newInterface = {};
     };
 
     $scope.deleteInterface = function(delInterface) {
