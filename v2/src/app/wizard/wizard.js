@@ -333,9 +333,9 @@ angular.module('compass.wizard', [
     };
 
     $scope.ifPreSelect = function(server) {
-        if(server.clusters) {
+        if (server.clusters) {
             angular.forEach(server.clusters, function(svCluster) {
-                if(svCluster.id == cluster.id) {
+                if (svCluster.id == cluster.id) {
                     server.selected = true;
                 }
             })
@@ -614,7 +614,6 @@ angular.module('compass.wizard', [
                     alert("This interface already exists. Please try another one");
                 }
             })
-
             if (!isExist) {
                 $scope.interfaces[newInterface.name] = {
                     "subnet_id": parseInt(newInterface.subnet_id),
@@ -745,7 +744,10 @@ angular.module('compass.wizard', [
             }
         });
         modalInstance.result.then(function(subnets) {
-            $scope.subnetworks = subnets;
+            $scope.subnetworks = [];
+            angular.forEach(subnets, function(subnet) {
+                $scope.subnetworks.push(subnet);
+            });
         }, function() {
             console.log("modal dismissed")
         })
@@ -1530,7 +1532,7 @@ var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
 };
 
 var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, dataService, $filter) {
-    $scope.subnetworks = subnets;
+    $scope.subnetworks = angular.copy(subnets);
     $scope.subnetAllValid = true;
 
     angular.forEach($scope.subnetworks, function(subnet) {
@@ -1585,7 +1587,9 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
         });
 
         $q.all(promises).then(function() {
-            $scope.subnetworks = subnetworks;
+            for(var i = 0; i < subnets.length && i < $scope.subnetworks.length; i++) {
+                $scope.subnetworks[i].$$hashKey = subnets[i].$$hashKey;
+            }
             $modalInstance.close($scope.subnetworks);
         }, function(response) {
             console.log("promises error", response);
@@ -1601,7 +1605,7 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
         $scope.subnetworks = $filter('filter')($scope.subnetworks, {
             valid: true
         }, true);
-        $modalInstance.close($scope.subnetworks);
+        $modalInstance.dismiss('cancel');
 
     };
 
@@ -1614,7 +1618,6 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
             valid: false
         });
         allValid();
-        console.log($scope.subnetworks);
     };
 
     $scope.removeSubnetwork = function(index) {
