@@ -290,23 +290,17 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var switches = [{
             "id": 1,
             "ip": "172.29.8.40",
-            "filters": {
-                "ports": "1-10;20-51"
-            },
+            "filters": "allow ports 1-10,20-51",
             "state": "under_mointoring"
         }, {
             "id": 2,
             "ip": "172.29.8.41",
-            "filters": {
-                "ports": "1-100"
-            },
+            "filters": "deny ports 1-100",
             "state": "under_mointoring"
         }, {
             "id": 3,
             "ip": "172.29.8.42",
-            "filters": {
-                "ports": "1-100"
-            },
+            "filters": "allow ports 1-50",
             "state": "under_mointoring"
         }];
         return [200, switches, {}];
@@ -325,11 +319,15 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var sw = {
             "id": id,
             "ip": "172.29.8.40",
-            "filters": {
-                "ports": "1-10;20-51"
-            },
+            "filters": "allow ports 1-10,20-51",
             "state": state
         };
+        return [200, sw, {}];
+    });
+
+    $httpBackend.whenPUT(/\.*\/switches\/([0-9]|[1-9][0-9])$/).respond(function(method, url, data) {
+        console.log(method, url, data);
+        var sw = JSON.parse(data);
         return [200, sw, {}];
     });
 
@@ -509,23 +507,23 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "user_id": 1,
             "action": "Created New User",
             "timestamp": "2012-12-30 12:22:00"
-            }, {
+        }, {
             "user_id": 1,
             "action": "Modified Admin Priviledges",
             "timestamp": "2013-03-25 09:10:00"
-            }, {
+        }, {
             "user_id": 3,
             "action": "Test Cluster",
             "timestamp": "2014-06-19 23:32:00"
-            }, {
+        }, {
             "user_id": 3,
             "action": "Deleted User",
             "timestamp": "2014-06-20 09:10:00"
-            }, {
+        }, {
             "user_id": 2,
             "action": "Deleted Cluster",
             "timestamp": "2014-07-26 16:22:00"
-            }, {
+        }, {
             "user_id": 2,
             "action": "Created New Cluster",
             "timestamp": "2014-08-22 14:22:00"

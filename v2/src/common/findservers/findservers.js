@@ -33,14 +33,13 @@ angular.module('compass.findservers', [])
                 dataService.getSwitchById(scope.switchinfo.id).success(function(data) {
                     if (data.state == "under_monitoring") {
                         getMachines();
-                    } else if(data.state === "initialized" || data.state === "repolling")
+                    } else if (data.state === "initialized" || data.state === "repolling")
                         if (fireTimer && checkSwitchCount < 15) {
                             checkSwitchTimer = $timeout(checkSwitchState, 2000);
                         } else {
                             scope.polling = false;
                             scope.result = "error";
-                        }
-                    else {
+                        } else {
                         scope.polling = false;
                         scope.result = "error";
                     }
@@ -48,7 +47,7 @@ angular.module('compass.findservers', [])
             };
 
             scope.$watch('polling', function(newval, oldval) {
-                if(newval != oldval) {
+                if (newval != oldval) {
                     if (newval == true) {
                         checkSwitchCount = 0;
                         fireTimer = true;
@@ -145,23 +144,24 @@ angular.module('compass.findservers', [])
 
             scope.newswitch = {}
             scope.newswitch.credentials = {};
-            scope.filters = {};
+            scope.alerts = [];
 
             scope.addSwitch = function() {
+                scope.alerts = [];
                 dataService.postSwitches(scope.newswitch).success(function(switchData) {
 
-                    if (scope.filters) {
-                        var filters = {
-                            "filters": scope.filters
-                        };
-                        dataService.putSwitchFilters(switchData.id, filters).success(function(filterData) {
-                            switchData.filters = filterData.filters;
-                            scope.newswitch = {};
-                            scope.filters = {};
-                            scope.switches.push(switchData);
-                        })
-                    }
-                })
+                    scope.newswitch = {};
+
+
+                    scope.switches.push(switchData);
+
+                }).error(function(response) {
+                    scope.alerts[0] = response;
+                });
+            };
+
+            scope.closeAlert = function() {
+                scope.alerts = [];
             };
         }
     };
