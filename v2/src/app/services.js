@@ -65,6 +65,11 @@ angular.module('compass.services', [])
         this.postSwitches = function(sw) {
             return $http.post(settings.apiUrlBase + '/switches', angular.toJson(sw));
         };
+
+        this.putSwitches = function(id, sw) {
+            return $http.put(settings.apiUrlBase + '/switches/' + id, angular.toJson(sw));
+        };
+
         /*
         this.postSwitchFilters = function(filters) {
             return $http.post(settings.apiUrlBase + '/switch-filters', angular.toJson(filters));

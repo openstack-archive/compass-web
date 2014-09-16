@@ -37,7 +37,7 @@ angular.module('compass.server', [
 
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
-        count: $scope.allservers.length // count per page
+        count: $scope.allservers.length + 1 // count per page
     }, {
         counts: [], // hide count-per-page box
         total: $scope.allservers.length, // length of data
