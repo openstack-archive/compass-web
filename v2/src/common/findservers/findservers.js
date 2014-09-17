@@ -1,6 +1,4 @@
 angular.module('compass.findservers', [])
-
-
 .directive('switchrow', function(dataService, $timeout) {
     return {
         restrict: 'A',
@@ -70,7 +68,7 @@ angular.module('compass.findservers', [])
     }
 })
 
-.directive('findservers', function(dataService, $modal) {
+.directive('findservers', function(dataService, $modal, $log) {
     return {
         restrict: 'E',
         scope: {
@@ -85,6 +83,31 @@ angular.module('compass.findservers', [])
             dataService.getSwitches().success(function(data) {
                 scope.switches = data;
             });
+
+            scope.modifySwitchModal = function(index) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'myModalContent.html',
+                    controller: modifySwitchModalInstanceCtrl,
+                    resolve: {
+                        targetSwitch: function() {
+                            return scope.switches[index];
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(targetSwitch) {
+                    scope.alerts = [];
+                    dataService.putSwitches(targetSwitch.id,targetSwitch).success(function() {
+
+                        scope.switches[index] = angular.copy(targetSwitch);
+
+                    }).error(function(response) {
+                        scope.alerts[0] = response;
+                    });
+                }, function() {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
 
             scope.selectAllSwitches = function(flag) {
                 if (flag) {
@@ -166,3 +189,13 @@ angular.module('compass.findservers', [])
         }
     };
 })
+var modifySwitchModalInstanceCtrl = function ($scope, $modalInstance,targetSwitch) {
+  $scope.targetSwitch = angular.copy(targetSwitch);
+  $scope.ok = function () {
+    $modalInstance.close($scope.targetSwitch);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
