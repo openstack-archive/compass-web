@@ -291,16 +291,28 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "id": 1,
             "ip": "172.29.8.40",
             "filters": "allow ports 1-10,20-51",
+            "credentials":{
+                "version": "2c",
+                "community":"public"
+            },
             "state": "under_mointoring"
         }, {
             "id": 2,
             "ip": "172.29.8.41",
             "filters": "deny ports 1-100",
+            "credentials":{
+                "version": "2c",
+                "community":"public"
+            },
             "state": "under_mointoring"
         }, {
             "id": 3,
             "ip": "172.29.8.42",
             "filters": "allow ports 1-50",
+            "credentials":{
+                "version": "2c",
+                "community":"public"
+            },
             "state": "under_mointoring"
         }];
         return [200, switches, {}];
