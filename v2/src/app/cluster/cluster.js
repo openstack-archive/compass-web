@@ -183,8 +183,8 @@ angular.module('compass.cluster', [
 
 })
 
-.controller('createClusterCtrl', ['$scope', '$state', '$modal', '$log', 'dataService', 'wizardFactory',
-    function($scope, $state, $modal, $log, dataService, wizardFactory) {
+.controller('createClusterCtrl', ['$scope', '$state', '$modal', '$log', 'dataService', 'wizardFactory','$rootScope',
+    function($scope, $state, $modal, $log, dataService, wizardFactory,$rootScope) {
         dataService.getAdapters().success(function(data) {
             $scope.allAdapters = data;
             $scope.cluster = {};
@@ -212,6 +212,8 @@ angular.module('compass.cluster', [
                         "flavor_id": cluster.flavor.id
                     };
                     dataService.createCluster(postClusterData).success(function(data, status) {
+                        $scope.clusters.push(data);
+                        $rootScope.$emit('clusters',$scope.clusters);
                         wizardFactory.setClusterInfo(data);
                         angular.forEach($scope.allAdapters, function(adapter) {
                             if (adapter.id == $scope.cluster.adapter_id) {

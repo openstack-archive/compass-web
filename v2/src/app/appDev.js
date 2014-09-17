@@ -407,7 +407,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
         var postData = JSON.parse(data)
         var mockResponse = {
-            "id": 1,
+            "id": 6,
             "name": postData.name,
             "adapter_id": 1,
             "os_id": 1,
