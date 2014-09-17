@@ -390,13 +390,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }];
         return [200, machines, {}];
     });
+
     /*
     $httpBackend.whenPOST(settings.apiUrlBase + '/switch-filters').respond(function(method, url, data) {
         console.log(method, url, data);
         var filterData = JSON.parse(data);
         return [200, filterData, {}];
     });
-*/
+    */
     $httpBackend.whenPUT(/\.*\/switch-filters\/([0-9]|[1-9][0-9])/).respond(function(method, url, data) {
         console.log(method, url, data);
         var filterData = JSON.parse(data);
@@ -650,6 +651,15 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 }, {
                     "display_name": "Network",
                     "name": "os-network"
+                }, {
+                    "display_name": "Storage",
+                    "name": "os-block-storage-worker"
+                }, {
+                    "display_name": "Message Queue",
+                    "name": "os-mq"
+                }, {
+                    "display_name": "database",
+                    "name": "os-db"
                 }]
             },
             "links": [{
@@ -915,6 +925,26 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
         var hosts = [];
         var num = 20;
+        var test_roles = [{
+            "display_name": "Compute",
+            "name": "os-compute-worker"
+        }, {
+            "display_name": "Controller",
+            "name": "os-controller"
+        }, {
+            "display_name": "Network",
+            "name": "os-network"
+        }, {
+            "display_name": "Storage",
+            "name": "os-block-storage-worker"
+        }, {
+            "display_name": "Message Queue",
+            "name": "os-mq"
+        }, {
+            "display_name": "database",
+            "name": "os-db"
+        }];
+
         for (var i = 1; i <= num; i++) {
             var host = {
                 "id": i,
@@ -925,14 +955,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "switch_ip": "172.29.8.40",
                 "port": i,
                 "vlan": i,
-                "roles": [{
-                    "display_name": "Network",
-                    "name": "os-network"
-                }, {
-                    "display_name": "Storage",
-                    "name": "os-block-storage-worker"
-                }],
-                "os_name": "CentOS",
+                "roles": [test_roles[i%6]],
                 "clusters": [{
                     "id": 1,
                     "name": "cluster1"
