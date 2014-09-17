@@ -11,7 +11,7 @@ var app = angular.module('compass', [
     'compass.userProfile',
     'ui.router',
     'ui.bootstrap',
-    //'compassAppDev',
+    'compassAppDev',
     'ngAnimate'
 ]);
 

@@ -1117,29 +1117,43 @@ angular.module('compass.wizard', [
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
     var colors = ['#8EA16C', '#C2CF30', '#FEC700', '#FF8900', '#D3432B', '#BB2952', '#8E1E5F', '#DE4AB6', '#9900EC', '#3A1AA8', '#3932FE', '#278BC0', '#35B9F6', '#91E0CB', '#42BC6A', '#5B4141'];
+
+    $scope.existingRoles = [];
+    $scope.realRole = [];
+
+    dataService.getServerColumns().success(function(data) {
+        $scope.server_columns = data.showless;
+    });
+
     dataService.getClusterById(cluster.id).success(function(data) {
         // wizardFactory.setAdapter(data);
         $scope.roles = data.flavor.roles;
         var i = 0;
-        angular.forEach($scope.roles, function(role) {
+        angular.forEach($scope.roles, function(role, role_key) {
             role.color = colors[i];
+            $scope.roles[role_key].dragChannel = i;
             i++;
-        })
-    });
-
-    dataService.getServerColumns().success(function(data) {
-        $scope.server_columns = data.showless;
+        });
+        angular.forEach($scope.roles, function(role, role_key) {
+            //realRole.splice(z,0,z);
+            $scope.realRole.push(role_key);
+        });
+        angular.forEach($scope.servers, function(value, key) {
+            $scope.existingRoles.push(angular.copy($scope.realRole));
+            $scope.servers[key].dropChannel = $scope.existingRoles[key].toString();
+        });
+        $scope.checkExistRolesDrag();
     });
 
     $scope.selectAllServers = function(flag) {
         if (flag) {
             angular.forEach($scope.servers, function(sv) {
                 sv.checked = true;
-            })
+            });
         } else {
             angular.forEach($scope.servers, function(sv) {
                 sv.checked = false;
-            })
+            });
         }
     };
 
@@ -1147,6 +1161,14 @@ angular.module('compass.wizard', [
         var serverIndex = $scope.servers.indexOf(server);
         var roleIndex = $scope.servers[serverIndex].roles.indexOf(role);
         $scope.servers[serverIndex].roles.splice(roleIndex, 1);
+
+        angular.forEach($scope.roles, function(role_value, role_key) {
+            if (role.display_name == $scope.roles[role_key].display_name) {
+                $scope.existingRoles[serverIndex].splice(role_key, 1, role_key)
+            }
+        });
+
+        $scope.servers[serverIndex].dropChannel = $scope.existingRoles[serverIndex].toString();
     };
 
     $scope.assignRole = function(role) {
@@ -1192,7 +1214,7 @@ angular.module('compass.wizard', [
                 }
                 svIndex++;
             }
-        })
+        });
     };
 
     $scope.checkRoleExist = function(existingRoles, newRole) {
@@ -1310,6 +1332,33 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
         });
     };
+
+    $scope.onDrop = function($event, key) {
+        $scope.dragKey = key;
+    };
+
+    $scope.dropSuccessHandler = function($event, role_value, key) {
+        var roleExist = $scope.checkRoleExist($scope.servers[$scope.dragKey].roles, role_value);
+        if (!roleExist) {
+            $scope.servers[$scope.dragKey].roles.push(role_value);
+        } else {
+            console.log("role exists");
+        }
+        $scope.checkExistRolesDrag();
+    };
+
+    $scope.checkExistRolesDrag = function() {
+        angular.forEach($scope.servers, function(value, key) {
+            angular.forEach($scope.servers[key].roles, function(server_role, server_role_key) {
+                angular.forEach($scope.roles, function(role, role_key) {
+                    if ($scope.servers[key].roles[server_role_key].display_name == $scope.roles[role_key].display_name) {
+                        $scope.existingRoles[key].splice(role_key, 1, "p")
+                    }
+                })
+            })
+            $scope.servers[key].dropChannel = $scope.existingRoles[key].toString();
+        })
+    };
 })
 
 .controller('networkMappingCtrl', function($scope, wizardFactory, dataService) {
@@ -1326,7 +1375,6 @@ angular.module('compass.wizard', [
         $scope.interfaces[key].dropChannel = "E";
     })
 
-
     $scope.networking = {};
     angular.forEach($scope.original_networking, function(value, key) {
         $scope.networking[key] = {};
@@ -1339,7 +1387,6 @@ angular.module('compass.wizard', [
 
     $scope.dropSuccessHandler = function($event, key, dict) {
         dict[key].mapping_interface = $scope.pendingInterface;
-        console.log($scope.pendingInterface);
     };
 
     angular.forEach($scope.interfaces, function(value, key) {
