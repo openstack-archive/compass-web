@@ -1,6 +1,7 @@
 angular.module('compass.services', [])
 
 // stateService is used for dynamically add/edit state
+/*
 .service('stateService', ['$state',
     function($state) {
         this.addStates = function(pendingStates) {
@@ -25,6 +26,7 @@ angular.module('compass.services', [])
         }
     }
 ])
+*/
 
 // dataService is used for http calls
 .service('dataService', ['$http', 'settings',
@@ -208,134 +210,95 @@ angular.module('compass.services', [])
         this.deleteHost = function(id) {
             return $http.delete(settings.apiUrlBase + '/hosts/' + id);
         };
-
-
-        this.getMetricsTreeNodes = function() {
-            return $http.get(settings.metadataUrlBase + '/metrics_tree.json');
-        };
-
-        this.monitorHosts = function() {
-            // /monit/api/hosts
-            return $http.get(settings.monitoringUrlBase + '/hosts');
 /*
-            return $http.jsonp(settings.monitoringUrlBase + '/hosts' + settings.jsonpSuffix);
-            var url = settings.monitoringUrlBase + '/hosts' ;
-            $http.jsonp(url).success(function (data, status, headers, config) {
-                console.log(data);
-		return data;
-            }).error(function (data, status, headers, config) {
-                //this always gets called
-                console.log(status);
-                deferred.reject(status);
-		return 'undefined';
-            });
+        this.deleteHost = function(clusterId, hostId) {
+            return $http.delete(settings.apiUrlBase + '/clusters/' + clusterId + '/hosts/' + hostId);
+        };
 */
+
+        this.monitorHosts = function(id) {
+            // This differ from the main hosts API because it has status/alert information
+            // /monit/api/cluster/<id>/hosts
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + id + '/hosts');
         };
 
-        this.monitorRsHostGroupMetric = function(groupName, metricName) {
-            // /monit/api/rshostgroup/<hostgroup>/metric/<metricname>
-            return $http.get(settings.monitoringUrlBase + '/rshostgroup/' + groupName + '/metric/' + metricName);
-        };
-
-        this.monitorAlerts = function() {
-            // /monit/api/alarms
-            //return $http.get(settings.monitoringUrlBase + '/alarms');
-            var url = settings.monitoringUrlBase + '/alarms' ;
-            return $http.get(settings.monitoringUrlBase + '/hosts/');
-        };
-
-        this.monitorTest = function() {
-            return $http.get(settings.monitoringUrlBase + '/');
-        };
-
-        this.monitorProxy = function(px_url) {
+/*      this.monitorProxy = function(px_url) {
+            // Leave for now may delete later
             // /monit/api/proxy/<path:url>
             return $http.get(settings.monitoringUrlBase + '/proxy/' + px_url);
         };
-
+*/
         this.monitorMetrics = function() {
+            // This returns a flat json list of metrics currently or historically have been collected
             // /monit/api/metrics
             return $http.get(settings.monitoringUrlBase + '/metrics');
         };
 
         this.monitorMetricsTree = function() {
+            // This will also order the metrics in a tree
             // /monit/api/metricstree
             return $http.get(settings.monitoringUrlBase + '/metricstree');
         };
 
-        this.monitorHostMetric = function(hostName, metricName) {
-            // /monit/api/host/<hostname>/metric/<metricname>
-            return $http.get(settings.monitoringUrlBase + '/host/' + hostName + '/metric/' + metricName);
+        this.monitorHostMetric = function(clusterId, hostName, metricName) {
+            // Returns a single metric for a cluster host
+            // /monit/api/cluster/<id>/host/<hostname>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/hosts/' + hostName + '/metric/' + metricName);
         };
 
-        this.monitorHostGroupMetric = function(groupName, metricName) {
-            // /monit/api/hostgroup/<hostgroup>/metric/<metricname>
-            return $http.get(settings.monitoringUrlBase + '/hostgroup/' + groupName + '/metric/' + metricName);
+        this.monitorHostGroupMetric = function(clusterId, groupName, metricName) {
+            // Returns a single metric for a cluster hostgroup
+            // /monit/api/cluster/<id>/hostgroup/<hostgroup>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/hostgroups/' + groupName + '/metric/' + metricName);
         };
 
-        this.monitorRsHostMetric = function(hostName, metricName) {
-            // /monit/api/rshost/<hostname>/metric/<metricname>
-            var url = settings.monitoringUrlBase + '/alarms';
+        this.monitorClusterMetric = function(clusterId, metricName) {
+            //  Returns a single metric for a cluster hostgroup
+            // /monit/api/cluster/<id>/metric/<metricname>
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/metrics/' + metricName);
         };
 
-        this.monitorRsHostGroupMetric = function(groupName, metricName) {
-            // /monit/api/rshostgroup/<hostgroup>/metric/<metricname>
-            return $http.get(settings.monitoringUrlBase + '/rshostgroup/' + groupName + '/metric/' + metricName);
+        this.monitorAlarms = function(clusterId) {
+            // Returns all alarm data for a cluster host
+            // /monit/api/cluster/<id>/alarms
+            return  $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/alarms');
         };
 
-        this.monitorAlarms = function() {
-            // /monit/api/alarms
-            return  $http.get(settings.monitoringUrlBase + '/alarms');
-/*
-            var url = settings.monitoringUrlBase + '/alarms' ;
-            $http.get(url).success(function (data, status, headers, config) {
-                console.log(data);
-		return data;
-            }).error(function (data, status, headers, config) {
-                //this always gets called
-                console.log(status);
-                //deferred.reject(status);
-		return 'undefined';
-            });
-*/
-
+        this.monitorEvents = function(id) {
+            // Reurns all event data for a cluster host
+            // /monit/api/cluster/<id>/events
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + id + '/events');
         };
 
-        this.monitorServices = function() {
-            // /monit/api/services
-            return $http.get(settings.monitoringUrlBase + '/services');
+        this.monitorTopology = function(clusterId) {
+            // Returns a nested json of networks and servers
+            // /monit/api/cluster/<id>/topology
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/topology');
         };
 
-        this.monitorTopology = function() {
-            // /monit/api/topologies/1
-            return $http.get(settings.monitoringUrlBase + '/topologies/1');
+        this.monitorServiceTopology = function(clusterId) {
+            // Returns a nested json of servers, roles and metrics
+            // /monit/api/cluster/<id>/servicetopology
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/servicetopology');
         };
 
-        this.monitorEvents = function() {
-            // /monit/api/events
-            return $http.get(settings.monitoringUrlBase + '/events');
+        this.monitorOverview = function(clusterId) {
+            // Returns a nested json  for constructing the overview page
+            // /monit/api/cluster/<id>/overview
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/overview');
         };
 
-        this.monitorEvents = function(eventID) {
-            // /monit/api/event/<eventId>
-            return $http.get(settings.monitoringUrlBase + '/event' + eventID);
+        this.monitorUsers = function(clusterId) {
+            // Returns a flat json list of all cluster users
+            // /monit/api/cluster/<id>/users
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/users');
         };
 
-        this.monitorOverview = function() {
-            // /monit/api/overview
-            return $http.get(settings.monitoringUrlBase + '/overview');
+        this.monitorUser = function(clusterId, userName) {
+            // Returns json information on a particliar user
+            // /monit/api/cluster/<id>/user/<username>
+            return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/user' + userName);
         };
-
-        this.monitorUsers = function() {
-            // /monit/api/users
-            return $http.get(settings.monitoringUrlBase + '/users');
-        };
-
-        this.monitorEvents = function(userName) {
-            // /monit/api/user/<username>
-            return $http.get(settings.monitoringUrlBase + '/user' + userName);
-        };
-
     }
 ])
 

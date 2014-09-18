@@ -3,8 +3,7 @@
         Cluster Overview
     </h1>
 </div>
-
-<div class="container row side-padding-0 top-padding-0" ng-controller="moniOverviewCtrl">
+<div class="container row side-padding-0 top-padding-0">
     <div class="toc info-icons">
         <ul class="tiles">
             <li ng-repeat="tile in moniOverviewData">
@@ -49,22 +48,4 @@
             </li>
         </ul>
     </div>
-
 </div>
-
-<!--div class="row side-padding-10 top-padding-10" ng-controller="moniOverviewCtrl">
-    <div class="col-xs-12">
-        <div ng-repeat="role in logicalTopoData.children" class="well pull-left">
-            <span>{{role.name}}</span>
-            <span>{{role.children.length}}</span>
-            <br/>{{role.state}}
-        </div>
-    </div>
-
-    <div class="col-xs-12 top-padding-10" style="height: 300px">
-        <nvd3-stacked-area-chart data="exampleData" id="exampleId" showXAxis="true" showYAxis="true" tooltips="true" interactive="true" useInteractiveGuideline="true" toolTipContent="toolTipContentFunction()" forceY="[0]">
-            <svg></svg>
-        </nvd3-stacked-area-chart>
-    </div>
-
-</div-->
