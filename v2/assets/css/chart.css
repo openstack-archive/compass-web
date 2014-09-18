@@ -84,6 +84,7 @@ ganttchart .chart {
 
 ganttchart text {
     font-family: "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif !important;
+    font-size: 14px;
 }
 
 ganttchart .axis path, ganttchart .axis line {
