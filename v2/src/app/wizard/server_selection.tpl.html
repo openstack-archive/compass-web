@@ -1,5 +1,6 @@
 <div ng-controller="svSelectCtrl">
-    <div class="row">
+    <span us-spinner ng-if="loading == true" spinner-key="spinner-1" spinner-start-active="1" style="position: absolute !important; left: 47%"></span>
+    <div class="row" ng-show="loading==false">
         <div collapse="findNewServersPanel.isCollapsed">
             <div class="dashed-panel">
                 <span class="action pull-right" ng-click="findNewServersPanel.isCollapsed = true;">
@@ -10,7 +11,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="loading==false">
         <div class="pull-left">
             <!--Search Input-->
             <span class="input-icon">
@@ -51,7 +52,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-show="loading==false">
         <div class="space-6"></div>
         <div class="table-responsive">
             <table ng-table="tableParams" class="table table-hover table-striped">

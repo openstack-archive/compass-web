@@ -57,7 +57,7 @@ angular.module('compass.wizard', [
     $scope.cluster = clusterData;
     wizardFactory.setClusterInfo($scope.cluster);
     wizardFactory.setAllMachinesHost(machinesHostsData);
-
+    $scope.loading = false;
     var oldConfig = clusterConfigData;
 
     // get pre-config data for wizard
@@ -265,6 +265,7 @@ angular.module('compass.wizard', [
 })
 
 .controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
+    $scope.loading = false;
     $scope.hideunselected = '';
     $scope.search = {};
 
@@ -306,7 +307,6 @@ angular.module('compass.wizard', [
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
     });
-
 
     $scope.selectAllServers = function(flag) {
         if (flag) {
@@ -353,6 +353,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.loading = true;
         var selectedServers = [];
         var noSelection = true;
         angular.forEach($scope.allservers, function(sv) {
@@ -371,6 +372,7 @@ angular.module('compass.wizard', [
                 "message": message
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         } else {
             var addHostsAction = {
                 "add_hosts": {
@@ -401,6 +403,7 @@ angular.module('compass.wizard', [
                 };
                 wizardFactory.setCommitState(commitState);
                 wizardFactory.setAllMachinesHost($scope.allservers);
+                $scope.loading = false;
 
             }).error(function(response) {
                 var commitState = {
@@ -409,6 +412,7 @@ angular.module('compass.wizard', [
                     "message": response
                 };
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             });
             //wizardFactory.setServers(selectedServers);
         }
@@ -437,6 +441,7 @@ angular.module('compass.wizard', [
 })
 
 .controller('globalCtrl', function($scope, wizardFactory, dataService, $q) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
 
     $scope.general = wizardFactory.getGeneralConfig();
@@ -491,6 +496,7 @@ angular.module('compass.wizard', [
 
 
     $scope.commit = function() {
+        $scope.loading = true;
         var os_global_general = {
             "os_config": {
                 "general": $scope.general
@@ -512,12 +518,14 @@ angular.module('compass.wizard', [
                     "message": response
                 };
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             });
         } else {
              var message = {
                  "message": "The required(*) fields can not be empty !"
              }
              $scope.openErrMessageModal(message);
+             $scope.loading = false;
          }
 
     };
@@ -557,6 +565,7 @@ angular.module('compass.wizard', [
 })
 
 .controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, $modal) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
     $scope.subnetworks = wizardFactory.getSubnetworks();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -642,6 +651,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.loading = true;
         wizardFactory.setInterfaces($scope.interfaces);
 
 
@@ -719,6 +729,7 @@ angular.module('compass.wizard', [
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             }, function(response) {
                 wizardFactory.setServers($scope.servers);
                 var commitState = {
@@ -728,6 +739,7 @@ angular.module('compass.wizard', [
                 };
                 console.info(response.data);
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             });
 
         }
@@ -819,6 +831,7 @@ angular.module('compass.wizard', [
 })
 
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
     $scope.partition = wizardFactory.getPartition();
     $scope.partitionInforArray = [];
@@ -931,6 +944,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.loading = true;
         if ($scope.duplicated == true) {
             var message = {
                 "message": "Mount Point cannot be the same"
@@ -965,6 +979,7 @@ angular.module('compass.wizard', [
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             }).error(function(response) {
                 var commitState = {
                     "name": "partition",
@@ -972,12 +987,14 @@ angular.module('compass.wizard', [
                     "message": response
                 };
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             });
         }
     };
 })
 
 .controller('securityCtrl', function($scope, wizardFactory, dataService) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
     $scope.server_credentials = wizardFactory.getServerCredentials();
     $scope.service_credentials = wizardFactory.getServiceCredentials();
@@ -1081,6 +1098,7 @@ angular.module('compass.wizard', [
     }
 
     $scope.commit = function() {
+        $scope.loading = true;
         var securityData = {
             "os_config": {
                 "server_credentials": {
@@ -1102,6 +1120,7 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         }).error(function(response) {
             var commitState = {
                 "name": "security",
@@ -1109,11 +1128,13 @@ angular.module('compass.wizard', [
                 "message": response
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         });
     };
 })
 
 .controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
     var colors = ['#8EA16C', '#C2CF30', '#FEC700', '#FF8900', '#D3432B', '#BB2952', '#8E1E5F', '#DE4AB6', '#9900EC', '#3A1AA8', '#3932FE', '#278BC0', '#35B9F6', '#91E0CB', '#42BC6A', '#5B4141'];
@@ -1259,6 +1280,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.loading = true;
         var promises = [];
         angular.forEach($scope.servers, function(server) {
             var roles = [];
@@ -1300,6 +1322,7 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         }, function(response) {
             console.log("promises error", response);
             var commitState = {
@@ -1308,11 +1331,13 @@ angular.module('compass.wizard', [
                 "message": response.data
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         });
     };
 })
 
 .controller('networkMappingCtrl', function($scope, wizardFactory, dataService) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
     $scope.interfaces = wizardFactory.getInterfaces();
     $scope.original_networking = wizardFactory.getNetworkMapping();
@@ -1362,6 +1387,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.loading = true;
         var networks = {};
         angular.forEach($scope.networking, function(value, key) {
             networks[key] = value.mapping_interface;
@@ -1379,6 +1405,7 @@ angular.module('compass.wizard', [
                 "message": ""
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         }).error(function(response) {
             var commitState = {
                 "name": "network_mapping",
@@ -1386,11 +1413,13 @@ angular.module('compass.wizard', [
                 "message": response
             };
             wizardFactory.setCommitState(commitState);
+            $scope.loading = false;
         });
     };
 })
 
 .controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
+    $scope.loading = false;
     var cluster = wizardFactory.getClusterInfo();
     $scope.servers = wizardFactory.getServers();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -1472,6 +1501,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.loading = true;
         var reviewAction = {
             "review": {
                 "hosts": []
@@ -1495,8 +1525,10 @@ angular.module('compass.wizard', [
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
+                $scope.loading = false;
             }).error(function(data) {
                 console.warn("Deploy hosts error: ", data);
+                $scope.loading = false;
             });
         }).error(function(data) {
             console.warn("Review hosts error: ", data);
