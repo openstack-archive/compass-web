@@ -10,7 +10,7 @@
             <tab-heading>
                 <i class="ace-icon fa fa-bell"></i>Alarms
             </tab-heading>
-            <form class="form-inline">
+            <!--form class="form-inline">
                 <select class="form-control" ng-model="renderer" ng-change="rendererChanged(renderer)">
                     <option ng-repeat="render in renderers" value="{{render}}">{{render}}</option>
                 </select>
@@ -18,9 +18,9 @@
                     <option ng-repeat="uri in uris" value="{{uri.v}}">{{uri.displayName}}</option>
                 </select>
                 <button class="btn btn-primary" ng-click="changeSeriesData(0)">Generate Alarm Report</button>
-            </form>
+            </form-->
             <div class="panel-body" id="alarmsGraphContainer">
-                <ganttchart data="alerts" hosts="hosts"></ganttchart>
+                <ganttchart data="alerts" dataready="alertDataReady"></ganttchart>
             </div>
         </tab>
         <tab>

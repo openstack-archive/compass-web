@@ -18,7 +18,8 @@ var app = angular.module('compass', [
 app.constant('settings', {
     apiUrlBase: '/api',
     metadataUrlBase: 'data',
-    monitoringUrlBase: 'http://metrics-api/monit/api/v1'
+    //monitoringUrlBase: 'http://metrics-api/monit/api/v1'
+    monitoringUrlBase: '/monit/api/v1'
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
