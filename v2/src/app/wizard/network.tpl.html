@@ -1,5 +1,6 @@
 <div ng-controller="networkCtrl">
-    <div class="row">
+    <span us-spinner ng-if="loading == true" spinner-key="spinner-1" spinner-start-active="1" style="position: absolute !important; left: 47%"></span>
+    <div class="row" ng-show="loading == false">
         <div collapse="autoFillPanel.isCollapsed" class="dashed-panel" style="height: auto; background-color: rgba(224, 226, 227, 0.25);">
             <span class="action pull-right" ng-click="autoFillPanel.isCollapsed = true;">
                 <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
@@ -109,7 +110,7 @@
             <div class="space-10"></div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="loading == false">
         <div class="pull-left">
             <!--Search Input-->
             <span class="input-icon">
@@ -141,7 +142,7 @@
             </button>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="loading == false">
         <div class="space-6"></div>
         <table ng-table="tableParams" class="table table-hover table-striped">
             <thead>

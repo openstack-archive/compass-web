@@ -1,7 +1,8 @@
 
 
 <div ng-controller="reviewCtrl">
-    <div class="row">
+    <span us-spinner ng-if="loading == true" spinner-key="spinner-1" spinner-start-active="1" style="position: absolute !important; left: 47%"></span>
+    <div class="row" ng-show="loading == false">
         <div class="col-sm-12">
             <div class="widget-box transparent margin-top-minus10">
                 <div class="widget-header widget-header-flat">
@@ -74,7 +75,7 @@
         </div>
     </div>
     <div class="space-30"></div>
-    <div class="row">
+    <div class="row" ng-show="loading == false">
         <div class="col-sm-6">
             <div class="widget-box transparent margin-top-minus10">
                 <div class="widget-header widget-header-flat">
@@ -149,7 +150,7 @@
         </div>
     </div>
     <div class="space-30"></div>
-    <div class="row">
+    <div class="row" ng-show="loading == false">
         <div class="col-sm-6">
             <div class="widget-box transparent margin-top-minus10">
                 <div class="widget-header widget-header-flat">

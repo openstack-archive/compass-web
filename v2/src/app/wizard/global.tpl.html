@@ -1,5 +1,6 @@
 <div ng-controller="globalCtrl">
-    <div class="row">
+    <span us-spinner ng-if="loading == true" spinner-key="spinner-1" spinner-start-active="1" style="position: absolute !important; left: 47%"></span>
+    <div class="row" ng-show="loading == false">
         <div class="col-xs-12">
             <form id="generalForm" name="generalForm" class="form-horizontal" role="form">
                 <!-- Use metadata to generate the form. might be used later -->
