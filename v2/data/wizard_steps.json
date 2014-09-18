@@ -54,7 +54,7 @@
         "title": "Review",
         "state": "",
         "template": "src/app/wizard/review.tpl.html",
-        "description": ""
+        "description": "Click a section title to navigate back to that page."
     }],
     "os": [{
         "id": 1,

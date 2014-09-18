@@ -5,11 +5,9 @@
             <h1>Create Cluster Wizard</h1>
             <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span>
         </div>
-
         <div id="create-cluster-wizard">
             <ul class="wizard-steps">
                 <li ng-repeat="step in steps" class="{{step.state}}" ng-click="skipForward(step.id)">
-                    
                     <span class="step">
                         <img src="assets/img/{{step.name}}.png" width="50px" height="50px" style="margin-left: -4.5px; margin-top: -5px;">
                     </span>
@@ -17,7 +15,6 @@
                 </li>
             </ul>
             <div class="space-10"></div>
-
             <div class="widget-box">
                 <div class="widget-header widget-header-flat widget-header-small">
                     <h5 class="widget-title">
@@ -33,7 +30,6 @@
                 </div>
             </div>
             <div class="space-10"></div>
-
             <div class="wizard-actions">
                 <button ng-click="stepBackward()" ng-disabled="currentStep == 1" class="btn btn-grey btn-prev-spacing" ng-class="{'btn-light' : currentStep == 1}">
                     <i class="ace-icon fa fa-arrow-left"></i>
