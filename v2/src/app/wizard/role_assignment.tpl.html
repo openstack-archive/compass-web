@@ -127,9 +127,14 @@
                         </td>
                         <td>
                             <div class="role-assign-drop" ui-on-Drop="onDrop($event, key)" drag-hover-class="drag-enter-role" drop-channel="{{value.dropChannel}}">
-                                <alert ng-repeat="role in value['roles']" class="role-tag border-radius-4" ng-style="{'background-color': role.color}" close="removeRole(value, role)">
+                                <div ng-repeat="role in value['roles']" class="role-tag border-radius-4" ng-style="{'background-color': role.color}" >
+                                    <button class="close role-close" ng-click="removeRole(value, role)" type="button">
+                                        <span aria-hidden="true">×</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
                                     {{role.display_name}}
-                                </alert>
+                                </div>
+                                 <!-- ng-class="{'role-1': role.display_name == 'Compute', 'role-2': role.display_name == 'Controller', 'role-3': role.display_name == 'Network', 'role-4': role.display_name == 'Storage', 'role-5': role.display_name == 'Message Queue', 'role-6': role.display_name == 'database'}" -->
                             </div>
                         </td>
                     </tr>
@@ -140,7 +145,7 @@
             <div class="widget-box transparent role-widget-box">
                 <div class="widget-header widget-header-marginbottom">
                     <br>
-                    <h4 class="margin-left-neg4">Drag Roles <br> to Assign</h4>
+                    <h4 class="margin-left-neg4">Drag to Assign</h4>
                 </div>
                 <div class="role-assign-drag">
                     <div ui-draggable="true" on-drop-success="dropSuccessHandler($event,role_value,role_key)" class="role-tag drag-roles ui-draggable" ng-repeat="(role_key, role_value) in roles" ng-style="{'background-color': role_value.color}" drag-channel="{{role_value.dragChannel}}">

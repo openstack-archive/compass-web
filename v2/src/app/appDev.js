@@ -649,14 +649,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "display_name": "Controller",
                     "name": "os-controller"
                 }, {
-                    "display_name": "Network",
-                    "name": "os-network"
-                }, {
                     "display_name": "Storage",
                     "name": "os-block-storage-worker"
                 }, {
                     "display_name": "Message Queue",
                     "name": "os-mq"
+                }, {
+                    "display_name": "Network",
+                    "name": "os-network"
                 }, {
                     "display_name": "database",
                     "name": "os-db"

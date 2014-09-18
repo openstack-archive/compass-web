@@ -1019,3 +1019,26 @@ circle[depth='4'] {
     min-height: 35px;
     padding: 0;
 }
+.role-1 {
+    background-color: #8EA16C;
+}
+.role-2 {
+    background-color: #C2CF30;
+}
+.role-3 {
+    background-color: #FEC700;
+}
+.role-4 {
+    background-color: #FF8900;
+}
+.role-5 {
+    background-color: #D3432B;
+}
+.role-6 {
+    background-color: #BB2952;
+}
+.role-close {
+    font-size: 15px !important;
+    margin-top: 2px;
+    margin-right: -15px;
+}

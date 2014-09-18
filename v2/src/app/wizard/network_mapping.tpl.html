@@ -16,7 +16,7 @@
                                 (Management)
                             </span>
                             <div ui-on-Drop="onDrop($event, interface_key)" drag-hover-class="drag-enter" drop-channel="{{interface_value.dropChannel}}" class="interface-placeholder interface-placeholder-margin">
-                                <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" drag-channel="{{network_value.dragChannel}}" class="external-event ui-draggable network-draggable margin-right-5" ng-class="{'label-pink': network_key == 'management', 'label-success': network_key =='tenant', 'label-purple': network_key == 'public', 'label-warning': network_key == 'storage'}" ng-if="network_value.mapping_interface==interface_key">
+                                <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" drag-channel="{{network_value.dragChannel}}" class="external-event ui-draggable network-draggable margin-right-5" ng-class="{'role-1': role.display_name == 'compute', 'role-1': role.display_name == 'controller'}" ng-if="network_value.mapping_interface==interface_key">
                                     <i class="ace-icon fa fa-arrows"></i>
                                     <span class="capitalize">{{network_key}}</span>
                                 </div>
