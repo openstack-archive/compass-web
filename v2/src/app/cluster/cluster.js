@@ -208,9 +208,11 @@ angular.module('compass.cluster', [
                     var postClusterData = {
                         "name": cluster.name,
                         "adapter_id": cluster.adapter.id,
-                        "os_id": cluster.os.id,
-                        "flavor_id": cluster.flavor.id
+                        "os_id": cluster.os.id
                     };
+                    if (cluster.flavor) {
+                        postClusterData.flavor_id = cluster.flavor.id;
+                    }
                     dataService.createCluster(postClusterData).success(function(data, status) {
                         wizardFactory.setClusterInfo(data);
                         angular.forEach($scope.allAdapters, function(adapter) {
