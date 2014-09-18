@@ -32,37 +32,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="server in $data | filter: search">
+                                    <tr ng-repeat="(key, value) in $data | filter: search">
                                         <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                                             <span ng-switch on="column.field">
                                                 <span ng-switch-when="os_installed">
-                                                    <span ng-if="server['os']">
+                                                    <span ng-if="value['os']">
                                                         <label>
                                                             <input ng-model="server.reinstallos" type="checkbox" class="ace">
                                                             <span class="lbl"></span>
                                                         </label>
                                                     </span>
-                                                    <span ng-if="!server['os']">
+                                                    <span ng-if="!value['os']">
                                                         -
                                                     </span>
                                                 </span>
                                                 <span ng-switch-when="clusters">
-                                                    <span ng-repeat="cluster in server.clusters">
+                                                    <span ng-repeat="cluster in value.clusters">
                                                         {{cluster.name}}&nbsp;
                                                     </span>
                                                 </span>
                                                 <span ng-switch-when="roles">
-                                                    <span ng-repeat="role in server['roles']" class="badge">
+                                                    <span ng-repeat="role in value['roles']" class="role-badge" ng-style="{'background-color': role.color}">
                                                         {{role.display_name}}
                                                     </span>
                                                 </span>
                                                 <span ng-switch-default>
-                                                    {{server[column.field]}}
+                                                    {{value[column.field]}}
                                                 </span>
                                             </span>
                                         </td>
                                         <td ng-repeat="(key, value) in interfaces">
-                                            {{server.networks[key].ip}}
+                                            {{value.networks[key].ip}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -130,8 +130,8 @@
                                 <thead>
                                     <tr>
                                         <th>Mount Point</th>
-                                        <th>Size Percentage(%)</th>
-                                        <th>Max Size(G)</th>
+                                        <th>Size Percentage (%)</th>
+                                        <th>Max Size (G)</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -514,11 +514,11 @@ angular.module('compass.wizard', [
                 wizardFactory.setCommitState(commitState);
             });
         } else {
-             var message = {
-                 "message": "The required(*) fields can not be empty !"
-             }
-             $scope.openErrMessageModal(message);
-         }
+            var message = {
+                "message": "The required(*) fields can not be empty !"
+            }
+            $scope.openErrMessageModal(message);
+        }
 
     };
 
@@ -1128,19 +1128,23 @@ angular.module('compass.wizard', [
     dataService.getClusterById(cluster.id).success(function(data) {
         // wizardFactory.setAdapter(data);
         $scope.roles = data.flavor.roles;
-        var i = 0;
         angular.forEach($scope.roles, function(role, role_key) {
-            role.color = colors[i];
-            $scope.roles[role_key].dragChannel = i;
-            i++;
-        });
-        angular.forEach($scope.roles, function(role, role_key) {
-            //realRole.splice(z,0,z);
+            role.color = colors[role_key];
+            $scope.roles[role_key].dragChannel = role_key;
             $scope.realRole.push(role_key);
         });
         angular.forEach($scope.servers, function(value, key) {
             $scope.existingRoles.push(angular.copy($scope.realRole));
             $scope.servers[key].dropChannel = $scope.existingRoles[key].toString();
+            angular.forEach($scope.servers[key].roles, function(server_role, server_role_key) {
+                $scope.server_role = "";
+                angular.forEach($scope.roles, function(role, role_key) {
+                    if (server_role.display_name == $scope.roles[role_key].display_name) {
+                        $scope.server_role = role_key;
+                    }
+                });
+                server_role.color = colors[$scope.server_role];
+            });
         });
         $scope.checkExistRolesDrag();
     });
@@ -1161,13 +1165,11 @@ angular.module('compass.wizard', [
         var serverIndex = $scope.servers.indexOf(server);
         var roleIndex = $scope.servers[serverIndex].roles.indexOf(role);
         $scope.servers[serverIndex].roles.splice(roleIndex, 1);
-
         angular.forEach($scope.roles, function(role_value, role_key) {
             if (role.display_name == $scope.roles[role_key].display_name) {
                 $scope.existingRoles[serverIndex].splice(role_key, 1, role_key)
             }
         });
-
         $scope.servers[serverIndex].dropChannel = $scope.existingRoles[serverIndex].toString();
     };
 
@@ -1352,12 +1354,12 @@ angular.module('compass.wizard', [
             angular.forEach($scope.servers[key].roles, function(server_role, server_role_key) {
                 angular.forEach($scope.roles, function(role, role_key) {
                     if ($scope.servers[key].roles[server_role_key].display_name == $scope.roles[role_key].display_name) {
-                        $scope.existingRoles[key].splice(role_key, 1, "p")
+                        $scope.existingRoles[key].splice(role_key, 1, "p");
                     }
-                })
-            })
+                });
+            });
             $scope.servers[key].dropChannel = $scope.existingRoles[key].toString();
-        })
+        });
     };
 })
 
@@ -1551,24 +1553,24 @@ angular.module('compass.wizard', [
         //TODO: error handling
     };
 })
-.directive('ngKeypress', function() {
-    return function(scope, element, attrs) {
-        element.bind("keydown keypress", function(event) {
-            if (event.which === 9) { // 9 is tab key
-                var current = attrs.position;
-                var result = current.split('_');
-                var next = result[0] + "_" + (parseInt(result[1]) + 1);
-                if ($("input[data-position=" + next + "]").length) {
+    .directive('ngKeypress', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if (event.which === 9) { // 9 is tab key
+                    var current = attrs.position;
+                    var result = current.split('_');
+                    var next = result[0] + "_" + (parseInt(result[1]) + 1);
+                    if ($("input[data-position=" + next + "]").length) {
 
-                    $("input[data-position=" + next + "]").focus();
-                } else {
-                    $(".btn-next").focus();
+                        $("input[data-position=" + next + "]").focus();
+                    } else {
+                        $(".btn-next").focus();
+                    }
+                    event.preventDefault();
                 }
-                event.preventDefault();
-            }
-        });
-    };
-});
+            });
+        };
+    });
 
 var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
     $scope.warning = warning;
@@ -1634,7 +1636,7 @@ var addSubnetModalInstanceCtrl = function($scope, $modalInstance, $q, subnets, d
         });
 
         $q.all(promises).then(function() {
-            for(var i = 0; i < subnets.length && i < $scope.subnetworks.length; i++) {
+            for (var i = 0; i < subnets.length && i < $scope.subnetworks.length; i++) {
                 $scope.subnetworks[i].$$hashKey = subnets[i].$$hashKey;
             }
             $modalInstance.close($scope.subnetworks);

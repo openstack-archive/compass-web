@@ -127,7 +127,7 @@
                         </td>
                         <td>
                             <div class="role-assign-drop" ui-on-Drop="onDrop($event, key)" drag-hover-class="drag-enter-role" drop-channel="{{value.dropChannel}}">
-                                <alert ng-repeat="role in value['roles']" class="role-tag border-radius-4" ng-style="{'background-color': role.color}" close="removeRole(value, role)">
+                                <alert ng-repeat="role in value['roles']" close="removeRole(value, role)" class="role-tag border-radius-4" ng-style="{'background-color': role.color}">
                                     {{role.display_name}}
                                 </alert>
                             </div>
@@ -140,12 +140,12 @@
             <div class="widget-box transparent role-widget-box">
                 <div class="widget-header widget-header-marginbottom">
                     <br>
-                    <h4 class="margin-left-neg4">Drag Roles <br> to Assign</h4>
+                    <h4 class="margin-left-neg4">Drag to Assign</h4>
                 </div>
                 <div class="role-assign-drag">
-                    <div ui-draggable="true" on-drop-success="dropSuccessHandler($event,role_value,role_key)" class="role-tag drag-roles ui-draggable" ng-repeat="(role_key, role_value) in roles" ng-style="{'background-color': role_value.color}" drag-channel="{{role_value.dragChannel}}">
+                    <div tooltip-placement="left" tooltip="{{role_value.display_name}}" tooltip-popup-delay='100' ui-draggable="true" on-drop-success="dropSuccessHandler($event,role_value,role_key)" class="role-tag drag-roles ui-draggable" ng-repeat="(role_key, role_value) in roles" ng-style="{'background-color': role_value.color}" drag-channel="{{role_value.dragChannel}}">
                         <i class="ace-icon fa fa-arrows margin-left-neg4"></i>
-                        <span>{{role_value.display_name}}</span>
+                        <span >{{role_value.display_name | limitTo: 10 }}</span>
                     </div>
                 </div>
             </div>
