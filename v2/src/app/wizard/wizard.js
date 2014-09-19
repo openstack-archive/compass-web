@@ -568,6 +568,15 @@ angular.module('compass.wizard', [
 
     dataService.getClusterHosts(cluster.id).success(function(data) {
         $scope.servers = data;
+
+         // Assume all hosts in the same cluster have same interface settings
+        if ($scope.servers[0].networks) {
+            if (Object.keys($scope.servers[0].networks).length != 0) {
+                $scope.interfaces = $scope.servers[0].networks;
+                wizardFactory.setInterfaces($scope.interfaces);
+            }
+        }
+
         $scope.tableParams = new ngTableParams({
             page: 1, // show first page
             count: $scope.servers.length + 1 // count per page
@@ -1396,6 +1405,10 @@ angular.module('compass.wizard', [
         if (value.is_promiscuous) {
             $scope.networking["public"].mapping_interface = key;
             $scope.interfaces[key].dropChannel = "P";
+        }
+        // The interface marked as management is required to be set as Management Network
+        if (value.is_mgmt) {
+            $scope.networking["management"].mapping_interface = key;
         }
     });
 
