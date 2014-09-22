@@ -123,7 +123,7 @@ angular.module('compass.wizard', [
                         'id': $scope.cluster.id
                     });
                 }
-                $scope.stepControl();
+                $scope.stepControl(goToPreviousStep = false);
                 if ($scope.currentStep > $scope.maxStep) {
                     $scope.maxStep = $scope.currentStep;
                 }
@@ -131,11 +131,16 @@ angular.module('compass.wizard', [
                 console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 $scope.openErrMessageModal(newCommitState.message);
 
+            } else if(newCommitState.state == "goToPreviousStep"){
+                $scope.stepControl(goToPreviousStep = true);
+                if ($scope.currentStep > $scope.maxStep) {
+                    $scope.maxStep = $scope.currentStep;
+                }
             }
         }
     });
 
-    $scope.stepControl = function() {
+    $scope.stepControl = function(goToPrevious) {
         if ($scope.pendingStep <= $scope.maxStep + 1) {
             var previousStepsIncomplete = false;
             for (var i = 0; i < $scope.pendingStep - 1; i++) {
@@ -150,7 +155,7 @@ angular.module('compass.wizard', [
                 };
                 alert(message.message);
             } else {
-                $scope.updateStepProgress($scope.pendingStep, $scope.currentStep);
+                $scope.updateStepProgress($scope.pendingStep, $scope.currentStep,goToPrevious);
                 $scope.currentStep = $scope.pendingStep;
             }
         } else {
@@ -163,9 +168,15 @@ angular.module('compass.wizard', [
     }
 
     // Updates CSS Classes on Step state change
-    $scope.updateStepProgress = function(newStep, oldStep) {
+    $scope.updateStepProgress = function(newStep, oldStep, goToPrevious) {
         $scope.steps[newStep - 1].state = "active";
-        $scope.steps[oldStep - 1].state = "complete";
+        if(goToPrevious)
+        {
+            $scope.steps[oldStep - 1].state = "";
+        }
+        else{
+            $scope.steps[oldStep - 1].state = "complete";
+        }
         if (newStep == 1) {
             if ($scope.maxStep > 2) {
                 $scope.steps[2].state = "incomplete";
@@ -190,11 +201,17 @@ angular.module('compass.wizard', [
         }
     };
 
-    $scope.triggerCommit = function(stepId) {
+    $scope.triggerCommit = function(stepId,nextStep) {
+        var sendRequest = false;
+        if(nextStep > stepId)
+        {
+            sendRequest = true;
+        }
         if ($scope.steps[stepId - 1].name != "review") {
             var commitState = {
                 "name": $scope.steps[stepId - 1].name,
                 "state": "triggered",
+                "sendRequest":sendRequest,
                 "message": {}
             };
             wizardFactory.setCommitState(commitState);
@@ -238,7 +255,7 @@ angular.module('compass.wizard', [
     $scope.skipForward = function(stepId) {
         if ($scope.currentStep != stepId) {
             $scope.pendingStep = stepId;
-            $scope.triggerCommit($scope.currentStep);
+            $scope.triggerCommit($scope.currentStep,stepId);
         }
     };
 
@@ -483,14 +500,23 @@ angular.module('compass.wizard', [
 
         if (newCommitState !== undefined) {
             if (newCommitState.name == "os_global" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
 
 
 
-    $scope.commit = function() {
+    $scope.commit = function(sendRequest) {
+        if (!sendRequest) {
+            var commitState = {
+                "name": "os_global",
+                "state": "goToPreviousStep",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+            return;
+        }
         var os_global_general = {
             "os_config": {
                 "general": $scope.general
@@ -645,12 +671,21 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "network" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
 
-    $scope.commit = function() {
+    $scope.commit = function(sendRequest) {
+        if (!sendRequest) {
+            var commitState = {
+                "name": "network",
+                "state": "goToPreviousStep",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+            return;
+        }
         wizardFactory.setInterfaces($scope.interfaces);
 
 
@@ -934,12 +969,21 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "partition" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
 
-    $scope.commit = function() {
+    $scope.commit = function(sendRequest) {
+        if (!sendRequest) {
+            var commitState = {
+                "name": "partition",
+                "state": "goToPreviousStep",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+            return;
+        }
         if ($scope.duplicated == true) {
             var message = {
                 "message": "Mount Point cannot be the same"
@@ -1015,7 +1059,7 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "security" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
@@ -1089,7 +1133,16 @@ angular.module('compass.wizard', [
         $scope.service_credentials = angular.copy($scope.originalServiceData);
     }
 
-    $scope.commit = function() {
+    $scope.commit = function(sendRequest) {
+        if (!sendRequest) {
+             var commitState = {
+                 "name": "security",
+                 "state": "goToPreviousStep",
+                 "message": ""
+             };
+             wizardFactory.setCommitState(commitState);
+             return;
+         }
         var securityData = {
             "os_config": {
                 "server_credentials": {
@@ -1286,12 +1339,21 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "role_assign" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
 
-    $scope.commit = function() {
+    $scope.commit = function(sendRequest) {
+        if (!sendRequest) {
+            var commitState = {
+                "name": "role_assign",
+                "state": "goToPreviousStep",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+            return;
+        }
         var promises = [];
         angular.forEach($scope.servers, function(server) {
             var roles = [];
@@ -1418,12 +1480,21 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "network_mapping" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
 
-    $scope.commit = function() {
+    $scope.commit = function(sendRequest) {
+        if (!sendRequest) {
+            var commitState = {
+                "name": "network_mapping",
+                "state": "goToPreviousStep",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+            return;
+        }
         var networks = {};
         angular.forEach($scope.networking, function(value, key) {
             networks[key] = value.mapping_interface;
@@ -1528,12 +1599,21 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "review" && newCommitState.state == "triggered") {
-                $scope.commit();
+                $scope.commit(newCommitState.sendRequest);
             }
         }
     });
 
     $scope.commit = function() {
+        if (!sendRequest) {
+            var commitState = {
+                "name": "review",
+                "state": "goToPreviousStep",
+                "message": ""
+            };
+            wizardFactory.setCommitState(commitState);
+            return;
+        }
         var reviewAction = {
             "review": {
                 "hosts": []
