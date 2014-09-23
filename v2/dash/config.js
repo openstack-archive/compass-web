@@ -13,7 +13,8 @@ function (Settings) {
     datasources: {
       metricsdb: {
         type: 'kairosdb',
-        url: "http://metrics:8080",
+        //url: "http://metrics:8080",
+        url: "http://localhost",
         default: true
       },
 /*
