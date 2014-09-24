@@ -167,9 +167,22 @@ angular.module('compass.wizard', [
         }
     }
 
+    for (var i = 0; i < $scope.steps.length; i++) {
+        if ($scope.steps[i].name == 'network') {
+            $scope.networkStep = i;
+        }
+        if ($scope.steps[i].name == 'role_assign') {
+            $scope.roleAssignStep = i;
+        }
+        if ($scope.steps[i].name == 'network_mapping') {
+            $scope.networkMappingStep = i;
+        }
+    }
+
     // Updates CSS Classes on Step state change
     $scope.updateStepProgress = function(newStep, oldStep, goToPrevious) {
         $scope.steps[newStep - 1].state = "active";
+
         if(goToPrevious)
         {
             $scope.steps[oldStep - 1].state = "";
@@ -177,27 +190,29 @@ angular.module('compass.wizard', [
         else{
             $scope.steps[oldStep - 1].state = "complete";
         }
-        if (newStep == 1) {
-            if ($scope.maxStep > 2) {
-                $scope.steps[2].state = "incomplete";
+
+        $scope.steps[oldStep - 1].state = "complete";
+        if ($scope.steps[newStep - 1].name == 'sv_selection') {
+            if ($scope.maxStep > $scope.networkStep) {
+                $scope.steps[$scope.networkStep].state = "incomplete";
             }
-            if ($scope.maxStep > 5) {
-                $scope.steps[5].state = "incomplete";
+            if ($scope.maxStep > $scope.roleAssignStep) {
+                $scope.steps[$scope.roleAssignStep].state = "incomplete";
             }
-            if ($scope.maxStep > 6) {
-                $scope.steps[6].state = "incomplete";
-            }
-        }
-        if (newStep == 3) {
-            if ($scope.maxStep > 5) {
-                $scope.steps[5].state = "incomplete";
-            }
-            if ($scope.maxStep > 6) {
-                $scope.steps[6].state = "incomplete";
+            if ($scope.maxStep > $scope.networkMappingStep) {
+                $scope.steps[$scope.networkMappingStep].state = "incomplete";
             }
         }
-        if (oldStep == 8) {
-            $scope.steps[7].state = "";
+        if (newStep == $scope.networkStep + 1) {
+            if ($scope.maxStep > $scope.roleAssignStep) {
+                $scope.steps[$scope.roleAssignStep].state = "incomplete";
+            }
+            if ($scope.maxStep > $scope.networkMappingStep) {
+                $scope.steps[$scope.networkMappingStep].state = "incomplete";
+            }
+        }
+        if (oldStep == $scope.steps.length) {
+            $scope.steps[$scope.steps.length - 1].state = "";
         }
     };
 
@@ -217,8 +232,6 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
         } else {
             $scope.stepControl();
-            $scope.updateStepProgress($scope.pendingStep, 8);
-            //$scope.updateStepProgress($scope.pendingStep, stepId);
         }
     };
 
@@ -582,7 +595,7 @@ angular.module('compass.wizard', [
     */
 })
 
-.controller('networkCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, $modal) {
+.controller('networkCtrl', function($scope, $timeout, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, $modal) {
     var cluster = wizardFactory.getClusterInfo();
     $scope.subnetworks = wizardFactory.getSubnetworks();
     $scope.interfaces = wizardFactory.getInterfaces();
@@ -798,7 +811,7 @@ angular.module('compass.wizard', [
     };
 
 
-    $scope.autofill = function() {
+    $scope.autofill = function(alertFade) {
         // Autofill IP for each interface
         angular.forEach($scope.interfaces, function(value, key) {
             var ip_start = $("#" + key + "-ipstart").val();
@@ -808,6 +821,14 @@ angular.module('compass.wizard', [
         // Autofill hostname
         var hostname_rule = $("#hostname-rule").val();
         $scope.fillHostname(hostname_rule);
+        $scope.networkAlerts = [{
+            msg: 'Autofill Done!'
+        }];
+        if (alertFade) {
+            $timeout(function() {
+                $scope.closeNetworkAlert();
+            }, alertFade);
+        }
     };
 
     $scope.fillHostname = function(rule) {
@@ -860,6 +881,10 @@ angular.module('compass.wizard', [
             }
         })
     }
+
+    $scope.closeNetworkAlert = function() {
+        $scope.networkAlerts = [];
+    };
 })
 
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {
@@ -920,8 +945,6 @@ angular.module('compass.wizard', [
         } else {
             $scope.partitionInforArray.splice(index, 1);
         }
-
-
         if ($scope.duplicatedIndexArray.indexOf(index) >= 0) {
             $scope.duplicated = false;
 
@@ -1474,7 +1497,6 @@ angular.module('compass.wizard', [
         }
     });
 
-
     $scope.$watch(function() {
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
@@ -1645,6 +1667,15 @@ angular.module('compass.wizard', [
         })
         //TODO: error handling
     };
+
+    $scope.returnStep = function(reviewName) {
+        for (var i = 0; i < $scope.steps.length; i++) {
+            if (reviewName == $scope.steps[i].name) {
+                $scope.skipForward(i + 1);
+            }
+        }
+    };
+
 })
     .directive('ngKeypress', function() {
         return function(scope, element, attrs) {

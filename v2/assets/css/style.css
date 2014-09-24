@@ -231,7 +231,7 @@ button[disabled] {
 }
 .wizard-steps li.active .step {
     transform: scale(1.2, 1.2);
-    -webkit-transform: scale(1.2, 1.2);
+    -webkit-transform: scale(1.2, 1.2); 
 }
 .wizard-steps li.active .title {
     font-weight: bold;
@@ -269,10 +269,13 @@ button[disabled] {
     border-color: #d15b47 !important;
 }
 .wizard-steps li .step {
-    transform: scale(1.6);
-    -webkit-transform: scale(1.6);
+    transform: scale(1.5);
+    -webkit-transform: scale(1.5);
     background-color: #AEAEAE;
     border-style: none;
+}
+.wizard-steps li.complete:hover .step {
+    transform: scale(1.7) !important;
 }
 .wizard-steps li.complete .step:before {
     background-color: rgba(255, 255, 255, 0);
@@ -974,7 +977,7 @@ circle[depth='4'] {
 }
 .role-assign-drop {
     min-height: 25px;
-    min-width: 220px;
+    min-width: 100px;
     /* background-color: rgba(221, 221, 221, 0.32); */
 }
 .role-assign-drag {
@@ -1026,11 +1029,18 @@ circle[depth='4'] {
     line-height: 15px;
     padding: 1px 7px 3px 7px;
     text-shadow: none;
-    border-radius: 10px;
+    border-radius: 5px;
     color: #fff;
     display: inline-block;
     min-width: 10px;
     text-align: center;
     vertical-align: baseline;
     white-space: nowrap;
+}
+.autofill-success {
+    margin-top: 20px;
+}
+h4.widget-title:hover {
+    color: #2a6496;
+    text-decoration: underline;
 }
