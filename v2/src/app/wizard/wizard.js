@@ -259,13 +259,13 @@ angular.module('compass.wizard', [
 
     $scope.stepForward = function() {
         $scope.pendingStep = $scope.currentStep + 1;;
-        $scope.triggerCommit($scope.currentStep);
+        $scope.triggerCommit($scope.currentStep,100);
     };
 
     // go to previous step
     $scope.stepBackward = function() {
         $scope.pendingStep = $scope.currentStep - 1;
-        $scope.triggerCommit($scope.currentStep);
+        $scope.triggerCommit($scope.currentStep,-100);
     };
 
     // go to step by stepId
@@ -1645,21 +1645,12 @@ angular.module('compass.wizard', [
     }, function(newCommitState, oldCommitState) {
         if (newCommitState !== undefined) {
             if (newCommitState.name == "review" && newCommitState.state == "triggered") {
-                $scope.commit(newCommitState.sendRequest);
+                $scope.commit();
             }
         }
     });
 
     $scope.commit = function() {
-        if (!sendRequest) {
-            var commitState = {
-                "name": "review",
-                "state": "goToPreviousStep",
-                "message": ""
-            };
-            wizardFactory.setCommitState(commitState);
-            return;
-        }
         var reviewAction = {
             "review": {
                 "hosts": []
