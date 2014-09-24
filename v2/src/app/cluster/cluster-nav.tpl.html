@@ -12,10 +12,34 @@
             <b class="arrow fa fa-angle-down"></b>
         </a>
         <ul class="submenu" ng-show="isMonitoringNavOpen" style="display: block">
-            <li ng-repeat="nav in monitoringNav" ng-class="{active:state.includes('{{nav.name}}')}">
-                <a ui-sref="{{nav.name}}">
+            <li ng-class="{active:state.includes('cluster.monitoring.overview')}">
+                <a ui-sref="cluster.monitoring.overview">
                     <i class="menu-icon fa fa-caret-right"></i>
-                    {{nav.display}}
+                    Overview
+                </a>
+            </li>
+            <li ng-class="{active:state.includes('cluster.monitoring.topology')}">
+                <a ui-sref="cluster.monitoring.topology">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Topology
+                </a>
+            </li>
+            <li ng-class="{active:state.includes('cluster.monitoring.alerts')}">
+                <a ui-sref="cluster.monitoring.alerts">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Alerts
+                </a>
+            </li>
+            <li ng-class="{active:state.includes('cluster.monitoring.metrics')}">
+                <a ui-sref="cluster.monitoring.metrics">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Metrics
+                </a>
+            </li>
+            <li ng-class="{active:state.includes('cluster.monitoring.charts')}">
+                <a ui-sref="cluster.monitoring.charts">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Dashboards
                 </a>
             </li>
         </ul>

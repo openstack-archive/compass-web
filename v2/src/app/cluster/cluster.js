@@ -65,17 +65,12 @@ angular.module('compass.cluster', [
         });
 })
 
-.controller('clusterCtrl', function($scope, $state, dataService, stateService, $stateParams) {
+.controller('clusterCtrl', function($scope, $state, dataService, $stateParams) {
     $scope.clusterId = $stateParams.id;
     $scope.state = $state;
 
     dataService.getClusterById($scope.clusterId).success(function(data) {
         $scope.clusterInfo = data;
-    });
-
-    dataService.getMonitoringNav().success(function(data) {
-        $scope.monitoringNav = data;
-        stateService.addStates($scope.monitoringNav);
     });
 
 }).directive('clusternav', function($timeout) {

@@ -4,7 +4,7 @@
     </h1>
 </div>
 
-<div class="col-lg-10" style="width: 100%;" ng-controller="metricsCtrl">
+<div class="col-lg-10" style="width: 100%;">
   <tabset class="ng-isolate-scope" style="width: 100%;">
     <tab heading="Metrics">
         <!--form class="form-inline ng-valid">
@@ -21,8 +21,8 @@
             <div class="col-md-4 col-sm-6">
                 <h3>
                     Metrics Browser
-                    <a href="" class="btn btn-default pull-right" ng-click="collapseAll()">Collapse all</a>
-                    <a href="" class="btn btn-default pull-right margin-right-5" ng-click="expandAll()">Expand all</a>
+                    <a href="" class="btn btn-default btn-xs pull-right" ng-click="collapseAll()">Collapse all</a>
+                    <a href="" class="btn btn-default btn-xs pull-right margin-right-5" ng-click="expandAll()">Expand all</a>
                 </h3>
 
                 <!-- Nested node template -->
@@ -61,6 +61,7 @@
                         interactive="true"
                         useInteractiveGuideline="true"
                         toolTipContent="toolTipContentFunction()"
+                        xAxisTickFormat="xAxisTickFormatFunction()"
                         margin="{left:50,top:50,bottom:50,right:50}"
                         forceY="[0]"
                         showLegend="true"
