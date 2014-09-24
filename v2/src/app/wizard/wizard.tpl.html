@@ -25,7 +25,8 @@
 
                 <div class="widget-body">
                     <div class="widget-main padding-32">
-                        <div ng-include="steps[currentStep-1].template"></div>
+                        <span us-spinner ng-if="loading == true" style="position: relative !important; left: 47%"></span>
+                        <div ng-hide = "loading == true" ng-include="steps[currentStep-1].template"></div>
                     </div>
                 </div>
             </div>

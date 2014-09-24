@@ -53,12 +53,17 @@ angular.module('compass.wizard', [
 })
 
 .controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, $modal, clusterData, machinesHostsData, wizardStepsData, clusterConfigData, usSpinnerService) {
+    $scope.loading = false;
     $scope.clusterId = $stateParams.id;
     $scope.cluster = clusterData;
     wizardFactory.setClusterInfo($scope.cluster);
     wizardFactory.setAllMachinesHost(machinesHostsData);
 
     var oldConfig = clusterConfigData;
+
+    $scope.$on('loading',function(event,data){
+        $scope.loading = data;
+    });
 
     // get pre-config data for wizard
     if ($stateParams.config == "true") {
@@ -113,6 +118,7 @@ angular.module('compass.wizard', [
 
     // Watch commit state change
     $scope.$watch(function() {
+        $scope.loading = false;
         return wizardFactory.getCommitState()
     }, function(newCommitState, oldCommitState) {
         if (newCommitState != oldCommitState && newCommitState.name == $scope.steps[$scope.currentStep - 1].name) {
@@ -138,6 +144,7 @@ angular.module('compass.wizard', [
                 }
             }
         }
+        $scope.loading = false;
     });
 
     $scope.stepControl = function(goToPrevious) {
@@ -383,6 +390,7 @@ angular.module('compass.wizard', [
     });
 
     $scope.commit = function() {
+        $scope.$emit("loading",true);
         var selectedServers = [];
         var noSelection = true;
         angular.forEach($scope.allservers, function(sv) {
@@ -518,8 +526,6 @@ angular.module('compass.wizard', [
         }
     });
 
-
-
     $scope.commit = function(sendRequest) {
         if (!sendRequest) {
             var commitState = {
@@ -530,6 +536,7 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
             return;
         }
+        $scope.$emit("loading",true);
         var os_global_general = {
             "os_config": {
                 "general": $scope.general
@@ -699,6 +706,7 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
             return;
         }
+        $scope.$emit("loading",true);
         wizardFactory.setInterfaces($scope.interfaces);
 
 
@@ -1007,6 +1015,7 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
             return;
         }
+        $scope.$emit("loading",true);
         if ($scope.duplicated == true) {
             var message = {
                 "message": "Mount Point cannot be the same"
@@ -1166,6 +1175,7 @@ angular.module('compass.wizard', [
              wizardFactory.setCommitState(commitState);
              return;
          }
+        $scope.$emit("loading",true);
         var securityData = {
             "os_config": {
                 "server_credentials": {
@@ -1377,6 +1387,7 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
             return;
         }
+        $scope.$emit("loading",true);
         var promises = [];
         angular.forEach($scope.servers, function(server) {
             var roles = [];
@@ -1517,6 +1528,8 @@ angular.module('compass.wizard', [
             wizardFactory.setCommitState(commitState);
             return;
         }
+
+        $scope.$emit("loading",true);
         var networks = {};
         angular.forEach($scope.networking, function(value, key) {
             networks[key] = value.mapping_interface;
