@@ -127,7 +127,7 @@
                         </td>
                         <td>
                             <div class="role-assign-drop" ui-on-Drop="onDrop($event, key)" drag-hover-class="drag-enter-role" drop-channel="{{value.dropChannel}}">
-                                <alert ng-repeat="role in value['roles']" close="removeRole(value, role)" class="role-tag border-radius-4" ng-style="{'background-color': role.color}">
+                                <alert ng-repeat="role in value['roles']" close="removeRole(value, role)" class="role-tag border-radius-4 fade-animation" ng-style="{'background-color': role.color}">
                                     {{role.display_name}}
                                 </alert>
                             </div>

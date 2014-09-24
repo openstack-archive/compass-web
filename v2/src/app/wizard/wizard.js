@@ -137,7 +137,7 @@ angular.module('compass.wizard', [
                 console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 $scope.openErrMessageModal(newCommitState.message);
 
-            } else if(newCommitState.state == "goToPreviousStep"){
+            } else if (newCommitState.state == "goToPreviousStep") {
                 $scope.stepControl(goToPreviousStep = true);
                 if ($scope.currentStep > $scope.maxStep) {
                     $scope.maxStep = $scope.currentStep;
@@ -162,7 +162,7 @@ angular.module('compass.wizard', [
                 };
                 alert(message.message);
             } else {
-                $scope.updateStepProgress($scope.pendingStep, $scope.currentStep,goToPrevious);
+                $scope.updateStepProgress($scope.pendingStep, $scope.currentStep, goToPrevious);
                 $scope.currentStep = $scope.pendingStep;
             }
         } else {
@@ -190,11 +190,9 @@ angular.module('compass.wizard', [
     $scope.updateStepProgress = function(newStep, oldStep, goToPrevious) {
         $scope.steps[newStep - 1].state = "active";
 
-        if(goToPrevious)
-        {
+        if (goToPrevious) {
             $scope.steps[oldStep - 1].state = "";
-        }
-        else{
+        } else {
             $scope.steps[oldStep - 1].state = "complete";
         }
 
@@ -223,17 +221,16 @@ angular.module('compass.wizard', [
         }
     };
 
-    $scope.triggerCommit = function(stepId,nextStep) {
+    $scope.triggerCommit = function(stepId, nextStep) {
         var sendRequest = false;
-        if(nextStep > stepId)
-        {
+        if (nextStep > stepId) {
             sendRequest = true;
         }
         if ($scope.steps[stepId - 1].name != "review") {
             var commitState = {
                 "name": $scope.steps[stepId - 1].name,
                 "state": "triggered",
-                "sendRequest":sendRequest,
+                "sendRequest": sendRequest,
                 "message": {}
             };
             wizardFactory.setCommitState(commitState);
@@ -275,7 +272,7 @@ angular.module('compass.wizard', [
     $scope.skipForward = function(stepId) {
         if ($scope.currentStep != stepId) {
             $scope.pendingStep = stepId;
-            $scope.triggerCommit($scope.currentStep,stepId);
+            $scope.triggerCommit($scope.currentStep, stepId);
         }
     };
 
@@ -299,6 +296,24 @@ angular.module('compass.wizard', [
     dataService.getSubnetConfig().success(function(data) {
         wizardFactory.setSubnetworks(data);
     });
+})
+
+.animation('.fade-animation', function() {
+    return {
+        enter: function(element, done) {
+            element.css('display', 'none');
+            element.fadeIn(500, done);
+            return function() {
+                element.stop();
+            }
+        },
+        leave: function(element, done) {
+            element.fadeOut(500, done)
+            return function() {
+                element.stop();
+            }
+        }
+    }
 })
 
 .controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
@@ -615,7 +630,7 @@ angular.module('compass.wizard', [
     dataService.getClusterHosts(cluster.id).success(function(data) {
         $scope.servers = data;
 
-         // Assume all hosts in the same cluster have same interface settings
+        // Assume all hosts in the same cluster have same interface settings
         if ($scope.servers[0].networks) {
             if (Object.keys($scope.servers[0].networks).length != 0) {
                 $scope.interfaces = $scope.servers[0].networks;
@@ -834,7 +849,7 @@ angular.module('compass.wizard', [
         }];
         if (alertFade) {
             $timeout(function() {
-                $scope.closeNetworkAlert();
+                $scope.networkAlerts = [];
             }, alertFade);
         }
     };
@@ -889,10 +904,6 @@ angular.module('compass.wizard', [
             }
         })
     }
-
-    $scope.closeNetworkAlert = function() {
-        $scope.networkAlerts = [];
-    };
 })
 
 .controller('partitionCtrl', function($scope, wizardFactory, dataService) {

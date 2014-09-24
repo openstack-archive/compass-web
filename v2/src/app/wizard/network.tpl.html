@@ -100,7 +100,7 @@
                     <div class="space-10"></div>
 
                     <div class="center">
-                        <button ng-click="autofill(2500)" class="btn btn-sm btn-primary">
+                        <button ng-click="autofill(3000)" class="btn btn-sm btn-primary">
                             Fill Values
                         </button>
                     </div>
@@ -141,7 +141,7 @@
             </button>
         </div>
     </div>
-    <alert ng-repeat="alert in networkAlerts" class="autofill-success" type="success" close="closeNetworkAlert()">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in networkAlerts" class="autofill-success fade-animation" type="success">{{alert.msg}}</alert>
     <div class="row">
         <div class="space-6"></div>
         <table ng-table="tableParams" class="table table-hover table-striped">
