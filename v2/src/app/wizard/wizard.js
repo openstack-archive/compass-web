@@ -259,13 +259,13 @@ angular.module('compass.wizard', [
 
     $scope.stepForward = function() {
         $scope.pendingStep = $scope.currentStep + 1;;
-        $scope.triggerCommit($scope.currentStep);
+        $scope.triggerCommit($scope.currentStep, $scope.pendingStep);
     };
 
     // go to previous step
     $scope.stepBackward = function() {
         $scope.pendingStep = $scope.currentStep - 1;
-        $scope.triggerCommit($scope.currentStep);
+        $scope.triggerCommit($scope.currentStep, $scope.pendingStep);
     };
 
     // go to step by stepId
