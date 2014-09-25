@@ -1451,8 +1451,8 @@ angular.module('compass.wizard', [
         });
     };
 
-    $scope.onDrop = function($event, key) {
-        $scope.dragKey = key;
+    $scope.onDrop = function($event, server) {
+        $scope.dragKey = $scope.servers.indexOf(server);
     };
 
     $scope.dropSuccessHandler = function($event, role_value, key) {

@@ -993,6 +993,7 @@ circle[depth='4'] {
 .role-widget-box {
     position: fixed !important;
     margin-left: 0px !important;
+    z-index: 10;
 }
 .margin-left-neg4 {
     margin-left: -4px;
