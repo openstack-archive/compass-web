@@ -95,39 +95,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, value) in $data | filter: search" ng-init="value.roles = value.roles === undefinded? [] : value.roles"  ng-class="{'hightlight': value.checked}">
+                    <tr ng-repeat="server in $data | filter: search" ng-init="server.roles = server.roles === undefinded? [] : server.roles"  ng-class="{'hightlight': server.checked}">
                         <td>
                             <label>
-                                <input ng-model="value.checked" type="checkbox" class="ace">
+                                <input ng-model="server.checked" type="checkbox" class="ace">
                                 <span class="lbl"></span>
                             </label>
                         </td>
                         <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                             <span ng-switch on="column.field">
                                 <span ng-switch-when="os_installed">
-                                    <span ng-if="value['os']">
+                                    <span ng-if="server['os']">
                                         <label>
-                                            <input ng-model="value.reinstallos" type="checkbox" class="ace">
+                                            <input ng-model="server.reinstallos" type="checkbox" class="ace">
                                             <span class="lbl"></span>
                                         </label>
                                     </span>
-                                    <span ng-if="!value['os']">
+                                    <span ng-if="!server['os']">
                                         -
                                     </span>
                                 </span>
                                 <span ng-switch-when="clusters">
-                                    <span ng-repeat="cluster in value.clusters">
+                                    <span ng-repeat="cluster in server.clusters">
                                         {{cluster.name}}&nbsp;
                                     </span>
                                 </span>
                                 <span ng-switch-default>
-                                    {{value[column.field]}}
+                                    {{server[column.field]}}
                                 </span>
                             </span>
                         </td>
                         <td>
-                            <div class="role-assign-drop" ui-on-Drop="onDrop($event, key)" drag-hover-class="drag-enter-role" drop-channel="{{value.dropChannel}}">
-                                <alert ng-repeat="role in value['roles']" close="removeRole(value, role)" class="role-tag border-radius-4 fade-animation" ng-style="{'background-color': role.color}">
+                            <div class="role-assign-drop" ui-on-Drop="onDrop($event, server)" drag-hover-class="drag-enter-role" drop-channel="{{server.dropChannel}}">
+                                <alert ng-repeat="role in server['roles']" close="removeRole(server, role)" class="role-tag border-radius-4" ng-style="{'background-color': role.color}">
                                     {{role.display_name}}
                                 </alert>
                             </div>
