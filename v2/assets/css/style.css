@@ -181,6 +181,9 @@ select {
 .no-cluster-panel h4 {
     padding-top: 50px;
 }
+.widget-box {
+    padding-bottom: 20px;
+}
 .widget-body .table {
     border-top: 0px !important;
 }
@@ -975,25 +978,11 @@ circle[depth='4'] {
     background-color: #687074 !important;
     color: #FFF !important;
 }
-.role-assign-drop {
-    min-height: 25px;
-    min-width: 100px;
-    /* background-color: rgba(221, 221, 221, 0.32); */
-}
 .role-assign-drag {
     border: 1px solid rgba(190, 210, 219, 0.5) !important;
     border-radius: 4px;
     min-height: 120px;
-    min-width: 120px;
-}
-.role-table-padding {
-    padding: 0px 0px 15px 0px !important;
-    width: 87%;
-}
-.role-widget-box {
-    position: fixed !important;
-    margin-left: 0px !important;
-    z-index: 10;
+    width: 122px;
 }
 .margin-left-neg4 {
     margin-left: -4px;
@@ -1005,15 +994,26 @@ circle[depth='4'] {
     width: 105px !important;
     border-radius: 4px !important;
 }
-.drag-role-col {
-    width: 13%;
+.table-col {
+    width: 87%;
 }
 .role-col {
-    float: left !important;
-    min-height: 1px;
-    padding-left: 15px;
-    padding-right: 15px;
-    position: relative;
+    width: 10%;
+}
+.role-panel {
+    z-index: 10;
+}
+.role-panel.stick {
+    position: fixed;
+    z-index: 10000;
+    top: 0px;
+    /*top: 0;
+    z-index: 10000;
+    border-radius: 0 0 0.5em 0.5em;*/
+}
+.role-assign-drop {
+    min-height: 30px;
+    min-width: 150px;
 }
 .drag-enter-role {
     background: none repeat scroll 0 0 #F0F9FF;
