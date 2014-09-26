@@ -106,16 +106,6 @@ angular.module('compass.wizard', [
     $scope.steps = wizardStepsData["os_and_ts"];
     wizardFactory.setSteps($scope.steps);
 
-    // start loading spinner
-    $scope.startSpin = function() {
-        usSpinnerService.spin('spinner-1');
-    };
-
-    // stop loading spinner
-    $scope.stopSpin = function() {
-        usSpinnerService.stop('spinner-1');
-    };
-
     // Watch commit state change
     $scope.$watch(function() {
         $scope.loading = false;
@@ -209,9 +199,6 @@ angular.module('compass.wizard', [
             }
         }
         if (newStep == $scope.networkStep + 1) {
-            if ($scope.maxStep > $scope.roleAssignStep) {
-                $scope.steps[$scope.roleAssignStep].state = "incomplete";
-            }
             if ($scope.maxStep > $scope.networkMappingStep) {
                 $scope.steps[$scope.networkMappingStep].state = "incomplete";
             }
@@ -1692,24 +1679,44 @@ angular.module('compass.wizard', [
     };
 
 })
-    .directive('ngKeypress', function() {
-        return function(scope, element, attrs) {
-            element.bind("keydown keypress", function(event) {
-                if (event.which === 9) { // 9 is tab key
-                    var current = attrs.position;
-                    var result = current.split('_');
-                    var next = result[0] + "_" + (parseInt(result[1]) + 1);
-                    if ($("input[data-position=" + next + "]").length) {
 
-                        $("input[data-position=" + next + "]").focus();
-                    } else {
-                        $(".btn-next").focus();
-                    }
-                    event.preventDefault();
+.directive('ngKeypress', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown keypress", function(event) {
+            if (event.which === 9) { // 9 is tab key
+                var current = attrs.position;
+                var result = current.split('_');
+                var next = result[0] + "_" + (parseInt(result[1]) + 1);
+                if ($("input[data-position=" + next + "]").length) {
+
+                    $("input[data-position=" + next + "]").focus();
+                } else {
+                    $(".btn-next").focus();
                 }
-            });
-        };
-    });
+                event.preventDefault();
+            }
+        });
+    };
+})
+ 
+//Used for roles panel on Role Assignment page
+.directive("rolepanelscroll", function($window) {
+    return function(scope, element, attrs) {
+        angular.element($window).bind("scroll", function() {
+            var window_top = this.pageYOffset;
+            var sticky_anchor_elem = angular.element($('#sticky-anchor'));
+            if(sticky_anchor_elem.length != 0) {
+                var div_top = sticky_anchor_elem.offset().top;
+                if (window_top > div_top) {
+                    $('.role-panel').addClass('stick');
+                } else {
+                    $('.role-panel').removeClass('stick');
+                }
+                scope.$apply();
+            }
+        });
+    };
+});
 
 var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
     $scope.warning = warning;
