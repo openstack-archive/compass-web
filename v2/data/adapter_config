@@ -11,6 +11,11 @@
                         "ftype": "string",
                         "description": "help text"
                     },
+                    "local_repo": {
+                        "display": "Local Repo",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
                     "ntp_proxy": {
                         "display": "NTP Server",
                         "ftype": "string",

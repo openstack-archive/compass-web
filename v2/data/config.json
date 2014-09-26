@@ -47,7 +47,8 @@
         "dns_servers": [""],
         "search_path": ["ods.com"],
         "domain": "ods.com",
-        "default_gateway": "10.145.88.1"
+        "default_gateway": "10.145.88.1",
+        "local_repo": ""
     },
     "server_credentials": {
         "username": "root",
