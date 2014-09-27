@@ -124,6 +124,9 @@ select {
     border-radius: 7px;
     height: 33px;
 }
+select option[value=""], select.form-control option[value=""] {
+    padding: 3px 4px;
+}
 .opacity-zero {
     opacity: 0;
 }

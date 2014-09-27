@@ -813,7 +813,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         console.log(method, url, data);
 
         var subnetConfig = JSON.parse(data);
-        subnetConfig.subnet_id = Math.floor((Math.random() * 100) + 1);
+        subnetConfig.id = Math.floor((Math.random() * 100) + 1);
 
         console.log(subnetConfig);
         return [200, subnetConfig, {}];
