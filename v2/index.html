@@ -19,54 +19,13 @@
 
     <link rel="stylesheet" type="text/css" href="assets/css/shelf.css">
 
-    <script type="text/javascript" src="vendor/jquery/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- AngularJS v1.2.16 -->
-    <script type="text/javascript" src="vendor/angular/angular.min.js"></script> 
-    <script type="text/javascript" src="vendor/angular/angular-animate.min.js"></script> 
-    <script type="text/javascript" src="vendor/angular/angular-mocks.js"></script>
-    <script type="text/javascript" src="vendor/angular/angular-touch.js"></script>
-
-    <!--<script type="text/javascript" src="../vendor/angular/angular-resource.min.js"></script>-->
-    <script type="text/javascript" src="vendor/angular-ui-router/angular-ui-router.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls-0.11.0.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-dragdrop/draganddrop.js"></script>
-    <script type="text/javascript" src="vendor/ng-table/ng-table.min.js"></script>
-    <script type="text/javascript" src="vendor/d3/d3.min.js"></script>
-    <script type="text/javascript" src="vendor/nvd3/nv.d3.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-nvd3/angularjs-nvd3-directives.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-ui-tree/angular-ui-tree.min.js"></script>
-
-    <script type="text/javascript" src="vendor/rickshaw/rickshaw.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-rickshaw/rickshaw.min.js"></script>
-
-    <script type="text/javascript" src="vendor/angular-spinner/spin.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-spinner/angular-spinner.min.js"></script>
-
-    <script type="text/javascript" src="vendor/angular-daterangepicker/moment.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-daterangepicker/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="vendor/angular-daterangepicker/daterangepicker-bs3.css">
-    <script type="text/javascript" src="vendor/angular-daterangepicker/ng-bs-daterangepicker.js"></script>
 
-    <script type="text/javascript" src="src/app/app.js"></script>
-    <script type="text/javascript" src="src/app/appDev.js"></script>
-    <script type="text/javascript" src="src/app/login/login.js"></script>
-    <script type="text/javascript" src="src/app/services.js"></script>
-    <script type="text/javascript" src="src/app/topnav/topnav.js"></script>
-    <script type="text/javascript" src="src/app/wizard/wizard.js"></script>
-    <script type="text/javascript" src="src/app/cluster/cluster.js"></script>
-    <script type="text/javascript" src="src/app/cluster/clusterlist.js"></script>
-    <script type="text/javascript" src="src/app/monitoring/monitoring.js"></script>
-    <script type="text/javascript" src="src/app/server/server.js"></script>
-    <script type="text/javascript" src="src/common/charts.js"></script>
-    <script type="text/javascript" src="src/common/findservers/findservers.js"></script>
-    <script type="text/javascript" src="src/common/gantt-chart-d3v2.js"></script>
-    <script type="text/javascript" src="src/app/user/usersetting.js"></script>
-    <script type="text/javascript" src="src/app/user/userprofile.js"></script>
+    <script data-main="src/main.js" src="vendor/require.js"></script>
+
 </head>
 
-<body ng-app="compass" ng-controller="appController">
+<body ng-controller="appController">
     <div ng-if="isAuthenticated && !state.includes('login')">
         <div ng-controller="topnavCtrl">
             <div topnav></div>
@@ -75,7 +34,7 @@
 
     <div class="main-container no-skin">
 
-            <div ui-view></div>
+        <div ui-view></div>
 
     </div>
 

@@ -1,4 +1,5 @@
-var compassAppDev = angular.module('compassAppDev', ['compass', 'ngMockE2E']);
+define(['angular','angularMocks'],function(angular){
+var compassAppDev = angular.module('compassAppDev', ['ngMockE2E']);
 
 compassAppDev.run(function($httpBackend, settings, $http) {
     var progressPercent = 0;
@@ -1738,4 +1739,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }];
         return [200, metricData, {}];
     });
+});
+return compassAppDev;
 });
