@@ -137,7 +137,7 @@
                 <span class="add-on input-group-addon">
                     <i class="fa fa-calendar"></i>
                 </span>
-                <input type="daterange" class="form-control date-picker-width" ng-model="dateRange" enableTimePicker="true" format="M/DD/YYYY h:mm A">
+                <input type="daterange" data-daterangepicker="" class="form-control date-picker-width" ng-model="dateRange" enableTimePicker="true" format="M/DD/YYYY h:mm A">
             </div>
             <div class="table-responsive">
                 <table ng-table="userParams" class="ng-table table table-striped table-hover nowrap">
@@ -163,6 +163,7 @@
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr ng-repeat="userLog in $data | filter:searchActivity | timeStampFilter:dateRange">
                             <td sortable="'user_id'">
