@@ -1,37 +1,11 @@
-angular.module('compass.services', [])
+define(['angular'],function(angular){
+var services_module = angular.module('compass.services', []);
 
-// stateService is used for dynamically add/edit state
-/*
-.service('stateService', ['$state',
-    function($state) {
-        this.addStates = function(pendingStates) {
-            var existingStates = $state.get(); // get all the current existing states
-            var alreadyExist = false; // flag - if the pending state is already in the states
-
-            angular.forEach(pendingStates, function(pst) {
-                angular.forEach(existingStates, function(est) {
-                    if (pst.name == est.name) {
-                        alreadyExist = true;
-                    }
-                });
-                if (!alreadyExist) {
-                    app.stateProvider.state(pst.name, {
-                        url: pst.url,
-                        //controller: pst.controller,
-                        templateUrl: 'src/app/monitoring/' + pst.url.substring(1) + '.tpl.html'
-                    });
-                }
-                alreadyExist = false;
-            });
-        }
-    }
-])
-*/
 
 // dataService is used for http calls
-.service('dataService', ['$http', 'settings',
-    function($http, settings) {
-
+services_module.service('dataService', ['$http','settings',  //settings is global constant
+    function($http,settings) {
+        
         this.login = function(user) {
             return $http.post(settings.apiUrlBase + '/users/login', angular.toJson(user));
         };
@@ -302,7 +276,7 @@ angular.module('compass.services', [])
     }
 ])
 
-.service('sortingService', function() {
+services_module.service('sortingService', function() {
     this.ipAddressPre = function(a) {
         var m = a.split("."),
             x = "";
@@ -322,7 +296,7 @@ angular.module('compass.services', [])
 })
 
 
-.factory('wizardFactory', [
+services_module.factory('wizardFactory', [
 
     function() {
         var wizard = {};
@@ -484,7 +458,7 @@ angular.module('compass.services', [])
     }
 ])
 
-.service('authService', ['$http', 'dataService',
+services_module.service('authService', ['$http', 'dataService',
     function($http, dataService) {
         this.isAuthenticated = false;
 
@@ -501,3 +475,5 @@ angular.module('compass.services', [])
         };
     }
 ])
+return services_module;
+})
