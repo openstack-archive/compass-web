@@ -3,7 +3,7 @@
     <div class="page-content" ng-swipe-disable-mouse ng-swipe-right="stepForward()" ng-swipe-left="stepBackward()" >
         <div class="page-header">
             <h1>Create Cluster Wizard</h1>
-            <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span>
+            <!-- <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span> -->
         </div>
         <div id="create-cluster-wizard">
             <ul class="wizard-steps">
@@ -26,7 +26,7 @@
                 <div class="widget-body">
                     <div class="widget-main padding-32">
                         <span us-spinner ng-if="loading == true" style="position: relative !important; left: 47%"></span>
-                        <div ng-hide = "loading == true" ng-include="steps[currentStep-1].template"></div>
+                        <div ng-hide="loading == true" ng-include="steps[currentStep-1].template"></div>
                     </div>
                 </div>
             </div>
