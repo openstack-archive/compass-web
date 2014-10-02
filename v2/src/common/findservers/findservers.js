@@ -97,14 +97,7 @@ define(['angular'], function() {
                     });
 
                     modalInstance.result.then(function(targetSwitch) {
-                        scope.alerts = [];
-                        dataService.putSwitches(targetSwitch.id, targetSwitch).success(function() {
-
-                            scope.switches[index] = angular.copy(targetSwitch);
-
-                        }).error(function(response) {
-                            scope.alerts[0] = response;
-                        });
+                        scope.switches[index] = angular.copy(targetSwitch);
                     }, function() {
                         $log.info('Modal dismissed at: ' + new Date());
                     });
@@ -190,10 +183,23 @@ define(['angular'], function() {
             }
         };
     });
-    var modifySwitchModalInstanceCtrl = function($scope, $modalInstance, targetSwitch) {
+
+    var modifySwitchModalInstanceCtrl = function($scope, $modalInstance, dataService, targetSwitch) {
         $scope.targetSwitch = angular.copy(targetSwitch);
+
         $scope.ok = function() {
-            $modalInstance.close($scope.targetSwitch);
+            $scope.alerts = [];
+            var updatedSwitch = {
+                "ip": $scope.targetSwitch.ip,
+                "filters": $scope.targetSwitch.filters,
+                "credentials": $scope.targetSwitch.credentials
+            };
+
+            dataService.putSwitches(targetSwitch.id, updatedSwitch).success(function(data) {
+                $modalInstance.close(data);
+            }).error(function(response) {
+                $scope.alerts[0] = response;
+            });
         };
 
         $scope.cancel = function() {

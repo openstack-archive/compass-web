@@ -342,6 +342,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
     $httpBackend.whenPUT(/\.*\/switches\/([0-9]|[1-9][0-9])$/).respond(function(method, url, data) {
         console.log(method, url, data);
         var sw = JSON.parse(data);
+        var id = url.substring(url.lastIndexOf("/") + 1);
+        sw.id = parseInt(id);
         return [200, sw, {}];
     });
 
