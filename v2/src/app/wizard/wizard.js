@@ -108,7 +108,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         // Watch commit state change
         $scope.$watch(function() {
-            $scope.loading = false;
             return wizardFactory.getCommitState()
         }, function(newCommitState, oldCommitState) {
             if (newCommitState != oldCommitState && newCommitState.name == $scope.steps[$scope.currentStep - 1].name) {
@@ -404,7 +403,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             if (noSelection) {
                 var message = {
                     "message": "Please select at least one server"
-                }
+                };
                 var commitState = {
                     "name": "sv_selection",
                     "state": "error",
@@ -502,20 +501,20 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         //For Routing Table Section
         //keep routing table for later use
         /*
-    $scope.routingtable = wizardFactory.getRoutingTable();
-    $scope.addRoute = function() {
-        $scope.routingtable.push({});
-        console.log($scope.routingtable);
-    };
-    $scope.removeRoute = function(index) {
-        $scope.routingtable.splice(index, 1)
-    };
-    $scope.$watch('routingtable', function() {
-        if ($scope.routingtable.length == 0) {
+        $scope.routingtable = wizardFactory.getRoutingTable();
+        $scope.addRoute = function() {
             $scope.routingtable.push({});
-        }
-    }, true);
-    */
+            console.log($scope.routingtable);
+        };
+        $scope.removeRoute = function(index) {
+            $scope.routingtable.splice(index, 1)
+        };
+        $scope.$watch('routingtable', function() {
+            if ($scope.routingtable.length == 0) {
+                $scope.routingtable.push({});
+            }
+        }, true);
+        */
 
         $scope.$watch(function() {
             return wizardFactory.getCommitState()
@@ -564,8 +563,13 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             } else {
                 var message = {
                     "message": "The required(*) fields can not be empty !"
-                }
-                $scope.openErrMessageModal(message);
+                };
+                var commitState = {
+                    "name": "os_global",
+                    "state": "error",
+                    "message": message
+                };
+                wizardFactory.setCommitState(commitState);
             }
 
         };
@@ -573,35 +577,35 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         // keey routing table for later use
         /*
-    $scope.updateRoutingTable = function() {
-        var routingCount = $scope.routingtable.length;
-        var routingTable = [];
-        var i = 0;
-        angular.forEach($scope.routingtable, function(rt) {
-            if (rt.id === undefined) {
-                // post routing table
-                dataService.postRoutingTable(cluster.id, rt).success(function(routingData) {
-                    routingTable.push(routingData);
-                    i++;
-                    if (i == routingCount) {
-                        $scope.routingtable = routingTable;
-                        wizardFactory.setRoutingTable(routingTable);
-                    }
-                })
-            } else {
-                // put routing table
-                dataService.putRoutingTable(cluster.id, rt.id, rt).success(function(routingData) {
-                    routingTable.push(routingData);
-                    i++;
-                    if (i == routingCount) {
-                        $scope.routingtable = routingTable;
-                        wizardFactory.setRoutingTable(routingTable);
-                    }
-                })
-            }
-        })
-    };
-    */
+        $scope.updateRoutingTable = function() {
+            var routingCount = $scope.routingtable.length;
+            var routingTable = [];
+            var i = 0;
+            angular.forEach($scope.routingtable, function(rt) {
+                if (rt.id === undefined) {
+                    // post routing table
+                    dataService.postRoutingTable(cluster.id, rt).success(function(routingData) {
+                        routingTable.push(routingData);
+                        i++;
+                        if (i == routingCount) {
+                            $scope.routingtable = routingTable;
+                            wizardFactory.setRoutingTable(routingTable);
+                        }
+                    })
+                } else {
+                    // put routing table
+                    dataService.putRoutingTable(cluster.id, rt.id, rt).success(function(routingData) {
+                        routingTable.push(routingData);
+                        i++;
+                        if (i == routingCount) {
+                            $scope.routingtable = routingTable;
+                            wizardFactory.setRoutingTable(routingTable);
+                        }
+                    })
+                }
+            })
+        };
+        */
     });
 
     wizardModule.controller('networkCtrl', function($scope, $timeout, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q, $modal) {

@@ -28,7 +28,7 @@ require.config({
         'login': 'app/login/login',
         'services': 'app/services',
         'appDev': 'app/appDev',
-        'clusterList': 'app/cluster/clusterList',
+        'clusterList': 'app/cluster/clusterlist',
         'cluster': 'app/cluster/cluster',
         'wizard': 'app/wizard/wizard',
         'topnav': 'app/topnav/topnav',
