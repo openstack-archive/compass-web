@@ -376,7 +376,52 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                             })
                             .attr("width", imgWidth)
                             .attr("height", imgHeight)
-                            .on("click", click);
+                            .on("click", click)
+                            .on("mouseover", function(d) {
+                                if (d.depth > 1) {
+                                    var foWidth = 300;
+
+                                    var fo = svg.append("foreignObject")
+                                        .attr({
+                                            "x": d.y + 100,
+                                            "y": d.x + 25,
+                                            "width": foWidth,
+                                            "class": "svg-tooltip"
+                                        });
+                                    var div = fo.append("xhtml:div")
+                                        .append("div")
+                                        .attr("class", "tip");
+
+                                    var table = div.append("table")
+                                        .style("width", "100%");
+
+                                    var tr_hostname = table.append("tr");
+                                    tr_hostname.append("td")
+                                        .attr("class", "pull-right")
+                                        .style("font-weight", "bold")
+                                        .html("Hostname");
+                                    tr_hostname.append("td")
+                                        .attr("class", "padding-left-15")
+                                        .html(d.name);
+
+                                    var tr_state = table.append("tr");
+                                    tr_state.append("td")
+                                        .attr("class", "pull-right")
+                                        .style("font-weight", "bold")
+                                        .html("State");
+                                    tr_state.append("td")
+                                        .attr("class", "padding-left-15")
+                                        .html(d.state);
+
+                                    var foHeight = div[0][0].getBoundingClientRect().height;
+                                    fo.attr({
+                                        "height": foHeight
+                                    });
+                                }
+                            })
+                            .on("mouseout", function() {
+                                svg.selectAll(".svg-tooltip").remove();
+                            });
 
                         nodeEnter.append("image")
                             .attr("xlink:href", function(d) {
