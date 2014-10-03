@@ -28,15 +28,16 @@
                 <!-- Nested node template -->
                 <script type="text/ng-template" id="nodes_renderer.html">
                     <div ui-tree-handle class="tree-node tree-node-content">
-                        <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" ng-class="{'opacity-zero': node.nodes.length == 0 || !node.nodes}">
+                        <a class="btn btn-success btn-xs" data-nodrag ng-click="toggleTab(this)" ng-class="{'opacity-zero': node.nodes.length == 0 || !node.nodes}">
                             <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
                         </a>
+                        <input type="checkbox" ng-if="node.nodes.length == 0 || !node.nodes" ng-click="generate(node)"></input>
                         {{node.title}}
-                        <a style="margin-right: 8px;" ng-click="generate(node)" data-nodrag="" class="pull-right btn btn-primary btn-xs no-border" ng-hide="node.nodes.length != 0">
+                        <!--a style="margin-right: 8px;" ng-click="generate(node)" data-nodrag="" class="pull-right btn btn-primary btn-xs no-border" ng-hide="node.nodes.length != 0">
                             <span class="glyphicon glyphicon-chevron-right"></span>
-                        </a>
+                        </a-->
                     </div>
-                    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}" ng-if="clickedHashTable[node.title]">
                         <li ng-repeat="node in node.nodes" ui-tree-node data-collapsed="true" ng-include="'nodes_renderer.html'">
                         </li>
                     </ol>

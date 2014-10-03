@@ -110,7 +110,7 @@ define(['angularAnimate', 'angularRickshaw', 'angularUiTree', 'nvd3Directive'], 
 
     monitoringModule.controller('metricsCtrl', function($scope, dataService, $stateParams) {
         var clusterId = $stateParams.id;
-
+        $scope.clickedHashTable ={};  
         $scope.metricsTree = [];
         dataService.monitorMetricsTree().success(function(data) {
             $scope.metricsTree = data;
@@ -139,10 +139,17 @@ define(['angularAnimate', 'angularRickshaw', 'angularUiTree', 'nvd3Directive'], 
         };
 
         // For Angular UI Tree
-        $scope.toggle = function(scope) {
-            scope.toggle();
-        };
+        // $scope.toggle = function(scope) {
+        //     scope.toggle();
+        // };
 
+        $scope.toggleTab = function(scope) {
+            var choice = scope.$element.text().trim();
+            if (!$scope.clickedHashTable[choice]) {
+                $scope.clickedHashTable[choice] = true;
+            }
+            scope.toggle();
+        }
         var getRootNodesScope = function() {
             return angular.element(document.getElementById("tree-root")).scope();
         };
