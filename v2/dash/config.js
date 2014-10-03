@@ -14,7 +14,8 @@ function (Settings) {
       metricsdb: {
         type: 'kairosdb',
         //url: "http://metrics:8080",
-        url: "http://localhost",
+        //url: "http://localhost",
+        url: "/monit/api/v1",
         default: true
       },
 /*
