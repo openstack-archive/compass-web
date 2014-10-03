@@ -14,7 +14,7 @@ define(['uiRouter'], function() {
             });
     });
 
-    loginModule.controller('loginCtrl', function($scope, authService, $state) {
+    loginModule.controller('loginCtrl', function($scope, authService, $state, rememberMe) {
         $scope.alerts = [];
 
         $scope.login = function() {
@@ -24,7 +24,8 @@ define(['uiRouter'], function() {
                 "password": $scope.password
             };
             authService.login(credentials).success(function(data) {
-                authService.isAuthenticated = true;
+                rememberMe.setCookies("isAuthenticated","true",30,Boolean($scope.remember));
+                //authService.isAuthenticated = true;
                 $state.transitionTo("clusterList");
             }).error(function(response) {
                 console.log(response);
