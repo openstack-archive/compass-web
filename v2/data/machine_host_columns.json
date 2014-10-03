@@ -123,6 +123,10 @@
         "field": "port",
         "visible": true
     }, {
+        "title": "Mgmt IP",
+        "field": "ip",
+        "visible": true
+    }, {
         "title": "VLAN",
         "field": "vlan",
         "visible": false
