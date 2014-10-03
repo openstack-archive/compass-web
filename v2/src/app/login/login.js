@@ -14,17 +14,19 @@ define(['uiRouter'], function() {
             });
     });
 
-    loginModule.controller('loginCtrl', function($scope, authService, $state) {
+    loginModule.controller('loginCtrl', function($scope, authService, $state, rememberMe) {
         $scope.alerts = [];
 
         $scope.login = function() {
             $scope.alerts = [];
             var credentials = {
                 "email": $scope.email,
-                "password": $scope.password
+                "password": $scope.password,
+                "remember": Boolean($scope.remember)
             };
             authService.login(credentials).success(function(data) {
-                authService.isAuthenticated = true;
+                rememberMe.setCookies("isAuthenticated","true",0.0833,Boolean($scope.remember));
+                //authService.isAuthenticated = true;
                 $state.transitionTo("clusterList");
             }).error(function(response) {
                 console.log(response);
