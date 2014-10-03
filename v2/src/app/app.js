@@ -38,11 +38,17 @@ define([
     });
     compassModule.config(function($stateProvider, $urlRouterProvider) {
         compassModule.stateProvider = $stateProvider;
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/clusterlist');
     });
-    compassModule.run(function($rootScope, $state, authService) {
+    compassModule.config(function($httpProvider){
+        $httpProvider.interceptors.push('authenticationInterceptor');
+    });
+    compassModule.run(function($rootScope, $state, authService, rememberMe) {
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-            if (toState.authenticate && !authService.isAuthenticated) {
+            if (authService.isAuthenticated == false) {
+                rememberMe.setCookies("isAuthenticated", "false", -365);
+            }
+            if (toState.authenticate && rememberMe.getCookie('isAuthenticated') != "true") {
                 // User isn't authenticated
                 $state.transitionTo("login");
                 event.preventDefault();
