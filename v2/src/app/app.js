@@ -38,18 +38,21 @@ define([
     });
     compassModule.config(function($stateProvider, $urlRouterProvider) {
         compassModule.stateProvider = $stateProvider;
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/clusterlist');
     });
-    compassModule.run(function($rootScope, $state, authService) {
+    compassModule.config(function($httpProvider){
+        $httpProvider.interceptors.push('authenticationInterceptor');
+    });
+    compassModule.run(function($rootScope, $state, authService, rememberMe) {
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-            if (toState.authenticate && !authService.isAuthenticated) {
+            if (toState.authenticate && rememberMe.getCookie('isAuthenticated') != "true") {
                 // User isn't authenticated
                 $state.transitionTo("login");
                 event.preventDefault();
             }
         });
     });
-    compassModule.controller('appController', function($scope, authService, $state) {
+    compassModule.controller('appController', function($scope, authService, $state, rememberMe) {
         $scope.currentUser = null;
         $scope.isAuthenticated = authService.isAuthenticated;
         $scope.state = $state;
@@ -61,8 +64,13 @@ define([
         })
 
         $scope.logout = function() {
-            authService.isAuthenticated = false;
-            $state.transitionTo("login");
+            authService.logout().success(function(data) {
+                rememberMe.setCookies("isAuthenticated", "false", -30);
+                $state.transitionTo("login");
+            }).error(function(response) {
+                console.log(response);
+                $scope.alerts.push(response);
+            })
         }
     });
 
