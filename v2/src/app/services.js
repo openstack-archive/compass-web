@@ -232,6 +232,11 @@ define(['angular'], function() {
                 return $http.get(settings.monitoringUrlBase + '/metrics');
             };
 
+            this.monitorMetricsName = function() {
+
+                return $http.get(settings.monitoringUrlBase + '/metricsName');
+            };
+
             this.monitorMetricsTree = function() {
                 // This will also order the metrics in a tree
                 // /monit/api/metricstree
