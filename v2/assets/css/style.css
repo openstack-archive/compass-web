@@ -13,9 +13,6 @@ body {
     font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif !important;
     color: rgba(83, 83, 83, 1) !important;
 }
-.main-container {
-    position: relative;
-}
 body, .main-content {
     background: #fff;
     /* right: 0px;
@@ -98,14 +95,16 @@ body, .main-content {
     display: inline-block;
     font-size: 13px;
     font-weight: normal;
-    margin-bottom: 3px;
+    margin-bottom: 3px !important;
     margin-right: 3px;
     padding: 4px 22px 5px 9px;
     position: relative;
+    text-transform: capitalize;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease 0s;
     vertical-align: baseline;
     white-space: nowrap;
+    overflow: hidden;
 }
 .no-border-search {
     padding-left: 10px;
@@ -234,6 +233,9 @@ input.ace[type="checkbox"] + .lbl:before, input.ace[type="radio"] + .lbl:before 
 button[disabled] {
     pointer-events: auto !important;
     cursor: not-allowed !important;
+}
+.wizard-steps li .title {
+    white-space: nowrap;
 }
 .wizard-steps li.active .step {
     transform: scale(1.2, 1.2);
@@ -445,6 +447,9 @@ a:active {
 .label:first-letter {
     text-transform: uppercase !important;
 }
+.label-red {
+    background-color: #e2755f !important;
+}
 .capitalize {
     text-transform: capitalize;
 }
@@ -626,8 +631,9 @@ div.center-align {
 
 .network-draggable {
     position: relative;
-    width: 132px !important;
+    width: 155px !important;
     border-radius: 7px;
+    cursor: move;
 }
 .external-event {
     float: left !important;
@@ -985,24 +991,27 @@ circle[depth='4'] {
     margin-left: -4px;
 }
 .table-col {
-    width: 87%;
+    width: 75%;
 }
 .role-col {
-    width: 10%;
+    width: 24%;
 }
 .role-panel {
     z-index: 10;
+    margin-left: 10px;
+    margin-right: -25px;
 }
 .role-panel.stick {
     position: fixed;
     z-index: 10000;
     top: 0px;
+    width: 24%;
 }
 .role-assign-drag {
     border: 1px solid rgba(190, 210, 219, 0.5) !important;
     border-radius: 4px;
     min-height: 120px;
-    width: 122px;
+    width: 90%;
 }
 .role-assign-drop {
     min-height: 30px;
@@ -1012,8 +1021,8 @@ circle[depth='4'] {
     margin-left: 7px;
     margin-top: 7px;
     display: block !important;
-    width: 105px !important;
     border-radius: 4px !important;
+    cursor: move;
 }
 .drag-enter-role {
     background: none repeat scroll 0 0 #F0F9FF;

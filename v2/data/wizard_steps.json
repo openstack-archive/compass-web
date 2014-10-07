@@ -5,7 +5,7 @@
         "title": "Server Selection",
         "state": "active",
         "template": "src/app/wizard/server_selection.tpl.html",
-        "description": "Select the servers you want to use for OpenStack"
+        "description": "Select the servers you want to use for your target system(s)"
     }, {
         "id": 2,
         "name": "os_global",
@@ -29,10 +29,10 @@
         "description": ""
     }, {
         "id": 5,
-        "name": "security",
-        "title": "Security",
+        "name": "package_config",
+        "title": "Target System Config",
         "state": "",
-        "template": "src/app/wizard/security.tpl.html",
+        "template": "src/app/wizard/package_config.tpl.html",
         "description": ""
     }, {
         "id": 6,
@@ -58,39 +58,39 @@
     }],
     "os": [{
         "id": 1,
+        "name": "sv_selection",
         "title": "Server Selection",
         "state": "active",
-        "template": "templates/server_selection.html"
+        "template": "src/app/wizard/server_selection.tpl.html",
+        "description": "Select the servers you want to use for your targer system(s)"
     }, {
         "id": 2,
-        "title": "Timezone & Language",
+        "name": "os_global",
+        "title": "OS Global Config",
         "state": "",
-        "template": "templates/timezone_language.html"
+        "template": "src/app/wizard/global.tpl.html",
+        "description": ""
     }, {
         "id": 3,
-        "title": "Partition",
-        "state": "",
-        "template": "templates/partition.html"
-    }, {
-        "id": 4,
+        "name": "network",
         "title": "Network",
         "state": "",
-        "template": "templates/network.html"
+        "template": "src/app/wizard/network.tpl.html",
+        "description": ""
+    }, {
+        "id": 4,
+        "name": "partition",
+        "title": "Partition",
+        "state": "",
+        "template": "src/app/wizard/partition.tpl.html",
+        "description": ""
     }, {
         "id": 5,
-        "title": "Host Configuration",
-        "state": "",
-        "template": "templates/host_config.html"
-    }, {
-        "id": 6,
-        "title": "Security",
-        "state": "",
-        "template": "templates/security.html"
-    }, {
-        "id": 7,
+        "name": "review",
         "title": "Review",
         "state": "",
-        "template": "templates/review.html"
+        "template": "src/app/wizard/review.tpl.html",
+        "description": "Click a section title to navigate back to that page."
     }],
     "ts": [{
         "id": 1,
