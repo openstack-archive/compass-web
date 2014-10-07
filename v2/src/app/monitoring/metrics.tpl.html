@@ -17,13 +17,17 @@
             <button class="btn btn-primary" ng-click="changeSeriesData(0)">Generate Metrics Report</button>
         </form-->
         <!--div class="panel-body" id="metricsGraphContainer"> </div-->
+
         <div class="row">
             <div class="col-md-4 col-sm-6">
+
                 <h3>
                     Metrics Browser
                     <a href="" class="btn btn-default btn-xs pull-right" ng-click="collapseAll()">Collapse all</a>
                     <a href="" class="btn btn-default btn-xs pull-right margin-right-5" ng-click="expandAll()">Expand all</a>
                 </h3>
+                <div multi-select allnames="metricsName"></div>
+                <hr>
 
                 <!-- Nested node template -->
                 <script type="text/ng-template" id="nodes_renderer.html">
@@ -47,6 +51,7 @@
                     <li ng-repeat="node in metricsTree" ui-tree-node data-collapsed="true" ng-include="'nodes_renderer.html'"></li>
                   </ol>
                 </div>
+
             </div>
 
             <div class="col-md-8 col-sm-6">
