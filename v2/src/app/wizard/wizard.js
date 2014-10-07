@@ -33,7 +33,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         });
                         return deferred.promise;
                     },
-                    wizardStepsData: function($q, dataService) {
+                    wizardStepsData: function($q, dataService) { // get the create-cluster-wizard steps
                         var deferred = $q.defer();
                         dataService.getWizardSteps().success(function(data) {
                             deferred.resolve(data);
@@ -47,64 +47,102 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                             deferred.resolve(data);
                         });
                         return deferred.promise;
+                    },
+                    adaptersData: function($q, dataService) {
+                        var deferred = $q.defer();
+                        dataService.getAdapters().success(function(data) {
+                            deferred.resolve(data);
+                        });
+                        return deferred.promise;
                     }
                 }
             });
     });
 
-    wizardModule.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, $modal, clusterData, machinesHostsData, wizardStepsData, clusterConfigData) {
+    wizardModule.controller('wizardCtrl', function($scope, dataService, wizardFactory, $stateParams, $state, $modal, clusterData, adaptersData, machinesHostsData, wizardStepsData, clusterConfigData) {
         $scope.loading = false;
         $scope.clusterId = $stateParams.id;
         $scope.cluster = clusterData;
         wizardFactory.setClusterInfo($scope.cluster);
         wizardFactory.setAllMachinesHost(machinesHostsData);
 
+        $scope.adapters = adaptersData;
+
+        angular.forEach($scope.adapters, function(adapter) {
+            if (adapter.id == $scope.cluster.adapter_id) {
+                $scope.currentAdapterName = adapter.name;
+            }
+        });
+
+
+
+        // get pre-config data for wizard and set wizard steps based on different adapters
         var oldConfig = clusterConfigData;
+        $scope.steps = [];
+        if ($stateParams.config == "true") {
+            dataService.getWizardPreConfig().success(function(data) {
+                var preConfigData = {};
+                switch ($scope.currentAdapterName) {
+                    case "openstack_icehouse":
+                        preConfigData = data["openstack"];
+                        $scope.steps = wizardStepsData["os_and_ts"];
+                        wizardFactory.setSteps($scope.steps);
+                        break;
+                    case "os_only":
+                        preConfigData = data["os_only"];
+                        $scope.steps = wizardStepsData["os"];
+                        wizardFactory.setSteps($scope.steps);
+                        break;
+                    case "ceph_openstack_icehouse":
+                        preConfigData = data["openstack_ceph"];
+                        $scope.steps = wizardStepsData["os_and_ts"];
+                        wizardFactory.setSteps($scope.steps);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (preConfigData) {
+                    wizardFactory.preConfig(preConfigData);
+
+                    if (oldConfig.os_config) {
+                        if (oldConfig.os_config.general) {
+                            wizardFactory.setGeneralConfig(oldConfig.os_config.general);
+                        }
+                        if (oldConfig.os_config.partition) {
+                            wizardFactory.setPartition(oldConfig.os_config.partition);
+                        }
+                        if (oldConfig.os_config.server_credentials) {
+                            wizardFactory.setServerCredentials(oldConfig.os_config.server_credentials);
+                        }
+                    }
+                    if (oldConfig.package_config) {
+                        if (oldConfig.package_config.security) {
+                            if (oldConfig.package_config.security.service_credentials) {
+                                wizardFactory.setServiceCredentials(oldConfig.package_config.security.service_credentials);
+                            }
+                            if (oldConfig.package_config.security.console_credentials) {
+                                wizardFactory.setConsoleCredentials(oldConfig.package_config.security.console_credentials);
+                            }
+                        }
+                        if (oldConfig.package_config.network_mapping) {
+                            wizardFactory.setNetworkMapping(oldConfig.package_config.network_mapping);
+                        }
+                        if (oldConfig.package_config.ceph_config) {
+                            wizardFactory.setCephConfig(oldConfig.package_config.ceph_config);
+                        }
+                    }
+                }
+            });
+        }
 
         $scope.$on('loading', function(event, data) {
             $scope.loading = data;
         });
 
-        // get pre-config data for wizard
-        if ($stateParams.config == "true") {
-            dataService.getWizardPreConfig().success(function(data) {
-                wizardFactory.preConfig(data);
-
-                if (oldConfig.os_config) {
-                    if (oldConfig.os_config.general) {
-                        wizardFactory.setGeneralConfig(oldConfig.os_config.general);
-                    }
-                    if (oldConfig.os_config.partition) {
-                        wizardFactory.setPartition(oldConfig.os_config.partition);
-                    }
-                    if (oldConfig.os_config.server_credentials) {
-                        wizardFactory.setServerCredentials(oldConfig.os_config.server_credentials);
-                    }
-                }
-                if (oldConfig.package_config) {
-                    if (oldConfig.package_config.security) {
-                        if (oldConfig.package_config.security.service_credentials) {
-                            wizardFactory.setServiceCredentials(oldConfig.package_config.security.service_credentials);
-                        }
-                        if (oldConfig.package_config.security.console_credentials) {
-                            wizardFactory.setConsoleCredentials(oldConfig.package_config.security.console_credentials);
-                        }
-                    }
-                    if (oldConfig.package_config.network_mapping) {
-                        wizardFactory.setNetworkMapping(oldConfig.package_config.network_mapping);
-                    }
-                }
-
-            });
-        }
-
         $scope.currentStep = 1;
         $scope.maxStep = 1;
         $scope.pendingStep = 1;
-
-        // get the create-cluster-wizard steps for os, ts or os_and_ts
-        $scope.steps = wizardStepsData["os_and_ts"];
-        wizardFactory.setSteps($scope.steps);
 
         // Watch commit state change
         $scope.$watch(function() {
@@ -479,6 +517,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         var cluster = wizardFactory.getClusterInfo();
 
         $scope.general = wizardFactory.getGeneralConfig();
+        $scope.server_credentials = wizardFactory.getServerCredentials();
 
         if (!$scope.general["dns_servers"]) {
             $scope.general["dns_servers"] = [""];
@@ -538,13 +577,17 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 return;
             }
             $scope.$emit("loading", true);
-            var os_global_general = {
+            var osGlobalConfig = {
                 "os_config": {
-                    "general": $scope.general
+                    "general": $scope.general,
+                    "server_credentials": {
+                        "username": $scope.server_credentials.username,
+                        "password": $scope.server_credentials.password
+                    }
                 }
             };
             if ($scope.generalForm.$valid) {
-                dataService.updateClusterConfig(cluster.id, os_global_general).success(function(configData) {
+                dataService.updateClusterConfig(cluster.id, osGlobalConfig).success(function(configData) {
                     wizardFactory.setGeneralConfig($scope.general);
                     var commitState = {
                         "name": "os_global",
@@ -571,7 +614,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 };
                 wizardFactory.setCommitState(commitState);
             }
-
         };
 
 
@@ -919,7 +961,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.partition[mount_point].percentage = $scope.newPartition.percentage;
         $scope.partition[mount_point].max_size = $scope.newPartition.max_size;
         $scope.newPartition = {};
-    };*/
+        };*/
 
         $scope.addPartition = function() {
             var newRowExist = false;
@@ -1062,11 +1104,10 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 });
             }
         };
-    })
+    });
 
-    wizardModule.controller('securityCtrl', function($scope, wizardFactory, dataService) {
+    wizardModule.controller('packageConfigCtrl', function($scope, wizardFactory, dataService) {
         var cluster = wizardFactory.getClusterInfo();
-        $scope.server_credentials = wizardFactory.getServerCredentials();
         $scope.service_credentials = wizardFactory.getServiceCredentials();
         $scope.console_credentials = wizardFactory.getConsoleCredentials();
 
@@ -1092,7 +1133,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             return wizardFactory.getCommitState()
         }, function(newCommitState, oldCommitState) {
             if (newCommitState !== undefined) {
-                if (newCommitState.name == "security" && newCommitState.state == "triggered") {
+                if (newCommitState.name == "package_config" && newCommitState.state == "triggered") {
                     $scope.commit(newCommitState.sendRequest);
                 }
             }
@@ -1167,10 +1208,19 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             $scope.service_credentials = angular.copy($scope.originalServiceData);
         }
 
+        // Ceph Config
+        $scope.cephAccordion = {};
+        /*$scope.cephConfig = {
+            "global_config": {},
+            "osd_config": {},
+            "osd_devices": {}
+        };*/
+        $scope.cephConfig = wizardFactory.getCephConfig();
+
         $scope.commit = function(sendRequest) {
             if (!sendRequest) {
                 var commitState = {
-                    "name": "security",
+                    "name": "package_config",
                     "state": "goToPreviousStep",
                     "message": ""
                 };
@@ -1178,13 +1228,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 return;
             }
             $scope.$emit("loading", true);
-            var securityData = {
-                "os_config": {
-                    "server_credentials": {
-                        "username": $scope.server_credentials.username,
-                        "password": $scope.server_credentials.password
-                    }
-                },
+            var targetSysConfigData = {
                 "package_config": {
                     "security": {
                         "service_credentials": $scope.service_credentials,
@@ -1192,16 +1236,19 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     }
                 }
             };
-            dataService.updateClusterConfig(cluster.id, securityData).success(function(data) {
+            if($scope.currentAdapterName == "ceph_openstack_icehouse") {
+                targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
+            }
+            dataService.updateClusterConfig(cluster.id, targetSysConfigData).success(function(data) {
                 var commitState = {
-                    "name": "security",
+                    "name": "package_config",
                     "state": "success",
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
             }).error(function(response) {
                 var commitState = {
-                    "name": "security",
+                    "name": "package_config",
                     "state": "error",
                     "message": response
                 };
@@ -1236,7 +1283,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 angular.forEach($scope.servers[key].roles, function(server_role, server_role_key) {
                     $scope.server_role = "";
                     angular.forEach($scope.roles, function(role, role_key) {
-                        if (server_role.display_name == $scope.roles[role_key].display_name) {
+                        if (server_role.name == $scope.roles[role_key].name) {
                             $scope.server_role = role_key;
                         }
                     });
@@ -1263,7 +1310,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             var roleIndex = $scope.servers[serverIndex].roles.indexOf(role);
             $scope.servers[serverIndex].roles.splice(roleIndex, 1);
             angular.forEach($scope.roles, function(role_value, role_key) {
-                if (role.display_name == $scope.roles[role_key].display_name) {
+                if (role.name == $scope.roles[role_key].name) {
                     $scope.existingRoles[serverIndex].splice(role_key, 1, role_key)
                 }
             });
@@ -1460,7 +1507,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             angular.forEach($scope.servers, function(value, key) {
                 angular.forEach($scope.servers[key].roles, function(server_role, server_role_key) {
                     angular.forEach($scope.roles, function(role, role_key) {
-                        if ($scope.servers[key].roles[server_role_key].display_name == $scope.roles[role_key].display_name) {
+                        if ($scope.servers[key].roles[server_role_key].name == $scope.roles[role_key].name) {
                             $scope.existingRoles[key].splice(role_key, 1, "p");
                         }
                     });
@@ -1481,28 +1528,29 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         };
 
         angular.forEach($scope.interfaces, function(value, key) {
-            $scope.interfaces[key].dropChannel = "E";
-        })
+            $scope.interfaces[key].dropChannel = "others";
+        });
 
         $scope.networking = {};
         angular.forEach($scope.original_networking, function(value, key) {
             $scope.networking[key] = {};
             $scope.networking[key].mapping_interface = value;
-            if (key == "public") {
-                $scope.networking[key].dragChannel = "P";
+            if (key == "external") {
+                $scope.networking[key].dragChannel = "external";
             } else
-                $scope.networking[key].dragChannel = "E";
-        })
+                $scope.networking[key].dragChannel = "others";
+        });
+
 
         $scope.dropSuccessHandler = function($event, key, dict) {
             dict[key].mapping_interface = $scope.pendingInterface;
         };
 
         angular.forEach($scope.interfaces, function(value, key) {
-            // The interface with promisc mode is required to be set as Public Network
+            // The interface with promisc mode is required to be set as External Network
             if (value.is_promiscuous) {
-                $scope.networking["public"].mapping_interface = key;
-                $scope.interfaces[key].dropChannel = "P";
+                $scope.networking["external"].mapping_interface = key;
+                $scope.interfaces[key].dropChannel = "external";
             }
             // The interface marked as management is required to be set as Management Network
             if (value.is_mgmt) {
@@ -1558,7 +1606,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 wizardFactory.setCommitState(commitState);
             });
         };
-    })
+    });
 
     wizardModule.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
         var cluster = wizardFactory.getClusterInfo();
@@ -1709,9 +1757,11 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             angular.element($window).bind("scroll", function() {
                 var window_top = this.pageYOffset;
                 var sticky_anchor_elem = angular.element($('#sticky-anchor'));
+                var window_height = $(window).height();
+                var scroll_panel_height = $('.role-assign-drag').height();
                 if (sticky_anchor_elem.length != 0) {
                     var div_top = sticky_anchor_elem.offset().top;
-                    if (window_top > div_top) {
+                    if (window_top > div_top + 10 && window_height > scroll_panel_height + 150) {
                         $('.role-panel').addClass('stick');
                     } else {
                         $('.role-panel').removeClass('stick');

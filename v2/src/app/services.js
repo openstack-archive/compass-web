@@ -1,7 +1,7 @@
 define(['angular'], function() {
     var servicesModule = angular.module('compass.services', []);
     // stateService is used for dynamically add/edit state
-/*    .service('stateService', ['$state',
+    /*    .service('stateService', ['$state',
         function($state) {
             this.addStates = function(pendingStates) {
                 var existingStates = $state.get(); // get all the current existing states       
@@ -341,6 +341,7 @@ define(['angular'], function() {
                 wizard.service_credentials = {};
                 wizard.console_credentials = {};
                 wizard.network_mapping = {};
+                wizard.ceph_config = {};
             };
 
             wizard.init();
@@ -354,6 +355,9 @@ define(['angular'], function() {
                 wizard.setServiceCredentials(config.service_credentials);
                 wizard.setConsoleCredentials(config.console_credentials);
                 wizard.setNetworkMapping(config.network_mapping);
+                if (config.ceph_config) {
+                    wizard.setCephConfig(config.ceph_config);
+                }
             };
 
             wizard.setClusterInfo = function(cluster) {
@@ -396,14 +400,14 @@ define(['angular'], function() {
                 return angular.copy(wizard.servers);
             };
             /*
-        wizard.setAdapter = function(adapter) { ////
-            wizard.adapter = adapter;
-        };
+            wizard.setAdapter = function(adapter) { ////
+                wizard.adapter = adapter;
+            };
 
-        wizard.getAdapter = function() { /////
-            return angular.copy(wizard.adapter);
-        };
-*/
+            wizard.getAdapter = function() { /////
+                return angular.copy(wizard.adapter);
+            };
+            */
             wizard.setGeneralConfig = function(config) {
                 wizard.generalConfig = config;
             };
@@ -422,14 +426,14 @@ define(['angular'], function() {
 
             // keey routing table for later use
             /*
-        wizard.setRoutingTable = function(routingTb) {
-            wizard.routingtable = routingTb;
-        };
+            wizard.setRoutingTable = function(routingTb) {
+                wizard.routingtable = routingTb;
+            };
 
-        wizard.getRoutingTable = function() {
-            return wizard.routingtable;
-        };
-        */
+            wizard.getRoutingTable = function() {
+                return wizard.routingtable;
+            };
+            */
 
             wizard.setInterfaces = function(interfaces) {
                 wizard.interfaces = interfaces;
@@ -476,6 +480,14 @@ define(['angular'], function() {
 
             wizard.getNetworkMapping = function() {
                 return angular.copy(wizard.network_mapping);
+            };
+
+            wizard.setCephConfig = function(cephConfig) {
+                wizard.ceph_config = cephConfig;
+            };
+
+            wizard.getCephConfig = function() {
+                return angular.copy(wizard.ceph_config);
             };
 
             return wizard;

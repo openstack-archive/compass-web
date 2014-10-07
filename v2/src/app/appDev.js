@@ -20,78 +20,91 @@ compassAppDev.run(function($httpBackend, settings, $http) {
     $httpBackend.whenGET(settings.apiUrlBase + '/adapters').respond(function(method, url, data) {
         console.log(method, url);
         var adapters = [{
-            "id": 1,
-            "display_name": "openstack",
-            "display": "OpenStack",
-            "os_installer": "cobbler",
-            "package_installer": "chef",
-            "supported_oses": [{
-                "name": "CentOs",
-                "id": 1
-            }, {
-                "name": "Ubuntu",
+                "flavors": [],
+                "display_name": "os_only",
+                "name": "os_only",
+                "roles": [],
+                "supported_oses": [{
+                    "os_id": 3,
+                    "id": 3,
+                    "name": "CentOS-6.5-x86_64"
+                }, {
+                    "os_id": 4,
+                    "id": 4,
+                    "name": "Ubuntu-12.04-x86_64"
+                }],
                 "id": 2
-            }],
-            "flavors": [{
-                "display_name": "allinone",
-                "id": 1,
-                "name": "allinone",
-                "roles": [{
-                    "display_name": "Compute",
-                    "name": "os-compute-worker"
-                }, {
-                    "display_name": "Controller",
-                    "name": "os-controller"
-                }, {
-                    "display_name": "Network",
-                    "name": "os-network"
-                }, {
-                    "display_name": "Storage",
-                    "name": "os-block-storage-worker"
-                }]
             }, {
-                "display_name": "multiroles",
-                "id": 2,
-                "name": "multiroles",
-                "roles": [{
-                    "display_name": "Compute",
-                    "name": "os-compute-worker"
+                "flavors": [],
+                "name": "ceph(chef)",
+                "roles": [],
+                "distributed_system_id": 2,
+                "supported_oses": [{
+                    "os_id": 3,
+                    "id": 3,
+                    "name": "CentOS-6.5-x86_64"
                 }, {
-                    "display_name": "Controller",
-                    "name": "os-controller"
+                    "os_id": 4,
+                    "id": 4,
+                    "name": "Ubuntu-12.04-x86_64"
+                }],
+                "distributed_system_name": "ceph",
+                "display_name": "ceph(chef)",
+                "id": 4
+            }, {
+                "flavors": [{
+                    "roles": [{
+                        "display_name": "all in one compute",
+                        "description": "all in one compute",
+                        "name": "allinone-compute"
+                    }],
+                    "display_name": "All-In-One",
+                    "id": 1,
+                    "template": "allinone.tmpl",
+                    "name": "allinone"
                 }, {
-                    "display_name": "Network",
-                    "name": "os-network"
+                    "roles": [],
+                    "display_name": "Single Controller, Multi-compute",
+                    "id": 2,
+                    "name": "single-contoller-multi-compute"
                 }, {
-                    "display_name": "Storage",
-                    "name": "os-block-storage-worker"
-                }]
-            }]
-        }, {
-            "id": 2,
-            "display_name": "hadoop",
-            "display": "Hadoop",
-            "os_installer": "cobbler",
-            "package_installer": "chef",
-            "roles": [{
-                "display_name": "Compute",
-                "name": "os-compute-worker"
+                    "roles": [],
+                    "display_name": "Multi-node Cluster",
+                    "id": 3,
+                    "template": "multinodes.tmpl",
+                    "name": "multinodes"
+                }],
+                "name": "openstack_icehouse",
+                "distributed_system_id": 1,
+                "supported_oses": [{
+                    "os_id": 3,
+                    "id": 3,
+                    "name": "CentOS-6.5-x86_64"
+                }, {
+                    "os_id": 4,
+                    "id": 4,
+                    "name": "Ubuntu-12.04-x86_64"
+                }],
+                "distributed_system_name": "openstack",
+                "display_name": "OpenStack Icehouse",
+                "id": 5
             }, {
-                "display_name": "Controller",
-                "name": "os-controller"
-            }, {
-                "display_name": "Network",
-                "name": "os-network"
-            }],
-            "supported_oses": [{
-                "name": "CentOs",
-                "id": 1
-            }, {
-                "name": "Ubuntu",
-                "id": 2
-            }],
-            "flavors": []
-        }];
+                "id": 6,
+                "name": "ceph_openstack_icehouse",
+                "display_name": "OpenStack and Ceph",
+                "supported_oses": [{
+                    "os_id": 3,
+                    "id": 3,
+                    "name": "CentOS-6.5-x86_64"
+                }, {
+                    "os_id": 4,
+                    "id": 4,
+                    "name": "Ubuntu-12.04-x86_64"
+                }],
+                "flavors": []
+
+            }];
+
         return [200, adapters, {}];
     });
 
@@ -649,9 +662,9 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var index = url.indexOf("clusters/");
         var id = url.substring(index).split("/")[1];
         var cluster = {
-            "id": id,
+            "id": parseInt(id),
             "name": "Cluster" + id,
-            "adapter_id": 1,
+            "adapter_id": 6,
             "os_id": 1,
             "editable": true,
             "create_by": "user@someemail.com",
@@ -674,7 +687,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "display_name": "Network",
                     "name": "os-network"
                 }, {
-                    "display_name": "database",
+                    "display_name": "Database",
                     "name": "os-db"
                 }]
             },
@@ -783,7 +796,9 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "management": "eth0",
                     "tenant": "eth0",
                     "storage": "eth0",
-                    "public": "eth1"
+                    "external": "eth1",
+                    "cluster_config": "",
+                    "public_config": ""
                 }
             }
         };
@@ -957,7 +972,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "display_name": "Message Queue",
             "name": "os-mq"
         }, {
-            "display_name": "database",
+            "display_name": "Database",
             "name": "os-db"
         }];
 

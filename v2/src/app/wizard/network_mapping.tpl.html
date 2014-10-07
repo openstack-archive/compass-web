@@ -16,10 +16,11 @@
                                 (Management)
                             </span>
                             <div ui-on-Drop="onDrop($event, interface_key)" drag-hover-class="drag-enter" drop-channel="{{interface_value.dropChannel}}" class="interface-placeholder interface-placeholder-margin">
-                                <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" drag-channel="{{network_value.dragChannel}}" class="external-event ui-draggable network-draggable margin-right-5 fade-animation" ng-class="{'label-pink': network_key == 'management', 'label-success': network_key =='tenant', 'label-purple': network_key == 'public', 'label-warning': network_key == 'storage'}" ng-if="network_value.mapping_interface==interface_key">
+                                <div ng-repeat="(network_key, network_value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, network_key, networking)" drag-channel="{{network_value.dragChannel}}" class="external-event ui-draggable network-draggable margin-right-5 fade-animation" ng-class="{'label-pink': network_key == 'management', 'label-success': network_key == 'tenant', 'label-purple': network_key == 'external', 'label-warning': network_key == 'storage', 'label-info': network_key == 'public_network', 'label-red': network_key == 'cluster_network'}" ng-if="network_value.mapping_interface == interface_key">
                                     <i class="ace-icon fa fa-arrows"></i>
                                     <span class="capitalize">{{network_key}}</span>
                                 </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>
@@ -33,11 +34,11 @@
                     <h4>Networks</h4>
                 </div>
                 <br>
-                <p>Use drag and drop to move logical networks between physical interfaces. (Interface assigned Promisc Mode can only map with Public network)</p>
+                <p>Use drag and drop to move logical networks between physical interfaces. (Interface assigned Promisc Mode can only map with External network)</p>
                 <div class="widget-body">
                     <div class="widget-main network-background">
-                        <div ui-on-Drop="onDrop($event, '')" drag-hover-class="drag-enter" class="network-placeholder network-margin-border" drop-channel="E">
-                            <div ng-repeat="(key, value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, key, networking);" class="external-event ui-draggable network-draggable network-margin margin-right-20 fade-animation" ng-class="{'label-pink': key == 'management', 'label-success': key =='tenant', 'label-purple': key == 'public', 'label-warning': key == 'storage'}" drag-channel="{{value.dragChannel}}" ng-if="!value.mapping_interface">
+                        <div ui-on-Drop="onDrop($event, '')" drag-hover-class="drag-enter" class="network-placeholder network-margin-border" drop-channel="external others">
+                            <div ng-repeat="(key, value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, key, networking);" class="external-event ui-draggable network-draggable network-margin margin-right-20 fade-animation" ng-class="{'label-pink': key == 'management', 'label-success': key =='tenant', 'label-purple': key == 'external', 'label-warning': key == 'storage', 'label-info': key == 'public_network', 'label-red': key == 'cluster_network'}" drag-channel="{{value.dragChannel}}" ng-if="!value.mapping_interface">
                                 <i class="ace-icon fa fa-arrows"></i>
                                 <span class="capitalize">{{key}}</span>
                             </div>

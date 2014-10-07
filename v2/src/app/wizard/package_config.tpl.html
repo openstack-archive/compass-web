@@ -1,10 +1,10 @@
-<div ng-controller="securityCtrl">
+<div ng-controller="packageConfigCtrl">
     <div class="row">
         <div class="col-xs-12">
             <div class="accordion-style1 panel-group accordion-style2" id="accordion">
                 <accordion close-others="true">
 
-                    <accordion-group is-open="serverAccordion.open" ng-init="serverAccordion.open=true">
+                    <!--accordion-group is-open="serverAccordion.open" ng-init="serverAccordion.open=true">
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> Server Credentials
                         </accordion-heading>
@@ -32,12 +32,12 @@
                                 </form>
                             </div>
                         </div>
-                    </accordion-group>
+                    </accordion-group-->
 
                     <accordion-group is-open="serviceAccordion.open">
 
                         <accordion-heading>
-                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status2.open, 'fa-angle-right': !status2.open}"></i> OpenStack Database &amp; Queue Credentials
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': serviceAccordion.open, 'fa-angle-right': !serviceAccordion.open}"></i> OpenStack Database &amp; Queue Credentials
                         </accordion-heading>
                         <div class="row">
                             <div class="col-lg-1">
@@ -96,7 +96,7 @@
 
                     <accordion-group is-open="mgmtAccordion.open">
                         <accordion-heading>
-                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i> OpenStack Keystone User Credentials
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': mgmtAccordion.open, 'fa-angle-right': !mgmtAccordion.open}"></i> OpenStack Keystone User Credentials
                         </accordion-heading>
                         <div class="row">
                             <div class="col-lg-1">
@@ -147,6 +147,96 @@
                                 </table>
                             </div>
                             <div class="col-lg-1">
+                            </div>
+                        </div>
+                    </accordion-group>
+
+                    <accordion-group is-open="cephAccordion.open" ng-if="currentAdapterName == 'ceph_openstack_icehouse'">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': cephAccordion.open, 'fa-angle-right': !cephAccordion.open}"></i> Ceph Global Configurations
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form id="cephForm" name="cephForm" class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Pool PG Number
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.global_config.osd_pool_pg_num" type="text" class="col-xs-10 col-sm-5" placeholder="OSD Pool PG Number" name="osd_pool_pg_num" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Pool PGP Number
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.global_config.osd_pool_pgp_num" type="text" class="col-xs-10 col-sm-5" placeholder="OSD Pool PGP Number" name="osd_pool_pgp_num" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Pool Size
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.global_config.osd_pool_size" type="text" class="col-xs-10 col-sm-5" placeholder="OSD Pool Size" name="osd_pool_size" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Journal Size
+                                                <span class="text-danger opacity-zero">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.osd_config.journal_size" type="text" class="col-xs-10 col-sm-5" placeholder="Journal Size" name="journal_size">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OP Threads
+                                                <span class="text-danger opacity-zero">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.osd_config.op_threads" type="number" class="col-xs-10 col-sm-5" placeholder="OP Threads" name="op_threads">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Devices
+                                                <span class="text-danger opacity-zero">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.osd_devices" type="text" class="col-xs-5 col-sm-2" placeholder="Device" name="device">
+                                                <input ng-model="cephConfig.journals" type="text" class="col-xs-5 col-sm-3" placeholder="Journal" name="journal">
+                                                <span class="col-xs-2 col-sm-3"-->
+                                                    <!--Add Action-->
+                                                    <!--span class="action" ng-click="addValue('dns_servers')">
+                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                    </span-->
+                                                    <!--Remove Action-->
+                                                    <!--span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                    </span-->
+                                                <!--/span>
+                                            </div>
+                                        </div>
+                                    </div-->
+
+                                </form>
                             </div>
                         </div>
                     </accordion-group>
