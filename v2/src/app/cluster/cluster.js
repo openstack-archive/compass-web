@@ -5,7 +5,6 @@ define(['angular'], function() {
         //'compass.charts',
         //'ngAnimate',
         //'ngTable',
-        //'angular-rickshaw'
     ]);
 
     clusterModule.config(function($stateProvider, $urlRouterProvider) {

@@ -1,11 +1,10 @@
-define(['angularAnimate', 'angularRickshaw', 'angularUiTree', 'nvd3Directive'], function() {
+define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
 
     var monitoringModule = angular.module('compass.monitoring', [
         'ui.router',
         'ui.bootstrap',
         'compass.charts',
         'ngAnimate',
-        'angular-rickshaw',
         'nvd3ChartDirectives',
         'ui.tree'
     ]);

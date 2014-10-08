@@ -16,8 +16,6 @@ require.config({
         'd3': '../vendor/d3/d3.min',
         'nvD3': '../vendor/nvd3/nv.d3.min',
         'ganttChart':'common/gantt-chart-d3v2',
-        'rickshaw': '../vendor/rickshaw/rickshaw.min',
-        'angularRickshaw': '../vendor/angular-rickshaw/rickshaw.min',
         'moment': '../vendor/angular-daterangepicker/moment.min',
         'daterangepicker': '../vendor/angular-daterangepicker/daterangepicker',
         'ngBsDaterangepicker': '../vendor/angular-daterangepicker/ng-bs-daterangepicker',
@@ -99,16 +97,9 @@ require.config({
             deps: ["nvD3"],
             exports: "nvd3Directive"
         },
-        "rickshaw": {
-            exports: "rickshaw"
-        },
         "angularUiTree": {
             deps: ["angular"],
             exports: "angularUiTree"
-        },
-        "angularRickshaw": {
-            deps: ["angular", "rickshaw", "d3"],
-            exports: "angularRickshaw"
         },
         "moment": {
             exports: "moment"
