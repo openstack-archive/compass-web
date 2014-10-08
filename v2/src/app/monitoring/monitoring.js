@@ -109,7 +109,7 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
 
     monitoringModule.controller('metricsCtrl', function($scope, dataService, $stateParams) {
         var clusterId = $stateParams.id;
-        $scope.clickedHashTable ={};  
+        $scope.clickedHashTable ={};
         $scope.metricsTree = [];
         dataService.monitorMetricsTree().success(function(data) {
             $scope.metricsTree = data;
@@ -120,6 +120,13 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
         $scope.metrics = [];
         dataService.monitorMetrics().success(function(data) {
             $scope.metrics = data;
+        }).error(function(response) {
+            // TODO
+        });
+
+        $scope.metricsName = [];
+        dataService.monitorMetricsName().success(function(data) {
+            $scope.metricsName = data;
         }).error(function(response) {
             // TODO
         });
@@ -177,7 +184,6 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
                     '<p>' + y + ' at ' + x + '</p>'
             }
         };
-
         /*
     // customize stack/line chart colors
     $scope.colorFunction = function() {
@@ -188,5 +194,49 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
     }
     */
 
-    })
+    });
+    monitoringModule.directive('multiSelect', function($filter) {  
+        return {
+            templateUrl: "src/app/monitoring/multiSelect.tpl.html",
+            scope: {
+                names: "=allnames"
+            },
+
+            link: function(scope, elem, attrs) {
+                $(".chosen-choices").click(function(event) {
+                    event.stopPropagation();
+                    $(".search-field > input").focus();
+                    $(".chosen-container").addClass("chosen-with-drop chosen-container-active");
+                });
+
+                $(".chosen-results").on("click", "li.active-result", function() {
+                    $(this).attr("class", "result-selected");
+                    var selected = $(this).text();
+                    var insertContent = '<li class="search-choice"><span>' + selected + '</span><a class="search-choice-close" data-option-array-index="' + selected + '"></a></li>';
+                    $(insertContent).insertBefore(".search-field");
+                    scope.searchText = "";
+                    scope.$apply();
+                });
+
+                $(".chosen-results").on('mouseenter', 'li.active-result', function() {
+                    $(this).addClass("highlighted");
+                }).on('mouseleave', 'li', function() {
+                    $(this).removeClass("highlighted");
+                });
+
+                $(".chosen-choices").on("click", "li > .search-choice-close", function() {
+                    var unselected = $(this).attr("data-option-array-index").trim();
+                    $(this).closest('li').remove();
+                    $(".chosen-results > li[data-option-array-index='" + unselected + "']").attr("class", "active-result");
+
+                });
+
+                $(document).click(function(e) {
+                    $(".chosen-container").removeClass("chosen-with-drop chosen-container-active");
+                })
+
+            }  
+        };
+    });
+
 });

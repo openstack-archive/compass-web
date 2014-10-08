@@ -22,7 +22,6 @@ require.config({
         'angularUiTree': '../vendor/angular-ui-tree/angular-ui-tree.min',
         'nvd3Directive': '../vendor/angular-nvd3/angularjs-nvd3-directives.min',
 
-
         'login': 'app/login/login',
         'services': 'app/services',
         'appDev': 'app/appDev',
