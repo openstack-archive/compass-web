@@ -387,7 +387,9 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.selectAllServers = function(flag) {
             if (flag) {
                 angular.forEach($scope.allservers, function(sv) {
-                    sv.selected = true;
+                    if (!sv.disabled) {
+                        sv.selected = true;
+                    }
                 })
             } else {
                 angular.forEach($scope.allservers, function(sv) {
@@ -409,10 +411,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         };
 
         $scope.ifPreSelect = function(server) {
+            server.disabled = false;
             if (server.clusters) {
+                if(server.clusters.length > 0) {
+                    server.disabled = true;
+                }
                 angular.forEach(server.clusters, function(svCluster) {
                     if (svCluster.id == cluster.id) {
                         server.selected = true;
+                        server.disabled = false;
                     }
                 })
             }

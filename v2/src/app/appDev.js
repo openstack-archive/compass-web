@@ -797,8 +797,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "tenant": "eth0",
                     "storage": "eth0",
                     "external": "eth1",
-                    "cluster_config": "",
-                    "public_config": ""
+                    "cluster_network": "",
+                    "public_network": ""
                 }
             }
         };

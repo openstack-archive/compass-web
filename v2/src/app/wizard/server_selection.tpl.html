@@ -74,10 +74,10 @@
                     <tr ng-show="$data.length==0">
                         <td colspan="9" class="center">No servers yet. Please click Discover Servers to discover available servers.</td>
                     </tr>
-                    <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new, 'hightlight': server.selected}">
+                    <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new, 'hightlight': server.selected, 'grey': server.disabled}">
                         <td>
                             <label ng-init="ifPreSelect(server)">
-                                <input ng-model="server.selected" type="checkbox" class="ace">
+                                <input ng-model="server.selected" type="checkbox" class="ace" ng-disabled="server.disabled">
                                 <span class="lbl"></span>
                             </label>
                         </td>
