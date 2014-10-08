@@ -1,12 +1,12 @@
-<div class="chosen-container chosen-container-multi" style="width: 375px;" title="">
+<div class="chosen-container chosen-container-multi" style="min-width: 100px;" title="">
     <ul class="chosen-choices">
         <li class="search-field">
-            <input type="text" ng-model="searchText" autocomplete="off" style="min-width: 25px;">
+            <input type="text" ng-model="searchText" autocomplete="off" style="min-width: 25px; height: 30px;">
         </li>
     </ul>
     <div class="chosen-drop">
         <ul class="chosen-results">
-            <li ng-repeat = "name in filtered = (names |filter: searchText)|limitTo: 1000" class="active-result" data-option-array-index="{{name}}">{{name}}</li>
+            <li ng-repeat = "name in filtered = (names |filter: searchText)|limitTo: 1000" ng-class="{ 'active-result':objectKeys.indexOf(name) < 0,'result-selected': objectKeys.indexOf(name) >= 0}" data-option-array-index="{{name}}">{{name}}</li>
             <li ng-if="filtered.length > 1000" class="result-selected" style="background-color:blue;">Showing the first 1000/{{filtered.length}} records</li>
             <li ng-if="filtered.length <= 1000" class="result-selected" style="background-color:blue;">Showing {{filtered.length}} records</li>
         </ul>
