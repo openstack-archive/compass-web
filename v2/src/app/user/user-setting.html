@@ -33,14 +33,6 @@
                                 </div>
                             </th>
                             <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('username', 'asc'),
-                        'sort-desc': tableParams.isSortBy('uesrname', 'desc')
-                      }" ng-click="tableParams.sorting({'username' : tableParams.isSortBy('username', 'asc') ? 'desc' : 'asc'})">
-                                <div>
-                                    Username
-                                </div>
-                            </th>
-                            <th class="sortable" ng-class="{
                         'sort-asc': tableParams.isSortBy('first_name', 'asc'),
                         'sort-desc': tableParams.isSortBy('first_name', 'desc')
                       }" ng-click="tableParams.sorting({'first_name' : tableParams.isSortBy('first_name', 'asc') ? 'desc' : 'asc'})">
@@ -81,9 +73,6 @@
                         <tr ng-repeat="userSetting in $data | filter:searchUser">
                             <td sortable="'email'">
                                 {{userSetting.email}}
-                            </td>
-                            <td sortable="'username'">
-                                {{userSetting.username}}
                             </td>
                             <td sortable="'first_name'">
                                 {{userSetting.first_name}}
