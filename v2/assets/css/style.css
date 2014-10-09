@@ -991,15 +991,16 @@ circle[depth='4'] {
     margin-left: -4px;
 }
 .table-col {
-    width: 75%;
+    width: 80%;
 }
 .role-col {
-    width: 24%;
+    margin-left: 1%;
+    max-width: 300px;
+    width: 19%;
 }
 .role-panel {
     z-index: 10;
-    margin-left: 10px;
-    margin-right: -25px;
+    margin-left: 11%;
 }
 .role-panel.stick {
     position: fixed;
