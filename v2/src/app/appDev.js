@@ -463,7 +463,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var userSetting = [{
             "id": 1,
             "email": "admin@compass.org",
-            "username": "admin",
             "first_name": "",
             "last_name": "",
             "active": false,
@@ -473,7 +472,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "id": 2,
             "email": "tsinghua@compass.org",
-            "username": "tsinghua",
             "first_name": "",
             "last_name": "",
             "active": true,
@@ -483,7 +481,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "id": 3,
             "email": "ann@compass.org",
-            "username": "ann",
             "first_name": "Ann",
             "last_name": "",
             "active": true,
@@ -493,7 +490,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "id": 4,
             "email": "john@compass.org",
-            "username": "jsmith",
             "first_name": "John",
             "last_name": "Smitch",
             "active": true,
@@ -503,7 +499,6 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }, {
             "id": 5,
             "email": "tom@compass.org",
-            "username": "tom",
             "first_name": "Tom",
             "last_name": "Jones",
             "active": true,

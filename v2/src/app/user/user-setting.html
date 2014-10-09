@@ -25,53 +25,28 @@
                 <table ng-table="tableParams" class="ng-table table table-striped table-hover nowrap">
                     <thead>
                         <tr>
-                            <th class="sortable" ng-class="{
-                      'sort-asc': tableParams.isSortBy('email', 'asc'),
-                      'sort-desc': tableParams.isSortBy('email', 'desc')}" ng-click="tableParams.sorting({'email' : tableParams.isSortBy('email', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': tableParams.isSortBy('email', 'asc'),'sort-desc': tableParams.isSortBy('email', 'desc')}" ng-click="tableParams.sorting({'email' : tableParams.isSortBy('email', 'asc') ? 'desc' : 'asc'})">
                                 <div>
                                     E-mail
                                 </div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('username', 'asc'),
-                        'sort-desc': tableParams.isSortBy('uesrname', 'desc')
-                      }" ng-click="tableParams.sorting({'username' : tableParams.isSortBy('username', 'asc') ? 'desc' : 'asc'})">
-                                <div>
-                                    Username
-                                </div>
-                            </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('first_name', 'asc'),
-                        'sort-desc': tableParams.isSortBy('first_name', 'desc')
-                      }" ng-click="tableParams.sorting({'first_name' : tableParams.isSortBy('first_name', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': tableParams.isSortBy('first_name', 'asc'),'sort-desc': tableParams.isSortBy('first_name', 'desc')}" ng-click="tableParams.sorting({'first_name' : tableParams.isSortBy('first_name', 'asc') ? 'desc' : 'asc'})">
                                 <div>
                                     First Name
                                 </div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('last_name', 'asc'),
-                        'sort-desc': tableParams.isSortBy('last_name', 'desc')
-                      }" ng-click="tableParams.sorting({'last_name' : tableParams.isSortBy('last_name', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': tableParams.isSortBy('last_name', 'asc'),'sort-desc': tableParams.isSortBy('last_name', 'desc')}" ng-click="tableParams.sorting({'last_name' : tableParams.isSortBy('last_name', 'asc') ? 'desc' : 'asc'})">
                                 <div>
                                     Last Name
                                 </div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('active', 'asc'),
-                        'sort-desc': tableParams.isSortBy('active', 'desc')
-                      }" ng-click="tableParams.sorting({'active' : tableParams.isSortBy('active', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': tableParams.isSortBy('active', 'asc'),'sort-desc': tableParams.isSortBy('active', 'desc')}" ng-click="tableParams.sorting({'active' : tableParams.isSortBy('active', 'asc') ? 'desc' : 'asc'})">
                                 <div>Active</div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('is_admin', 'asc'),
-                        'sort-desc': tableParams.isSortBy('is_admin', 'desc')
-                      }" ng-click="tableParams.sorting({'is_admin' : tableParams.isSortBy('is_admin', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': tableParams.isSortBy('is_admin', 'asc'),'sort-desc': tableParams.isSortBy('is_admin', 'desc')}" ng-click="tableParams.sorting({'is_admin' : tableParams.isSortBy('is_admin', 'asc') ? 'desc' : 'asc'})">
                                 <div>Admin</div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': tableParams.isSortBy('last_login', 'asc'),
-                        'sort-desc': tableParams.isSortBy('last_login', 'desc')
-                      }" ng-click="tableParams.sorting({'last_login' : tableParams.isSortBy('last_login', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': tableParams.isSortBy('last_login', 'asc'),'sort-desc': tableParams.isSortBy('last_login', 'desc')}" ng-click="tableParams.sorting({'last_login' : tableParams.isSortBy('last_login', 'asc') ? 'desc' : 'asc'})">
                                 <div>Last Login</div>
                             </th>
                             <th>Actions</th>
@@ -81,9 +56,6 @@
                         <tr ng-repeat="userSetting in $data | filter:searchUser">
                             <td sortable="'email'">
                                 {{userSetting.email}}
-                            </td>
-                            <td sortable="'username'">
-                                {{userSetting.username}}
                             </td>
                             <td sortable="'first_name'">
                                 {{userSetting.first_name}}
@@ -143,22 +115,13 @@
                 <table ng-table="userParams" class="ng-table table table-striped table-hover nowrap">
                     <thead>
                         <tr>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': userParams.isSortBy('user_id', 'asc'),
-                        'sort-desc': userParams.isSortBy('user_id', 'desc')
-                      }" ng-click="userParams.sorting({'user_id' : userParams.isSortBy('user_id', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': userParams.isSortBy('user_id', 'asc'),'sort-desc': userParams.isSortBy('user_id', 'desc')}" ng-click="userParams.sorting({'user_id' : userParams.isSortBy('user_id', 'asc') ? 'desc' : 'asc'})">
                                 <div>User ID</div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': userParams.isSortBy('action', 'asc'),
-                        'sort-desc': userParams.isSortBy('action', 'desc')
-                      }" ng-click="userParams.sorting({'action' : userParams.isSortBy('action', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': userParams.isSortBy('action', 'asc'),'sort-desc': userParams.isSortBy('action', 'desc')}" ng-click="userParams.sorting({'action' : userParams.isSortBy('action', 'asc') ? 'desc' : 'asc'})">
                                 <div>Action</div>
                             </th>
-                            <th class="sortable" ng-class="{
-                        'sort-asc': userParams.isSortBy('timestamp', 'asc'),
-                        'sort-desc': userParams.isSortBy('timestamp', 'desc')
-                      }" ng-click="userParams.sorting({'timestamp' : userParams.isSortBy('timestamp', 'asc') ? 'desc' : 'asc'})">
+                            <th class="sortable" ng-class="{'sort-asc': userParams.isSortBy('timestamp', 'asc'),'sort-desc': userParams.isSortBy('timestamp', 'desc')}" ng-click="userParams.sorting({'timestamp' : userParams.isSortBy('timestamp', 'asc') ? 'desc' : 'asc'})">
                                 <div>Timestamp</div>
                             </th>
                         </tr>

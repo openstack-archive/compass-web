@@ -209,7 +209,7 @@ select option[value=""], select.form-control option[value=""] {
 .border-radius-4 {
     border-radius: 4px !important;
 }
-textarea, input[type="text"], input[type="password"], input[type="number"] {
+textarea, input[type="text"], input[type="password"], input[type="number"], input[type="email"] {
     -webkit-appearance: none;
     /* Remove inner shadow from inputs on mobile iOS */
     /*background: inherit;*/
