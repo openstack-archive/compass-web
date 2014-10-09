@@ -36,7 +36,7 @@
                 <br>
                 <p>Use drag and drop to move logical networks between physical interfaces. (Interface assigned Promisc Mode can only map with External network)</p>
                 <div class="widget-body">
-                    <div class="widget-main network-background">
+                    <div class="widget-main row network-background">
                         <div ui-on-Drop="onDrop($event, '')" drag-hover-class="drag-enter" class="network-placeholder network-margin-border" drop-channel="external others">
                             <div ng-repeat="(key, value) in networking" ui-draggable="true" on-drop-success="dropSuccessHandler($event, key, networking);" class="external-event ui-draggable network-draggable network-margin margin-right-20 fade-animation" ng-class="{'label-pink': key == 'management', 'label-success': key =='tenant', 'label-purple': key == 'external', 'label-warning': key == 'storage', 'label-info': key == 'public_network', 'label-red': key == 'cluster_network'}" drag-channel="{{value.dragChannel}}" ng-if="!value.mapping_interface">
                                 <i class="ace-icon fa fa-arrows"></i>
