@@ -121,163 +121,163 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
     });
 
     chartsModule.directive('circlepacking', function() {
-        return {
-            restrict: 'EAC',
-            scope: {
-                data: '=',
-                dataready: '=',
-                id: '@'
-            },
-            link: function(scope, elem, attrs) {
-                scope.$watch('dataready', function(newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        if (newVal == "true") {
-                            drawCircleGraph();
-                        }
-                    }
-                }, true);
+     return {
+         restrict: 'EAC',
+         scope: {
+             data: '=',
+             dataready: '=',
+             id: '@'
+         },
+         link: function(scope, elem, attrs) {
+             scope.$watch('dataready', function(newVal, oldVal) {
+                 if (newVal != oldVal) {
+                     if (newVal == "true") {
+                         drawCircleGraph();
+                     }
+                 }
+             }, true);
 
-                function drawCircleGraph() {
+             function drawCircleGraph() {
 
-                    var elemId = scope.id;
-                    var data = scope.data;
+                 var elemId = scope.id,
+                     data = scope.data,
+                     margin = 20,
+                     diameter = 660;
+                 var color = d3.scale.linear()
+                     .domain([-1, 5])
+                     .range(["hsl(204, 80%, 71%)", "hsl(236, 100%, 50%)"])
+                     .interpolate(d3.interpolateHcl);
 
-                    var w = 600,
-                        h = 600,
-                        r = 550,
-                        x = d3.scale.linear().range([0, r]),
-                        y = d3.scale.linear().range([0, r]),
-                        node,
-                        root;
+                 var pack = d3.layout.pack()
+                     .padding(2)
+                     .size([diameter - margin, diameter - margin])
+                     .value(function(d) {
+                         return 500;
+                     });
 
-                    var pack = d3.layout.pack()
-                        .size([r, r])
-                        .value(function(d) {
-                            if (d.children === undefined || d.children.length == 0) {
-                                return 500;
-                            } else {
-                                return undefined;
-                            }
-                        })
+                 var svg = d3.select("#" + elemId).append("svg", "h2")
+                     .attr("width", diameter)
+                     .attr("height", diameter)
+                     .append("g")
+                     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+                 var focus = root = data,
+                     nodes = pack.nodes(root),
+                     view;
+                 var circle = svg.selectAll("circle")
+                     .data(nodes)
+                     .enter().append("circle")
+                     .attr("class", function(d) {
+                         return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"
+                     })
+                     .style("fill", function(d) {
+                         return d.children ? color(d.depth) : null;
+                     })
+                     .style("stroke", function(d) {
+                         return d.state == "error" ? "red" : null;
+                     })
+                     .on("mouseover", function(d) {
+                         var name = d.name;
+                         svg.selectAll("text")
+                             .style("fill", function(d) {
+                                 return d.name == name ? "red" : null;
+                             })
+                             .attr("class", function(d) {
+                                 return d.name == name ? "chartLabel-hover" : "chartLabel"
+                             });
+                     })
+                     .on("mouseout", function(d) {
+                         var name = d.name;
+                         svg.selectAll("text")
+                             .style("fill", function(d) {
+                                 return d.name == name ? "black" : null;
+                             })
+                             .attr("class", "chartLabel");
+                     })
+                     .on("click", function(d) {
+                         if (focus !== d) zoom(d);
+                         d3.event.stopPropagation();
+                     });
 
-                    var vis = d3.select("#" + elemId).append("svg:svg", "h2")
-                        .attr("width", w)
-                        .attr("height", h)
-                        .append("svg:g")
-                        .attr("transform", "translate(" + (w - r) / 2 + "," + (h - r) / 2 + ")");
+                 var text = svg.selectAll("text")
+                     .data(nodes)
+                     .enter().append("text")
+                     .attr("class", "chartLabel")
+                     .style("fill-opacity", function(d) {
+                         return d.parent === root ? 1 : 0;
+                     })
+                     .style("display", function(d) {
+                         return d.parent === root ? null : "none";
+                     })
+                     .text(function(d) {
+                         return d.name;
+                     });
+                 var node = svg.selectAll("circle,text");
 
-                    node = root = data;
+                 zoomTo([root.x, root.y, root.r * 2 + margin]);
 
-                    var nodes = pack.nodes(root);
+                 d3.select("body")
+                     .style("background", color(-1))
+                     .on("click", function() {
+                         zoom(root);
+                     });
 
-                    vis.selectAll("circle")
-                        .data(nodes)
-                        .enter().append("svg:circle")
-                        .attr("class", function(d) {
-                            return d.children ? "parent" : "child";
-                        })
-                        .attr("cx", function(d) {
-                            return d.x;
-                        })
-                        .attr("cy", function(d) {
-                            return d.y;
-                        })
-                        .attr("r", function(d) {
-                            return d.r;
-                        })
-                        .attr("depth", function(d) {
-                            return d.depth;
-                        })
-                        .on("click", function(d) {
-                            return zoom(node == d ? root : d);
-                        })
-                        .on("contextmenu", function(d) {
-                            //stop showing browser menu
-                            d3.event.preventDefault();
-                        })
-                        .on("mouseover", function(d) {
-                            //console.log("mouseover ", d)
-                        });
+                 function zoomTo(v) {
+                     var k = diameter / v[2];
+                     view = v;
+                     node.attr("transform", function(d) {
+                         return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")";
+                     });
+                     circle.attr("r", function(d) {
+                         if (isOverlap(d)) {
+                             return (d.r - 10) * k;
+                         }
+                         return d.r * k;
+                     });
+                 }
 
-                    vis.selectAll("text")
-                        .data(nodes)
-                        .enter().append("svg:text")
-                        .attr("class", function(d) {
-                            return d.children ? "parent" : "child";
-                        })
-                        .attr("x", function(d) {
-                            return d.x;
-                        })
-                        .attr("y", function(d) {
-                            if (d.depth == 0 || d.depth == 1) {
-                                return y(d.y + d.r + 20);
-                            } else if (d.depth == 2 || d.depth == 3) {
-                                return y(d.y + d.r + 5);
-                            } else {
-                                return y(d.y);
-                            }
-                            //return d.children ? d.y + d.r + 10 : d.y;
-                        })
-                        .attr("dy", ".35em")
-                        .attr("text-anchor", "middle")
-                        .style("display", function(d) {
-                            return d.r > 30 ? "block" : "none";
-                        })
-                        .text(function(d) {
-                            return d.name;
-                        });
+                 function isOverlap(d) {
+                     if (d === root) {
+                         return false;
+                     }
+                     if (d.r == d.parent.r) {
+                         return true;
+                     }
 
-                    d3.select(window).on("click", function() {
-                        zoom(root);
-                    });
+                     return isOverlap(d.parent);
 
+                 }
 
-                    function zoom(d, i) {
-                        var k = r / d.r / 2;
-                        x.domain([d.x - d.r, d.x + d.r]);
-                        y.domain([d.y - d.r, d.y + d.r]);
+                 function zoom(d) {
+                     var focus0 = focus;
+                     focus = d;
+                     var transition = d3.transition()
+                         .duration(d3.event.altKey ? 7500 : 750)
+                         .tween("zoom", function(d) {
+                             var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+                             return function(t) {
+                                 zoomTo(i(t));
+                             };
+                         });
+                     transition.selectAll("text")
+                         .filter(function(d) {
+                             return d.parent === focus || this.style.display === "inline"
+                         })
+                         .style("fill-opacity", function(d) {
+                             return d.parent === focus ? 1 : 0
+                         })
+                         .each("start", function(d) {
+                             if (d.parent === focus) this.style.display = "inline";
+                         })
+                         .each("end", function(d) {
+                             if (d.parent !== focus) this.style.display = "none";
+                         })
+                 }
 
-                        var t = vis.transition()
-                            .duration(d3.event.altKey ? 7500 : 750);
+             }
+         }
 
-                        t.selectAll("circle")
-                            .attr("cx", function(d) {
-                                return x(d.x);
-                            })
-                            .attr("cy", function(d) {
-                                return y(d.y);
-                            })
-                            .attr("r", function(d) {
-                                return k * d.r;
-                            });
-
-                        t.selectAll("text")
-                            .attr("x", function(d) {
-                                return x(d.x);
-                            })
-                            .attr("y", function(d) {
-                                if (d.depth == 0 || d.depth == 1) {
-                                    return y(d.y + d.r + 20);
-                                } else if (d.depth == 2 || d.depth == 3) {
-                                    return y(d.y + d.r + 5);
-                                } else {
-                                    return y(d.y);
-                                }
-
-                                //return d.children ? y(d.y + d.r + 10) : y(d.y);
-                            })
-                            .style("display", function(d) {
-                                return k * d.r > 30 ? "block" : "none";
-                            });
-
-                        node = d;
-                        d3.event.stopPropagation();
-                    }
-                }
-
-            }
-        };
-    });
+     }
+ });
 
     chartsModule.directive('treechart', function() {
         return {
