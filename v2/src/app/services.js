@@ -34,6 +34,10 @@ define(['angular'], function() {
                 return $http.post(settings.apiUrlBase + '/users/login', angular.toJson(user));
             };
 
+            this.logout = function(){
+                return $http.post(settings.apiUrlBase + '/users/logout', null);
+            }
+
             this.getWizardPreConfig = function() {
                 return $http.get(settings.metadataUrlBase + '/config.json');
             };
@@ -303,7 +307,7 @@ define(['angular'], function() {
                 return $http.get(settings.monitoringUrlBase + '/clusters/' + clusterId + '/user' + userName);
             };
         }
-    ])
+    ]);
 
     servicesModule.service('sortingService', function() {
         this.ipAddressPre = function(a) {
@@ -322,7 +326,7 @@ define(['angular'], function() {
             }
             return x;
         };
-    })
+    });
 
 
     servicesModule.factory('wizardFactory', [
@@ -497,11 +501,11 @@ define(['angular'], function() {
 
             return wizard;
         }
-    ])
+    ]);
 
     servicesModule.service('authService', ['$http', 'dataService',
         function($http, dataService) {
-            this.isAuthenticated = false;
+            this.isAuthenticated = true;
 
             this.setLogin = function(isLogin) {
                 this.isAuthenticated = isLogin;
@@ -512,8 +516,52 @@ define(['angular'], function() {
             };
 
             this.logout = function() {
-                this.isAuthenticated = false;
-            };
+                 //this.isAuthenticated = false;
+                 return dataService.logout();
+             };
         }
-    ])
+    ]);
+    servicesModule.factory('authenticationInterceptor', ['$q', '$location',
+        function($q, $location) {
+            return {
+                response: function(response) {
+                    return response;
+                },
+                responseError: function(rejection) {
+                    if (rejection.status == 401) {
+                        console.log("Response Error 401", rejection);
+                        $location.path('/login');
+                    }
+
+                    return $q.reject(rejection);
+                }
+            }
+        }
+    ]);
+
+    servicesModule.service('rememberMe', function() {
+        this.setCookies = function(key, value, exdays, remember) {
+            if (remember) {
+                var d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                var expires = "expires=" + d.toUTCString();
+                document.cookie = key + "=" + value + "; " + expires;
+            } else {
+                document.cookie = key + "=" + value;
+            }
+
+        };
+
+        this.getCookie = function(key) {
+            var name = key + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1);
+                if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+
+            }
+            return "";
+        };
+    });
 })

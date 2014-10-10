@@ -16,6 +16,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         }
         return [200, user, {}];
     });
+    $httpBackend.whenPOST(settings.apiUrlBase + '/users/logout').respond(function(method, url, data) {
+        console.log(method, url, data);
+        var message = {
+            "message": "logout successfully"
+        }
+        return [200, message, {}];
+    });
 
     $httpBackend.whenGET(settings.apiUrlBase + '/adapters').respond(function(method, url, data) {
         console.log(method, url);
