@@ -1267,7 +1267,8 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
     wizardModule.controller('roleAssignCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $q) {
         var cluster = wizardFactory.getClusterInfo();
         $scope.servers = wizardFactory.getServers();
-        var colors = ['#8EA16C', '#C2CF30', '#FEC700', '#FF8900', '#D3432B', '#BB2952', '#8E1E5F', '#DE4AB6', '#9900EC', '#3A1AA8', '#3932FE', '#278BC0', '#35B9F6', '#91E0CB', '#42BC6A', '#5B4141'];
+        //var colors = ['#8EA16C', '#C2CF30', '#FEC700', '#FF8900', '#D3432B', '#BB2952', '#8E1E5F', '#DE4AB6', '#9900EC', '#3A1AA8', '#3932FE', '#278BC0', '#35B9F6', '#91E0CB', '#42BC6A', '#5B4141'];
+        var colors = ['#a4ebc6', '#cbe375', '#f5d185', '#ee9f97', '#de8ea8', '#8a8ae7', '#85c9fc', '#ffdc4d', '#f2af58', '#f1a3d7', '#e0a9f8', '#88e8db', '#7dc9df', '#bfbfbf', '#bece91', '#84efa7'];
 
         $scope.existingRoles = [];
         $scope.realRole = [];

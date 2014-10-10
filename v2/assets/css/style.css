@@ -105,6 +105,12 @@ body, .main-content {
     vertical-align: baseline;
     white-space: nowrap;
     overflow: hidden;
+    width: 150px;
+}
+.role-tag .close {
+    margin-right: -15px;
+    cursor: pointer;
+    font-size: 16px;
 }
 .no-border-search {
     padding-left: 10px;
@@ -998,21 +1004,23 @@ circle[depth='4'] {
     margin-left: -4px;
 }
 .table-col {
-    width: 75%;
+    width: 80%;
 }
 .role-col {
-    width: 24%;
+    margin-left: 1%;
+    max-width: 300px;
+    width: 19%;
 }
 .role-panel {
     z-index: 10;
-    margin-left: 10px;
-    margin-right: -25px;
+    margin-left: 30px;
 }
 .role-panel.stick {
     position: fixed;
     z-index: 10000;
     top: 0px;
-    width: 24%;
+    padding-right: 30px;
+    width: 19%;
 }
 .role-assign-drag {
     border: 1px solid rgba(190, 210, 219, 0.5) !important;
@@ -1030,6 +1038,7 @@ circle[depth='4'] {
     display: block !important;
     border-radius: 4px !important;
     cursor: move;
+    width: auto;
 }
 .drag-enter-role {
     background: none repeat scroll 0 0 #F0F9FF;
@@ -1053,6 +1062,7 @@ circle[depth='4'] {
     text-align: center;
     vertical-align: baseline;
     white-space: nowrap;
+    margin-right: 2px;
 }
 .autofill-success {
     margin-top: 20px;
