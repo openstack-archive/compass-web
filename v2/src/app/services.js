@@ -1,5 +1,5 @@
-define(['angular'], function() {
-    var servicesModule = angular.module('compass.services', []);
+define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
+    var servicesModule = angular.module('compass.services', ['ui.bootstrap']);
     // stateService is used for dynamically add/edit state
     /*    .service('stateService', ['$state',
         function($state) {
@@ -503,12 +503,17 @@ define(['angular'], function() {
         }
     ]);
 
-    servicesModule.service('authService', ['$http', 'dataService',
-        function($http, dataService) {
-            this.isAuthenticated = true;
+    servicesModule.service('authService', ['$http', 'dataService','rememberMe',
+        function($http, dataService,rememberMe) {
+            this.isAuthenticated = false;
 
-            this.setLogin = function(isLogin) {
-                this.isAuthenticated = isLogin;
+            this.setLogin = function(remember) {
+                this.isAuthenticated = true;
+                rememberMe.setCookies("isAuthenticated","true",0.0833,Boolean(remember));
+            };
+            this.setLogout = function(){
+                this.isAuthenticated = false;
+                rememberMe.setCookies("isAuthenticated", "false", -30);
             }
 
             this.login = function(user) {
@@ -516,13 +521,25 @@ define(['angular'], function() {
             };
 
             this.logout = function() {
-                 //this.isAuthenticated = false;
                  return dataService.logout();
              };
         }
     ]);
-    servicesModule.factory('authenticationInterceptor', ['$q', '$location',
-        function($q, $location) {
+    servicesModule.service('modalService',function($modal){
+        this.show = function(message){
+            return $modal.open({
+                templateUrl: 'messagemodal.html',
+                controller: 'errorHandlingModalController',
+                resolve:{
+                    message: function(){
+                        return message;
+                    }
+                }
+            });
+        }
+    });
+    servicesModule.factory('authenticationInterceptor', ['$q', '$location','$injector',
+        function($q, $location, $injector) {
             return {
                 response: function(response) {
                     return response;
@@ -531,6 +548,13 @@ define(['angular'], function() {
                     if (rejection.status == 401) {
                         console.log("Response Error 401", rejection);
                         $location.path('/login');
+                    }
+                    else{
+                         if(rejection.config.url && rejection.config.url != "/api/users/login")
+                         {
+                            var modal = $injector.get("modalService");
+                            modal.show(rejection);
+                         }
                     }
 
                     return $q.reject(rejection);
@@ -557,8 +581,13 @@ define(['angular'], function() {
             var ca = document.cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1);
-                if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+                while (c.charAt(0) == ' ')
+                    c = c.substring(1);
+                if (c.indexOf(name) != -1)
+                 {
+                    console.log("inside")
+                    return c.substring(name.length, c.length);
+                 }
 
             }
             return "";

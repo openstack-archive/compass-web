@@ -25,8 +25,7 @@ define(['uiRouter'], function() {
                 "remember": Boolean($scope.remember)
             };
             authService.login(credentials).success(function(data) {
-                rememberMe.setCookies("isAuthenticated","true",0.0833,Boolean($scope.remember));
-                //authService.isAuthenticated = true;
+                authService.setLogin($scope.remember);
                 $state.transitionTo("clusterList");
             }).error(function(response) {
                 console.log(response);

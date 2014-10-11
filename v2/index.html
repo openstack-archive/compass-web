@@ -36,7 +36,25 @@
         <div ui-view></div>
 
     </div>
-
 </body>
+<script type="text/ng-template" id="messagemodal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">
+            <i class="ace-icon fa fa-exclamation-triangle orange"></i>
+            Error {{status}}
+        </h3>
+    </div>
+    <div class="modal-body">
+        <span ng-if="warning.message">
+            {{warning.message}}
+        </span>
+        <span ng-if="warning.message === undefined">
+            Error occured.
+        </span>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
 
 </html>
