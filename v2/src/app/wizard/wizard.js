@@ -486,14 +486,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     wizardFactory.setCommitState(commitState);
                     wizardFactory.setAllMachinesHost($scope.allservers);
 
-                }).error(function(response) {
-                    var commitState = {
-                        "name": "sv_selection",
-                        "state": "success",
-                        "message": response
-                    };
-                    wizardFactory.setCommitState(commitState);
                 });
+                // .error(function(response) {
+                //     var commitState = {
+                //         "name": "sv_selection",
+                //         "state": "success",
+                //         "message": response
+                //     };
+                //     wizardFactory.setCommitState(commitState);
+                // });
                 //wizardFactory.setServers(selectedServers);
             }
         };
@@ -602,14 +603,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         "message": ""
                     };
                     wizardFactory.setCommitState(commitState);
-                }).error(function(response) {
-                    var commitState = {
-                        "name": "os_global",
-                        "state": "error",
-                        "message": response
-                    };
-                    wizardFactory.setCommitState(commitState);
                 });
+                // .error(function(response) {
+                //     var commitState = {
+                //         "name": "os_global",
+                //         "state": "error",
+                //         "message": response
+                //     };
+                //     wizardFactory.setCommitState(commitState);
+                // });
             } else {
                 var message = {
                     "message": "The required(*) fields can not be empty !"
@@ -1101,14 +1103,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         "message": ""
                     };
                     wizardFactory.setCommitState(commitState);
-                }).error(function(response) {
-                    var commitState = {
-                        "name": "partition",
-                        "state": "error",
-                        "message": response
-                    };
-                    wizardFactory.setCommitState(commitState);
                 });
+                // .error(function(response) {
+                //     var commitState = {
+                //         "name": "partition",
+                //         "state": "error",
+                //         "message": response
+                //     };
+                //     wizardFactory.setCommitState(commitState);
+                // });
             }
         };
     });
@@ -1253,14 +1256,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
-            }).error(function(response) {
-                var commitState = {
-                    "name": "package_config",
-                    "state": "error",
-                    "message": response
-                };
-                wizardFactory.setCommitState(commitState);
             });
+            // .error(function(response) {
+            //     var commitState = {
+            //         "name": "package_config",
+            //         "state": "error",
+            //         "message": response
+            //     };
+            //     wizardFactory.setCommitState(commitState);
+            // });
         };
     });
 
@@ -1605,14 +1609,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
-            }).error(function(response) {
-                var commitState = {
-                    "name": "network_mapping",
-                    "state": "error",
-                    "message": response
-                };
-                wizardFactory.setCommitState(commitState);
             });
+            // .error(function(response) {
+            //     var commitState = {
+            //         "name": "network_mapping",
+            //         "state": "error",
+            //         "message": response
+            //     };
+            //     wizardFactory.setCommitState(commitState);
+            // });
         };
     });
 

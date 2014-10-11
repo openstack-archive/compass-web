@@ -1,5 +1,5 @@
-define(['angular'], function() {
-    var servicesModule = angular.module('compass.services', []);
+define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
+    var servicesModule = angular.module('compass.services', ['ui.bootstrap']);
     // stateService is used for dynamically add/edit state
     /*    .service('stateService', ['$state',
         function($state) {
@@ -521,8 +521,21 @@ define(['angular'], function() {
              };
         }
     ]);
-    servicesModule.factory('authenticationInterceptor', ['$q', '$location',
-        function($q, $location) {
+    servicesModule.service('modalService',function($modal){
+        this.show = function(message){
+            return $modal.open({
+                templateUrl: 'messagemodal.html',
+                controller: 'errorHandlingModalController',
+                resolve:{
+                    message: function(){
+                        return message;
+                    }
+                }
+            });
+        }
+    });
+    servicesModule.factory('authenticationInterceptor', ['$q', '$location','$injector',
+        function($q, $location, $injector) {
             return {
                 response: function(response) {
                     return response;
@@ -531,6 +544,13 @@ define(['angular'], function() {
                     if (rejection.status == 401) {
                         console.log("Response Error 401", rejection);
                         $location.path('/login');
+                    }
+                    else{
+                         if(rejection.config.url && rejection.config.url != "/api/users/login")
+                         {
+                            var modal = $injector.get("modalService");
+                            modal.show(rejection);
+                         }
                     }
 
                     return $q.reject(rejection);
