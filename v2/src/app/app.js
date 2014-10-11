@@ -73,5 +73,13 @@ define([
             })
         }
     });
+    compassModule.controller('errorHandlingModalController',function($scope,$modalInstance,message){
+        $scope.warning = message.data;
+        $scope.status = message.status;
+
+        $scope.ok =function(){
+            $modalInstance.close();
+        }
+    });
 
 });
