@@ -709,8 +709,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var config = {
             "os_config": {
                 "server_credentials": {
-                    "username": "admin",
-                    "password": "admin"
+                    "username": "root",
+                    "password": "huawei"
                 },
                 "partition": {
                     "/var": {

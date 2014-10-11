@@ -10,6 +10,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         'angularSpinner',
         'ngAnimate'
     ]);
+
     wizardModule.config(function config($stateProvider) {
         $stateProvider
             .state('wizard', {
@@ -73,8 +74,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 $scope.currentAdapterName = adapter.name;
             }
         });
-
-
 
         // get pre-config data for wizard and set wizard steps based on different adapters
         var oldConfig = clusterConfigData;
@@ -611,9 +610,17 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     wizardFactory.setCommitState(commitState);
                 });
             } else {
-                var message = {
-                    "message": "The required(*) fields can not be empty !"
-                };
+                console.log($scope.generalForm.$error);
+                var message = {};
+                if($scope.generalForm.$error.required) {
+                    message = {
+                        "message": "The required(*) fields can not be empty !"
+                    };
+                } else if($scope.generalForm.$error.match) {
+                    message = {
+                        "message": "The passwords do not match"
+                    };                    
+                }
                 var commitState = {
                     "name": "os_global",
                     "state": "error",
