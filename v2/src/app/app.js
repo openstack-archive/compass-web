@@ -54,14 +54,8 @@ define([
     });
     compassModule.controller('appController', function($scope, authService, $state, rememberMe) {
         $scope.currentUser = null;
-        $scope.isAuthenticated = authService.isAuthenticated;
+        $scope.isAuthenticated = rememberMe.getCookie('isAuthenticated') == ""? true : false;
         $scope.state = $state;
-
-        $scope.$watch(function() {
-            return authService.isAuthenticated
-        }, function(val) {
-            $scope.isAuthenticated = authService.isAuthenticated;
-        })
 
         $scope.logout = function() {
             authService.logout().success(function(data) {
@@ -71,6 +65,14 @@ define([
                 console.log(response);
                 $scope.alerts.push(response);
             })
+        }
+    });
+    compassModule.controller('errorHandlingModalController',function($scope,$modalInstance,message){
+        $scope.warning = message.data;
+        $scope.status = message.status;
+
+        $scope.ok =function(){
+            $modalInstance.close();
         }
     });
 
