@@ -10,6 +10,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         'angularSpinner',
         'ngAnimate'
     ]);
+
     wizardModule.config(function config($stateProvider) {
         $stateProvider
             .state('wizard', {
@@ -73,8 +74,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 $scope.currentAdapterName = adapter.name;
             }
         });
-
-
 
         // get pre-config data for wizard and set wizard steps based on different adapters
         var oldConfig = clusterConfigData;
@@ -413,7 +412,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.ifPreSelect = function(server) {
             server.disabled = false;
             if (server.clusters) {
-                if(server.clusters.length > 0) {
+                if (server.clusters.length > 0) {
                     server.disabled = true;
                 }
                 angular.forEach(server.clusters, function(svCluster) {
@@ -611,9 +610,17 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     wizardFactory.setCommitState(commitState);
                 });
             } else {
-                var message = {
-                    "message": "The required(*) fields can not be empty !"
-                };
+                console.log($scope.generalForm.$error);
+                var message = {};
+                if ($scope.generalForm.$error.required) {
+                    message = {
+                        "message": "The required(*) fields can not be empty !"
+                    };
+                } else if ($scope.generalForm.$error.match) {
+                    message = {
+                        "message": "The passwords do not match"
+                    };
+                }
                 var commitState = {
                     "name": "os_global",
                     "state": "error",
@@ -877,11 +884,11 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.autofill = function(alertFade) {
             // Autofill IP for each interface
             angular.forEach($scope.interfaces, function(value, key) {
-                var ip_start = $("#" + key + "-ipstart").val();
-                var interval = parseInt($("#" + key + "-increase-num").val());
-                $scope.fillIPBySequence(ip_start, interval, key);
-            })
-            // Autofill hostname
+                    var ip_start = $("#" + key + "-ipstart").val();
+                    var interval = parseInt($("#" + key + "-increase-num").val());
+                    $scope.fillIPBySequence(ip_start, interval, key);
+                })
+                // Autofill hostname
             var hostname_rule = $("#hostname-rule").val();
             $scope.fillHostname(hostname_rule);
             $scope.networkAlerts = [{
@@ -924,15 +931,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             angular.forEach($scope.servers, function(server) {
                 if (ipParts[3] > 255) {
                     ipParts[3] = ipParts[3] - 256;
-                    ipParts[2]++;
+                    ipParts[2] ++;
                 }
                 if (ipParts[2] > 255) {
                     ipParts[2] = ipParts[2] - 256;
-                    ipParts[1]++;
+                    ipParts[1] ++;
                 }
                 if (ipParts[1] > 255) {
                     ipParts[1] = ipParts[1] - 256;
-                    ipParts[0]++;
+                    ipParts[0] ++;
                 }
                 if (ipParts[0] > 255) {
                     server.networks[interface].ip = "";
@@ -1243,7 +1250,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     }
                 }
             };
-            if($scope.currentAdapterName == "ceph_openstack_icehouse") {
+            if ($scope.currentAdapterName == "ceph_openstack_icehouse") {
                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
             }
             dataService.updateClusterConfig(cluster.id, targetSysConfigData).success(function(data) {
@@ -1714,20 +1721,20 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             });
 
             dataService.postClusterActions(cluster.id, reviewAction).success(function(data) {
-                dataService.postClusterActions(cluster.id, deployAction).success(function(data) {
-                    var commitState = {
-                        "name": "review",
-                        "state": "success",
-                        "message": ""
-                    };
-                    wizardFactory.setCommitState(commitState);
+                    dataService.postClusterActions(cluster.id, deployAction).success(function(data) {
+                        var commitState = {
+                            "name": "review",
+                            "state": "success",
+                            "message": ""
+                        };
+                        wizardFactory.setCommitState(commitState);
+                    }).error(function(data) {
+                        console.warn("Deploy hosts error: ", data);
+                    });
                 }).error(function(data) {
-                    console.warn("Deploy hosts error: ", data);
-                });
-            }).error(function(data) {
-                console.warn("Review hosts error: ", data);
-            })
-            //TODO: error handling
+                    console.warn("Review hosts error: ", data);
+                })
+                //TODO: error handling
         };
 
         $scope.returnStep = function(reviewName) {
