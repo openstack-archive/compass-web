@@ -4,13 +4,13 @@
             <form id="generalForm" name="generalForm" class="form-horizontal" role="form">
                 <!-- Use metadata to generate the form. might be used later -->
                 <!--<div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
-                <div ng-if="key!='_self'">
-                    <label class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" name="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
-                    </div>
-                </div>
-            </div>-->
+                        <div ng-if="key!='_self'">
+                            <label class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" name="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
+                            </div>
+                        </div>
+                    </div>-->
                 <!--TODO: use json to generate inputs-->
                 <div class="form-group">
                     <div>
@@ -203,11 +203,13 @@
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-8">
-                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Confirm Password" ng-model="confirmPassword" name="server-confirmpassword" required>
+                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Confirm Password" ng-model="confirmPassword" data-match="server_credentials.password" name="confirmPassword" required>
+                            <div class="margin-left-14 inline">
+                                <span class="text-danger" data-ng-show="generalForm.confirmPassword.$error.match">Passwords do not match</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </form>
 
             <!--table class="table table-hover nowrap">
