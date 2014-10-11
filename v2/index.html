@@ -36,7 +36,18 @@
         <div ui-view></div>
 
     </div>
-
 </body>
+
+<script type="text/ng-template" id="errorHandlingModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Error "{{status}}"</h3>
+    </div>
+    <div class="modal-body">
+        {{message}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="close()">CLOSE</button>
+    </div>
+</script>
 
 </html>
