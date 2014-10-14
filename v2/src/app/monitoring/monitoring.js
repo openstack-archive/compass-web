@@ -109,7 +109,7 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
 
     monitoringModule.controller('metricsCtrl', function($scope, dataService, $stateParams) {
         var clusterId = $stateParams.id;
-        $scope.clickedHashTable ={};
+        $scope.clickedHashTable = {};
         $scope.metricsTree = [];
         dataService.monitorMetricsTree().success(function(data) {
             $scope.metricsTree = data;
@@ -132,6 +132,7 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
         });
 
         $scope.metricsData = [];
+
         $scope.generate = function(node) {
             console.log(node);
 
@@ -184,6 +185,7 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
                     '<p>' + y + ' at ' + x + '</p>'
             }
         };
+
         /*
     // customize stack/line chart colors
     $scope.colorFunction = function() {
@@ -193,44 +195,58 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
         };
     }
     */
-
     });
-    monitoringModule.directive('multiSelect', function($filter) {  
+    monitoringModule.directive('multiSelect', function($filter, dataService, $stateParams) {  
         return {
             templateUrl: "src/app/monitoring/multiSelect.tpl.html",
             scope: {
+                metricsData: "=metricsdata",
                 names: "=allnames"
+
             },
 
             link: function(scope, elem, attrs) {
+                // set focus on input text area
                 $(".chosen-choices").click(function(event) {
                     event.stopPropagation();
                     $(".search-field > input").focus();
                     $(".chosen-container").addClass("chosen-with-drop chosen-container-active");
+                    scope.objectKeys = scope.metricsData.map(function(obj) {
+                        return obj.key
+                    });
+                    scope.$apply();
                 });
-
+                // select one and put it in input area
                 $(".chosen-results").on("click", "li.active-result", function() {
-                    $(this).attr("class", "result-selected");
+                    var clusterId = $stateParams.id;
                     var selected = $(this).text();
-                    var insertContent = '<li class="search-choice"><span>' + selected + '</span><a class="search-choice-close" data-option-array-index="' + selected + '"></a></li>';
+                    var insertContent = '<li class="btn btn-info search-choice"><span>' + selected + '</span><a class="search-choice-close" data-option-array-index="' + selected + '"></a></li>';
+                    dataService.monitorClusterMetric(clusterId, selected).success(function(data) {
+                        scope.metricsData.push(data);
+                    }).error(function(response) {
+                        // TODO
+                    });
+
                     $(insertContent).insertBefore(".search-field");
                     scope.searchText = "";
                     scope.$apply();
                 });
-
+                //hight light
                 $(".chosen-results").on('mouseenter', 'li.active-result', function() {
                     $(this).addClass("highlighted");
                 }).on('mouseleave', 'li', function() {
                     $(this).removeClass("highlighted");
                 });
-
+                // remove the selected one
                 $(".chosen-choices").on("click", "li > .search-choice-close", function() {
                     var unselected = $(this).attr("data-option-array-index").trim();
                     $(this).closest('li').remove();
-                    $(".chosen-results > li[data-option-array-index='" + unselected + "']").attr("class", "active-result");
+                    var index = scope.objectKeys.indexOf(unselected);
+                    scope.metricsData.splice(index, 1);
+                    scope.$apply();
 
                 });
-
+                //hide options when a user clicks other places
                 $(document).click(function(e) {
                     $(".chosen-container").removeClass("chosen-with-drop chosen-container-active");
                 })
