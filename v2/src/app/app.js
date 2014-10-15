@@ -45,10 +45,15 @@ define([
     });
     compassModule.run(function($rootScope, $state, authService, rememberMe) {
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-            if (toState.authenticate && rememberMe.getCookie('isAuthenticated') != "true") {
-                // User isn't authenticated
-                $state.transitionTo("login");
-                event.preventDefault();
+            if (toState.authenticate && !authService.isAuthenticated) {
+                if (rememberMe.getCookie("isAuthenticated")) {
+                    authService.isAuthenticated = true
+                }
+                else {
+                    // User isn't authenticated
+                    $state.transitionTo("login");
+                    event.preventDefault();
+                }
             }
         });
     });
@@ -65,12 +70,20 @@ define([
 
         $scope.logout = function() {
             authService.logout().success(function(data) {
-                rememberMe.setCookies("isAuthenticated", "false", -30);
+                authService.setLogout();
                 $state.transitionTo("login");
             }).error(function(response) {
                 console.log(response);
                 $scope.alerts.push(response);
             })
+        }
+    });
+    compassModule.controller('errorHandlingModalController',function($scope,$modalInstance,message){
+        $scope.warning = message.data;
+        $scope.status = message.status;
+
+        $scope.ok =function(){
+            $modalInstance.close();
         }
     });
 
