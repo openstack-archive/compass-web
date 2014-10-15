@@ -1,4 +1,4 @@
-define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
+define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], function() {
 
     var monitoringModule = angular.module('compass.monitoring', [
         'ui.router',
@@ -6,7 +6,8 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
         'compass.charts',
         'ngAnimate',
         'nvd3ChartDirectives',
-        'ui.tree'
+        'ui.tree',
+        'angularSpinner'
     ]);
 
     monitoringModule.config(function($stateProvider, $urlRouterProvider) {
@@ -111,39 +112,49 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
         var clusterId = $stateParams.id;
         $scope.clickedHashTable = {};
         $scope.metricsTree = [];
+        $scope.loading = 0;
         dataService.monitorMetricsTree().success(function(data) {
             $scope.metricsTree = data;
+            $scope.loading++;
         }).error(function(response) {
             // TODO
         });
-
         /*$scope.metrics = [];
         dataService.monitorMetrics().success(function(data) {
             $scope.metrics = data;
         }).error(function(response) {
             // TODO
         });*/
-
         $scope.metricsName = [];
         dataService.monitorMetricsName().success(function(data) {
             $scope.metricsName = data;
+            $scope.loading++;
         }).error(function(response) {
             // TODO
         });
 
         $scope.metricsData = [];
-
+        $scope.metricsDataKey = [];
         $scope.generate = function(node) {
-            console.log(node);
+            var checked = $scope.metricsDataKey.indexOf(node.id) > -1? false: true;
+            if (checked) {
+                 dataService.monitorClusterMetric(clusterId, node.id).success(function(data) {
+                     $scope.metricsData.push(data);
+                     $scope.metricsDataKey.push(data.key);
 
-            dataService.monitorClusterMetric(clusterId, node.title).success(function(data) {
-                $scope.metricsData = data;
-
-            }).error(function(response) {
-                // TODO
-            });
-
+                 }).error(function(response) {
+                     // TODO
+                 });
+             } else{
+                var index = $scope.metricsDataKey.indexOf(node);
+                $scope.metricsData.splice(index, 1);
+                $scope.metricsDataKey.splice(index, 1);
+             }
         };
+
+        $scope.isChecked = function(node){
+            return $scope.metricsDataKey.indexOf(node.id) > -1? true: false;
+        }
 
         // For Angular UI Tree
         // $scope.toggle = function(scope) {
@@ -207,7 +218,8 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
             templateUrl: "src/app/monitoring/multiSelect.tpl.html",
             scope: {
                 metricsData: "=metricsdata",
-                names: "=allnames"
+                names: "=allnames",
+                metricsDataKey: "=metricsdatakey"
 
             },
 
@@ -217,23 +229,21 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
                     event.stopPropagation();
                     $(".search-field > input").focus();
                     $(".chosen-container").addClass("chosen-with-drop chosen-container-active");
-                    scope.objectKeys = scope.metricsData.map(function(obj) {
-                        return obj.key
-                    });
                     scope.$apply();
                 });
                 // select one and put it in input area
                 $(".chosen-results").on("click", "li.active-result", function() {
                     var clusterId = $stateParams.id;
                     var selected = $(this).text();
-                    var insertContent = '<li class="btn btn-info search-choice"><span>' + selected + '</span><a class="search-choice-close" data-option-array-index="' + selected + '"></a></li>';
                     dataService.monitorClusterMetric(clusterId, selected).success(function(data) {
+                        console.log(data);
                         scope.metricsData.push(data);
+                        scope.metricsDataKey.push(data.key);
                     }).error(function(response) {
                         // TODO
                     });
 
-                    $(insertContent).insertBefore(".search-field");
+                    //$(insertContent).insertBefore(".search-field");
                     scope.searchText = "";
                     scope.$apply();
                 });
@@ -244,18 +254,15 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
                     $(this).removeClass("highlighted");
                 });
                 // remove the selected one
-                $(".chosen-choices").on("click", "li > .search-choice-close", function() {
-                    var unselected = $(this).attr("data-option-array-index").trim();
-                    $(this).closest('li').remove();
-                    var index = scope.objectKeys.indexOf(unselected);
+                scope.removeSelected = function(target){
+                    var index = scope.metricsDataKey.indexOf(target.data);
                     scope.metricsData.splice(index, 1);
-                    scope.$apply();
-
-                });
+                    scope.metricsDataKey.splice(index,1);
+                };
                 //hide options when a user clicks other places
                 $(document).click(function(e) {
                     $(".chosen-container").removeClass("chosen-with-drop chosen-container-active");
-                })
+                });
 
             }  
         };
