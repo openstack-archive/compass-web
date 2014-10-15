@@ -24,19 +24,19 @@
                 <h3>
                     Metrics Browser
                 </h3>
-                <div multi-select metricsdata="metricsData" allnames="metricsName"></div>
+                <div multi-select metricsdata="metricsData" metricsdatakey="metricsDataKey" allnames="metricsName"></div>
                 <hr>
                 <!-- Nested node template -->
                 <div>
                     <a href="" class="btn btn-default btn-xs" ng-click="collapseAll()">Collapse all</a>
-                    <a href="" class="btn btn-default btn-xs margin-right-5" ng-click="expandAll()">Expand all</a>
+                    <!-- <a href="" class="btn btn-default btn-xs margin-right-5" ng-click="expandAll()">Expand all</a> -->
                 </div>
                 <script type="text/ng-template" id="nodes_renderer.html">
                     <div ui-tree-handle class="tree-node tree-node-content">
                         <a class="btn btn-success btn-xs" data-nodrag ng-click="toggleTab(this)" ng-class="{'opacity-zero': node.nodes.length == 0 || !node.nodes}">
                             <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
                         </a>
-                        <input type="checkbox" ng-if="node.nodes.length == 0 || !node.nodes" ng-click="generate(node)"></input>
+                        <input type="checkbox" ng-if="node.nodes.length == 0 || !node.nodes" ng-checked="isChecked(node)" ng-click="generate(node)"></input>
                         {{node.title}}
                         <!--a style="margin-right: 8px;" ng-click="generate(node)" data-nodrag="" class="pull-right btn btn-primary btn-xs no-border" ng-hide="node.nodes.length != 0">
                             <span class="glyphicon glyphicon-chevron-right"></span>
