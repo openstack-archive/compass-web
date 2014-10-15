@@ -17,26 +17,26 @@
             <button class="btn btn-primary" ng-click="changeSeriesData(0)">Generate Metrics Report</button>
         </form-->
         <!--div class="panel-body" id="metricsGraphContainer"> </div-->
-
-        <div class="row">
-            <div class="col-md-4 col-sm-6">
+        <span us-spinner style="margin: 50% auto 0 auto" ng-if="loading < 2"></span>
+        <div class="row" ng-class="{'loadingMask': loading < 2}">
+            <div class="col-md-4 col-sm-6" ng-class="{'mask':loading < 2}">
 
                 <h3>
                     Metrics Browser
                 </h3>
-                <div multi-select metricsdata="metricsData" allnames="metricsName"></div>
+                <div multi-select metricsdata="metricsData" metricsdatakey="metricsDataKey" allnames="metricsName"></div>
                 <hr>
                 <!-- Nested node template -->
                 <div>
                     <a href="" class="btn btn-default btn-xs" ng-click="collapseAll()">Collapse all</a>
-                    <a href="" class="btn btn-default btn-xs margin-right-5" ng-click="expandAll()">Expand all</a>
+                    <!-- <a href="" class="btn btn-default btn-xs margin-right-5" ng-click="expandAll()">Expand all</a> -->
                 </div>
                 <script type="text/ng-template" id="nodes_renderer.html">
                     <div ui-tree-handle class="tree-node tree-node-content">
                         <a class="btn btn-success btn-xs" data-nodrag ng-click="toggleTab(this)" ng-class="{'opacity-zero': node.nodes.length == 0 || !node.nodes}">
                             <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
                         </a>
-                        <input type="checkbox" ng-if="node.nodes.length == 0 || !node.nodes" ng-click="generate(node)"></input>
+                        <input type="checkbox" ng-if="node.nodes.length == 0 || !node.nodes" ng-checked="isChecked(node)" ng-click="generate(node)"></input>
                         {{node.title}}
                         <!--a style="margin-right: 8px;" ng-click="generate(node)" data-nodrag="" class="pull-right btn btn-primary btn-xs no-border" ng-hide="node.nodes.length != 0">
                             <span class="glyphicon glyphicon-chevron-right"></span>
