@@ -117,12 +117,12 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
             // TODO
         });
 
-        $scope.metrics = [];
+        /*$scope.metrics = [];
         dataService.monitorMetrics().success(function(data) {
             $scope.metrics = data;
         }).error(function(response) {
             // TODO
-        });
+        });*/
 
         $scope.metricsName = [];
         dataService.monitorMetricsName().success(function(data) {
@@ -175,6 +175,12 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive'], function() {
         $scope.xAxisTickFormatFunction = function() {
             return function(d) {
                 return d3.time.format('%x')(new Date(d));
+            }
+        };
+
+        $scope.yAxisTickFormatFunction = function(){
+            return function(d){
+                return d3.format(',d')(d);
             }
         };
 
