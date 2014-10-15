@@ -215,8 +215,7 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
 
                  zoomTo([root.x, root.y, root.r * 2 + margin]);
 
-                 d3.select("body")
-                     .style("background", color(-1))
+                 d3.select("#" + elemId)
                      .on("click", function() {
                          zoom(root);
                      });
