@@ -595,10 +595,10 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
 
                     //var hostnames = scope.hosts;
                     var taskStatus = {
-                        "SUCCESSFUL": "bar-successful",
-                        "CRITICAL": "bar-failed",
-                        "WARNING": "bar-warning",
-                        "UNKNOWN": "bar-unknown"
+                        "successful": "bar-successful",
+                        "critical": "bar-failed",
+                        "warning": "bar-warning",
+                        "unknown": "bar-unknown"
                     };
 
                     tasks.sort(function(a, b) {

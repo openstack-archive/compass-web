@@ -230,21 +230,21 @@ define(['angular'], function() {
             return $http.get(settings.monitoringUrlBase + '/proxy/' + px_url);
         };
 */
-            this.monitorMetrics = function() {
+            /*this.monitorMetrics = function() {
                 // This returns a flat json list of metrics currently or historically have been collected
                 // /monit/api/metrics
                 return $http.get(settings.monitoringUrlBase + '/metrics');
-            };
+            };*/
 
             this.monitorMetricsName = function() {
 
-                return $http.get(settings.monitoringUrlBase + '/metricsName');
+                return $http.get(settings.monitoringUrlBase + '/metricnames');
             };
 
             this.monitorMetricsTree = function() {
                 // This will also order the metrics in a tree
                 // /monit/api/metricstree
-                return $http.get(settings.monitoringUrlBase + '/metricstree');
+                return $http.get(settings.monitoringUrlBase + '/metrictree');
             };
 
             this.monitorHostMetric = function(clusterId, hostName, metricName) {
