@@ -152,9 +152,50 @@
         <div class="col-sm-6">
             <div class="widget-box transparent margin-top-minus10">
                 <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter" ng-click="returnStep('os_global')">
+                        <i class="ace-icon fa fa-globe"></i>
+                        OS Global Configurations
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isConfigCollapsed = !isConfigCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isConfigCollapsed, 'fa-chevron-down': isConfigCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isConfigCollapsed">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in global_config">
+                                        <td>{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Server Credentials</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username</td>
+                                        <td>{{server_credentials.username}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Password</td>
+                                        <td>{{server_credentials.password}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
                     <h4 class="widget-title lighter" ng-click="returnStep('security')">
                         <i class="ace-icon fa fa-lock"></i>
-                        Credentials
+                        Target System Configurations
                     </h4>
                     <div class="widget-toolbar no-border">
                         <ul class="nav nav-tabs">
@@ -207,45 +248,20 @@
                                 </tbody>
                             </table>
                             </script>
-                            <script type="text/ng-template" id="server.tpl.html">
-                            <h6>
-                                <strong>Username:</strong>
-                                    {{server_credentials.username}}
-                                </h6>
-                                <h6>
-                                <strong>Password:</strong>
-                                    {{server_credentials.password}}
-                                </h6>
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="widget-box transparent margin-top-minus10">
-                <div class="widget-header widget-header-flat">
-                    <h4 class="widget-title lighter" ng-click="returnStep('os_global')">
-                        <i class="ace-icon fa fa-globe"></i>
-                        OS Global Configurations
-                    </h4>
-                    <div class="widget-toolbar">
-                        <a class="action" ng-click="isConfigCollapsed = !isConfigCollapsed">
-                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isConfigCollapsed, 'fa-chevron-down': isConfigCollapsed}"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="widget-body">
-                    <div class="widget-body-inner" style="display: block;">
-                        <div class="widget-main no-padding" collapse="isConfigCollapsed">
+                            <script type="text/ng-template" id="ceph.tpl.html">
                             <table class="table table-striped">
                                 <tbody>
-                                    <tr ng-repeat="(key, value) in global_config">
+                                    <tr ng-repeat="(key, value) in cephConfig.global_config">
+                                        <td>{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                    <tr ng-repeat="(key, value) in cephConfig.osd_config">
                                         <td>{{key}}</td>
                                         <td>{{value}}</td>
                                     </tr>
                                 </tbody>
                             </table>
+                            </script>
                         </div>
                     </div>
                 </div>

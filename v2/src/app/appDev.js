@@ -666,7 +666,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var cluster = {
             "id": parseInt(id),
             "name": "Cluster" + id,
-            "adapter_id": 6,
+            "adapter_id": 6, // 6: ceph_openstack_icehouse, 5: openstack_icehouse, 4: ceph(chef), 2: os_only
             "os_id": 1,
             "editable": true,
             "create_by": "user@someemail.com",

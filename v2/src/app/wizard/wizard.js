@@ -1637,21 +1637,26 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.service_credentials = wizardFactory.getServiceCredentials();
         $scope.console_credentials = wizardFactory.getConsoleCredentials();
         $scope.global_config = wizardFactory.getGeneralConfig();
+        $scope.cephConfig = wizardFactory.getCephConfig();
 
         dataService.getServerColumns().success(function(data) {
             $scope.server_columns = data.review;
         });
 
         $scope.tabs = [{
-            title: 'Database & Queue',
-            url: 'service.tpl.html'
+            "title": "Database & Queue",
+            "url": "service.tpl.html"
         }, {
-            title: 'Keystone User',
-            url: 'console.tpl.html'
-        }, {
-            title: 'Server',
-            url: 'server.tpl.html'
+            "title": "Keystone User",
+            "url": "console.tpl.html"
         }];
+
+        if ($scope.currentAdapterName == "ceph_openstack_icehouse") {
+            $scope.tabs.push({
+                "title": "Ceph",
+                "url": "ceph.tpl.html"
+            });
+        }
 
         $scope.currentTab = $scope.tabs[0].url;
 
@@ -1748,7 +1753,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 }
             }
         };
-
     });
 
     wizardModule.directive('ngKeypress', function() {
