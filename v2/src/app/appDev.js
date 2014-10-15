@@ -1732,7 +1732,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             };
         } else {
             metricData = {
-                "key": "else",
+                "key": name,
                 "values": [
                     [1136005200000, 1271000.0],
                     [1138683600000, 1271000.0],
