@@ -375,7 +375,32 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                             })
                             .attr("width", imgWidth)
                             .attr("height", imgHeight)
-                            .on("click", click)
+                            .on("click", click);
+
+                        nodeEnter.append("image")
+                            .attr("xlink:href", function(d) {
+                                if (d.depth == 0)
+                                    return "assets/img/router.png";
+                                else if (d.depth == 1)
+                                    return "assets/img/switch1.png";
+                                else
+                                    return "assets/img/server1.png";
+                            })
+                            .attr("width", imgWidth)
+                            .attr("height", imgHeight);
+
+                        nodeEnter.append("rect")
+                            .attr("width", imgWidth)
+                            .attr("height", imgHeight)
+                            .attr("data-state", function(d) {
+                                return d.state
+                            })
+                            .style("opacity", function(d) {
+                                if (d.depth == 0)
+                                    return 0;
+                                else
+                                    return 0.3;
+                            })
                             .on("mouseover", function(d) {
                                 if (d.depth > 1) {
                                     var foWidth = 300;
@@ -422,31 +447,6 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                                 svg.selectAll(".svg-tooltip").remove();
                             });
 
-                        nodeEnter.append("image")
-                            .attr("xlink:href", function(d) {
-                                if (d.depth == 0)
-                                    return "assets/img/router.png";
-                                else if (d.depth == 1)
-                                    return "assets/img/switch1.png";
-                                else
-                                    return "assets/img/server1.png";
-                            })
-                            .attr("width", imgWidth)
-                            .attr("height", imgHeight);
-
-                        nodeEnter.append("rect")
-                            .attr("width", imgWidth)
-                            .attr("height", imgHeight)
-                            .attr("data-state", function(d) {
-                                return d.state
-                            })
-                            .style("opacity", function(d) {
-                                if (d.depth == 0)
-                                    return 0;
-                                else
-                                    return 0.3;
-                            });
-
                         nodeEnter.append("text")
                             .attr("x", function(d) {
                                 if (d.depth == 0)
@@ -469,8 +469,7 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                             .text(function(d) {
                                 return d.name;
                             })
-                            .style("font-size", "15px")
-                            .style("fill-opacity", 1e-6);
+                            .style("font-size", "15px");
 
                         // Transition nodes to their new position.
                         var nodeUpdate = node.transition()
@@ -594,7 +593,7 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
 
                     //var hostnames = scope.hosts;
                     var taskStatus = {
-                        "successful": "bar-successful",
+                        "ok": "bar-successful",
                         "critical": "bar-failed",
                         "warning": "bar-warning",
                         "unknown": "bar-unknown"
