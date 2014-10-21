@@ -28,12 +28,12 @@ circle.child {
 }
 circle.parent {
     fill-opacity: 1 !important;
-    //stroke: none !important;
+    /*stroke: none !important;*/
     fill: #E6F7FF!important;
 }
-circle {
+circlepacking circle {
     fill-opacity: 1 !important;
-    //stroke: none !important;
+    /*stroke: none !important;*/
 }
 circle[depth='1'] {
     fill: #85D6FF !important;
