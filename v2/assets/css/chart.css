@@ -26,12 +26,12 @@ circle.parent:hover {
 circle.child {
     pointer-events: none;
 }
-circle.parent {
+circlepacking circle.parent {
     fill-opacity: 1 !important;
     //stroke: none !important;
     fill: #E6F7FF!important;
 }
-circle {
+circlepacking circle {
     fill-opacity: 1 !important;
     //stroke: none !important;
 }
