@@ -1,5 +1,5 @@
 <div class="chosen-container chosen-container-multi" style="width: 100%;" title="">
-    <ul class="chosen-choices">
+    <ul class="chosen-choices" style="overflow-x:auto;">
         <li class="btn btn-info search-choice" ng-repeat=" data in metricsDataKey" ng-click="removeSelected(this)">
             <span>{{data}}</span>
             <a class="search-choice-close" data-option-array-index="{{data}}"></a>
@@ -10,9 +10,9 @@
     </ul>
     <div class="chosen-drop">
         <ul class="chosen-results">
-            <li ng-repeat = "name in filtered = (names |filter: searchText)|limitTo: 1000" ng-class="{ 'active-result':metricsDataKey.indexOf(name) < 0,'result-selected': metricsDataKey.indexOf(name) >= 0}" data-option-array-index="{{name}}">{{name}}</li>
-            <li ng-if="filtered.length > 1000" class="result-selected" style="background-color:blue;">Showing the first 1000/{{filtered.length}} records</li>
-            <li ng-if="filtered.length <= 1000" class="result-selected" style="background-color:blue;">Showing {{filtered.length}} records</li>
+            <li ng-repeat = "name in filtered = (names |filter: searchText)|limitTo: 200" ng-class="{ 'active-result':metricsDataKey.indexOf(name) < 0,'result-selected': metricsDataKey.indexOf(name) >= 0}" data-option-array-index="{{name}}">{{name}}</li>
+            <li ng-if="filtered.length > 200" class="result-selected" style="background-color:blue;">Showing the first 200/{{filtered.length}} records</li>
+            <li ng-if="filtered.length <= 200" class="result-selected" style="background-color:blue;">Showing {{filtered.length}} records</li>
         </ul>
     </div>
 </div>
