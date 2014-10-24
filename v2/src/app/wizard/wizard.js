@@ -876,6 +876,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 angular.forEach(subnets, function(subnet) {
                     $scope.subnetworks.push(subnet);
                 });
+                wizardFactory.setSubnetworks($scope.subnetworks);
             }, function() {
                 console.log("modal dismissed")
             })
