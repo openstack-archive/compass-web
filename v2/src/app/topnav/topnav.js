@@ -4,7 +4,7 @@ define(['angular'], function() {
         'ui.bootstrap'
     ]);
 
-    topNavModule.controller('topnavCtrl', function($scope, $http, dataService, $rootScope) {
+    topNavModule.controller('topnavCtrl', function($scope, $state, $http, dataService, $rootScope) {
         // get all clusters
         dataService.getClusters().success(function(data) {
             $scope.clusters = data;
@@ -12,6 +12,23 @@ define(['angular'], function() {
         $rootScope.$on('clusters', function(event, data) {
             $scope.clusters = data;
         });
+
+        $scope.gotoCluster = function(id) {
+            dataService.getClusterProgress(id).success(function(data) {
+                if (data.state == "UNINITIALIZED") {
+                    $state.go("wizard", {
+                        "id": id,
+                        "config": "true"
+                    });
+                } else {
+                    $state.go("cluster.overview", {
+                        "id": id
+                    });
+
+                }
+            });
+        };
+
     });
     topNavModule.directive('topnav', function() {
         return {

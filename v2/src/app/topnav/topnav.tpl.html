@@ -28,7 +28,7 @@
                             </a>
                         </li>
                         <li ng-repeat="cluster in clusters">
-                            <a ui-sref="cluster.overview({ id: cluster.id })">
+                            <a href ng-click="gotoCluster(cluster.id)">
                                 <i class="ace-icon fa fa-dot-circle-o blue opacity-zero"></i>
                                 {{cluster.name}}
                             </a>
