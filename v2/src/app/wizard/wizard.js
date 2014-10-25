@@ -159,8 +159,8 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     if ($scope.currentStep > $scope.maxStep) {
                         $scope.maxStep = $scope.currentStep;
                     }
-                } else if (newCommitState.state == "error") {
-                    console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
+                } else if (newCommitState.state == "invalid") {
+                    console.warn("### catch invalid in wizardCtrl ###", newCommitState, oldCommitState);
                     $scope.openErrMessageModal(newCommitState.message);
 
                 } else if (newCommitState.state == "goToPreviousStep") {
@@ -168,6 +168,8 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     if ($scope.currentStep > $scope.maxStep) {
                         $scope.maxStep = $scope.currentStep;
                     }
+                } else if (newCommitState.state == "error") {
+                    console.warn("### catch error in wizardCtrl ###", newCommitState, oldCommitState);
                 }
             }
             $scope.loading = false;
@@ -450,7 +452,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 };
                 var commitState = {
                     "name": "sv_selection",
-                    "state": "error",
+                    "state": "invalid",
                     "message": message
                 };
                 wizardFactory.setCommitState(commitState);
@@ -485,16 +487,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     wizardFactory.setCommitState(commitState);
                     wizardFactory.setAllMachinesHost($scope.allservers);
 
+                }).error(function(response) {
+                    var commitState = {
+                        "name": "sv_selection",
+                        "state": "error",
+                        "message": response
+                    };
+                    wizardFactory.setCommitState(commitState);
                 });
-                // .error(function(response) {
-                //     var commitState = {
-                //         "name": "sv_selection",
-                //         "state": "success",
-                //         "message": response
-                //     };
-                //     wizardFactory.setCommitState(commitState);
-                // });
-                //wizardFactory.setServers(selectedServers);
+                wizardFactory.setServers(selectedServers);
             }
         };
 
@@ -602,15 +603,14 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         "message": ""
                     };
                     wizardFactory.setCommitState(commitState);
+                }).error(function(response) {
+                    var commitState = {
+                        "name": "os_global",
+                        "state": "error",
+                        "message": response
+                    };
+                    wizardFactory.setCommitState(commitState);
                 });
-                // .error(function(response) {
-                //     var commitState = {
-                //         "name": "os_global",
-                //         "state": "error",
-                //         "message": response
-                //     };
-                //     wizardFactory.setCommitState(commitState);
-                // });
             } else {
                 var message = {};
                 if ($scope.generalForm.$error.required) {
@@ -1110,15 +1110,14 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         "message": ""
                     };
                     wizardFactory.setCommitState(commitState);
+                }).error(function(response) {
+                    var commitState = {
+                        "name": "partition",
+                        "state": "error",
+                        "message": response
+                    };
+                    wizardFactory.setCommitState(commitState);
                 });
-                // .error(function(response) {
-                //     var commitState = {
-                //         "name": "partition",
-                //         "state": "error",
-                //         "message": response
-                //     };
-                //     wizardFactory.setCommitState(commitState);
-                // });
             }
         };
     });
@@ -1263,15 +1262,14 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
+            }).error(function(response) {
+                var commitState = {
+                    "name": "package_config",
+                    "state": "error",
+                    "message": response
+                };
+                wizardFactory.setCommitState(commitState);
             });
-            // .error(function(response) {
-            //     var commitState = {
-            //         "name": "package_config",
-            //         "state": "error",
-            //         "message": response
-            //     };
-            //     wizardFactory.setCommitState(commitState);
-            // });
         };
     });
 
@@ -1616,15 +1614,14 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     "message": ""
                 };
                 wizardFactory.setCommitState(commitState);
+            }).error(function(response) {
+                var commitState = {
+                    "name": "network_mapping",
+                    "state": "error",
+                    "message": response
+                };
+                wizardFactory.setCommitState(commitState);
             });
-            // .error(function(response) {
-            //     var commitState = {
-            //         "name": "network_mapping",
-            //         "state": "error",
-            //         "message": response
-            //     };
-            //     wizardFactory.setCommitState(commitState);
-            // });
         };
     });
 
