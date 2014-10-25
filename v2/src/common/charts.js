@@ -300,7 +300,7 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                         tree = d3.layout.tree();
 
                     var margin = {
-                        top: 0,
+                        top: 20,
                         right: 120,
                         bottom: 0,
                         left: 130
@@ -407,8 +407,8 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
 
                                     var fo = svg.append("foreignObject")
                                         .attr({
-                                            "x": d.y + 100,
-                                            "y": d.x + 25,
+                                            "x": d.y - 330,
+                                            "y": d.x - 37,
                                             "width": foWidth,
                                             "class": "svg-tooltip"
                                         });
@@ -426,7 +426,16 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                                         .html("Hostname");
                                     tr_hostname.append("td")
                                         .attr("class", "padding-left-15")
-                                        .html(d.name);
+                                        .html(d.name.split("@")[0]);
+
+                                    var tr_ip = table.append("tr");
+                                    tr_ip.append("td")
+                                        .attr("class", "pull-right")
+                                        .style("font-weight", "bold")
+                                        .html("IP");
+                                    tr_ip.append("td")
+                                        .attr("class", "padding-left-15")
+                                        .html(d.name.split("@")[1]);
 
                                     var tr_state = table.append("tr");
                                     tr_state.append("td")
@@ -467,7 +476,7 @@ define(['angular', 'ganttChart'], function(angular, ganttChart) {
                                 return d.children || d._children ? "end" : "start";
                             })
                             .text(function(d) {
-                                return d.name;
+                                return d.name.split("@")[0];
                             })
                             .style("font-size", "15px");
 
