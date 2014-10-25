@@ -97,6 +97,10 @@ treechart rect {
     fill: none;
     cursor: pointer;
 }
+treechart rect:hover {
+    stroke: #222;
+    stroke-width: 3px;
+}
 treechart rect[data-state='ok'] {
     fill: green;
 }
@@ -114,6 +118,8 @@ treechart text.info {
 }
 treechart .tip {
     border: 2px dashed #aaaaaa;
+    border-radius: 8px;
+    opacity: 0.9;
     padding: 8px 10px;
     background-color: #eeeeee;
 }
