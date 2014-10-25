@@ -624,7 +624,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 }
                 var commitState = {
                     "name": "os_global",
-                    "state": "error",
+                    "state": "invalid",
                     "message": message
                 };
                 wizardFactory.setCommitState(commitState);
@@ -1082,7 +1082,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 }
                 var commitState = {
                     "name": "partition",
-                    "state": "error",
+                    "state": "invalid",
                     "message": message
                 };
                 wizardFactory.setCommitState(commitState);
