@@ -113,7 +113,33 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
         $scope.clickedHashTable = {};
         $scope.metricsTree = [];
         $scope.loading = 0;
+        dataPreprocessing = function(data,name){
+            angular.forEach(data.nodes,function(node){
+                if(node.nodes.length == 0)
+                {
+                    var start = 0;
+                    if((start = node.title.indexOf("(")) > -1)
+                    {
+
+                        var end = node.title.indexOf(")");
+                        var insideWord = node.title.substring(start+1,end);
+                        node.id = name +"."+node.title.substring(0,start-1)+"."+insideWord;
+
+                        // console.log(node.title);
+                    }
+                    else
+                    {
+                        node.id = name+"."+node.title;
+                    }
+                    return;
+                }
+                dataPreprocessing(node,name+"."+node.title);
+            })
+        }
         dataService.monitorMetricsTree().success(function(data) {
+            angular.forEach(data,function(node){
+                dataPreprocessing(node,node.title);
+            });
             $scope.metricsTree = data;
             $scope.loading++;
         }).error(function(response) {
