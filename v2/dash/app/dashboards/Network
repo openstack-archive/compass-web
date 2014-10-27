@@ -1,0 +1,546 @@
+{
+  "title": "Networking",
+  "services": {
+    "filter": {
+      "list": [],
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      }
+    }
+  },
+  "rows": [
+    {
+      "title": "Summary",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "text",
+          "mode": "html",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #6fb3e0; background-color: #6fb3e0; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/network.png\"><h3 style=\"color:#ffffff;margin: 7px;\">OpenStack Networking</h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\">Find various information about Neutron processes running on OpenStack cluster in this dashboard.  <br/><br/><br/></p></div>",
+          "style": {},
+          "title": "Nuetron Dashboard"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "thresholdLine": false
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": true,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_count.processes"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_count.threads"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_pagefaults.majflt"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_pagefaults.minflt"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Neutron Proc Info",
+          "leftYAxisLabel": "Counts and Faults"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": true,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_data.value"
+            }
+          ],
+          "aliasColors": {
+            "processes.ps_state.sleeping.value ( ) ": "#705DA0"
+          },
+          "aliasYAxis": {},
+          "title": "Process Data Size",
+          "leftYAxisLabel": ""
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "Summary",
+      "height": "300px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": true,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_disk_octets.read"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_disk_octets.write"
+            }
+          ],
+          "aliasColors": {
+            "processes.ps_state.sleeping.value ( ) ": "#705DA0"
+          },
+          "aliasYAxis": {},
+          "title": "Disk I/O",
+          "leftYAxisLabel": ""
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": true,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_stacksize.value"
+            }
+          ],
+          "aliasColors": {
+            "processes.ps_state.sleeping.value ( ) ": "#705DA0"
+          },
+          "aliasYAxis": {},
+          "title": "Process Stack Size",
+          "leftYAxisLabel": ""
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": true,
+            "total": true,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.neutron-server.ps_vm.value"
+            }
+          ],
+          "aliasColors": {
+            "processes.ps_state.sleeping.value ( ) ": "#705DA0"
+          },
+          "aliasYAxis": {},
+          "title": "Process VM Size",
+          "leftYAxisLabel": ""
+        }
+      ],
+      "notice": false
+    }
+  ],
+  "editable": true,
+  "failover": false,
+  "panel_hints": true,
+  "style": "light",
+  "pulldowns": [
+    {
+      "type": "filtering",
+      "collapse": false,
+      "notice": false,
+      "enable": false
+    },
+    {
+      "type": "annotations",
+      "enable": false
+    }
+  ],
+  "nav": [
+    {
+      "type": "timepicker",
+      "collapse": false,
+      "notice": false,
+      "enable": true,
+      "status": "Stable",
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ],
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "now": true
+    }
+  ],
+  "loader": {
+    "save_gist": false,
+    "save_elasticsearch": true,
+    "save_local": true,
+    "save_default": true,
+    "save_temp": true,
+    "save_temp_ttl_enable": true,
+    "save_temp_ttl": "30d",
+    "load_gist": false,
+    "load_elasticsearch": true,
+    "load_elasticsearch_size": 20,
+    "load_local": false,
+    "hide": false
+  },
+  "refresh": false,
+  "tags": [
+    "processes",
+    "openstack"
+  ],
+  "timezone": "browser"
+}

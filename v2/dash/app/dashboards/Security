@@ -4,7 +4,7 @@
     "filter": {
       "list": [],
       "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
       }
     }
@@ -12,7 +12,7 @@
   "rows": [
     {
       "title": "Row1",
-      "height": "250px",
+      "height": "450px",
       "editable": true,
       "collapse": false,
       "collapsable": true,
@@ -23,7 +23,7 @@
           "editable": true,
           "type": "text",
           "mode": "html",
-          "content": "<h3> Security </h3>\n<br/>\nThis dashboard presents information to help assess the authentication system in OpenStack.  It will be enhanced to include other security metrics as they are collected.",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #7b68af; background-color: #7b68af; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/moni/security.png\"><h3 style=\"color:#ffffff;margin: 7px;\">Security </h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\"> This dashboard presents information to help assess the authentication system in OpenStack.  It will be enhanced to include other security metrics as they are collected.<br/><br/><br/><br/></p></div>",
           "style": {},
           "title": "Security"
         },
@@ -128,6 +128,263 @@
           "aliasColors": {},
           "aliasYAxis": {},
           "title": "Keystone Process"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 1,
+          "linewidth": 2,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": true,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.httpd.ps_cputime.user"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.httpd.ps_cputime.syst"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Web Processes"
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "Row1",
+      "height": "450px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "bytes",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 5,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.keystone.ps_data.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.httpd.ps_data.value"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Process Data"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "loadingEditor": false,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "processes.keystone.ps_stacksize.value",
+              "currentHorizontalAggregatorName": "rate"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Keystone Stack Size"
         },
         {
           "span": 4,

@@ -4,21 +4,32 @@
     "filter": {
       "list": [],
       "time": {
-        "from": "2014-09-04T21:59:52.065Z",
-        "to": "2014-09-04T22:01:09.479Z"
+        "from": "2014-10-27T17:10:56.791Z",
+        "to": "2014-10-27T17:15:29.777Z"
       }
     }
   },
   "rows": [
     {
-      "title": "test",
-      "height": "350px",
+      "title": "Loads",
+      "height": "250px",
       "editable": true,
       "collapse": false,
       "collapsable": true,
       "panels": [
         {
-          "span": 6,
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "text",
+          "loadingEditor": false,
+          "mode": "html",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #6c9842; background-color: #6c9842; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/moni/cluster_summary.png\"><h3 style=\"color:#ffffff;margin: 7px;\">Cluster Summary </h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\"> Provides a variety of general metrics to get a quick idea of what is going on with the system.<br/><br/><br/><br/></p></div>",
+          "style": {},
+          "title": "Cluster Summary"
+        },
+        {
+          "span": 4,
           "editable": true,
           "type": "graph",
           "loadingEditor": false,
@@ -198,7 +209,7 @@
           "title": "cpu"
         },
         {
-          "span": 6,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "loadingEditor": false,
@@ -238,8 +249,8 @@
             "min": false,
             "max": false,
             "current": true,
-            "total": true,
-            "avg": true
+            "total": false,
+            "avg": false
           },
           "percentage": false,
           "zerofill": true,
@@ -358,7 +369,7 @@
           "points": false,
           "pointradius": 5,
           "bars": false,
-          "stack": true,
+          "stack": false,
           "legend": {
             "show": true,
             "values": true,
@@ -420,21 +431,6 @@
                 "percentile": "0.75"
               },
               "metric": "load.load.shortterm"
-            },
-            {
-              "target": "",
-              "downsampling": "avg",
-              "errors": {},
-              "groupBy": {
-                "timeInterval": "1s"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.fork_rate.value"
             }
           ],
           "aliasColors": {},
@@ -556,7 +552,7 @@
           ],
           "aliasColors": {},
           "aliasYAxis": {},
-          "title": "rabbit"
+          "title": "Message Bus"
         },
         {
           "span": 4,
@@ -685,256 +681,6 @@
       "notice": false
     },
     {
-      "title": "New row",
-      "height": "250px",
-      "editable": true,
-      "collapse": false,
-      "collapsable": true,
-      "panels": [
-        {
-          "error": false,
-          "span": 4,
-          "editable": true,
-          "type": "text",
-          "mode": "markdown",
-          "content": "this is a basic sample of notes which can be added",
-          "style": {},
-          "title": "Info"
-        },
-        {
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "scale": 1,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "resolution": 100,
-          "lines": true,
-          "fill": 3,
-          "linewidth": 1,
-          "points": false,
-          "pointradius": 5,
-          "bars": false,
-          "stack": true,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "percentage": false,
-          "zerofill": true,
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "query_as_alias": true
-          },
-          "targets": [
-            {
-              "downsampling": "avg",
-              "errors": {
-                "groupBy": {
-                  "groupCount": "Group count must be an integer"
-                }
-              },
-              "groupBy": {
-                "timeInterval": "1s",
-                "tagKey": "role"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.fork_rate.value",
-              "currentTagKey": "",
-              "currentTagValue": "",
-              "tags": {
-                "host": [
-                  "host1"
-                ]
-              },
-              "currentGroupByType": "time"
-            },
-            {
-              "target": "",
-              "downsampling": "avg",
-              "errors": {
-                "tags": null
-              },
-              "groupBy": {
-                "timeInterval": "1s"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.fork_rate.value",
-              "currentTagKey": "host",
-              "currentTagValue": "host2"
-            },
-            {
-              "target": "",
-              "downsampling": "avg",
-              "errors": {
-                "tags": null
-              },
-              "groupBy": {
-                "timeInterval": "1s"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.fork_rate.value",
-              "currentTagKey": "host",
-              "currentTagValue": "host3"
-            },
-            {
-              "target": "",
-              "downsampling": "avg",
-              "errors": {
-                "tags": null
-              },
-              "groupBy": {
-                "timeInterval": "1s"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.fork_rate.value",
-              "currentTagKey": "host",
-              "currentTagValue": "host4"
-            }
-          ],
-          "aliasColors": {},
-          "aliasYAxis": {},
-          "rightYAxisLabel": "time",
-          "title": "Fork Rate"
-        },
-        {
-          "span": 4,
-          "editable": true,
-          "type": "graph",
-          "datasource": null,
-          "renderer": "flot",
-          "x-axis": true,
-          "y-axis": true,
-          "scale": 1,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "leftMax": null,
-            "rightMax": null,
-            "leftMin": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "annotate": {
-            "enable": false
-          },
-          "resolution": 100,
-          "lines": true,
-          "fill": 4,
-          "linewidth": 3,
-          "points": false,
-          "pointradius": 5,
-          "bars": true,
-          "stack": true,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "percentage": false,
-          "zerofill": true,
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "individual",
-            "query_as_alias": true
-          },
-          "targets": [
-            {
-              "downsampling": "sum",
-              "errors": {},
-              "groupBy": {
-                "timeInterval": "1s"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.quantum-dhcp-agent.ps_count.processes",
-              "currentTagKey": "host",
-              "currentTagValue": "host3"
-            },
-            {
-              "target": "",
-              "downsampling": "sum",
-              "errors": {},
-              "groupBy": {
-                "timeInterval": "1s"
-              },
-              "horAggregator": {
-                "samplingRate": "1s",
-                "unit": "millisecond",
-                "factor": "1",
-                "percentile": "0.75"
-              },
-              "metric": "processes.quantum-l3-agent.ps_count.processes"
-            }
-          ],
-          "aliasColors": {},
-          "aliasYAxis": {},
-          "title": "Quantum Processes"
-        }
-      ],
-      "notice": false
-    },
-    {
       "title": "Networking",
       "height": "250px",
       "editable": true,
@@ -942,7 +688,7 @@
       "collapsable": true,
       "panels": [
         {
-          "span": 6,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "loadingEditor": false,
@@ -1006,7 +752,7 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "interface.if_packets.eth1.rx",
+              "metric": "interface.eth0.if_packets.rx",
               "currentHorizontalAggregatorName": "rate"
             },
             {
@@ -1022,7 +768,7 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "interface.if_packets.eth1.tx",
+              "metric": "interface.eth0.if_packets.tx",
               "currentHorizontalAggregatorName": "rate"
             }
           ],
@@ -1034,7 +780,7 @@
           "title": "Packet Rate"
         },
         {
-          "span": 6,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "loadingEditor": false,
@@ -1067,7 +813,7 @@
           "points": false,
           "pointradius": 5,
           "bars": false,
-          "stack": true,
+          "stack": false,
           "legend": {
             "show": true,
             "values": true,
@@ -1088,9 +834,7 @@
           "targets": [
             {
               "downsampling": "avg",
-              "errors": {
-                "tags": null
-              },
+              "errors": {},
               "groupBy": {
                 "timeInterval": "1s"
               },
@@ -1100,7 +844,7 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "disk.vda.disk_ops.read",
+              "metric": "disk.sda.disk_ops.read",
               "currentHorizontalAggregatorName": "avg",
               "currentTagKey": "cluster",
               "tags": {},
@@ -1119,12 +863,22 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "disk.vda.disk_ops.write"
+              "metric": "disk.sda.disk_ops.write"
             }
           ],
           "aliasColors": {},
           "aliasYAxis": {},
           "title": "Disk Ops"
+        },
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "text",
+          "mode": "html",
+          "content": "<br/><br/>  The Interfaces and disk metrics names driving this chart may need to be adjusted according to the <b>naming and configuration</b> of devices on your system.<br/> <br/> ",
+          "style": {},
+          "title": "Note"
         }
       ],
       "notice": false

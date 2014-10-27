@@ -4,7 +4,7 @@
     "filter": {
       "list": [],
       "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
       }
     }
@@ -12,7 +12,7 @@
   "rows": [
     {
       "title": "Summary",
-      "height": "250px",
+      "height": "350px",
       "editable": true,
       "collapse": false,
       "collapsable": true,
@@ -22,8 +22,8 @@
           "span": 4,
           "editable": true,
           "type": "text",
-          "mode": "markdown",
-          "content": "",
+          "mode": "html",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #6fb3e0; background-color: #6fb3e0; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/moni/messagebus.png\"><h3 style=\"color:#ffffff;margin: 7px;\">Message Bus </h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\"> This dashboard provides information on RabbitMQ/AMPQ their OpenStack related processes.<br/><br/><br/><br/></p></div>",
           "style": {},
           "title": "Message Bus"
         },
@@ -245,7 +245,7 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "rabbitmq_info.gauge.pmap_mapped.value"
+              "metric": "processes.rabbitmq-server.ps_cputime.syst"
             },
             {
               "target": "",
@@ -260,8 +260,8 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "rabbitmq_info.gauge.pmap_shared.value",
-              "hide": true
+              "metric": "processes.rabbitmq-server.ps_cputime.user",
+              "hide": false
             },
             {
               "target": "",
@@ -276,7 +276,7 @@
                 "factor": "1",
                 "percentile": "0.75"
               },
-              "metric": "rabbitmq_info.gauge.pmap_used.value"
+              "metric": "processes.rabbitmq-server.ps_stacksize.value"
             }
           ],
           "aliasColors": {
@@ -371,6 +371,102 @@
           "aliasColors": {},
           "aliasYAxis": {},
           "title": "MySQL"
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "New row",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 6,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "rabbitmq_info.gauge.ctl_consumers_compute.value"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "rabbitmq_info.gauge.ctl_consumers_conductor.value"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Bus Consumers"
         }
       ],
       "notice": false
