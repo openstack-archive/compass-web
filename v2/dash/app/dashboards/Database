@@ -4,7 +4,7 @@
     "filter": {
       "list": [],
       "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
       }
     }
@@ -12,7 +12,7 @@
   "rows": [
     {
       "title": "Row1",
-      "height": "250px",
+      "height": "450px",
       "editable": true,
       "collapse": false,
       "collapsable": true,
@@ -23,7 +23,7 @@
           "editable": true,
           "type": "text",
           "mode": "html",
-          "content": "<h3> OpenStack Supporting Database Info </H3>\n<br/>\nThis dashboard is to show information that helps discern the state of supporting databases primarily MySQL or Postgres.  This may additionally include information on Redis, Cassandra, Mongo and/or ElasticSearch.",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #a0a0a0; background-color: #a0a0a0; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/moni/database.png\"><h3 style=\"color:#ffffff;margin: 7px;\">Cluster Databases </h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\"> This dashboard is to show information that helps discern the state of supporting databases primarily MySQL or Postgres.  This may additionally include information on Redis, Cassandra, Mongo and/or ElasticSearch.<br/><br/><br/><br/></p></div>",
           "style": {},
           "title": "OS Database"
         },
@@ -232,6 +232,192 @@
           "aliasColors": {},
           "aliasYAxis": {},
           "title": "MySQL Process"
+        }
+      ],
+      "notice": false
+    },
+    {
+      "title": "Row1",
+      "height": "450px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "kairosdb.datastore.cassandra.key_query_time",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "kairosdb.http.query_time",
+              "currentHorizontalAggregatorName": "rate"
+            },
+            {
+              "target": "",
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "kairosdb.http.request_time",
+              "currentHorizontalAggregatorName": "rate"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "KairosDB Process"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "annotate": {
+            "enable": false
+          },
+          "resolution": 100,
+          "lines": true,
+          "fill": 2,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "legend": {
+            "show": true,
+            "values": true,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": true
+          },
+          "percentage": false,
+          "zerofill": true,
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "targets": [
+            {
+              "downsampling": "avg",
+              "errors": {},
+              "groupBy": {
+                "timeInterval": "1s"
+              },
+              "horAggregator": {
+                "samplingRate": "1s",
+                "unit": "millisecond",
+                "factor": "1",
+                "percentile": "0.75"
+              },
+              "metric": "kairosdb.metric_counters",
+              "currentHorizontalAggregatorName": "rate"
+            }
+          ],
+          "aliasColors": {},
+          "aliasYAxis": {},
+          "title": "Unique Metrics Collected"
         }
       ],
       "notice": false

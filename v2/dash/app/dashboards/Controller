@@ -4,7 +4,7 @@
     "filter": {
       "list": [],
       "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
       }
     }
@@ -23,7 +23,7 @@
           "editable": true,
           "type": "text",
           "mode": "html",
-          "content": "<h3> OpenStack Controller </h3>\n<br/>\nThis dashboard provides process information specifically configured for the OpenStack Controller node. ",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #6c9842; background-color: #d6487e; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/moni/controller.png\"><h3 style=\"color:#ffffff;margin: 7px;\">OpenStack Controller </h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\"> This dashboard provides process information specifically configured for the OpenStack Controller node. <br/><br/><br/><br/></p></div>",
           "style": {},
           "title": "Controller"
         },

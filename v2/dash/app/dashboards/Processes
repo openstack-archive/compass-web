@@ -4,7 +4,7 @@
     "filter": {
       "list": [],
       "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
       }
     }
@@ -12,7 +12,7 @@
   "rows": [
     {
       "title": "Summary",
-      "height": "250px",
+      "height": "450px",
       "editable": true,
       "collapse": false,
       "collapsable": true,
@@ -23,7 +23,7 @@
           "editable": true,
           "type": "text",
           "mode": "html",
-          "content": "<h3> Cluster System Process Status </h3>\n\nFind various information about process states running on your OpenStack cluster in this dashboard.  This information includes:<br/>\n<ul>\n<li> Cluster Process Summary </li>\n<ul>\n<li>Note that process idle time is on a seperate graph so that other states are easily visible </li>\n</ul>\n<li> OpenStack Key Process Metrics </li>\n<ul> <li> Process Count </li> <li>Process Memory Util </li> <li>...</li> </ul>\n<li> Supporting Process Metrics </li>\n<li> Process Fork Rate  </li>\n<li>Other Process Information</li>\n</ul>",
+          "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #6fb3e0; background-color: #6fb3e0; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 10px; margin-top: 5px\" src=\"/assets/img/moni/processes.png\"><h3 style=\"color:#ffffff;margin: 7px;\">Cluster Processes</h3><p style=\"margin-left: 7px; margin-bottom: 10px; margin-top: 5px\">Find various information about process states running on your OpenStack cluster in this dashboard.  This information includes:<ul><li> Cluster Process Summary </li><ul>\n<li>Note that process idle time is on a seperate graph so that other states are easily visible </li></ul><li> OpenStack Key Process Metrics </li><ul> <li> Process Count </li> <li>Process Memory Util </li> <li>...</li> </ul><li> Supporting Process Metrics </li><li> Process Fork Rate </li><li>Other Process Information</li>\n</ul><br/></p></div>",
           "style": {},
           "title": "Process Dashboard"
         },
