@@ -29,7 +29,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     },
                     machinesHostsData: function($q, dataService, clusterData) {
                         var deferred = $q.defer();
-                        dataService.getAllMachineHosts(clusterData.os_id).success(function(data) {
+                        dataService.getAllMachineHosts().success(function(data) {
                             deferred.resolve(data);
                         });
                         return deferred.promise;
