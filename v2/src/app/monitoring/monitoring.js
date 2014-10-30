@@ -172,7 +172,7 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
                      // TODO
                  });
              } else{
-                var index = $scope.metricsDataKey.indexOf(node);
+                var index = $scope.metricsDataKey.indexOf(node.id);
                 $scope.metricsData.splice(index, 1);
                 $scope.metricsDataKey.splice(index, 1);
              }
