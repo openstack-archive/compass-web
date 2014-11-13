@@ -104,11 +104,11 @@ require.config({
             exports: "moment"
         },
         "daterangepicker": {
-            deps: ["twitterBootstrap", "angular", "moment"],
+            deps: ["twitterBootstrap", "moment"],
             exports: "daterangepicker"
         },
         "ngBsDaterangepicker": {
-            deps: ["daterangepicker"],
+            deps: ["moment","daterangepicker", "angular"],
             exports: "ngBsDaterangepicker"
         }
     },
