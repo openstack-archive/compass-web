@@ -43,6 +43,22 @@
         </div>
         <div class="col-md-8 col-sm-6" ng-class="{'mask':loading < 2}">
             <h3>Metrics Chart</h3>
+            <!-- <div class="input-prepend input-group date-picker-margin">
+                <span class="add-on input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </span>
+                <input type="daterange" class="form-control" startDate="2013-09-10" ng-model="dateRange" style="width:400px;" enableTimePicker="true" format="M/DD/YYYY h:mm A" >
+
+            </div> -->
+            <div>
+                From
+                <input type="number" style="width:55px" ng-model="start_relative.value" min="1"/>
+                <select ng-model="start_relative.unit" ng-options="tu for tu in timeUnit"></select> ago
+                To
+                <input type="number" style="width:55px" ng-model="end_relative.value" min="1"/>
+                <select ng-model="end_relative.unit" ng-options="tu for tu in timeUnit"></select> ago
+                <button style="margin-left: 10px" ng-click="changeTimeRange()">Apply</button>
+            </div>
             <div class="row" style="height: 400px">
                 <nvd3-line-chart
                     id="metrics-chart"
