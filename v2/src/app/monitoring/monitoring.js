@@ -1,4 +1,4 @@
-define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], function() {
+define(['angularAnimate', 'angularUiTree', 'nvd3Directive', 'ngSpinner'], function() {
 
     var monitoringModule = angular.module('compass.monitoring', [
         'ui.router',
@@ -108,49 +108,47 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
 
     });
 
-    monitoringModule.controller('metricsCtrl', function($scope, dataService, $stateParams) {
+    monitoringModule.controller('metricsCtrl', function($rootScope, $scope, dataService, $stateParams, metricsFactory) {
         var clusterId = $stateParams.id;
         $scope.clickedHashTable = {};
-        $scope.metricsTree = [];
+        $scope.metricsTree = []; // contains ui tree data
         $scope.loading = 0;
-        dataPreprocessing = function(data,name){
-            angular.forEach(data.nodes,function(node){
-                if(node.nodes.length == 0)
-                {
+        metricsFactory.init();
+        $scope.timeUnit = ["milliseconds", "years", "months", "days", "hours"];
+        $scope.start_relative = {
+            "value": 1,
+            "unit": "hours"
+        };
+        /*==== format data for ui-tree ====*/
+        dataPreprocessing = function(data, name) {
+            angular.forEach(data.nodes, function(node) {
+                if (node.nodes.length == 0) {
                     var start = 0;
-                    if((start = node.title.indexOf("(")) > -1)
-                    {
+                    if ((start = node.title.indexOf("(")) > -1) {
 
                         var end = node.title.indexOf(")");
-                        var insideWord = node.title.substring(start+1,end);
-                        node.id = name +"."+node.title.substring(0,start-1)+"."+insideWord;
+                        var insideWord = node.title.substring(start + 1, end);
+                        node.id = name + "." + node.title.substring(0, start - 1) + "." + insideWord;
 
                         // console.log(node.title);
-                    }
-                    else
-                    {
-                        node.id = name+"."+node.title;
+                    } else {
+                        node.id = name + "." + node.title;
                     }
                     return;
                 }
-                dataPreprocessing(node,name+"."+node.title);
+                dataPreprocessing(node, name + "." + node.title);
             })
         }
         dataService.monitorMetricsTree().success(function(data) {
-            angular.forEach(data,function(node){
-                dataPreprocessing(node,node.title);
+            angular.forEach(data, function(node) {
+                dataPreprocessing(node, node.title);
             });
             $scope.metricsTree = data;
             $scope.loading++;
         }).error(function(response) {
             // TODO
         });
-        /*$scope.metrics = [];
-        dataService.monitorMetrics().success(function(data) {
-            $scope.metrics = data;
-        }).error(function(response) {
-            // TODO
-        });*/
+
         $scope.metricsName = [];
         dataService.monitorMetricsName().success(function(data) {
             $scope.metricsName = data;
@@ -161,25 +159,34 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
 
         $scope.metricsData = [];
         $scope.metricsDataKey = [];
+        /*==== ui tree draw graph ====*/
         $scope.generate = function(node) {
-            var checked = $scope.metricsDataKey.indexOf(node.id) > -1? false: true;
+            var checked = $scope.metricsDataKey.indexOf(node.id) > -1 ? false : true;
             if (checked) {
-                 dataService.monitorClusterMetric(clusterId, node.id).success(function(data) {
-                     $scope.metricsData.push(data);
-                     $scope.metricsDataKey.push(data.key);
 
-                 }).error(function(response) {
-                     // TODO
-                 });
-             } else{
+                var selected = node.id;
+                var index = metricsFactory.addSelectedMetrics(selected); //store the initial query
+
+                var query = metricsFactory.getSelectedMetricsQuery(index);
+                dataService.monitorMetricsQuery(query).success(function(data) {
+                    var index = metricsFactory.addDisplayData(data);
+                    $scope.metricsData.push(metricsFactory.getDisplayData(index));
+                    $scope.metricsDataKey.push(selected); // show selected on both multi-selection and ui-tree
+                }).error(function(response) {
+                    // TODO
+                });
+
+            } else {
+                metricsFactory.removeSelectedMetrics(node.id);
                 var index = $scope.metricsDataKey.indexOf(node.id);
                 $scope.metricsData.splice(index, 1);
                 $scope.metricsDataKey.splice(index, 1);
-             }
+            }
+
         };
 
-        $scope.isChecked = function(node){
-            return $scope.metricsDataKey.indexOf(node.id) > -1? true: false;
+        $scope.isChecked = function(node) {
+            return $scope.metricsDataKey.indexOf(node.id) > -1 ? true : false;
         }
 
         // For Angular UI Tree
@@ -215,8 +222,8 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
             }
         };
 
-        $scope.yAxisTickFormatFunction = function(){
-            return function(d){
+        $scope.yAxisTickFormatFunction = function() {
+            return function(d) {
                 return d3.format(',d')(d);
             }
         };
@@ -229,6 +236,21 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
             }
         };
 
+        $scope.changeTimeRange = function() {
+            metricsFactory.setStartRelative($scope.start_relative);
+
+            metricsFactory.setEndRelative($scope.end_relative);
+
+            for (var i = 0; i < metricsFactory.getSelectedSize(); i++) {
+                var query = metricsFactory.getSelectedMetricsQuery(i);
+                console.log(query);
+                dataService.monitorMetricsQuery(query).success(function(data) {
+                    var index = metricsFactory.updateDisplayData(data);
+                }).error(function(response) {
+                    // TODO
+                });
+            }
+        };
         /*
     // customize stack/line chart colors
     $scope.colorFunction = function() {
@@ -239,17 +261,34 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
     }
     */
     });
-    monitoringModule.directive('multiSelect', function($filter, dataService, $stateParams) {  
+
+    // this is the helper function to find index for a target object in an array
+    var findTargetIndex = function(container, target) {
+        var index = -1;
+        var count = 0;
+
+        angular.forEach(container, function(t) {
+            if (t.key == target) {
+                index = count;
+            }
+            count++;
+        });
+        if (index > -1)
+            return index;
+        return -1;
+    };
+    monitoringModule.directive('multiSelect', function($filter, dataService, $modal, $stateParams, metricsFactory) {  
         return {
             templateUrl: "src/app/monitoring/multiSelect.tpl.html",
             scope: {
-                metricsData: "=metricsdata",
+                metricsData: "=metricsdata", //metricsData is the data that show on the graph
                 names: "=allnames",
                 metricsDataKey: "=metricsdatakey"
 
             },
 
             link: function(scope, elem, attrs) {
+                var selected = "";
                 // set focus on input text area
                 $(".chosen-choices").click(function(event) {
                     event.stopPropagation();
@@ -260,11 +299,15 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
                 // select one and put it in input area
                 $(".chosen-results").on("click", "li.active-result", function() {
                     var clusterId = $stateParams.id;
-                    var selected = $(this).text();
-                    dataService.monitorClusterMetric(clusterId, selected).success(function(data) {
-                        console.log(data);
-                        scope.metricsData.push(data);
-                        scope.metricsDataKey.push(data.key);
+                    selected = $(this).text();
+
+                    var index = metricsFactory.addSelectedMetrics(selected); //store the initial query
+
+                    var query = metricsFactory.getSelectedMetricsQuery(index);
+                    dataService.monitorMetricsQuery(query).success(function(data) {
+                        var index = metricsFactory.addDisplayData(data);
+                        scope.metricsData.push(metricsFactory.getDisplayData(index));
+                        scope.metricsDataKey.push(selected); // show selected on both multi-selection and ui-tree
                     }).error(function(response) {
                         // TODO
                     });
@@ -273,24 +316,123 @@ define(['angularAnimate', 'angularUiTree', 'nvd3Directive','ngSpinner'], functio
                     scope.searchText = "";
                     scope.$apply();
                 });
-                //hight light
+
+                //high light
                 $(".chosen-results").on('mouseenter', 'li.active-result', function() {
                     $(this).addClass("highlighted");
                 }).on('mouseleave', 'li', function() {
                     $(this).removeClass("highlighted");
                 });
                 // remove the selected one
-                scope.removeSelected = function(target){
+                scope.removeSelected = function(target) {
+                    metricsFactory.removeSelectedMetrics(target.data);
                     var index = scope.metricsDataKey.indexOf(target.data);
                     scope.metricsData.splice(index, 1);
-                    scope.metricsDataKey.splice(index,1);
+                    scope.metricsDataKey.splice(index, 1);
                 };
                 //hide options when a user clicks other places
                 $(document).click(function(e) {
                     $(".chosen-container").removeClass("chosen-with-drop chosen-container-active");
                 });
+                scope.filter = function(target) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'filter.html',
+                        controller: 'metricsModalInstanceCtrl',
+                        resolve: {
+                            tags: function($q, dataService) {
+                                var deferred = $q.defer();
 
+                                dataService.monitorMetricsTagName(selected).success(function(data) {
+                                    deferred.resolve(data.queries[0].results[0].tags);
+                                }).error(function(response) {
+                                    // TODO
+                                });
+                                return deferred.promise;
+                            },
+                            metricsName: function() {
+                                return target.data;
+                            }
+                        }
+                    });
+                };
             }  
+        };
+    });
+    monitoringModule.controller('metricsModalInstanceCtrl', function($rootScope, $scope, $modalInstance, tags, metricsName, metricsFactory, dataService) {
+
+        $scope.groups = ["tag", "time", "value"];
+        $scope.timeUnit = ["milliseconds", "years", "months", "days", "hours"];
+        $scope.aggregatorTypes = ["avg", "dev", "div","min", "max", "rate", "sampler", "sum", "scale", "count", "least_squares","percentile"];
+
+
+        $scope.allTags = [];
+        $scope.displayTags = tags;
+
+        var index = metricsFactory.getIndex(metricsName);
+        $scope.metrics = metricsFactory.getSelectedMetricsQuery(index).metrics;
+        if (!jQuery.isEmptyObject($scope.metrics[0].tags)) {
+            angular.forEach($scope.metrics[0].tags, function(value, key) {
+                console.log(value)
+                angular.forEach(value, function(v) {
+                    var temp = {};
+                    temp.selectedTag = key;
+                    temp.tagValue = v;
+                    $scope.allTags.push(temp);
+                });
+            });
+        }
+        $scope.addGroup = function() {
+            if (!$scope.metrics[0].group_by) {
+                $scope.metrics[0].group_by = [];
+            }
+            $scope.metrics[0].group_by.push({});
+        };
+        $scope.removeGroup = function(index) {
+            $scope.metrics[0].group_by.splice(index, 1);
+        };
+        $scope.addAggregator = function() {
+            $scope.metrics[0].aggregators.push({});
+        };
+        $scope.removeAggregator = function(index) {
+            $scope.metrics[0].aggregators.splice(index, 1);
+        }
+        $scope.addTag = function() {
+            $scope.allTags.push({});
+        };
+        $scope.removeTag = function(index) {
+            $scope.allTags.splice(index, 1);
+        }
+        $scope.ok = function() {
+            $scope.metrics[0].tags = {};
+            angular.forEach($scope.allTags, function(tag) {
+                if (!$scope.metrics[0].tags[tag.selectedTag]) {
+                    $scope.metrics[0].tags[tag.selectedTag] = [];
+                }
+                $scope.metrics[0].tags[tag.selectedTag].push(tag.tagValue);
+            });
+            var index = metricsFactory.getIndex(metricsName);
+            var query = metricsFactory.getSelectedMetricsQuery(index);
+
+            dataService.monitorMetricsQuery(query).success(function(data) {
+                var index = metricsFactory.updateDisplayData(data);
+            }).error(function(response) {
+                // TODO
+            });
+            $modalInstance.close();
+        };
+        $scope.cleanGroupBy = function(index) {
+            var temp = $scope.metrics[0].group_by[index].name;
+            $scope.metrics[0].group_by[index] = {};
+            $scope.metrics[0].group_by[index].name = temp;
+        };
+        $scope.cheanAggregator = function(index){
+            var temp = $scope.metrics[0].aggregators[index].name;
+            $scope.metrics[0].aggregators[index]= {};
+            $scope.metrics[0].aggregators[index].align_sampling = true;
+            $scope.metrics[0].aggregators[index].name= temp;
+        };
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
         };
     });
 

@@ -44,6 +44,7 @@ define([
         $httpProvider.interceptors.push('authenticationInterceptor');
     });
     compassModule.run(function($rootScope, $state, authService, rememberMe) {
+        $rootScope.Object = Object;  //Object can be used in anywhere. e.g. : Object.key({}).length == 0
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
             if (toState.authenticate && !authService.isAuthenticated) {
                 if (rememberMe.getCookie("isAuthenticated")) {
