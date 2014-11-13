@@ -50,6 +50,10 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 return $http.get(settings.metadataUrlBase + '/adapter_config');
             };
 
+            // this.getMetricsQuery = function() {
+            //     return $http.get(settings.metadataUrlBase + '/metrics.json');
+            // };
+
             this.getAllMachineHosts = function(os) {
                 if (os) {
                     return $http.get(settings.apiUrlBase + '/switches-machines-hosts?os_id=' + os);
@@ -241,6 +245,14 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 return $http.get(settings.monitoringUrlBase + '/metricnames');
             };
 
+            this.monitorMetricsTagName = function(selectedMetrics) {
+                var metrics = '{"metrics":[{"tags":{},"name":"'+selectedMetrics+'"}],"cache_time":0,"start_absolute":0}';
+                return $http.post(settings.monitoringUrlBase + '/datapoints/query/tag',metrics);
+            };
+            this.monitorMetricsQuery = function(query) {
+                return $http.post(settings.monitoringUrlBase + '/datapoints/query',query);
+            };
+
             this.monitorMetricsTree = function() {
                 // This will also order the metrics in a tree
                 // /monit/api/metricstree
@@ -328,7 +340,140 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
         };
     });
 
+    servicesModule.factory('metricsFactory', ['dataService',
 
+        function(dataService) {
+            var metrics = {};
+            metrics.init = function() {
+                metrics.selectedMetrics = [];
+                metrics.selectedMetricsQuery = [];
+                metrics.displayData = [];
+
+                metrics.start_relative = {
+                    value: "1",
+                    unit: "hours"
+                };
+                metrics.end_relative = {
+                    value: null,
+                    unit: null
+                };
+
+                metrics.selectedSize = 0;
+            };
+
+            metrics.init();
+
+            metrics.getIndex = function(metricsName) {
+                for (var i = 0; i < metrics.selectedMetrics.length; i++) {
+                    if (metrics.selectedMetrics[i] == metricsName) {
+                        return i;
+                    }
+                }
+            };
+
+            metrics.getSelectedSize = function() {
+                return this.selectedSize;
+            };
+
+            /* ================ relative time ====================*/
+            metrics.setStartRelative = function(new_start_relative) {
+                metrics.start_relative.value = new_start_relative.value;
+                metrics.start_relative.unit = new_start_relative.unit;
+            };
+
+            metrics.setEndRelative = function(new_end_relative) {
+                metrics.end_relative.value = new_end_relative.value;
+                metrics.end_relative.unit = new_end_relative.unit;
+            };
+
+            /* ================= selected Metrics ================*/
+            metrics.addSelectedMetrics = function(metricsName) {
+                metrics.selectedMetrics.push(metricsName);
+                metrics.addSelectedMetricsQuery(metricsName);
+                metrics.selectedSize++;
+                return metrics.selectedMetrics.length - 1;
+            };
+            metrics.removeSelectedMetrics = function(metricsName) {
+                    for (var i = 0; i < metrics.selectedMetrics.length; i++) {
+                        if (metrics.selectedMetrics[i] == metricsName) {
+                            metrics.selectedMetrics.splice(i, 1);
+                            metrics.removeSelectedMetricsQuery(i);
+                            metrics.removeDisplayData(i);
+                            metrics.selectedSize--;
+                        }
+                    }
+                }
+                /* ============== selected Metrics Query ===============*/
+            metrics.addSelectedMetricsQuery = function(metricsName) {
+                var query = {
+                    metrics: [{
+                        tags: {},
+                        name: "",
+                        aggregators: [{
+                            name: "sum",
+                            align_sampling: true,
+                            sampling: {
+                                value: "1",
+                                unit: "milliseconds"
+                            }
+                        }]
+                    }],
+                    cache_time: 0,
+                    start_relative: {
+                        value: "1",
+                        unit: "hours"
+                    }
+                };
+                query.start_relative = metrics.start_relative;
+                if (metrics.end_relative.value != null && metrics.end_relative.unit != null) {
+                    query.end_relative = metrics.end_relative;
+                }
+                query.metrics[0].name = metricsName;
+                metrics.selectedMetricsQuery.push(query);
+            };
+
+            metrics.removeSelectedMetricsQuery = function(index) {
+                metrics.selectedMetricsQuery.splice(index, 1);
+            };
+            metrics.updateStartRelativeInQuery = function(index) {
+                if (metrics.end_relative.value != null && metrics.end_relative.unit != null) {
+                    this.selectedMetricsQuery[index].end_relative = metrics.end_relative;
+                } else if (this.selectedMetricsQuery[index].end_relative) {
+                    delete this.selectedMetricsQuery[index].end_relative;
+                }
+
+            };
+            metrics.getSelectedMetricsQuery = function(index) {
+                this.updateStartRelativeInQuery(index);
+                return metrics.selectedMetricsQuery[index];
+            };
+
+            /* ================== display data on the char ====================*/
+            metrics.addDisplayData = function(data) {
+                var tempObj = {};
+                tempObj.key = data.queries[0].results[0].name;
+                tempObj.values = data.queries[0].results[0].values;
+                metrics.displayData.push(tempObj);
+                return metrics.displayData.length - 1;
+            };
+            metrics.updateDisplayData = function(data) {
+                var index = metrics.getIndex(data.queries[0].results[0].name);
+                metrics.displayData[index].values = data.queries[0].results[0].values;
+                return index;
+
+            };
+            metrics.getDisplayData = function(index) {
+                return metrics.displayData[index];
+            };
+            metrics.removeDisplayData = function(index) {
+                metrics.displayData.splice(index, 1);
+            };
+
+            return metrics;
+
+
+        }
+    ]);
     servicesModule.factory('wizardFactory', [
 
         function() {
