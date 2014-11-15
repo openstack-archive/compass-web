@@ -384,7 +384,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             }
         });
 
-
         $scope.selectAllServers = function(flag) {
             if (flag) {
                 angular.forEach($scope.allservers, function(sv) {
