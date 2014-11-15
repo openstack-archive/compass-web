@@ -59,9 +59,12 @@
                     <tr>
                         <th>
                             <label>
-                                <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                                <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace"></input>
                                 <span class="lbl"></span>
                             </label>
+                            <span class="action" style="margin-left:10px; position:relative; top: 2px;">
+                                <i class="fa fa-plus-circle bigger-140 red" tooltip="Add Server" ng-click="addServer()"></i>
+                            </span>
                         </th>
                         <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
                                     'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
@@ -109,4 +112,28 @@
             </table>
         </div>
     </div>
+<script type="text/ng-template" id="addServerModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Add a Server</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+          <label class="col-sm-3" style="text-align: right">Host MAC Addr</label>
+          <input type="text" ng-model="server.mac" class="form-control" style="width:380px">
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3" style="text-align: right">Switch IP</label>
+          <input type="text" ng-model="server.switch_ip" class="form-control" style="width:380px">
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3" style="text-align: right">Port</label>
+          <input type="text" ng-model="server.port" class="form-control" style="width:380px">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
 </div>

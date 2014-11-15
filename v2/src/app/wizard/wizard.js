@@ -341,13 +341,21 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         }
     });
 
-    wizardModule.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
+    wizardModule.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $modal, $rootScope) {
         $scope.hideunselected = '';
         $scope.search = {};
 
         var cluster = wizardFactory.getClusterInfo();
 
         $scope.allservers = wizardFactory.getAllMachinesHost();
+
+        $scope.addServer = function(){
+            var modalInstance = $modal.open({
+              templateUrl: 'addServerModalContent.html',
+              controller: 'addServerModalInstanceCtrl'
+            });
+
+        };
 
         $scope.tableParams = new ngTableParams({
             page: 1, // show first page
@@ -384,6 +392,12 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             }
         });
 
+        $rootScope.$on('addServer', function(event, data) {
+
+            $scope.allservers.push(data);
+            $scope.tableParams.count($scope.allservers.length);
+
+        });
 
         $scope.selectAllServers = function(flag) {
             if (flag) {
@@ -585,6 +599,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 return;
             }
             $scope.$emit("loading", true);
+            console.log($scope.server_credentials)
             var osGlobalConfig = {
                 "os_config": {
                     "general": $scope.general,
@@ -1791,6 +1806,18 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 }
             });
         };
+    });
+    wizardModule.controller('addServerModalInstanceCtrl', function ($rootScope, $scope, $modalInstance) {
+
+      $scope.server={};
+      $scope.ok = function () {
+        $rootScope.$emit("addServer", $scope.server);
+        $modalInstance.close();
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
     });
 
     var wizardModalInstanceCtrl = function($scope, $modalInstance, warning) {
