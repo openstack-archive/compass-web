@@ -53,7 +53,7 @@
         },
         "server_credentials": {
             "username": "root",
-            "password": "huawei"
+            "password": ""
         },
         "service_credentials": {
             "rabbitmq": {
