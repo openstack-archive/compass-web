@@ -383,6 +383,12 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, switchState, {}];
     });
 
+    $httpBackend.whenPOST(settings.apiUrlBase + '/batch-machines').respond(function(method, url, data) {
+        console.log(method, url, data);
+
+        return [200, {}, {}];
+    });
+
     $httpBackend.whenGET(/\.*\/switches\/([0-9]|[1-9][0-9])\/machines$/).respond(function(method, url, data) {
         console.log(method, url, data);
         var index = url.indexOf("switches/");

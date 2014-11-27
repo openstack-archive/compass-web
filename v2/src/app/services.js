@@ -58,6 +58,10 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 }
             };
 
+            this.addMultiMachines = function(machines) {
+                return $http.post(settings.apiUrlBase + '/batch-machines');
+            };
+
             this.getSwitches = function() {
                 return $http.get(settings.apiUrlBase + '/switches');
             };
