@@ -34,7 +34,8 @@ require.config({
         'userSetting': 'app/user/usersetting',
         'monitoring': 'app/monitoring/monitoring',
         'charts': 'common/charts',
-        'findservers': 'common/findservers/findservers'
+        'findservers': 'common/findservers/findservers',
+        'fileHelper': 'common/filehelper'
     },
     shim: {
         "jquery": {

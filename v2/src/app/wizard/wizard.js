@@ -1,4 +1,4 @@
-define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinner', 'angularAnimate'], function() {
+define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinner', 'angularAnimate', 'fileHelper'], function() {
     var wizardModule = angular.module('compass.wizard', [
         'ui.router',
         'ui.bootstrap',
@@ -8,7 +8,8 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         'ngDragDrop',
         'ngTouch',
         'angularSpinner',
-        'ngAnimate'
+        'ngAnimate',
+        'compass.filereader'
     ]);
 
     wizardModule.config(function config($stateProvider) {
@@ -344,6 +345,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
     wizardModule.controller('svSelectCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
         $scope.hideunselected = '';
         $scope.search = {};
+        $scope.alerts = [];
 
         var cluster = wizardFactory.getClusterInfo();
 
@@ -424,6 +426,25 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     }
                 })
             }
+        };
+
+        $scope.importServers = function(servers) {
+            dataService.addMultiMachines(servers).success(function(data) {
+                $scope.alerts[0] = {
+                    type: "success",
+                    msg: "Import success!"
+                };
+                //TODO: add servers to the machine-host table
+            }).error(function(response) {
+                $scope.alerts[0] = {
+                    type: "danger",
+                    msg: "Import failed!"
+                };
+            });
+
+        };
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
         };
 
         $scope.$watch(function() {

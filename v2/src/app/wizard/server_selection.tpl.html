@@ -9,6 +9,47 @@
                 <findservers results="foundResults"></findservers>
             </div>
         </div>
+        <div collapse="importServersPanel.isCollapsed">
+            <div class="dashed-panel">
+                <span class="action pull-right" ng-click="importServersPanel.isCollapsed = true;">
+                    <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
+                </span>
+                <div class="clearfix"></div>
+                <h4>Import Servers by CSV file</h4>
+                <div>
+
+                </div>
+                <center style="margin-top: 20px; margin-bottom: 30px;">
+                    <input style="display: inline" type="file" accept=".csv" file-reader="fileContent" />
+                    <button style="display: inline" type="button" class="btn btn-primary" ng-click="importServers(fileContent)" ng-show="fileContent && fileContent.length > 0">Import</button>
+                </center>
+                <div style="margin-bottom: 30px;">
+                    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+
+                <div class="table-responsive" ng-show="fileContent && fileContent.length > 0">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>MAC Addr</th>
+                                <th>Switch IP</th>
+                                <th>Port</th>
+                                <th>VLAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="machine in fileContent">
+                                <td>{{machine.mac}}</td>
+                                <td>{{machine.switch_ip}}</td>
+                                <td>{{machine.port}}</td>
+                                <td>{{machine.vlan}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="pull-left">
@@ -36,12 +77,18 @@
             </div>
         </div>
         <div class="pull-right">
-            <button class="btn btn-info" ng-click="findNewServersPanel.isCollapsed = !findNewServersPanel.isCollapsed" ng-init="findNewServersPanel.isCollapsed = true;">
+            <button class="btn btn-info" ng-click="findNewServersPanel.isCollapsed = !findNewServersPanel.isCollapsed; importServersPanel.isCollapsed = findNewServersPanel.isCollapsed?importServersPanel.isCollapsed : true;" ng-init="findNewServersPanel.isCollapsed = true;">
                 Discover Servers&nbsp;&nbsp;
                 <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !findNewServersPanel.isCollapsed}"></i>
             </button>
         </div>
-        <div class="pull-right side-padding-20">
+        <div class="pull-right side-padding-10">
+            <button class="btn btn-info" ng-click="importServersPanel.isCollapsed = !importServersPanel.isCollapsed; findNewServersPanel.isCollapsed = importServersPanel.isCollapsed?importServersPanel.isCollapsed : true;" ng-init="importServersPanel.isCollapsed = true;">
+                Import Servers&nbsp;&nbsp;
+                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !importServersPanel.isCollapsed}"></i>
+            </button>
+        </div>
+        <div class="pull-right">
             <div class="checkbox">
                 <label>
                     <input ng-model="hideunselected" ng-change="hideUnselected()" type="checkbox" class="ace">
