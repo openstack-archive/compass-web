@@ -465,7 +465,7 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
             };
 
             wizard.getServerCredentials = function() {
-                return angular.copy(wizard.server_credentials);
+                return wizard.server_credentials;
             }
             wizard.setServiceCredentials = function(credentials) {
                 wizard.service_credentials = credentials;
