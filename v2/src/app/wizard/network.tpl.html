@@ -9,21 +9,27 @@
                 <div class="col-sm-12">
                     <h4>
                         Autofill IP Address for Each Interface
-                        <button class="btn btn-sm btn-info pull-right" ng-click="openAddSubnetModal()">Add Subnet</button>
+                        <button class="btn btn-sm btn-info pull-right" ng-click="openAddSubnetModal()" >Add Subnet</button>
+                        <button class="btn btn-sm btn-info pull-right" ng-model="autoFill" style="margin-right:15px;" ng-click="autoFillMange()">{{autoFillButtonDisplay}}</button>
                     </h4>
                     <table class="table table-hover nowrap">
                         <thead>
                             <tr>
+                                <th>Action</th>
                                 <th>Interface</th>
                                 <th>Is Mgmt Network</th>
                                 <th>Promisc Mode</th>
                                 <th>Subnet</th>
-                                <th>Autofill Rules</th>
-                                <th>Action</th>
+                                <th ng-if="autoFill">Autofill Rules</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+                                <td>
+                                    <span ng-click="addInterface(newInterface)" class="action">
+                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                    </span>
+                                </td>
                                 <td>
                                     <input class="input-small" type="text" ng-model="newInterface.name" placeholder="Interface" required />
                                 </td>
@@ -36,14 +42,14 @@
                                         </option>
                                     </select>
                                 </td>
-                                <td></td>
-                                <td>
-                                    <span ng-click="addInterface(newInterface)" class="action">
-                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                    </span>
-                                </td>
                             </tr>
                             <tr ng-repeat="(interface_name, value) in interfaces track by $index">
+                                <td>
+                                    <!--Remove Action-->
+                                    <span class="action" ng-click="deleteInterface(interface_name)">
+                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                    </span>
+                                </td>
                                 <td>
                                     {{interface_name}}
                                 </td>
@@ -66,7 +72,7 @@
                                         </option>
                                     </select>
                                 </td>
-                                <td>
+                                <td ng-if="autoFill">
                                     <input id="{{interface_name}}-ipstart" type="text" class="input-medium" placeholder="IP Start">
                                     <select id="{{interface_name}}-increase-num">
                                         <option value="1">Increase by 1</option>
@@ -76,34 +82,30 @@
                                         <option value="5">Increase by 5</option>
                                     </select>
                                 </td>
-                                <td>
-                                    <!--Remove Action-->
-                                    <span class="action" ng-click="deleteInterface(interface_name)">
-                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                    </span>
+                            </tr>
+                            <tr style="border:none;">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td ng-if="autoFill">
+                                    <h4>Autofill Hostname</h4>
+                                    <select id="hostname-rule" class="input-large">
+                                        <option value="" selected="selected">Please select a pattern</option>
+                                        <option value="host">Host</option>
+                                        <option value="switch_ip">Switch IP</option>
+                                    </select>
+
+                                    <button ng-click="autofill(3000)" class="btn btn-sm btn-primary">
+                                        Fill Values
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div class="space-10"></div>
-                    <hr>
-                    <div class="space-10"></div>
-
-                    <h4>Autofill Hostname</h4>
-                    <select id="hostname-rule" class="input-large">
-                        <option value="" selected="selected">Please select a pattern</option>
-                        <option value="host">Host</option>
-                        <option value="switch_ip">Switch IP</option>
-                    </select>
-
-                    <div class="space-10"></div>
-
-                    <div class="center">
-                        <button ng-click="autofill(3000)" class="btn btn-sm btn-primary">
-                            Fill Values
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="space-10"></div>
@@ -136,8 +138,8 @@
         </div>
         <div class="pull-right">
             <button class="btn btn-sm btn-info" ng-init="autoFillPanel.isCollapsed = true;" ng-click="autoFillPanel.isCollapsed = !autoFillPanel.isCollapsed">
-                Autofill&nbsp;&nbsp;
-                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i>
+                Set Subnet&nbsp;&nbsp;
+                <span class="text-danger"><i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoFillPanel.isCollapsed}"></i></span>
             </button>
         </div>
     </div>

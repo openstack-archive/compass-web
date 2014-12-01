@@ -669,8 +669,19 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         var cluster = wizardFactory.getClusterInfo();
         $scope.subnetworks = wizardFactory.getSubnetworks();
         $scope.interfaces = wizardFactory.getInterfaces();
+        $scope.autoFill = false;
+        $scope.autoFillButtonDisplay = "Enable Autofill";
         //$scope.servers = wizardFactory.getServers();
-
+        $scope.autoFillMange = function(){
+            $scope.autoFill = !$scope.autoFill;
+            if($scope.autoFill)
+            {
+                $scope.autoFillButtonDisplay = "Disable Autofill";
+            }
+            else{
+                $scope.autoFillButtonDisplay = "Enable Autofill";
+            }
+        };
         dataService.getServerColumns().success(function(data) {
             $scope.server_columns = data.showless;
         });
