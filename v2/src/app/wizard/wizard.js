@@ -97,6 +97,11 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         $scope.steps = wizardStepsData["os_and_ts"];
                         wizardFactory.setSteps($scope.steps);
                         break;
+                    case "ceph_firefly":
+                        preConfigData = data["ceph_firefly"];
+                        $scope.steps = wizardStepsData["os_and_ts"];
+                        wizardFactory.setSteps($scope.steps);
+                        break;
                     default:
                         break;
                 }
@@ -672,16 +677,15 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.autoFill = false;
         $scope.autoFillButtonDisplay = "Enable Autofill";
         //$scope.servers = wizardFactory.getServers();
-        $scope.autoFillMange = function(){
+        $scope.autoFillMange = function() {
             $scope.autoFill = !$scope.autoFill;
-            if($scope.autoFill)
-            {
+            if ($scope.autoFill) {
                 $scope.autoFillButtonDisplay = "Disable Autofill";
-            }
-            else{
+            } else {
                 $scope.autoFillButtonDisplay = "Enable Autofill";
             }
         };
+
         dataService.getServerColumns().success(function(data) {
             $scope.server_columns = data.showless;
         });
@@ -1266,6 +1270,10 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             if ($scope.currentAdapterName == "ceph_openstack_icehouse") {
                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
             }
+            if ($scope.currentAdapterName == "ceph_firefly") {
+                targetSysConfigData["package_config"]={};
+                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
+             }
             dataService.updateClusterConfig(cluster.id, targetSysConfigData).success(function(data) {
                 var commitState = {
                     "name": "package_config",
@@ -1573,18 +1581,19 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.dropSuccessHandler = function($event, key, dict) {
             dict[key].mapping_interface = $scope.pendingInterface;
         };
-
-        angular.forEach($scope.interfaces, function(value, key) {
-            // The interface with promisc mode is required to be set as External Network
-            if (value.is_promiscuous) {
-                $scope.networking["external"].mapping_interface = key;
-                $scope.interfaces[key].dropChannel = "external";
-            }
-            // The interface marked as management is required to be set as Management Network
-            if (value.is_mgmt) {
-                $scope.networking["management"].mapping_interface = key;
-            }
-        });
+        if ($scope.currentAdapterName != "ceph_firefly") {
+            angular.forEach($scope.interfaces, function(value, key) {
+                // The interface with promisc mode is required to be set as External Network
+                if (value.is_promiscuous) {
+                    $scope.networking["external"].mapping_interface = key;
+                    $scope.interfaces[key].dropChannel = "external";
+                }
+                // The interface marked as management is required to be set as Management Network
+                if (value.is_mgmt) {
+                    $scope.networking["management"].mapping_interface = key;
+                }
+            });
+        }
 
         $scope.$watch(function() {
             return wizardFactory.getCommitState()

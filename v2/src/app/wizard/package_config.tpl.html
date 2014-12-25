@@ -34,7 +34,7 @@
                         </div>
                     </accordion-group-->
 
-                    <accordion-group is-open="serviceAccordion.open">
+                    <accordion-group is-open="serviceAccordion.open" ng-if="currentAdapterName != 'ceph_firefly'">
 
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': serviceAccordion.open, 'fa-angle-right': !serviceAccordion.open}"></i> OpenStack Database &amp; Queue Credentials
@@ -94,7 +94,7 @@
 
                     </accordion-group>
 
-                    <accordion-group is-open="mgmtAccordion.open">
+                    <accordion-group is-open="mgmtAccordion.open" ng-if="currentAdapterName != 'ceph_firefly'">
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': mgmtAccordion.open, 'fa-angle-right': !mgmtAccordion.open}"></i> OpenStack Keystone User Credentials
                         </accordion-heading>
@@ -151,7 +151,7 @@
                         </div>
                     </accordion-group>
 
-                    <accordion-group is-open="cephAccordion.open" ng-if="currentAdapterName == 'ceph_openstack_icehouse'">
+                    <accordion-group is-open="cephAccordion.open" ng-if="currentAdapterName == 'ceph_openstack_icehouse' || currentAdapterName == 'ceph_firefly'">
                         <accordion-heading>
                             <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': cephAccordion.open, 'fa-angle-right': !cephAccordion.open}"></i> Ceph Global Configurations
                         </accordion-heading>

@@ -42,8 +42,18 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 }],
                 "id": 2
             }, {
-                "flavors": [],
-                "name": "ceph(chef)",
+                "flavors": [{
+                    "roles": [{
+                        "display_name": "Ceph Cluster (Firefly)",
+                        "description": "Ceph Cluster (Firefly)",
+                        "name": "ceph_firefly"
+                    }],
+                    "display_name": "Ceph Cluster (Firefly)",
+                    "id": 1,
+                    "template": "cephfirefly.tmpl",
+                    "name": "ceph_firefly"
+                }],
+                "name": "ceph_firefly",
                 "roles": [],
                 "distributed_system_id": 2,
                 "supported_oses": [{
@@ -56,7 +66,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "name": "Ubuntu-12.04-x86_64"
                 }],
                 "distributed_system_name": "ceph",
-                "display_name": "ceph(chef)",
+                "display_name": "ceph_firefly",
                 "id": 4
             }, {
                 "flavors": [{
@@ -709,8 +719,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var config = {
             "os_config": {
                 "server_credentials": {
-                    "username": "",
-                    "password": ""
+                    "username": "root",
+                    "password": "huawei"
                 },
                 "partition": {
                     "/var": {
