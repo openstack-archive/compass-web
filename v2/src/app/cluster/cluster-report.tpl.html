@@ -1,0 +1,42 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default" ng-repeat = "report in reports">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <span>{{report.name}}</span>
+        <span ng-if="reportStates[report.name] =='finished'">
+          <i class='class="ace-icon fa fa fa-check bigger-160 green'></i>
+        </span>
+        <span ng-if="reportStates[report.name] =='verifying'">
+          <i class='class="ace-icon fa fa-spinner fa-spin bigger-160 orange'></i>
+        </span>
+        <span ng-if="reportStates[report.name] =='error'">
+          <i class='class="ace-icon fa fa-times bigger-160 red'></i>
+        </span>
+         <button class="pull-right btn btn-default btn-xs" data-toggle="collapse" data-parent="#accordion" href="#{{report.name}}" aria-expanded="true" aria-controls="{{report.name}}" ng-disabled = "reportStates[report.name] == 'verifying'" ng-style="{color: notFinished ? 'white' : 'grey'}">
+         <i class="glyphicon glyphicon-chevron-down"></i>
+        </button>
+      </h4>
+    </div>
+    <div id="{{report.name}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <table class="table table-striped">
+         <thead>
+           <tr>
+              <th>Actions</th>
+              <th>Avg(sec)</th>
+              <th>Errors</th>
+              <th>Max(sec)</th>
+              <th>Min(sec)</th>
+              <th>Success</th>
+              <th>Total(sec)</th>
+            </tr>
+         </thead>
+         <tr ng-repeat="detail in details">
+          <td >{{detail.name}}</td>
+          <td ng-repeat="(key,detail) in detail.summary.duration.summary">{{detail}}</td>
+         </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
