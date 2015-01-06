@@ -24,6 +24,228 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, message, {}];
     });
 
+    $httpBackend.whenPOST(/\.*\/clusters\/([0-9]|[1-9][0-9])\/action$/).respond(function(method, url, data){
+        console.log(method, url, data);
+        var healthrequest = {
+             "status": "start to check cluster health.",
+             "cluster_id": 1
+        };
+        return [200, healthrequest, {}];
+    });
+
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])*\/healthreports$/).respond(function(method, url, data){
+        console.log(method, url, data);
+        var healthStates = ["verifying","finished","error"];
+        var reports = [
+        {
+           "name": "name1",
+           "state": healthStates[Math.floor((Math.random()*3))],
+           "error_message": "",
+           "cluster_id": 1,
+           "report": {
+            "report": {
+                "actions": {
+                    "nova.boot_server": {
+                        "duration": {
+                            "data": [
+                                83.646584987640381,
+                                48.459306001663208
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 48.459000000000003,
+                                "avg (sec)": 66.052999999999997,
+                                "max (sec)": 83.647000000000006,
+                                "total": 2
+                            }
+                        }
+                    },
+                    "nova.delete_server": {
+                        "duration": {
+                            "data": [
+                                2.3977420330047607,
+                                2.6214451789855957
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 2.3980000000000001,
+                                "avg (sec)": 2.5099999999999998,
+                                "max (sec)": 2.621,
+                                "total": 2
+                            }
+                        }
+                    }
+                },
+         "errors_info": []
+            },
+                   "raw_output": "output1"
+                }
+        },
+        {
+           "name": "name2",
+           "state": "finished",
+           "error_message": "",
+           "cluster_id": 2,
+           "report": {
+             "report": {
+                "actions": {
+                    "neutron.create_network": {
+                        "duration": {
+                            "data": [
+                                0.87460207939147949,
+                                0.97025418281555176
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 0.875,
+                                "avg (sec)": 0.92200000000000004,
+                                "max (sec)": 0.96999999999999997,
+                                "total": 2
+                            }
+                        }
+                    },
+                    "neutron.delete_network": {
+                        "duration": {
+                            "data": [
+                                0.58310413360595703,
+                                0.6661829948425293
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 0.58299999999999996,
+                                "avg (sec)": 0.625,
+                                "max (sec)": 0.66600000000000004,
+                                "total": 2
+                            }
+                        }
+                    }
+                },
+                "errors_info": []
+            },
+                   "raw_output": "output2"
+                }
+        }];
+        return [200, reports, {}];
+
+    });
+
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/healthreports\/([0-9]|[1-9][0-9])*/).respond(function(method, url, data){
+        console.log(method, url, data);
+        var healthStates = ["verifying","finished","error"];
+        var indireports = 
+        {
+           "name": "name1",
+           "state": healthStates[Math.floor((Math.random()*3))],
+           "error_message": "",
+           "cluster_id": 1,
+           "report": {
+                   "report": {
+                "actions": {
+                    "nova.boot_server": {
+                        "duration": {
+                            "data": [
+                                83.646584987640381,
+                                48.459306001663208
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 48.459000000000003,
+                                "avg (sec)": 66.052999999999997,
+                                "max (sec)": 83.647000000000006,
+                                "total": 2
+                            }
+                        }
+                    },
+                    "nova.delete_server": {
+                        "duration": {
+                            "data": [
+                                2.3977420330047607,
+                                2.6214451789855957
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 2.3980000000000001,
+                                "avg (sec)": 2.5099999999999998,
+                                "max (sec)": 2.621,
+                                "total": 2
+                            }
+                        }
+                    }
+                },
+                "errors_info": []
+            },
+                   "raw_output": {
+                "result": [
+                    {
+                        "duration": 86.044774055480957,
+                        "scenario_output": {
+                            "errors": "",
+                            "data": {}
+                        },
+                        "idle_duration": 0.0,
+                        "atomic_actions": {
+                            "nova.boot_server": 83.646584987640381,
+                            "nova.delete_server": 2.3977420330047607
+                        },
+                        "error": []
+                    },
+                    {
+                        "duration": 51.081114053726196,
+                        "scenario_output": {
+                            "errors": "",
+                            "data": {}
+                        },
+                        "idle_duration": 0.0,
+                        "atomic_actions": {
+                            "nova.boot_server": 48.459306001663208,
+                            "nova.delete_server": 2.6214451789855957
+                        },
+                        "error": []
+                    }
+                ],
+                "key": {
+                    "kw": {
+                        "runner": {
+                            "type": "constant",
+                            "concurrency": 2,
+                            "times": 2
+                        },
+                        "args": {
+                            "flavor": {
+                                "name": "m1.tiny"
+                            },
+                            "image": {
+                                "name": "cirros"
+                            }
+                        },
+                        "context": {
+                            "users": {
+                                "project_domain": "default",
+                                "users_per_tenant": 2,
+                                "tenants": 3,
+                                "resource_management_workers": 30,
+                                "user_domain": "default"
+                            }
+                        }
+                    },
+                    "name": "NovaServers.boot_and_delete_server",
+                    "pos": 0
+                },
+                "sla": []
+            }
+                }
+
+        };
+        return [200, indireports, {}];
+
+    });
+
     $httpBackend.whenGET(settings.apiUrlBase + '/adapters').respond(function(method, url, data) {
         console.log(method, url);
         var adapters = [{

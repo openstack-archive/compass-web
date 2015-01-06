@@ -62,7 +62,61 @@ define(['angular'], function() {
                 controller: "clusterLogCtrl",
                 templateUrl: 'src/app/cluster/cluster-log.tpl.html',
                 authenticate: true
+            })
+            .state('cluster.report',{
+                url:'/report',
+                controller: "clusterReportCtrl",
+                templateUrl:'src/app/cluster/cluster-report.tpl.html',
+                authenticate:true,
+                resolve: {
+                    reportData: function($stateParams, $q, dataService) {
+                        var clusterId = $stateParams.id;
+                        var name = $stateParams.name;
+                        var deferred = $q.defer();
+                        dataService.getHealthReports(clusterId).success(function(data) {
+                            deferred.resolve(data);
+                        });
+                        return deferred.promise;
+                    }
+                }
             });
+    });
+    clusterModule.controller('clusterReportCtrl', function($scope, $state, dataService, $stateParams, $timeout, reportData){
+        $scope.reports = reportData;
+        $scope.details = [];
+        var progressTimer;
+        var fireTimer = true;
+        $scope.notFinished = true;
+        $scope.reportStates = {};
+
+        var getClusterReport= function(){
+         
+            angular.forEach($scope.reports, function(rd){
+                
+                if($scope.reportStates[rd.name]!="finished" && $scope.reportStates[rd.name]!="error"){
+                    
+                    dataService.getIndividualReports(rd.cluster_id, rd.name).success(function(dt){         
+                        $scope.details = [];
+                        $scope.reportStates[rd.name] = dt.state;
+                        angular.forEach(dt.report.report.actions, function(value,key){  
+                        $scope.details.push({"name":key,"summary":value});
+                        }); 
+                    });
+                }
+                
+            });
+
+            if(fireTimer){
+                    progressTimer = $timeout(getClusterReport, 3000);                         
+            }
+        };
+
+        getClusterReport();
+
+        $scope.$on('$destroy', function() {
+            fireTimer = false;
+            $timeout.cancel(progressTimer);
+        });
     });
 
     clusterModule.controller('clusterCtrl', function($scope, $state, dataService, $stateParams) {
@@ -98,11 +152,17 @@ define(['angular'], function() {
 
     });
 
-    clusterModule.controller('clusterProgressCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData) {
+    clusterModule.controller('clusterProgressCtrl', function($scope, dataService, $state, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData) {
         var clusterId = $stateParams.id;
         var progressTimer;
         var fireTimer = true;
         $scope.hosts = clusterhostsData;
+
+        $scope.startChecking = function(){
+                    dataService.startHealthCheck($scope.clusterId).success(function(data){
+                        $state.go('cluster.report',data);
+                    });
+                };
 
         var getClusterProgress = function() {
             dataService.getClusterProgress(clusterId).success(function(data) {

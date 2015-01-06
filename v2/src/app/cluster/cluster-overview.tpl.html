@@ -82,6 +82,10 @@
                     </div>
                     <div class="pull-right">
                         <div class="btn-group" dropdown>
+                             <button type="button" class="btn btn-info" ng-click="startChecking()" ng-disabled="clusterProgress.state == 'INSTALLING'">
+                                 Report 
+                             </button>
+
                             <button type="button" class="btn btn-info dropdown-toggle" ng-disabled="clusterProgress.state == 'INSTALLING'">
                                 Actions
                                 <span class="ace-icon fa fa-caret-down icon-on-right"></span>
