@@ -35,15 +35,17 @@ compassAppDev.run(function($httpBackend, settings, $http) {
 
     $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])*\/healthreports$/).respond(function(method, url, data){
         console.log(method, url, data);
-        var healthStates = ["verifying","finished","error"];
+        var healthStates = ["verifying","finished","error","success"];
         var reports = [
         {
            "name": "name1",
-           "state": healthStates[Math.floor((Math.random()*3))],
-           "error_message": "",
+           "category": "neutron",
+           "state": "verifying",
+           "error_message": "GetResourceErrorStatus",
            "cluster_id": 1,
            "report": {
-            "report": {
+            "results": {
+                "total_errors": 2, 
                 "actions": {
                     "nova.boot_server": {
                         "duration": {
@@ -52,12 +54,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                                 48.459306001663208
                             ],
                             "summary": {
-                                "errors": 0,
+                                "errors": 1,
                                 "success": "100.0%",
                                 "min (sec)": 48.459000000000003,
                                 "avg (sec)": 66.052999999999997,
                                 "max (sec)": 83.647000000000006,
-                                "total": 2
+                                "total": 2,
+                                "errors_info": ["title","error"]
                             }
                         }
                     },
@@ -73,23 +76,73 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                                 "min (sec)": 2.3980000000000001,
                                 "avg (sec)": 2.5099999999999998,
                                 "max (sec)": 2.621,
-                                "total": 2
+                                "total": 2,
+                                "errors_info": ["title","error"]
                             }
                         }
                     }
                 },
-         "errors_info": []
+            },
+                   "raw_output": "output1"
+                }
+        },
+        {"name": "name3",
+           "category": "neutron",
+           "state": "verifying",
+           "error_message": "GetResourceErrorStatus",
+           "cluster_id": 1,
+           "report": {
+            "results": {
+                "total_errors": 2, 
+                "actions": {
+                    "nova.boot_server": {
+                        "duration": {
+                            "data": [
+                                83.646584987640381,
+                                48.459306001663208
+                            ],
+                            "summary": {
+                                "errors": 1,
+                                "success": "100.0%",
+                                "min (sec)": 48.459000000000003,
+                                "avg (sec)": 66.052999999999997,
+                                "max (sec)": 83.647000000000006,
+                                "total": 2,
+                                "errors_info": ["title","error"]
+                            }
+                        }
+                    },
+                    "nova.delete_server": {
+                        "duration": {
+                            "data": [
+                                2.3977420330047607,
+                                2.6214451789855957
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 2.3980000000000001,
+                                "avg (sec)": 2.5099999999999998,
+                                "max (sec)": 2.621,
+                                "total": 2,
+                                "errors_info": ["title","error"]
+                            }
+                        }
+                    }
+                },
             },
                    "raw_output": "output1"
                 }
         },
         {
            "name": "name2",
-           "state": "finished",
-           "error_message": "",
+           "category": "nova",
+           "state": "verifying",
+           "error_message": "GetResourceErrorStatus",
            "cluster_id": 2,
            "report": {
-             "report": {
+             "results": {
+                "total_errors": 2, 
                 "actions": {
                     "neutron.create_network": {
                         "duration": {
@@ -98,12 +151,13 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                                 0.97025418281555176
                             ],
                             "summary": {
-                                "errors": 0,
+                                "errors": 1,
                                 "success": "100.0%",
                                 "min (sec)": 0.875,
                                 "avg (sec)": 0.92200000000000004,
                                 "max (sec)": 0.96999999999999997,
-                                "total": 2
+                                "total": 2,
+                                "errors_info": ["title","error"]
                             }
                         }
                     },
@@ -119,12 +173,12 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                                 "min (sec)": 0.58299999999999996,
                                 "avg (sec)": 0.625,
                                 "max (sec)": 0.66600000000000004,
-                                "total": 2
+                                "total": 2,
+                                "errors_info": []
                             }
                         }
                     }
                 },
-                "errors_info": []
             },
                    "raw_output": "output2"
                 }
@@ -133,17 +187,19 @@ compassAppDev.run(function($httpBackend, settings, $http) {
 
     });
 
-    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/healthreports\/([0-9]|[1-9][0-9])*/).respond(function(method, url, data){
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/healthreports\/.*/).respond(function(method, url, data){
         console.log(method, url, data);
-        var healthStates = ["verifying","finished","error"];
+        var healthStates = ["verifying","finished","error","success"];
         var indireports =
         {
            "name": "name1",
-           "state": healthStates[Math.floor((Math.random()*3))],
+           "category": "neutron",
+           "state": healthStates[Math.floor((Math.random()*4))],
            "error_message": "",
            "cluster_id": 1,
            "report": {
-                   "report": {
+            "results": {
+                "total_errors": 2, 
                 "actions": {
                     "nova.boot_server": {
                         "duration": {
@@ -152,12 +208,26 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                                 48.459306001663208
                             ],
                             "summary": {
-                                "errors": 0,
+                                "errors": {
+                                    "count": 2, 
+                                    "details": [
+                                        [
+                                            "GetResourceErrorStatus", 
+                                            "Resource <Server: rally_novaserver_mmlywuugchuxrjth> has ERROR status: No valid host was found. ", 
+                                            "Traceback (most recent call last):\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/runners/base.py\", line 77, in _run_scenario_once\n    method_name)(**kwargs) or scenario_output\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/servers.py\", line 104, in boot_and_delete_server\n    self._generate_random_name(), image, flavor, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/base.py\", line 261, in func_atomic_actions\n    f = func(self, *args, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/utils.py\", line 126, in _boot_server\n    check_interval=CONF.benchmark.nova_server_boot_poll_interval\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 104, in wait_for\n    resource = update_resource(resource)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 67, in _get_from_manager\n    status=status, fault=msg)\nGetResourceErrorStatus: Resource <Server: rally_novaserver_mmlywuugchuxrjth> has ERROR status: No valid host was found. \n"
+                                        ], 
+                                        [
+                                            "GetResourceErrorStatus", 
+                                            "Resource <Server: rally_novaserver_tydvigmxvdrwdgir> has ERROR status: No valid host was found. ", 
+                                            "Traceback (most recent call last):\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/runners/base.py\", line 77, in _run_scenario_once\n    method_name)(**kwargs) or scenario_output\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/servers.py\", line 104, in boot_and_delete_server\n    self._generate_random_name(), image, flavor, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/base.py\", line 261, in func_atomic_actions\n    f = func(self, *args, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/utils.py\", line 126, in _boot_server\n    check_interval=CONF.benchmark.nova_server_boot_poll_interval\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 104, in wait_for\n    resource = update_resource(resource)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 67, in _get_from_manager\n    status=status, fault=msg)\nGetResourceErrorStatus: Resource <Server: rally_novaserver_tydvigmxvdrwdgir> has ERROR status: No valid host was found. \n"
+                                        ]
+                                    ]
+                                },
                                 "success": "100.0%",
                                 "min (sec)": 48.459000000000003,
                                 "avg (sec)": 66.052999999999997,
                                 "max (sec)": 83.647000000000006,
-                                "total": 2
+                                "total": 2,
                             }
                         }
                     },
@@ -173,12 +243,15 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                                 "min (sec)": 2.3980000000000001,
                                 "avg (sec)": 2.5099999999999998,
                                 "max (sec)": 2.621,
-                                "total": 2
+                                "total": 2,
+                                "errors": {
+                                    "count": 0, 
+                                    "details": []
+                                }
                             }
                         }
                     }
                 },
-                "errors_info": []
             },
                    "raw_output": {
                 "result": [

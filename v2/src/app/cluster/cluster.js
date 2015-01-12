@@ -67,52 +67,103 @@ define(['angular'], function() {
                 url:'/report',
                 controller: "clusterReportCtrl",
                 templateUrl:'src/app/cluster/cluster-report.tpl.html',
-                authenticate:true,
-                resolve: {
-                    reportData: function($stateParams, $q, dataService) {
-                        var clusterId = $stateParams.id;
-                        var name = $stateParams.name;
-                        var deferred = $q.defer();
-                        dataService.getHealthReports(clusterId).success(function(data) {
-                            deferred.resolve(data);
-                        });
-                        return deferred.promise;
-                    }
-                }
+                authenticate:true
             });
     });
-    clusterModule.controller('clusterReportCtrl', function($scope, $state, dataService, $stateParams, $timeout, reportData){
-        $scope.reports = reportData;
-        $scope.details = [];
+    clusterModule.controller('clusterReportCtrl', function($scope, $state, dataService, $stateParams, $timeout, $modal){
+        $scope.details = {};
+        $scope.modalId = {};
+        $scope.errorActions = {};
+        var pormise;
         var progressTimer;
         var fireTimer = true;
         $scope.notFinished = true;
         $scope.reportStates = {};
+        var clusterId = $stateParams.id;
+        $scope.showData = false;
+        $scope.showDetails = false;
+        $scope.isTimeout = false;
+        $scope.categories = {};
 
-        var getClusterReport= function(){
-            angular.forEach($scope.reports, function(rd){
-                if($scope.reportStates[rd.name]!="finished" && $scope.reportStates[rd.name]!="error"){
-                    dataService.getIndividualReports(rd.cluster_id, rd.name).success(function(dt){
-                        $scope.details = [];
-                        $scope.reportStates[rd.name] = dt.state;
-                        angular.forEach(dt.report.report.actions, function(value,key){
-                        $scope.details.push({"name":key,"summary":value});
+        function timeoutAlert(){
+            $scope.isTimeout = true;
+        }
+
+        function isEmpty(obj) {
+            for(var prop in obj) {
+                if(obj.hasOwnProperty(prop))
+                return false;
+            }
+            return true;
+        }
+
+        var getAllReports = function(){
+          if(!$scope.isTimeout){
+            dataService.getHealthReports(clusterId).success(function(data){
+                if(!isEmpty(data)){
+                    $scope.reports = data;
+                    $scope.showData = true;
+                     $scope.$on('$destroy', function(){
+                         $timeout.cancel(promise);
+                     });
+                    
+                    angular.forEach(data, function(dt){
+                        if(!isEmpty($scope.categories) && !isEmpty($scope.categories[dt.category])){
+                            $scope.categories[dt.category].push(dt.name);
+                        }
+                        else{
+                            $scope.categories[dt.category] = [];
+                            $scope.categories[dt.category].push(dt.name);
+                        }                      
+                    });
+
+                    var getClusterReport= function(){
+                        angular.forEach($scope.reports, function(rd){
+                            if(($scope.reportStates[rd.name]!="finished" && $scope.reportStates[rd.name]!="error" && $scope.reportStates[rd.name]!="success")||isEmpty($scope.reportStates[rd.name])){    
+                                var getResults = function(){
+                                     dataService.getIndividualReports(rd.cluster_id, rd.name).success(function(dt){
+                                        if(!isEmpty(dt.report)){
+                                            $scope.details[rd.name] = dt.report.results.actions;
+                                            for(var i in dt.report.results.actions){
+                                                var str = i+rd.name;
+                                                $scope.modalId[i+rd.name] = str.replace(".","-");
+                                                $scope.createModalId = function(action,name){
+                                                    return $scope.modalId[action+name];
+                                                };                                             
+                                            }
+                                            $scope.reportStates[rd.name] = dt.state;
+                                        }
+                                        else{
+                                            $scope.reportStates[rd.name] = dt.state;
+                                            $scope.showDetails = false;                                            
+                                            $timeout(getResults,2000);
+                                        }
+                                    });
+                                }
+                                getResults();
+                            }
                         });
+                        if(fireTimer){          
+                            progressTimer = $timeout(getClusterReport, 3000);
+                        };
+                    }
+                    getClusterReport();
+                    $scope.$on('$destroy', function() {
+                        fireTimer = false;
+                        $timeout.cancel(progressTimer);
                     });
                 }
+                else{
+                    pormise = $timeout(timeoutAlert,600000);
+                    $timeout(getAllReports,2000);
+                    $scope.showData = false;
+                }
             });
-
-
-            if(fireTimer){
-                progressTimer = $timeout(getClusterReport, 3000);
-            };
+          }
         }
-        getClusterReport();
 
-        $scope.$on('$destroy', function() {
-            fireTimer = false;
-            $timeout.cancel(progressTimer);
-        });
+        getAllReports();
+
     });
 
     clusterModule.controller('clusterCtrl', function($scope, $state, dataService, $stateParams) {
@@ -122,7 +173,6 @@ define(['angular'], function() {
         dataService.getClusterById($scope.clusterId).success(function(data) {
             $scope.clusterInfo = data;
         });
-
     });
     clusterModule.directive('clusternav', function($timeout) {
         return {
@@ -148,14 +198,17 @@ define(['angular'], function() {
 
     });
 
-    clusterModule.controller('clusterProgressCtrl', function($scope, dataService, $state, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData) {
+    clusterModule.controller('clusterProgressCtrl', function($scope, dataService, $state, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData,$rootScope) {
         var clusterId = $stateParams.id;
         var progressTimer;
         var fireTimer = true;
         $scope.hosts = clusterhostsData;
+        var request =  {
+           "check_health": null
+        }
 
         $scope.startChecking = function(){
-                    dataService.startHealthCheck($scope.clusterId).success(function(data){
+                    dataService.startHealthCheck($scope.clusterId, request).success(function(data){
                         $state.go('cluster.report',data);
                     });
                 };

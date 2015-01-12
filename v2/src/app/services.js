@@ -139,8 +139,8 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 return $http.post(settings.apiUrlBase + '/clusters/' + id + '/action', angular.toJason(checkHealth));
             };
 
-            this.startHealthCheck = function(id){
-                return $http.post(settings.apiUrlBase + '/clusters/' + id + '/action',angular.toJson(id));
+            this.startHealthCheck = function(id, request){
+                return $http.post(settings.apiUrlBase + '/clusters/' + id + '/action',angular.toJson(request));
             };
 
             this.getClusters = function() {

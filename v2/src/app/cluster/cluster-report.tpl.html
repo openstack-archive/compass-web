@@ -1,10 +1,29 @@
+<div ng-if="!showData && !isTimeout" class="centerLoading">
+  <i class='class="ace-icon fa fa-spinner fa-spin bigger-300 orange'></i>
+  <span>loading...</span>
+</div>
+<div ng-if="showData" class="widget-box transparent" style = "border-radius: 7px;"ng-repeat="(categoryName, categoryValue) in categories">
+<div class="widget-header">
+  <h4 class="widget-title">{{categoryName}}</h4>
+</div>
+<div class="widget-body">
+<div class="widget-main">
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default" ng-repeat = "report in reports">
+
+<div ng-if="isTimeout" class="centerLoading">
+  <i class='class="ce-icon fa fa-times bigger-300 red'></i>
+  <span>Timeout Error</span>
+</div>
+<span ng-if = "showData && !isTimeout">
+  <div class="panel panel-default" ng-repeat = "report in reports | filter: categoryName">
     <div class="panel-heading" role="tab" id="headingOne">
       <h4 class="panel-title">
         <span>{{report.name}}</span>
-        <span ng-if="reportStates[report.name] =='finished'">
+        <span ng-if="reportStates[report.name] =='success'">
           <i class='class="ace-icon fa fa fa-check bigger-160 green'></i>
+        </span>
+        <span ng-if="reportStates[report.name] =='finished'">
+          <i class='class="ace-icon fa fa-exclamation bigger-160 yellow'></i>
         </span>
         <span ng-if="reportStates[report.name] =='verifying'">
           <i class='class="ace-icon fa fa-spinner fa-spin bigger-160 orange'></i>
@@ -19,24 +38,85 @@
     </div>
     <div id="{{report.name}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
-        <table class="table table-striped">
+        <table class="table" style="font-size:13px">
          <thead>
-           <tr>
+           <tr class="info">
               <th>Actions</th>
               <th>Avg(sec)</th>
-              <th>Errors</th>
               <th>Max(sec)</th>
               <th>Min(sec)</th>
+              <th>Errors</th>
               <th>Success</th>
               <th>Total(sec)</th>
             </tr>
          </thead>
-         <tr ng-repeat="detail in details">
-          <td >{{detail.name}}</td>
-          <td ng-repeat="(key,detail) in detail.summary.duration.summary">{{detail}}</td>
+         <tr ng-repeat="(key,detail) in details[report.name]">
+          <td>{{key}}</td>
+          <td>{{detail.duration.summary["avg (sec)"]}}</td>
+          <td>{{detail.duration.summary["max (sec)"]}}</td>
+          <td>{{detail.duration.summary["min (sec)"]}}</td>
+          <td>
+            <span ng-if="detail.duration.summary.errors.count == 0">{{detail.duration.summary.errors.count}}</span>
+            <span ng-if="detail.duration.summary.errors.count!= 0">
+              <button id="popover" data-trigger="hover" style = "border-radius:20px!important" class="btn btn-xs btn-danger popover-hide" 
+              title='{{detail.duration.summary.errors.details[0][0]}}'
+              type="button"
+              data-toggle="modal" 
+              data-placement="right"
+              data-target="#{{createModalId(key,report.name)}}" 
+              data-content='{{detail.duration.summary.errors.details[0][1]}}'>
+                {{detail.duration.summary.errors.count}}
+              </button>
+                <!-- Modal -->
+              <div class="modal fade" id="{{createModalId(key,report.name)}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header" style="background:#B74635">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Error Details</h4>
+                      </div>
+                      <div class="modal-body">
+                            <table class="table">
+                              <tr>
+                                <td>Exception Type</td>
+                                <td>{{detail.duration.summary.errors.details[0][0]}}</td>
+                              </tr>
+                              <tr>
+                                <td>Exception Message</td>
+                                <td>{{detail.duration.summary.errors.details[0][1]}}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>{{detail.duration.summary.errors.details[0][2]}}</td>
+                              </tr>
+                            </table>
+                      </div>
+                      <div class="modal-footer" style="background:#F2DEDE">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <script>
+                $(function () { $('.popover-show').popover('show');});
+                $(function () { $('.popover-hide').popover('hide');});
+                $(function () { $('.popover-destroy').popover('destroy');});
+                $(function () { $('.popover-toggle').popover('toggle');});
+                $(function () { $(".popover-options a").popover({html : true });});
+                $("#popover").popover({ trigger: "hover" });
+              </script>
+            </span>
+          </td>
+          <td>{{detail.duration.summary["success"]}}</td>
+          <td>{{detail.duration.summary["total"]}}</td>
          </tr>
         </table>
       </div>
     </div>
   </div>
+</span>
+</div>
+</div>
+</div>
 </div>
