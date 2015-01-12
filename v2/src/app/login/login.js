@@ -41,7 +41,6 @@ define(['uiRouter'], function() {
 
     loginModule.directive('setFocus', function() {
         return function(scope, element) {
-            console.log(element);
             element[0].focus();
         };
     });

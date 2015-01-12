@@ -74,7 +74,7 @@ define(['angular'], function() {
         $scope.details = {};
         $scope.modalId = {};
         $scope.errorActions = {};
-        var pormise;
+        var promise;
         var progressTimer;
         var fireTimer = true;
         $scope.notFinished = true;
@@ -103,10 +103,7 @@ define(['angular'], function() {
                 if(!isEmpty(data)){
                     $scope.reports = data;
                     $scope.showData = true;
-                     $scope.$on('$destroy', function(){
-                         $timeout.cancel(promise);
-                     });
-                    
+                    $timeout.cancel(promise);                    
                     angular.forEach(data, function(dt){
                         if(!isEmpty($scope.categories) && !isEmpty($scope.categories[dt.category])){
                             $scope.categories[dt.category].push(dt.name);
@@ -114,7 +111,7 @@ define(['angular'], function() {
                         else{
                             $scope.categories[dt.category] = [];
                             $scope.categories[dt.category].push(dt.name);
-                        }                      
+                        }
                     });
 
                     var getClusterReport= function(){
@@ -129,13 +126,13 @@ define(['angular'], function() {
                                                 $scope.modalId[i+rd.name] = str.replace(".","-");
                                                 $scope.createModalId = function(action,name){
                                                     return $scope.modalId[action+name];
-                                                };                                             
+                                                };
                                             }
                                             $scope.reportStates[rd.name] = dt.state;
                                         }
                                         else{
                                             $scope.reportStates[rd.name] = dt.state;
-                                            $scope.showDetails = false;                                            
+                                            $scope.showDetails = false;
                                             $timeout(getResults,2000);
                                         }
                                     });
@@ -143,7 +140,7 @@ define(['angular'], function() {
                                 getResults();
                             }
                         });
-                        if(fireTimer){          
+                        if(fireTimer){
                             progressTimer = $timeout(getClusterReport, 3000);
                         };
                     }
@@ -154,16 +151,22 @@ define(['angular'], function() {
                     });
                 }
                 else{
-                    pormise = $timeout(timeoutAlert,600000);
+                    promise = $timeout(timeoutAlert,600000);
                     $timeout(getAllReports,2000);
                     $scope.showData = false;
                 }
             });
           }
         }
-
+        
         getAllReports();
 
+    });
+    
+    clusterModule.filter('nl2br', function($sce){
+          return function(text) {
+               return text ? $sce.trustAsHtml(text.replace(/\n/g, '<br/>')) : '';
+          };
     });
 
     clusterModule.controller('clusterCtrl', function($scope, $state, dataService, $stateParams) {

@@ -2,18 +2,17 @@
   <i class='class="ace-icon fa fa-spinner fa-spin bigger-300 orange'></i>
   <span>loading...</span>
 </div>
-<div ng-if="showData" class="widget-box transparent" style = "border-radius: 7px;"ng-repeat="(categoryName, categoryValue) in categories">
+<div ng-if="isTimeout" class="centerLoading">
+  <i class='class="ce-icon fa fa-times bigger-300 red'></i>
+  <span>Timeout Error</span>
+</div>
+<div ng-if="showData && !isTimeout" class="widget-box transparent" style = "border-radius: 7px;"ng-repeat="(categoryName, categoryValue) in categories">
 <div class="widget-header">
   <h4 class="widget-title">{{categoryName}}</h4>
 </div>
 <div class="widget-body">
 <div class="widget-main">
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-
-<div ng-if="isTimeout" class="centerLoading">
-  <i class='class="ce-icon fa fa-times bigger-300 red'></i>
-  <span>Timeout Error</span>
-</div>
 <span ng-if = "showData && !isTimeout">
   <div class="panel panel-default" ng-repeat = "report in reports | filter: categoryName">
     <div class="panel-heading" role="tab" id="headingOne">
@@ -58,12 +57,12 @@
           <td>
             <span ng-if="detail.duration.summary.errors.count == 0">{{detail.duration.summary.errors.count}}</span>
             <span ng-if="detail.duration.summary.errors.count!= 0">
-              <button id="popover" data-trigger="hover" style = "border-radius:20px!important" class="btn btn-xs btn-danger popover-hide" 
+              <button id="popover" data-trigger="hover" style = "border-radius:20px!important" class="btn btn-xs btn-danger popover-hide"
               title='{{detail.duration.summary.errors.details[0][0]}}'
               type="button"
-              data-toggle="modal" 
+              data-toggle="modal"
               data-placement="right"
-              data-target="#{{createModalId(key,report.name)}}" 
+              data-target="#{{createModalId(key,report.name)}}"
               data-content='{{detail.duration.summary.errors.details[0][1]}}'>
                 {{detail.duration.summary.errors.count}}
               </button>
@@ -79,16 +78,16 @@
                       <div class="modal-body">
                             <table class="table">
                               <tr>
-                                <td>Exception Type</td>
+                                <td><strong>Exception Type</strong></td>
                                 <td>{{detail.duration.summary.errors.details[0][0]}}</td>
                               </tr>
                               <tr>
-                                <td>Exception Message</td>
+                                <td><strong>Exception Message</strong></td>
                                 <td>{{detail.duration.summary.errors.details[0][1]}}</td>
                               </tr>
                               <tr>
                                 <td></td>
-                                <td>{{detail.duration.summary.errors.details[0][2]}}</td>
+                                <td><p ng-bind-html = "detail.duration.summary.errors.details[0][2] | nl2br"></p></td>
                               </tr>
                             </table>
                       </div>
