@@ -126,6 +126,23 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
             this.getUserLog = function() {
                 return $http.get(settings.apiUrlBase + '/users/logs');
             }
+
+            this.getHealthReports = function(id){
+                return $http.get(settings.apiUrlBase + '/clusters/' + id + '/healthreports');
+            };
+
+            this.getIndividualReports = function(id, name){
+                return $http.get(settings.apiUrlBase + '/clusters/' + id + '/healthreports/' + name);
+            };
+
+            this.postHealthCheck = function(id, checkHealth){
+                return $http.post(settings.apiUrlBase + '/clusters/' + id + '/action', angular.toJason(checkHealth));
+            };
+
+            this.startHealthCheck = function(id, request){
+                return $http.post(settings.apiUrlBase + '/clusters/' + id + '/action',angular.toJson(request));
+            };
+
             this.getClusters = function() {
                 return $http.get(settings.apiUrlBase + '/clusters');
             };
