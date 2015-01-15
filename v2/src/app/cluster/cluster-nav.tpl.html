@@ -84,6 +84,17 @@
         </a>
     </li>
 
+    <li ng-class="{active:state.includes('cluster.report')}">
+        <a ng-if="activeReport" ui-sref="cluster.report">
+            <i class="menu-icon glyphicon glyphicon-list-alt glyphicon-list-alt"></i>
+            <span class="menu-text">Report</span>
+        </a>
+        <a ng-if="!activeReport">
+            <i class="menu-icon glyphicon glyphicon-list-alt glyphicon-list-alt"></i>
+            <span class="menu-text">Report</span>
+        </a>
+    </li>
+
 </ul>
 
 <div class="sidebar-toggle sidebar-collapse" ng-click="sidebarCollapse = !sidebarCollapse">

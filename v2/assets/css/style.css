@@ -1056,3 +1056,15 @@ h4.widget-title:hover {
 .loadingMask .mask{
     opacity: 0.5;
 }
+.centerLoading{
+    padding-top: 20%;
+    padding-left: 45%;
+}
+.popover-title{
+    background: #F2DEDE;
+}
+.yellow{
+    color: #FEE188 !important;
+}
+.red-tooltip + .tooltip > .tooltip-inner {background-color: #f00;}
+.red-tooltip + .tooltip > .tooltip-arrow { border-bottom-color:#f00; }

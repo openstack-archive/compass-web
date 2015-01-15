@@ -1,14 +1,22 @@
-<div class='progress progress-striped border-radius-4 no-margin-bottom' ng-class="{'active': progressdata!=100&&clusterstate=='INSTALLING'}">
-    <div style='width: {{progressdata}}%;' class='progress-bar' ng-class="{'progress-bar-warning': progressSeverity=='WARNING', 'progress-bar-danger': progressSeverity=='ERROR', 'progress-bar-success': progressdata==100}"></div>
-    <div class='progressbar-number'>
-        <span ng-if="progressdata==0">
-            Waiting...
-        </span>
-        <span ng-if="progressdata!=0">
-            {{progressdata}}%
-        </span>
+<span ng-if="(clusterstate!='ERROR' || clusterstate=='SUCCESSFUL') && progressdata<100">
+    <div class='progress progress-striped border-radius-4 no-margin-bottom' ng-class="{'active': progressdata!=100&&clusterstate=='INSTALLING'}">
+        <div style='width: {{progressdata}}%;' class='progress-bar' ng-class="{'progress-bar-warning': progressSeverity=='WARNING', 'progress-bar-danger': progressSeverity=='ERROR', 'progress-bar-success': progressdata==100}"></div>
+        <div class='progressbar-number'>
+            <span ng-if="progressdata==0">
+                Waiting...
+            </span>
+            <span ng-if="progressdata!=0">
+                {{progressdata}}%
+            </span>
+        </div>
     </div>
-</div>
-<div>
-    {{message}}
-</div>
+    <div>
+        {{message}}
+    </div>
+</span>
+<span ng-if="clusterstate=='ERROR' && progressdata<100">
+    <i class="ace-icon fa fa-times bigger-160 red"></i>
+</span>
+<span ng-if="(clusterstate=='SUCCESSFUL'|| clusterstate=='ERROR') && progressdata==100">
+    <i class="ace-icon fa fa fa-check bigger-160 green"></i>
+</span>

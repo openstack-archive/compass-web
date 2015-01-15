@@ -24,6 +24,302 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         return [200, message, {}];
     });
 
+  $httpBackend.whenPOST(/\.*\/clusters\/([0-9]|[1-9][0-9])\/action$/).respond(function(method, url, data) {
+            console.log(method, url, data);
+            var healthrequest = {
+                "status": "start to check cluster health.",
+                "cluster_id": 1
+            };
+            return [200, healthrequest, {}];
+        });
+
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])*\/healthreports$/).respond(function(method, url, data) {
+            console.log(method, url, data);
+            var healthStates = ["verifying", "finished", "error", "success"];
+            var reports = [{
+                "name": "name1",
+                "category": "neutron",
+                "state": "verifying",
+                "error_message": "GetResourceErrorStatus",
+                "cluster_id": 1,
+                "report": {
+                    "results": {
+                        "total_errors": 2,
+                        "actions": {
+                            "nova.boot_server": {
+                                "duration": {
+                                    "data": [
+                                        83.646584987640381,
+                                        48.459306001663208
+                                    ],
+                                    "summary": {
+                                        "errors": 1,
+                                        "success": "100.0%",
+                                        "min (sec)": 48.459000000000003,
+                                        "avg (sec)": 66.052999999999997,
+                                        "max (sec)": 83.647000000000006,
+                                        "total": 2,
+                                        "errors_info": ["title", "error"]
+                                    }
+                                }
+                            },
+                            "nova.delete_server": {
+                                "duration": {
+                                    "data": [
+                                        2.3977420330047607,
+                                        2.6214451789855957
+                                    ],
+                                    "summary": {
+                                        "errors": 0,
+                                        "success": "100.0%",
+                                        "min (sec)": 2.3980000000000001,
+                                        "avg (sec)": 2.5099999999999998,
+                                        "max (sec)": 2.621,
+                                        "total": 2,
+                                        "errors_info": ["title", "error"]
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    "raw_output": "output1"
+                }
+            }, {
+                "name": "name3",
+                "category": "neutron",
+                "state": "verifying",
+                "error_message": "GetResourceErrorStatus",
+                "cluster_id": 1,
+                "report": {
+                    "results": {
+                        "total_errors": 2,
+                        "actions": {
+                            "nova.boot_server": {
+                                "duration": {
+                                    "data": [
+                                        83.646584987640381,
+                                        48.459306001663208
+                                    ],
+                                    "summary": {
+                                        "errors": 1,
+                                        "success": "100.0%",
+                                        "min (sec)": 48.459000000000003,
+                                        "avg (sec)": 66.052999999999997,
+                                        "max (sec)": 83.647000000000006,
+                                        "total": 2,
+                                        "errors_info": ["title", "error"]
+                                    }
+                                }
+                            },
+                            "nova.delete_server": {
+                                "duration": {
+                                    "data": [
+                                        2.3977420330047607,
+                                        2.6214451789855957
+                                    ],
+                                    "summary": {
+                                        "errors": 0,
+                                        "success": "100.0%",
+                                        "min (sec)": 2.3980000000000001,
+                                        "avg (sec)": 2.5099999999999998,
+                                        "max (sec)": 2.621,
+                                        "total": 2,
+                                        "errors_info": ["title", "error"]
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    "raw_output": "output1"
+                }
+            }, {
+                "name": "name2",
+                "category": "nova",
+                "state": "verifying",
+                "error_message": "GetResourceErrorStatus",
+                "cluster_id": 2,
+                "report": {
+                    "results": {
+                        "total_errors": 2,
+                        "actions": {
+                            "neutron.create_network": {
+                                "duration": {
+                                    "data": [
+                                        0.87460207939147949,
+                                        0.97025418281555176
+                                    ],
+                                    "summary": {
+                                        "errors": 1,
+                                        "success": "100.0%",
+                                        "min (sec)": 0.875,
+                                        "avg (sec)": 0.92200000000000004,
+                                        "max (sec)": 0.96999999999999997,
+                                        "total": 2,
+                                        "errors_info": ["title", "error"]
+                                    }
+                                }
+                            },
+                            "neutron.delete_network": {
+                                "duration": {
+                                    "data": [
+                                        0.58310413360595703,
+                                        0.6661829948425293
+                                    ],
+                                    "summary": {
+                                        "errors": 0,
+                                        "success": "100.0%",
+                                        "min (sec)": 0.58299999999999996,
+                                        "avg (sec)": 0.625,
+                                        "max (sec)": 0.66600000000000004,
+                                        "total": 2,
+                                        "errors_info": []
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    "raw_output": "output2"
+                }
+            }];
+            return [200, reports, {}];
+
+        });
+
+
+    $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])\/healthreports\/.*/).respond(function(method, url, data){
+        console.log(method, url, data);
+        var index = url.indexOf("healthreports/");
+        var name = url.substring(index).split("/")[1];
+        var healthStates = ["verifying","finished","error","success"];
+        var indireports =
+        {
+           "name": name,
+           "category": "neutron",
+           "state": healthStates[Math.floor((Math.random()*4))],
+           "error_message": "error",
+           "cluster_id": 1,
+           "report": {
+            "results": {
+                "total_errors": 2,
+                "actions": {
+                    "nova.boot_server": {
+                        "duration": {
+                            "data": [
+                                83.646584987640381,
+                                48.459306001663208
+                            ],
+                            "summary": {
+                                "errors": {
+                                    "count": 2,
+                                    "details": [
+                                        [
+                                            "GetResourceErrorStatus",
+                                            "Resource <Server: rally_novaserver_mmlywuugchuxrjth> has ERROR status: No valid host was found. ",
+                                            "Traceback (most recent call last):\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/runners/base.py\", line 77, in _run_scenario_once\n    method_name)(**kwargs) or scenario_output\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/servers.py\", line 104, in boot_and_delete_server\n    self._generate_random_name(), image, flavor, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/base.py\", line 261, in func_atomic_actions\n    f = func(self, *args, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/utils.py\", line 126, in _boot_server\n    check_interval=CONF.benchmark.nova_server_boot_poll_interval\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 104, in wait_for\n    resource = update_resource(resource)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 67, in _get_from_manager\n    status=status, fault=msg)\nGetResourceErrorStatus: Resource <Server: rally_novaserver_mmlywuugchuxrjth> has ERROR status: No valid host was found. \n"
+                                        ],
+                                        [
+                                            "GetResourceErrorStatus",
+                                            "Resource <Server: rally_novaserver_tydvigmxvdrwdgir> has ERROR status: No valid host was found. ", 
+                                            "Traceback (most recent call last):\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/runners/base.py\", line 77, in _run_scenario_once\n    method_name)(**kwargs) or scenario_output\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/servers.py\", line 104, in boot_and_delete_server\n    self._generate_random_name(), image, flavor, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/base.py\", line 261, in func_atomic_actions\n    f = func(self, *args, **kwargs)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/scenarios/nova/utils.py\", line 126, in _boot_server\n    check_interval=CONF.benchmark.nova_server_boot_poll_interval\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 104, in wait_for\n    resource = update_resource(resource)\n  File \"/opt/rally/lib/python2.6/site-packages/rally/benchmark/utils.py\", line 67, in _get_from_manager\n    status=status, fault=msg)\nGetResourceErrorStatus: Resource <Server: rally_novaserver_tydvigmxvdrwdgir> has ERROR status: No valid host was found. \n"
+                                        ]
+                                    ]
+                                },
+                                "success": "100.0%",
+                                "min (sec)": 48.459000000000003,
+                                "avg (sec)": 66.052999999999997,
+                                "max (sec)": 83.647000000000006,
+                                "total": 2,
+                            }
+                        }
+                    },
+                    "nova.delete_server": {
+                        "duration": {
+                            "data": [
+                                2.3977420330047607,
+                                2.6214451789855957
+                            ],
+                            "summary": {
+                                "errors": 0,
+                                "success": "100.0%",
+                                "min (sec)": 2.3980000000000001,
+                                "avg (sec)": 2.5099999999999998,
+                                "max (sec)": 2.621,
+                                "total": 2,
+                                "errors": {
+                                    "count": 0,
+                                    "details": []
+                                }
+                            }
+                        }
+                    }
+                },
+            },
+                   "raw_output": {
+                "result": [
+                    {
+                        "duration": 86.044774055480957,
+                        "scenario_output": {
+                            "errors": "",
+                            "data": {}
+                        },
+                        "idle_duration": 0.0,
+                        "atomic_actions": {
+                            "nova.boot_server": 83.646584987640381,
+                            "nova.delete_server": 2.3977420330047607
+                        },
+                        "error": []
+                    },
+                    {
+                        "duration": 51.081114053726196,
+                        "scenario_output": {
+                            "errors": "",
+                            "data": {}
+                        },
+                        "idle_duration": 0.0,
+                        "atomic_actions": {
+                            "nova.boot_server": 48.459306001663208,
+                            "nova.delete_server": 2.6214451789855957
+                        },
+                        "error": []
+                    }
+                ],
+                "key": {
+                    "kw": {
+                        "runner": {
+                            "type": "constant",
+                            "concurrency": 2,
+                            "times": 2
+                        },
+                        "args": {
+                            "flavor": {
+                                "name": "m1.tiny"
+                            },
+                            "image": {
+                                "name": "cirros"
+                            }
+                        },
+                        "context": {
+                            "users": {
+                                "project_domain": "default",
+                                "users_per_tenant": 2,
+                                "tenants": 3,
+                                "resource_management_workers": 30,
+                                "user_domain": "default"
+                            }
+                        }
+                    },
+                    "name": "NovaServers.boot_and_delete_server",
+                    "pos": 0
+                },
+                "sla": []
+            }
+                }
+
+        };
+        return [200, indireports, {}];
+
+    });
+
     $httpBackend.whenGET(settings.apiUrlBase + '/adapters').respond(function(method, url, data) {
         console.log(method, url);
         var adapters = [{
@@ -42,18 +338,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 }],
                 "id": 2
             }, {
-                "flavors": [{
-                    "roles": [{
-                        "display_name": "Ceph Cluster (Firefly)",
-                        "description": "Ceph Cluster (Firefly)",
-                        "name": "ceph_firefly"
-                    }],
-                    "display_name": "Ceph Cluster (Firefly)",
-                    "id": 1,
-                    "template": "cephfirefly.tmpl",
-                    "name": "ceph_firefly"
-                }],
-                "name": "ceph_firefly",
+                "flavors": [],
+                "name": "ceph(chef)",
                 "roles": [],
                 "distributed_system_id": 2,
                 "supported_oses": [{
@@ -66,7 +352,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "name": "Ubuntu-12.04-x86_64"
                 }],
                 "distributed_system_name": "ceph",
-                "display_name": "ceph_firefly",
+                "display_name": "ceph(chef)",
                 "id": 4
             }, {
                 "flavors": [{
@@ -719,8 +1005,8 @@ compassAppDev.run(function($httpBackend, settings, $http) {
         var config = {
             "os_config": {
                 "server_credentials": {
-                    "username": "root",
-                    "password": "huawei"
+                    "username": "",
+                    "password": ""
                 },
                 "partition": {
                     "/var": {

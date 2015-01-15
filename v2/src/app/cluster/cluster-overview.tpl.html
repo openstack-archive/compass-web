@@ -82,6 +82,10 @@
                     </div>
                     <div class="pull-right">
                         <div class="btn-group" dropdown>
+                            <button type="button" class="btn btn-info" ng-click="startChecking()" ng-disabled="clusterProgress.state == 'INSTALLING'">
+                                Report
+                            </button>
+
                             <button type="button" class="btn btn-info dropdown-toggle" ng-disabled="clusterProgress.state == 'INSTALLING'">
                                 Actions
                                 <span class="ace-icon fa fa-caret-down icon-on-right"></span>
@@ -124,7 +128,7 @@
                                         <span class="lbl"></span>
                                     </label>
                                 </th>
-                                <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                <th ng-repeat="column in server_columns | orderBy: 'field'" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
                                     'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
                                     <div>{{column.title}}</div>
                                 </th>
@@ -140,7 +144,7 @@
                                         <span class="lbl"></span>
                                     </label>
                                 </td>
-                                <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                                <td ng-repeat="column in server_columns | orderBy: 'field'" ng-show="column.visible" sortable="column.field">
                                     <span ng-switch on="column.field">
                                         <span ng-switch-when="clusters">
                                             <span ng-repeat="cluster in host.clusters">
@@ -171,12 +175,12 @@
                     </table>
                     <script type="text/ng-template" id="deleteHostConfirm.html">
                         <div class="modal-header ng-scope">
-                        <h3 class="modal-title">Create Cluster</h3>
+                            <h3 class="modal-title">Create Cluster</h3>
                         </div>
-                        <div class="modal-body"  style="padding-top: 30px; padding-bottom: 20px;" >
+                        <div class="modal-body" style="padding-top: 30px; padding-bottom: 20px;">
                             Are you sure to delete
                             <strong>{{host.hostname}}</strong>?
-                        </div>                       
+                        </div>
                         <div class="modal-footer">
                             <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                             <button class="btn btn-primary" ng-click="ok()">OK</button>
