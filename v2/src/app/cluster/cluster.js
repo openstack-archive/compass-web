@@ -62,7 +62,125 @@ define(['angular'], function() {
                 controller: "clusterLogCtrl",
                 templateUrl: 'src/app/cluster/cluster-log.tpl.html',
                 authenticate: true
+            })
+            .state('cluster.report', {
+                url: '/report',
+                controller: "clusterReportCtrl",
+                templateUrl: 'src/app/cluster/cluster-report.tpl.html',
+                authenticate: true
             });
+    });
+    clusterModule.controller('clusterReportCtrl', function($scope, $state, dataService, $stateParams, $timeout, $modal) {
+        var clusterId = $stateParams.id;
+        var dtLength = -1;
+        var progressTimer;
+        $scope.categories = {};
+        $scope.errorMessage = {};
+        $scope.showData = false;
+        $scope.modalId = {};
+        $scope.showData = false;
+        $scope.showDetails = false;
+        $scope.isTimeout = false;
+
+        $scope.promise = $timeout(function() {
+            $scope.isTimeout = true;
+        }, 1200000);
+        $scope.details = {};
+        $scope.reportStates = {};
+
+        function isEmpty(obj) {
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop))
+                    return false;
+            }
+            return true;
+        }
+
+        var getAllReports = function() {
+            if (!$scope.isTimeout) {
+                dataService.getHealthReports(clusterId).success(function(reportsData) {
+
+                    if (!isEmpty(reportsData)) {
+
+                        if (reportsData.length != dtLength) {
+                            dtLength = reportsData.length;
+                            $timeout(getAllReports, 3000);
+                        } else {
+                            $scope.reports = reportsData;
+                            $scope.showData = true;
+                            $timeout.cancel($scope.promise);
+                            angular.forEach(reportsData, function(reportdt) {
+                                $scope.categories[reportdt.category] = reportdt.category;
+                            });
+                            getIndividualReport();
+                        }
+                    } else {
+                        $timeout(getAllReports, 2000);
+                        $scope.showData = false;
+                    }
+                });
+            }
+        }
+
+        var getIndividualReport = function() {
+            var finishedNumbers = 0;
+            angular.forEach($scope.reports, function(individualdt) {
+                if (($scope.reportStates[individualdt.name] === "verifying") || isEmpty($scope.reportStates[individualdt.name])) {
+                    getIndividualDetails(individualdt);
+                } else {
+                    finishedNumbers++;
+                }
+            });
+
+            if (finishedNumbers != $scope.reports.length) {
+                progressTimer = $timeout(getIndividualReport, 3000);
+            } else {
+                $timeout.cancel(progressTimer);
+            }
+        }
+
+        var getIndividualDetails = function(individualdt) {
+            dataService.getIndividualReports(individualdt.cluster_id, individualdt.name).success(function(indidetail) {
+                if (!isEmpty(indidetail.report)) {
+                    $scope.details[individualdt.name] = indidetail.report.results.actions;
+                    for (var i in indidetail.report.results.actions) {
+                        var str = i + individualdt.name;
+                        $scope.modalId[i + individualdt.name] = str.replace(".", "-");
+                        $scope.createModalId = function(action, name) {
+                            return $scope.modalId[action + name];
+                        };
+                    }
+                    $scope.reportStates[individualdt.name] = indidetail.state;
+                } else {
+                    $scope.reportStates[individualdt.name] = indidetail.state;
+                    $scope.showDetails = false;
+                    $timeout(getIndividualDetails, 2000);
+                }
+                if (indidetail.state === "error") {
+                    $scope.errorMessage[individualdt.name] = indidetail.error_message;
+                }
+            });
+        };
+
+        getAllReports();
+
+    });
+    clusterModule.filter('FilterByCategory', function() {
+        return function(items, categoryName) {
+            var filtered = [];
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (item.category == categoryName) {
+                    filtered.push(item);
+                }
+            }
+            return filtered;
+        }
+    });
+    clusterModule.filter('nl2br', function($sce) {
+        return function(text) {
+            return text ? $sce.trustAsHtml(text.replace(/\n/g, '<br/>')) : '';
+        };
     });
 
     clusterModule.controller('clusterCtrl', function($scope, $state, dataService, $stateParams) {
@@ -72,7 +190,6 @@ define(['angular'], function() {
         dataService.getClusterById($scope.clusterId).success(function(data) {
             $scope.clusterInfo = data;
         });
-
     });
     clusterModule.directive('clusternav', function($timeout) {
         return {
@@ -98,11 +215,20 @@ define(['angular'], function() {
 
     });
 
-    clusterModule.controller('clusterProgressCtrl', function($scope, dataService, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData) {
+    clusterModule.controller('clusterProgressCtrl', function($scope, dataService, $state, $stateParams, $filter, ngTableParams, $timeout, $modal, clusterhostsData, $rootScope) {
         var clusterId = $stateParams.id;
         var progressTimer;
         var fireTimer = true;
         $scope.hosts = clusterhostsData;
+        var request = {
+            "check_health": null
+        }
+
+        $scope.startChecking = function() {
+            dataService.startHealthCheck($scope.clusterId, request).success(function(data) {
+                $state.go('cluster.report', data);
+            });
+        };
 
         var getClusterProgress = function() {
             dataService.getClusterProgress(clusterId).success(function(data) {

@@ -40,17 +40,16 @@ define([
         compassModule.stateProvider = $stateProvider;
         $urlRouterProvider.otherwise('/clusterlist');
     });
-    compassModule.config(function($httpProvider){
+    compassModule.config(function($httpProvider) {
         $httpProvider.interceptors.push('authenticationInterceptor');
     });
     compassModule.run(function($rootScope, $state, authService, rememberMe) {
-        $rootScope.Object = Object;  //Object can be used in anywhere. e.g. : Object.key({}).length == 0
+        $rootScope.Object = Object; //Object can be used in anywhere. e.g. : Object.key({}).length == 0
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
             if (toState.authenticate && !authService.isAuthenticated) {
                 if (rememberMe.getCookie("isAuthenticated")) {
                     authService.isAuthenticated = true
-                }
-                else {
+                } else {
                     // User isn't authenticated
                     $state.transitionTo("login");
                     event.preventDefault();
@@ -79,11 +78,11 @@ define([
             })
         }
     });
-    compassModule.controller('errorHandlingModalController',function($scope,$modalInstance,message){
+    compassModule.controller('errorHandlingModalController', function($scope, $modalInstance, message) {
         $scope.warning = message.data;
         $scope.status = message.status;
 
-        $scope.ok =function(){
+        $scope.ok = function() {
             $modalInstance.close();
         }
     });
