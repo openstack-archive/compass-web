@@ -18,7 +18,7 @@ define([
     var compassModule = ng.module('app', [
         'compass.login',
         'compass.services',
-        // 'compassAppDev',
+        // 'compassAppDev', 
         'compass.clusterlist',
         'compass.cluster',
         'compass.wizard',
