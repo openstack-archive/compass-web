@@ -406,6 +406,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         dataService.getServerColumns().success(function(data) {
             $scope.server_columns = data.showall;
+            //console.log($scope.server_columns);
         });
 
         $scope.hideUnselected = function() {
@@ -674,6 +675,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         var cluster = wizardFactory.getClusterInfo();
         $scope.subnetworks = wizardFactory.getSubnetworks();
         $scope.interfaces = wizardFactory.getInterfaces();
+        console.log($scope.interfaces);
         $scope.autoFill = false;
         $scope.autoFillButtonDisplay = "Enable Autofill";
         //$scope.servers = wizardFactory.getServers();
@@ -692,7 +694,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         dataService.getClusterHosts(cluster.id).success(function(data) {
             $scope.servers = data;
-
+            console.log($scope.servers);
             // Assume all hosts in the same cluster have same interface settings
             if ($scope.servers[0].networks) {
                 if (Object.keys($scope.servers[0].networks).length != 0) {
@@ -1271,9 +1273,9 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
             }
             if ($scope.currentAdapterName == "ceph_firefly") {
-                targetSysConfigData["package_config"]={};
-                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
-             }
+                targetSysConfigData["package_config"] = {};
+                targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
+            }
             dataService.updateClusterConfig(cluster.id, targetSysConfigData).success(function(data) {
                 var commitState = {
                     "name": "package_config",
@@ -1645,7 +1647,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         };
     });
 
-    wizardModule.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService) {
+    wizardModule.controller('reviewCtrl', function($scope, wizardFactory, dataService, $filter, ngTableParams, sortingService, $anchorScroll, $location) {
         var cluster = wizardFactory.getClusterInfo();
         $scope.servers = wizardFactory.getServers();
         $scope.interfaces = wizardFactory.getInterfaces();
@@ -1659,7 +1661,37 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         dataService.getServerColumns().success(function(data) {
             $scope.server_columns = data.review;
+
+            for (var i = 0; i < data.review.length; i++) {
+                if (data.review[i].title == "Hostname") {
+                    var temp = $scope.server_columns[0];
+                    $scope.server_columns[0] = data.review[i];
+                    $scope.server_columns[i] = temp;
+                }
+                if (data.review[i].title == "Host MAC Addr") {
+                    var temp = $scope.server_columns[1];
+                    $scope.server_columns[1] = data.review[i];
+                    $scope.server_columns[i] = temp;
+                }
+                if (data.review[i].title == "Switch IP") {
+                    var temp = $scope.server_columns[2];
+                    $scope.server_columns[2] = data.review[i];
+                    $scope.server_columns[i] = temp;
+                }
+                if (data.review[i].title == "Port") {
+                    var temp = $scope.server_columns[3];
+                    $scope.server_columns[3] = data.review[i];
+                    $scope.server_columns[i] = temp;
+                }
+            }
         });
+
+        $scope.scrollTo = function(id) {
+            var old = $location.hash();
+            $location.hash(id);
+            $anchorScroll();
+            $location.hash(old);
+        };
 
         $scope.tabs = [{
             "title": "Database & Queue",
@@ -1791,6 +1823,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             });
         };
     });
+
 
     //Used for roles panel on Role Assignment page
     wizardModule.directive("rolepanelscroll", function($window) {
