@@ -69,14 +69,12 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         $scope.adapters = adaptersData;
 
-        angular.forEach($scope.adapters, function(adapter) {
-            if (adapter.id == $scope.cluster.adapter_id) {
-                $scope.currentAdapterName = adapter.name;
-            }
-        });
+        $scope.currentAdapterName = $scope.cluster.adapter_name;
+        $scope.currentFlavor = $scope.cluster.flavor.name;
 
         // get pre-config data for wizard and set wizard steps based on different adapters
         var oldConfig = clusterConfigData;
+
         $scope.steps = [];
         if ($stateParams.config == "true") {
             dataService.getWizardPreConfig().success(function(data) {
@@ -108,7 +106,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
                 if (preConfigData) {
                     wizardFactory.preConfig(preConfigData);
-
                     if (oldConfig.os_config) {
                         if (oldConfig.os_config.general) {
                             wizardFactory.setGeneralConfig(oldConfig.os_config.general);
@@ -134,6 +131,12 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         }
                         if (oldConfig.package_config.ceph_config) {
                             wizardFactory.setCephConfig(oldConfig.package_config.ceph_config);
+                        }
+                        if (oldConfig.package_config.neutron_config) {
+                            wizardFactory.setNeutronConfig(oldConfig.package_config.neutron_config);
+                        }
+                        if (oldConfig.package_config.ha_config) {
+                            wizardFactory.setNeutronConfig(oldConfig.package_config.ha_config);
                         }
                     }
                 }
@@ -528,10 +531,13 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
     });
 
     wizardModule.controller('globalCtrl', function($scope, wizardFactory, dataService, $q) {
+
+
         var cluster = wizardFactory.getClusterInfo();
 
         $scope.general = wizardFactory.getGeneralConfig();
         $scope.server_credentials = wizardFactory.getServerCredentials();
+
 
         if (!$scope.general["dns_servers"]) {
             $scope.general["dns_servers"] = [""];
@@ -580,6 +586,8 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             }
         });
 
+
+
         $scope.commit = function(sendRequest) {
             if (!sendRequest) {
                 var commitState = {
@@ -600,6 +608,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     }
                 }
             };
+
             if ($scope.generalForm.$valid) {
                 dataService.updateClusterConfig(cluster.id, osGlobalConfig).success(function(configData) {
                     wizardFactory.setGeneralConfig($scope.general);
@@ -1241,6 +1250,38 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             $scope.service_credentials = angular.copy($scope.originalServiceData);
         }
 
+        //High Availability Config
+        $scope.haAccordion = {};
+        $scope.ha_config = wizardFactory.getHighAvailabilityConfig();
+
+        if (!$scope.ha_config["ha_proxy"]) {
+            $scope.ha_config["ha_proxy"] = {};
+            $scope.ha_config["ha_proxy"]["vip"] = [""];
+        }
+
+        //Neutron Config
+        $scope.neutronAccordion = {};
+        $scope.neutron_config = wizardFactory.getNeutronConfig();
+
+        $scope.addValue = function(key) {
+            $scope.neutron_config.openvswitch[key].push("");
+        };
+
+        if (!$scope.neutron_config["openvswitch"]) {
+            $scope.neutron_config["openvswitch"] = {};
+            $scope.neutron_config["openvswitch"]["tunnel_id_ranges"] = [""];
+            $scope.neutron_config["openvswitch"]["network_vlan_ranges"] = [""];
+            $scope.neutron_config["openvswitch"]["bridge_mappings"] = [""];
+        }
+        // else {
+        //     if (!$scope.neutronConfig["openvswitch"]["tunnel_id_ranges"]) $scope.neutronConfig["openvswitch"]["tunnel_id_ranges"] = [""];
+        //     if (!$scope.neutronConfig["openvswitch"]["network_vlan_ranges"]) $scope.neutronConfig["openvswitch"]["network_vlan_ranges"] = [""];
+        //     if (!$scope.neutronConfig["openvswitch"]["bridge_mapping"]) $scope.neutronConfig["openvswitch"]["bridge_mapping"] = [""];
+        //     if (!$scope.neutronConfig["openvswitch"]["tenant_network_type"]) $scope.neutronConfig["openvswitch"]["tenant_network_type"] = [""];
+        // }
+
+        // console.log($scope.neutronConfig);
+
         // Ceph Config
         $scope.cephAccordion = {};
         /*$scope.cephConfig = {
@@ -1249,6 +1290,24 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             "osd_devices": {}
         };*/
         $scope.cephConfig = wizardFactory.getCephConfig();
+
+
+
+        //    $scope.$watch(function() {
+        //     return wizardFactory.getCommitState()
+        // }, function(newCommitState, oldCommitState) {
+
+        //     if (newCommitState !== undefined) {
+        //         if (newCommitState.state == "triggered") {
+        //             $scope.commit(newCommitState.sendRequest);
+        //         }
+        //     }
+        // });
+
+
+
+        $scope.form = {};
+
 
         $scope.commit = function(sendRequest) {
             if (!sendRequest) {
@@ -1269,28 +1328,92 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                     }
                 }
             };
-            if ($scope.currentAdapterName == "ceph_openstack_icehouse") {
-                targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
+
+            if ($scope.currentAdapterName == "ceph_openstack_icehouse" || $scope.currentAdapterName == "openstack_icehouse") {
+
+                if ($scope.currentAdapterName == "ceph_openstack_icehouse") {
+                    targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
+                }
+
+                if ($scope.currentAdapterName == "openstack_icehouse" && $scope.currentFlavor == "HA-multinodes") {
+                    targetSysConfigData["package_config"]["ha_proxy"] = {};
+                    targetSysConfigData["package_config"]["ha_proxy"]["vip"] = $scope.ha_config.ha_proxy.vip;
+
+                }
+
+                targetSysConfigData["package_config"]["neutron_config"] = {};
+                targetSysConfigData["package_config"]["neutron_config"]["openvswitch"] = {};
+
+                if ($scope.neutron_config.openvswitch.tenant_network_type == "gre") {
+                    targetSysConfigData["package_config"]["neutron_config"]["openvswitch"]["tenant_network_type"] = "gre";
+                    targetSysConfigData["package_config"]["neutron_config"]["openvswitch"]["tunnel_id_ranges"] = $scope.neutron_config.openvswitch.tunnel_id_ranges;
+                }
+                if ($scope.neutron_config.openvswitch.tenant_network_type == "vlan") {
+                    targetSysConfigData["package_config"]["neutron_config"]["openvswitch"]["tenant_network_type"] = "vlan";
+                    targetSysConfigData["package_config"]["neutron_config"]["openvswitch"]["network_vlan_ranges"] = $scope.neutron_config.openvswitch.network_vlan_ranges;
+                    targetSysConfigData["package_config"]["neutron_config"]["openvswitch"]["bridge_mappings"] = $scope.neutron_config.openvswitch.bridge_mappings;
+                }
             }
+
             if ($scope.currentAdapterName == "ceph_firefly") {
                 targetSysConfigData["package_config"] = {};
                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig;
             }
-            dataService.updateClusterConfig(cluster.id, targetSysConfigData).success(function(data) {
-                var commitState = {
-                    "name": "package_config",
-                    "state": "success",
-                    "message": ""
-                };
-                wizardFactory.setCommitState(commitState);
-            }).error(function(response) {
-                var commitState = {
-                    "name": "package_config",
-                    "state": "error",
-                    "message": response
-                };
-                wizardFactory.setCommitState(commitState);
+
+            $scope.areValid = true;
+            $scope.notValidformName = "";
+
+            angular.forEach($scope.form, function(formdt, key) {
+                if ($scope.form[key].$valid == false) {
+                    $scope.areValid = false;
+                    $scope.notValidformName = key;
+                }
             });
+
+
+            if ($scope.areValid) {
+
+                dataService.updateClusterConfig(cluster.id, targetSysConfigData).success(function(data) {
+
+                    wizardFactory.setNeutronConfig($scope.neutron_config);
+                    wizardFactory.setHighAvailabilityConfig($scope.ha_config);
+
+                    var commitState = {
+                        "name": "package_config",
+                        "state": "success",
+                        "message": ""
+                    };
+                    wizardFactory.setCommitState(commitState);
+                }).error(function(response) {
+                    var commitState = {
+                        "name": "package_config",
+                        "state": "error",
+                        "message": response
+                    };
+                    wizardFactory.setCommitState(commitState);
+                });
+
+            } else {
+                var message = {};
+                if ($scope.form[$scope.notValidformName].$error.required) {
+                    message = {
+                        "message": "The required(*) fields are empty!"
+                    };
+                } else if ($scope.form[$scope.notValidformName].$error.pattern) {
+                    message = {
+                        "message": "The required(*) fields are not in correct patterns!"
+                    };
+                }
+
+                var commitState = {
+                    "name": "package_config",
+                    "state": "invalid",
+                    "message": message
+                };
+                wizardFactory.setCommitState(commitState);
+            }
+
+
         };
     });
 

@@ -1,4 +1,4 @@
-define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
+define(['angular', 'uiBootstrap'], function(ng, uiBootstrap) {
     var servicesModule = angular.module('compass.services', ['ui.bootstrap']);
     // stateService is used for dynamically add/edit state
     /*    .service('stateService', ['$state',
@@ -34,7 +34,7 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 return $http.post(settings.apiUrlBase + '/users/login', angular.toJson(user));
             };
 
-            this.logout = function(){
+            this.logout = function() {
                 return $http.post(settings.apiUrlBase + '/users/logout', null);
             }
 
@@ -246,11 +246,11 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
             };
 
             this.monitorMetricsTagName = function(id, selectedMetrics) {
-                var metrics = '{"metrics":[{"tags":{},"name":"'+selectedMetrics+'"}],"cache_time":0,"start_absolute":0}';
-                return $http.post(settings.monitoringUrlBase + '/clusters/'+ id +'/datapointtags',metrics);
+                var metrics = '{"metrics":[{"tags":{},"name":"' + selectedMetrics + '"}],"cache_time":0,"start_absolute":0}';
+                return $http.post(settings.monitoringUrlBase + '/clusters/' + id + '/datapointtags', metrics);
             };
-            this.monitorMetricsQuery = function(clusterId,query) {
-                return $http.post(settings.monitoringUrlBase + '/clusters/'+clusterId+'/datapoints',query);
+            this.monitorMetricsQuery = function(clusterId, query) {
+                return $http.post(settings.monitoringUrlBase + '/clusters/' + clusterId + '/datapoints', query);
             };
 
             this.monitorMetricsTree = function() {
@@ -382,8 +382,7 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
             };
 
             metrics.setEndRelative = function(new_end_relative) {
-                if(new_end_relative)
-                {
+                if (new_end_relative) {
                     console.log(new_end_relative)
                     metrics.end_relative.value = new_end_relative.value;
                     metrics.end_relative.unit = new_end_relative.unit;
@@ -461,8 +460,7 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 return metrics.displayData.length - 1;
             };
             metrics.updateDisplayData = function(data) {
-                if(data.errors)
-                {
+                if (data.errors) {
                     alert(data.errors[0]);
                     return -1;
                 }
@@ -505,6 +503,8 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 wizard.console_credentials = {};
                 wizard.network_mapping = {};
                 wizard.ceph_config = {};
+                wizard.neutron_config = {};
+                wizard.ha_config = {};
             };
 
             wizard.init();
@@ -513,6 +513,9 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 //wizard.setClusterInfo(config.cluster);
                 wizard.setInterfaces(config.interface);
                 wizard.setGeneralConfig(config.general);
+
+                // wizard.setNeutronConfig(config.neutron_config);
+
                 wizard.setPartition(config.partition);
                 wizard.setServerCredentials(config.server_credentials);
                 wizard.setServiceCredentials(config.service_credentials);
@@ -520,6 +523,13 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 wizard.setNetworkMapping(config.network_mapping);
                 if (config.ceph_config) {
                     wizard.setCephConfig(config.ceph_config);
+                }
+                if (config.neutron_config) {
+                    wizard.setNeutronConfig(config.neutron_config);
+                }
+
+                if (config.ha_config) {
+                    wizard.setHighAvailabilityConfig(config.ha_config)
                 }
             };
 
@@ -653,19 +663,33 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 return angular.copy(wizard.ceph_config);
             };
 
+            wizard.setNeutronConfig = function(neutronConfig) {
+                wizard.neutron_config = neutronConfig;
+            }
+
+            wizard.getNeutronConfig = function() {
+                return angular.copy(wizard.neutron_config);
+            }
+            wizard.setHighAvailabilityConfig = function(haConfig) {
+                wizard.ha_config = haConfig;
+            }
+            wizard.getHighAvailabilityConfig = function() {
+                return angular.copy(wizard.ha_config);
+            }
+
             return wizard;
         }
     ]);
 
-    servicesModule.service('authService', ['$http', 'dataService','rememberMe',
-        function($http, dataService,rememberMe) {
+    servicesModule.service('authService', ['$http', 'dataService', 'rememberMe',
+        function($http, dataService, rememberMe) {
             this.isAuthenticated = false;
 
             this.setLogin = function(remember) {
                 this.isAuthenticated = true;
-                rememberMe.setCookies("isAuthenticated","true",0.0833,Boolean(remember));
+                rememberMe.setCookies("isAuthenticated", "true", 0.0833, Boolean(remember));
             };
-            this.setLogout = function(){
+            this.setLogout = function() {
                 this.isAuthenticated = false;
                 rememberMe.setCookies("isAuthenticated", "false", -30);
             }
@@ -675,24 +699,24 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
             };
 
             this.logout = function() {
-                 return dataService.logout();
-             };
+                return dataService.logout();
+            };
         }
     ]);
-    servicesModule.service('modalService',function($modal){
-        this.show = function(message){
+    servicesModule.service('modalService', function($modal) {
+        this.show = function(message) {
             return $modal.open({
                 templateUrl: 'messagemodal.html',
                 controller: 'errorHandlingModalController',
-                resolve:{
-                    message: function(){
+                resolve: {
+                    message: function() {
                         return message;
                     }
                 }
             });
         }
     });
-    servicesModule.factory('authenticationInterceptor', ['$q', '$location','$injector',
+    servicesModule.factory('authenticationInterceptor', ['$q', '$location', '$injector',
         function($q, $location, $injector) {
             return {
                 response: function(response) {
@@ -702,13 +726,11 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                     if (rejection.status == 401) {
                         console.log("Response Error 401", rejection);
                         $location.path('/login');
-                    }
-                    else{
-                         if(rejection.config.url && rejection.config.url != "/api/users/login")
-                         {
+                    } else {
+                        if (rejection.config.url && rejection.config.url != "/api/users/login") {
                             var modal = $injector.get("modalService");
                             modal.show(rejection);
-                         }
+                        }
                     }
 
                     return $q.reject(rejection);
@@ -737,11 +759,10 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 var c = ca[i];
                 while (c.charAt(0) == ' ')
                     c = c.substring(1);
-                if (c.indexOf(name) != -1)
-                 {
+                if (c.indexOf(name) != -1) {
                     console.log("inside")
                     return c.substring(name.length, c.length);
-                 }
+                }
 
             }
             return "";

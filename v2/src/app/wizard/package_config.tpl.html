@@ -157,7 +157,7 @@
                         </accordion-heading>
                         <div class="row">
                             <div class="col-xs-12">
-                                <form id="cephForm" name="cephForm" class="form-horizontal" role="form">
+                                <form id="form.cephForm" name="form.cephForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                         <div>
                                             <label class="col-sm-4 control-label no-padding-right">
@@ -223,21 +223,155 @@
                                                 <input ng-model="cephConfig.osd_devices" type="text" class="col-xs-5 col-sm-2" placeholder="Device" name="device">
                                                 <input ng-model="cephConfig.journals" type="text" class="col-xs-5 col-sm-3" placeholder="Journal" name="journal">
                                                 <span class="col-xs-2 col-sm-3"-->
-                                                    <!--Add Action-->
-                                                    <!--span class="action" ng-click="addValue('dns_servers')">
+                                    <!--Add Action-->
+                                    <!--span class="action" ng-click="addValue('dns_servers')">
                                                         <i class="fa fa-plus-circle bigger-140 blue"></i>
                                                     </span-->
-                                                    <!--Remove Action-->
-                                                    <!--span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
+                                    <!--Remove Action-->
+                                    <!--span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
                                                         <i class="fa fa-minus-circle bigger-140 blue"></i>
                                                     </span-->
-                                                <!--/span>
+                                    <!--/span>
                                             </div>
                                         </div>
                                     </div-->
 
                                 </form>
                             </div>
+                        </div>
+                    </accordion-group>
+
+                    <accordion-group ng-if="currentAdapterName == 'ceph_openstack_icehouse' || currentAdapterName == 'openstack_icehouse'">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right"></i> Neutron Configuration
+                        </accordion-heading>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form id="form.neutronForm" name="form.neutronForm" class="form-horizontal" role="form">
+
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Tenant Network Type:
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select ng-init="neutron_config.openvswitch.tenant_network_type='gre'" ng-model="neutron_config.openvswitch.tenant_network_type" name="tenant" class="col-xs-10 col-sm-5">
+                                                    <option value="gre" ng-selected="neutron_config.openvswitch.tenant_network_type == 'gre'">gre</option>
+                                                    <option value="vlan" ng-selected="neutron_config.openvswitch.tenant_network_type == 'vlan'">vlan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-if="neutron_config.openvswitch.tenant_network_type=='gre'" ng-repeat="tunnel_id in neutron_config.openvswitch.tunnel_id_ranges track by $index">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                <span ng-if="$index==0">
+                                                        Tunnel ID Ranges:
+                                                    <span class="text-danger">*</span>
+                                                </span>
+                                            </label>
+                                            <div class="col-sm-8" style="margin-bottom: 10px;">
+                                                <input ng-model="neutron_config.openvswitch.tunnel_id_ranges[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="TunnelID" name="tunnel_id" required>
+                                                <span class="col-xs-2 col-sm-3">
+                                                        <!--Add Action-->
+                                                        <span class="action" ng-click="addValue('tunnel_id_ranges')">
+                                                            <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                         </span>
+                                                <!--Remove Action-->
+                                                <span ng-show="neutron_config.openvswitch.tunnel_id_ranges.length > 1" class="action" ng-click="neutron_config.openvswitch.tunnel_id_ranges.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                         </span>
+                                                <!-- hint -->
+                                                <span style="margin-left: 20px; color: #AEAEAE;">e.g. 1:1000</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="neutron_config.openvswitch.tenant_network_type=='vlan'" ng-repeat="vlan in neutron_config.openvswitch.network_vlan_ranges track by $index">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                <span ng-if="$index==0">
+                                                        Network Vlan Ranges:
+                                                    <span class="text-danger">*</span>
+                                                </span>
+                                            </label>
+                                            <div class="col-sm-8" style="margin-bottom: 10px;">
+                                                <input ng-model="neutron_config.openvswitch.network_vlan_ranges[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="VlanRanges" name="vlan" required>
+                                                <span class="col-xs-2 col-sm-3">
+                                                        <!--Add Action-->
+                                                        <span class="action" ng-click="addValue('network_vlan_ranges')">
+                                                            <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                         </span>
+                                                <!--Remove Action-->
+                                                <span ng-show="neutron_config.openvswitch.network_vlan_ranges.length > 1" class="action" ng-click="neutron_config.openvswitch.network_vlan_ranges.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                         </span>
+                                                <!-- hint -->
+                                                <span style="margin-left: 20px; color: #AEAEAE;">e.g. physnet1:2700:2999</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="neutron_config.openvswitch.tenant_network_type=='vlan'" ng-repeat="bridge in neutron_config.openvswitch.bridge_mappings track by $index" style="margin-bottom: 10px;">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                <span ng-if="$index==0">
+                                                        Bridge Mapping:
+                                                    <span class="text-danger">*</span>
+                                                </span>
+                                            </label>
+                                            <div class="col-sm-8" style="margin-bottom: 10px;">
+                                                <input ng-model="neutron_config.openvswitch.bridge_mappings[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="BridgeMapping" name="bridge_mappings" required>
+                                                <span class="col-xs-2 col-sm-3">
+                                                        <!--Add Action-->
+                                                        <span class="action" ng-click="addValue('bridge_mappings')">
+                                                            <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                         </span>
+                                                <!--Remove Action-->
+                                                <span ng-show="neutron_config.openvswitch.bridge_mappings.length > 1" class="action" ng-click="neutron_config.openvswitch.bridge_mappings.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                         </span>
+                                                <!-- hint -->
+                                                <span style="margin-left: 20px; color: #AEAEAE;">e.g. physnet1:br-eth1</span>
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </accordion-group>
+
+                    <accordion-group ng-if="currentFlavor == 'HA-multinodes'">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right"></i>High Availability Configuration
+                        </accordion-heading>
+                        <div class="row">
+                            <form id="form.haForm" name="form.haForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+
+                                    <div>
+                                        <label class="col-sm-4 control-label no-padding-right">
+                                            VIP:
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8" style="margin-bottom: 10px;">
+                                            <input ng-model="ha_config.ha_proxy.vip" type="text" class="col-xs-10 col-sm-5" placeholder="" name="ha" ng-pattern="/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/" required>
+                                            <div class="margin-left-14 inline">
+                                                <span class="text-danger" ng-show="form.haForm.ha.$dirty && form.haForm.ha.$error.pattern">
+                                                    Invalid IP Address
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </accordion-group>
 

@@ -90,6 +90,12 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                     "id": 3,
                     "template": "multinodes.tmpl",
                     "name": "multinodes"
+                }, {
+                    "roles": [],
+                    "display_name": "Multi-node Cluster with HA",
+                    "id": 3,
+                    "template": "ha.tmpl",
+                    "name": "HA-multinodes"
                 }],
                 "name": "openstack_icehouse",
                 "distributed_system_id": 1,
