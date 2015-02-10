@@ -505,6 +505,8 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 wizard.console_credentials = {};
                 wizard.network_mapping = {};
                 wizard.ceph_config = {};
+                wizard.neutron_config = {};
+                wizard.ha_config = {};
             };
 
             wizard.init();
@@ -513,6 +515,9 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 //wizard.setClusterInfo(config.cluster);
                 wizard.setInterfaces(config.interface);
                 wizard.setGeneralConfig(config.general);
+
+               // wizard.setNeutronConfig(config.neutron_config);
+                
                 wizard.setPartition(config.partition);
                 wizard.setServerCredentials(config.server_credentials);
                 wizard.setServiceCredentials(config.service_credentials);
@@ -520,6 +525,13 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
                 wizard.setNetworkMapping(config.network_mapping);
                 if (config.ceph_config) {
                     wizard.setCephConfig(config.ceph_config);
+                }
+                if(config.neutron_config){
+                    wizard.setNeutronConfig(config.neutron_config);
+                }
+
+                if(config.ha_config){
+                    wizard.setHighAvailabilityConfig(config.ha_config)
                 }
             };
 
@@ -652,6 +664,20 @@ define(['angular','uiBootstrap'], function(ng, uiBootstrap) {
             wizard.getCephConfig = function() {
                 return angular.copy(wizard.ceph_config);
             };
+            
+            wizard.setNeutronConfig = function(neutronConfig){
+                wizard.neutron_config = neutronConfig;
+            }
+
+            wizard.getNeutronConfig = function() {
+                return angular.copy(wizard.neutron_config);
+            }
+            wizard.setHighAvailabilityConfig = function(haConfig){
+                wizard.ha_config = haConfig;
+            }
+            wizard.getHighAvailabilityConfig = function(){
+                return angular.copy(wizard.ha_config);
+            }
 
             return wizard;
         }
