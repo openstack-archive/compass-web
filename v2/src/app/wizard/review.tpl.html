@@ -232,6 +232,7 @@
                                 </table>
                                 <br>
                                 <br>
+                                <span ng-if="currentAdapterName == 'ceph_openstack_icehouse' || currentAdapterName == 'ceph_firefly'">
                                 <div class="widget-header widget-header-flat review-targetconfig">
                                     <h5 class="widget-title white" ng-click="returnStep('security')">
                                         Target System Configurations - cephConfig
@@ -251,6 +252,53 @@
                                 </table>
                                 <br>
                                 <br>
+                                </span>
+                                <span ng-if="currentAdapterName == 'ceph_openstack_icehouse' || currentAdapterName == 'openstack_icehouse'">
+                                <div class="widget-header widget-header-flat review-targetconfig">
+                                    <h5 class="widget-title white" ng-click="returnStep('security')">
+                                        Target System Configurations - NeutronConfig
+                                    </h5>
+                                </div>
+                                <table class="table table-striped table-border-grey">
+                                    <tbody>
+                                        <tr>
+                                            <td>tenent_network_type</td>
+                                            <td>{{neutronConfig.openvswitch.tenant_network_type}}</td>
+                                        </tr>
+                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='gre'" ng-repeat="(key, value) in neutronConfig.openvswitch.tunnel_id_ranges">
+                                            <td>tunnel_id_ranges_{{key}}</td>
+                                            <td>{{value}}</td>
+                                        </tr>
+                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='vlan'" ng-repeat="(key, value) in neutronConfig.openvswitch.network_vlan_ranges">
+                                            <td>network_vlan_ranges_{{key}}</td>
+                                            <td>{{value}}</td>
+                                        </tr>
+                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='vlan'" ng-repeat="(key, value) in neutronConfig.openvswitch.bridge_mappings">
+                                            <td>bridge_mappins_{{key}}</td>
+                                            <td>{{value}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <br>
+                                </span>
+                                <span ng-if="currentFlavor == 'HA-multinodes'">
+                                <div class="widget-header widget-header-flat review-targetconfig">
+                                    <h5 class="widget-title white" ng-click="returnStep('security')">
+                                        Target System Configurations - High Availability Config
+                                    </h5>
+                                </div>
+                                <table class="table table-striped table-border-grey">
+                                    <tbody>
+                                        <tr>
+                                            <td>VIP</td>
+                                            <td>{{haConfig.ha_proxy.vip}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <br>
+                                </span>
                                 <div class="widget-header widget-header-flat review-targetconfig">
                                     <h5 class="widget-title white" ng-click="returnStep('security')">
                                         Target System Configurations - console_credentials

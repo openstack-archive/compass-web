@@ -257,7 +257,8 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <div class="col-sm-8">
-                                                <select ng-init="neutron_config.openvswitch.tenant_network_type='gre'" ng-model="neutron_config.openvswitch.tenant_network_type" name="tenant" class="col-xs-10 col-sm-5">
+                                            <!-- ng-init="neutron_config.openvswitch.tenant_network_type='gre'" -->
+                                                <select ng-model="neutron_config.openvswitch.tenant_network_type" name="tenant" class="col-xs-10 col-sm-5">
                                                     <option value="gre" ng-selected="neutron_config.openvswitch.tenant_network_type == 'gre'">gre</option>
                                                     <option value="vlan" ng-selected="neutron_config.openvswitch.tenant_network_type == 'vlan'">vlan</option>
                                                 </select>
