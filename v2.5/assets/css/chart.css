@@ -1,0 +1,170 @@
+/* circle packing */
+
+text {
+    font-size: 14px !important;
+    font-family: "Arial, Helvetica, sans-serif";
+    pointer-events: none;
+}
+text.parent {
+    fill: #1f77b4;
+}
+circle {
+    fill: #ccc;
+    stroke: #999;
+    fill-opacity: .8;
+    pointer-events: all;
+}
+circle.parent {
+    fill: #1f77b4;
+    fill-opacity: .3;
+    stroke: steelblue;
+}
+circle.parent:hover {
+    stroke: #ff7f0e;
+    stroke-width: 5px;
+}
+circle.child {
+    pointer-events: none;
+}
+circlepacking circle.parent {
+    fill-opacity: 1 !important;
+    //stroke: none !important;
+    fill: #E6F7FF!important;
+}
+circlepacking circle {
+    fill-opacity: 1 !important;
+    //stroke: none !important;
+}
+circle[depth='1'] {
+    fill: #85D6FF !important;
+}
+circle[depth='2'] {
+    fill: #70B8FF !important;
+}
+circle[depth='3'] {
+    fill: #3399FF !important;
+}
+circle[depth='4'] {
+    fill: #005CE6 !important;
+}
+circle.node {
+  cursor: pointer;
+}
+circle.node:hover {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+circle.node--leaf {
+  fill: white;
+}
+.chartLabel {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+}
+.chartLabel-hover{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+  font-size: 30px !important;
+}
+.chartLabel,
+.node--root,
+.node--leaf {
+  pointer-events: none;
+}
+.red-border {
+    border-color: red !important;
+}
+
+/* tree chart*/
+
+.node circle {
+    cursor: pointer;
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+.node text {
+    font-size: 11px;
+}
+path.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+treechart rect {
+    fill: none;
+    cursor: pointer;
+}
+treechart rect:hover {
+    stroke: #222;
+    stroke-width: 3px;
+}
+treechart rect[data-state='ok'] {
+    fill: green;
+}
+treechart rect[data-state='warning'] {
+    fill: yellow;
+}
+treechart rect[data-state='error'] {
+    fill: red;
+}
+treechart text.info {
+    background-color: #ffffff;
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #dddddd;
+}
+treechart .tip {
+    border: 2px dashed #aaaaaa;
+    border-radius: 8px;
+    opacity: 0.9;
+    padding: 8px 10px;
+    background-color: #eeeeee;
+}
+
+
+/* gantt chart */
+
+ganttchart .chart {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin-top: 30px;
+}
+
+ganttchart text {
+    font-family: "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif !important;
+    font-size: 14px;
+}
+
+ganttchart .axis path, ganttchart .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+ganttchart .bar {
+    fill: #B8B8B8; /*grey*/
+}
+
+ganttchart .bar-failed {
+    fill: #CC0000; /*red*/
+}
+
+ganttchart .bar-warning {
+    fill: #ffbb33; /*yellow*/
+}
+
+ganttchart .bar-successful {
+    fill: #669900; /*green*/
+}
+
+ganttchart .bar-unknown {
+    fill: #33b5e5; /*blue*/
+}
+
+ganttchart .x text {
+    text-anchor: end !important;
+    transform: rotate(-65deg);
+}

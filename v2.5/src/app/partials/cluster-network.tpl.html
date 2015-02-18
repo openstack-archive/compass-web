@@ -1,0 +1,23 @@
+<div class="page-header">
+    <h1>
+        Network
+    </h1>
+</div>
+<div class="row side-padding-10 padding-top-30">
+    <div class="col-xs-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Network</th>
+                    <th>Interface</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key, value) in configuration.package_config.network_mapping">
+                    <td class="capitalize">{{key}} Network</td>
+                    <td>{{value}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

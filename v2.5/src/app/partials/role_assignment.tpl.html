@@ -1,0 +1,162 @@
+<div ng-controller="roleAssignCtrl">
+    <div class="row">
+        <div collapse="autoAssignRoles.isCollapsed" class="dashed-panel" style="background-color: rgba(224, 226, 227, 0.25);">
+            <span class="action pull-right" ng-click="autoAssignRoles.isCollapsed = true;">
+                <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
+            </span>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <form name="autoAssignForm" role="form" class="form-horizontal">
+                        <div ng-repeat="role in roles" class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right capitalize">{{role.display_name}}</label>
+                            <div class="col-sm-8" ng-init="role.count=1">
+                                <input type="number" min="0" class="col-xs-10 col-sm-5" ng-model="role.count" placeholder="Count">
+                            </div>
+                        </div>
+                        <div class="col-md-offset-4 col-md-8" style="margin-left: 33%;">
+                            <span>
+                                Total Hosts: {{servers.length}} | Total Roles: {{rolesTotalCount}}
+                            </span>
+                            <button style="margin-left: 18px;" type="button" class="btn btn-sm btn-info" ng-click="autoAssignRoles()" ng-disabled="autoAssignForm.$invalid">
+                                Assign
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="pull-left table-col">
+            <div>
+                <div class="pull-left">
+                    <!--Search Input-->
+                    <span class="input-icon">
+                        <input type="text" placeholder="Search" ng-model="search.$">
+                        <i class="ace-icon fa fa-search blue"></i>
+                    </span>
+                    <!-- Column Show / Hide button -->
+                    <div class="btn-group" dropdown is-open="status.isopen">
+                        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            Column Show / Hide
+                            <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                                <a class="action">
+                                    <span ng-class="{'opacity-zero': !column.visible}">
+                                        <i class="ace-icon fa fa-check blue"></i>
+                                    </span>
+                                    {{column.title}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <span style="display: none">
+                        <input type="text" placeholder="HA VIP" ng-model="ha_vip">
+                    </span>
+                    <button class="btn btn-sm btn-info" ng-init="autoAssignRoles.isCollapsed = true;" ng-click="autoAssignRoles.isCollapsed = !autoAssignRoles.isCollapsed">
+                        Auto Assign&nbsp;
+                        <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoAssignRoles.isCollapsed}"></i>
+                    </button>
+
+
+
+                    <div class="btn-group" dropdown>
+                        <button type="button" style="border-bottom-width: 3px; border-top-width: 3px;" class="btn btn-sm btn-info dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            Manually Assign&nbsp;
+                            <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
+                            <li ng-repeat="role in roles">
+                                <a class="action" ng-click="assignRole(role)">
+                                    {{role.display_name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="space-6"></div>
+            <table ng-table="tableParams" class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <label>
+                                <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                       'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                            <div>{{column.title}}</div>
+                        </th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="server in $data | filter: search" ng-init="server.roles = server.roles === undefinded? [] : server.roles"  ng-class="{'hightlight': server.checked}">
+                        <td>
+                            <label>
+                                <input ng-model="server.checked" type="checkbox" class="ace">
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+                        <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                            <span ng-switch on="column.field">
+                                <span ng-switch-when="os_installed">
+                                    <span ng-if="server['os']">
+                                        <label>
+                                            <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </span>
+                                    <span ng-if="!server['os']">
+                                        -
+                                    </span>
+                                </span>
+                                <span ng-switch-when="clusters">
+                                    <span ng-repeat="cluster in server.clusters">
+                                        {{cluster.name}}&nbsp;
+                                    </span>
+                                </span>
+                                <span ng-switch-default>
+                                    {{server[column.field]}}
+                                </span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="role-assign-drop" ui-on-Drop="onDrop($event, server)" drag-hover-class="drag-enter-role" drop-channel="{{server.dropChannel}}">
+                                <span ng-repeat="role in server['roles']" class="role-tag border-radius-4" ng-style="{'background-color': role.color}"   tooltip="{{role.display_name}}">
+                                    <span class="pull-left">{{role.display_name | limitTo : 15}}</span>
+                                    <span class="pull-right close" ng-click="removeRole(server, role)">
+                                        <i class="ace-icon fa fa-times white"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pull-left role-col">
+            <div id="sticky-anchor"></div>
+            <div class="row role-panel" rolepanelscroll>
+                <div class="blue">
+                    <h4>Drag to Assign</h4>
+                </div>
+                <div class="role-assign-drag">
+                    <div tooltip-placement="left" tooltip="{{role_value.display_name}}" tooltip-popup-delay='100' ui-draggable="true" on-drop-success="dropSuccessHandler($event,role_value,role_key)" class="role-tag drag-roles ui-draggable" ng-repeat="(role_key, role_value) in roles" ng-style="{'background-color': role_value.color}" drag-channel="{{role_value.dragChannel}}">
+                        <i class="ace-icon fa fa-arrows margin-left-neg4"></i>
+                        <span >{{role_value.display_name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="col-sm-12 no-padding">
+    <!--div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 no-padding" style="margin-top:10px" ng-repeat="cluster in clusters  | filter:search"-->
+    <div ng-repeat="cluster in clusters | filter:search" class="pull-left">
+        <div class="infobox infobox-dark1 action" ng-mouseover="hoverView=true" ng-mouseleave="hoverView=false" ng-class="{'infobox-green': cluster.state == 'SUCCESSFUL', 'infobox-blue': cluster.state == 'INITIALIZED', 'infobox-red': cluster.state == 'ERROR', 'infobox-orange': cluster.state == 'INSTALLING', 'infobox-grey': cluster.state == 'UNINITIALIZED'}" ng-click="goToCluster(cluster.id, cluster.state)">
+            <div class="infobox-icon pull-left">
+                <i class="ace-icon fa" ng-class="{'fa-check': cluster.state == 'SUCCESSFUL', ' fa-times': cluster.state == 'ERROR', 'fa-spinner': cluster.state == 'INSTALLING', ' fa-circle-o': cluster.state == 'INITIALIZED', 'fa-gear': cluster.state == 'UNINITIALIZED'}"></i>
+            </div>
+            <div class="pull-left">
+                <span style="font-size: 22px; padding-left: 20px; text-transform: uppercase;font-family:Impact,'Arial Black','Open-Sans', sans-serif; width:200px; overflow: hidden; display:block; white-space: nowrap" tooltip="{{cluster.name}}">{{cluster.name}}</span>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="infobox-data">
+                <span class="infobox-data-number"></span>
+                <div class="infobox-content">
+                    <table ng-hide="hoverView">
+                        <tr>
+                            <td class="pull-right">State</td>
+                            <td class="padding-left-15">{{cluster.state}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">System</td>
+                            <td class="padding-left-15">{{cluster.distributed_system_name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">OS</td>
+                            <td class="padding-left-15">{{cluster.os_name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">Updated</td>
+                            <td class="padding-left-15">{{cluster.updated_at}}</td>
+                        </tr>
+                    </table>
+                    <table ng-show="hoverView">
+                        <tr>
+                            <td class="pull-right">
+                                Total Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-info">{{cluster.progress.total_hosts}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">
+                                Installing Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-warning">{{cluster.progress.installing_hosts}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">
+                                Completed Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-success">{{cluster.progress.completed_hosts}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right">
+                                Failed Hosts
+                            </td>
+                            <td class="padding-left-15">
+                                <span class="badge badge-danger">{{cluster.progress.failed_hosts}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="table-responsive">
+    <table ng-table="tableParams" class="ng-table table table-striped table-hover nowrap">
+        <thead>
+            <tr>
+                <th class="sortable" ng-class="{
+          'sort-asc': tableParams.isSortBy('name', 'asc'),
+          'sort-desc': tableParams.isSortBy('name', 'desc')}" ng-click="tableParams.sorting({'name' : tableParams.isSortBy('name', 'asc') ? 'desc' : 'asc'})">
+                    <div>
+                        Cluster Name
+                    </div>
+                </th>
+                <!-- With icons doesn't make sense to have sorting
+                class="sortable" ng-class="{
+            'sort-asc': tableParams.isSortBy('state', 'asc'),
+            'sort-desc': tableParams.isSortBy('state', 'desc')
+          }" ng-click="tableParams.sorting({'state' : tableParams.isSortBy('state', 'asc') ? 'desc' : 'asc'})"
+            -->
+                <th>
+                    State
+                </th>
+                <th>
+                    Deployment Details
+                </th>
+                <th class="sortable" ng-class="{
+            'sort-asc': tableParams.isSortBy('distributed_system_name', 'asc'),
+            'sort-desc': tableParams.isSortBy('distributed_system_name', 'desc')
+          }" ng-click="tableParams.sorting({'distributed_system_name' : tableParams.isSortBy('distributed_system_name', 'asc') ? 'desc' : 'asc'})">
+                    <div>
+                        Target System
+                    </div>
+                </th>
+                <th class="sortable" ng-class="{
+            'sort-asc': tableParams.isSortBy('os_name', 'asc'),
+            'sort-desc': tableParams.isSortBy('os_name', 'desc')
+          }" ng-click="tableParams.sorting({'os_name' : tableParams.isSortBy('os_name', 'asc') ? 'desc' : 'asc'})">
+                    <div>
+                        OS
+                    </div>
+                </th>
+                <th class="sortable" ng-class="{
+            'sort-asc': tableParams.isSortBy('updated_at', 'asc'),
+            'sort-desc': tableParams.isSortBy('updated_at', 'desc')
+          }" ng-click="tableParams.sorting({'updated_at' : tableParams.isSortBy('updated_at', 'asc') ? 'desc' : 'asc'})">
+                    <div>
+                        Date Modified
+                    </div>
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="cluster in $data | filter:search">
+                <td sortable="'name'">
+                    <span ng-if="cluster.state=='UNINITIALIZED'">
+                        <a ui-sref="wizard({ id: cluster.id, config: true })">{{cluster.name}}</a>
+                    </span>
+                    <span ng-if="cluster.state!='UNINITIALIZED'">
+                        <a ui-sref="cluster.overview({ id: cluster.id })">{{cluster.name}}</a>
+                    </span>
+                </td>
+                <td sortable="'state'">
+                    <span ng-if="cluster.state == 'SUCCESSFUL'">
+                        <i class="ace-icon fa fa fa-check bigger-160 green"></i>
+                    </span>
+                    <span ng-if="cluster.state == 'ERROR'">
+                        <i class="ace-icon fa fa-times bigger-160 red"></i>
+                    </span>
+                    <span ng-if="cluster.state == 'INSTALLING'">
+                        <i class="ace-icon fa fa-spinner fa-spin bigger-160 orange"></i>
+                    </span>
+                    <span ng-if="cluster.state == 'INITIALIZED'">
+                        <i class="ace-icon fa fa-circle-o bigger-160 blue"></i>
+                    </span>
+                    <span ng-if="cluster.state == 'UNINITIALIZED'">
+                        <i class="ace-icon fa fa-gear bigger-160 grey"></i>
+                    </span>
+                </td>
+                <td>
+                    <span ng-if="cluster.progress">
+                        <span>Total: {{cluster.progress.total_hosts}}&nbsp;&nbsp;</span>
+                        <span>Installing: {{cluster.progress.installing_hosts}}&nbsp;&nbsp;</span>
+                        <span>Completed: {{cluster.progress.completed_hosts}}&nbsp;&nbsp;</span>
+                        <span>Failed: {{cluster.progress.failed_hosts}}</span>
+                    </span>
+                </td>
+                <td sortable="'distributed_system_name'">
+                    {{cluster.distributed_system_name}}
+                </td>
+                <td sortable="'os_name'">
+                    {{cluster.os_name}}
+                </td>
+                <td sortable="'updated_at'">
+                    {{cluster.updated_at}}
+                </td>
+                <td>
+                    <button ng-click="export()" class="btn btn-xs btn-black-white btn-clte btn-export-hover border-radius-4">
+                        <i class="glyphicon glyphicon-export bigger-130"></i>
+                    </button>
+                    <button ng-click="alert()" class="btn btn-xs btn-black-white btn-trash-hover border-radius-4">
+                        <span class="glyphicon glyphicon-trash bigger-130"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

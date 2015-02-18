@@ -1,0 +1,42 @@
+<div ng-controller="partitionCtrl">
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table table-hover nowrap">
+                <thead>
+                    <tr>
+                        <th>Mount Point</th>
+                        <th>Size Percentage (%)</th>
+                        <th>Max Size (G)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="partitionInfo in partitionInforArray">
+                        <td>
+                            <input  ng-class="{'red-border': duplicated == true && duplicatedIndexArray.indexOf($index) >= 0}" ng-model="partitionInfo.name" ng-change="mount_point_change($index,partitionInfo.name)" ng-disabled ="duplicated == true && duplicatedIndexArray.indexOf($index) < 0" type="text" placeholder="Mount Point">
+                        </td>
+                        <td>
+                            <input ng-model="partitionInfo.percentage" type="number"  min="1" max="100" placeholder="Size Percentage" class="input-medium">
+                        </td>
+                        <td>
+                            <input ng-model="partitionInfo.max_size" type="text"  min="1" max="100" placeholder="Max Size" class="input-medium">
+                        </td>
+                        <td>
+                            <!-- add button -->
+                            <span ng-click="addPartition()" class="action" style="padding-left: 31px;" >
+                                <i class="fa fa-plus-circle bigger-140 blue"S></i>
+                           </span>
+                            <!--delete button-->
+                            <span ng-if="partitionInforArray.length > 1" ng-click="deletePartition($index)" class="action border-radius-4">
+                                <i class="fa fa-minus-circle bigger-140 blue"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4 text-center partition-chart">
+            <piechart piedata="partitionarray"></piechart>
+        </div>
+    </div>
+</div>

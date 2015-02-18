@@ -1,0 +1,148 @@
+{
+    "os_config": {
+        "centos" : {
+            "global": {
+                "general": {
+                    "_self": {
+                        "display": "General"
+                    },
+                    "http_proxy": {
+                        "display": "HTTP Proxy",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "local_repo": {
+                        "display": "Local Repo",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "ntp_proxy": {
+                        "display": "NTP Server",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "dns_servers": {
+                        "display": "DNS Servers",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "search_path": {
+                        "display": "Search Path",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "domain": {
+                        "display": "Domain",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "gateway": {
+                        "display": "Gateway",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "timezone": {
+                        "display": "Timezone",
+                        "ftype": "string",
+                        "description": "help text"
+                    },
+                    "language": {
+                        "display": "Language",
+                        "ftype": "string",
+                        "description": "help text"
+                    }
+                },
+                "subnetwork": {
+                    "_self": {
+                        "display": "Subnetwork"
+                    }
+                },
+                "routing_table": {
+                    "_self": {
+                        "display": "Routing Table"
+                    }
+                }
+            },
+            "security": {
+                "_self": {
+                    "display": "Server Credentials",
+                    "description": "The default administrator user name and password for each server",
+                    "type": "table"
+                },
+                "columns": {
+                    "1": {
+                        "name": "username",
+                        "display": "Username"
+                    },
+                    "2": {
+                        "name": "password",
+                        "display": "Password",
+                        "type": "password"
+                    }
+                }
+            },
+            "partition": {
+
+            },
+            "server_credentials": {
+
+            }
+        }
+    },
+    "adapter_config": {
+        "security": {
+            "_self": {
+                "display": "Security"
+            },
+            "service_credentials": {
+                "_self": {
+                    "display": "OpenStack Service Credentials",
+                    "description": "Username and password for all of the OpenStack services",
+                    "type": "table"
+                },
+                "fields": [{
+                    "name": "service",
+                    "display": "Service",
+                    "ftype": "string",
+                    "is_required": true
+                }, {
+                    "name": "username",
+                    "display": "Username",
+                    "ftype": "string",
+                    "is_required": true
+                }, {
+                    "name": "password",
+                    "display": "Password",
+                    "ftype": "password",
+                    "is_required": true
+                }]
+            },
+            "management_console_credentials": {
+                "_self": {
+                    "display": "OpenStack Management Console Credentials",
+                    "description": "Username and password for the OpenStack management console",
+                    "type": "table"
+                },
+                "fields": [{
+                    "name": "service",
+                    "display": "Service",
+                    "ftype": "string",
+                    "is_required": true
+                }, {
+                    "name": "username",
+                    "display": "Username",
+                    "ftype": "string",
+                    "is_required": true
+                }, {
+                    "name": "password",
+                    "display": "Password",
+                    "ftype": "password",
+                    "is_required": true
+                }]
+            }
+        },
+        "network_mapping": {
+
+        }
+    }
+}

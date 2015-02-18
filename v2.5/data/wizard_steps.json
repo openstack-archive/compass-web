@@ -1,0 +1,121 @@
+{
+    "os_and_ts": [{
+        "id": 1,
+        "name": "sv_selection",
+        "title": "Server Selection",
+        "state": "active",
+        "template": "src/app/partials/server_selection.tpl.html",
+        "description": "Select the servers you want to use for your target system(s)"
+    }, {
+        "id": 2,
+        "name": "os_global",
+        "title": "OS Global Config",
+        "state": "",
+        "template": "src/app/partials/global.tpl.html",
+        "description": ""
+    }, {
+        "id": 3,
+        "name": "network",
+        "title": "Network",
+        "state": "",
+        "template": "src/app/partials/network.tpl.html",
+        "description": ""
+    }, {
+        "id": 4,
+        "name": "partition",
+        "title": "Partition",
+        "state": "",
+        "template": "src/app/partials/partition.tpl.html",
+        "description": ""
+    }, {
+        "id": 5,
+        "name": "package_config",
+        "title": "Target System Config",
+        "state": "",
+        "template": "src/app/partials/package_config.tpl.html",
+        "description": ""
+    }, {
+        "id": 6,
+        "name": "role_assign",
+        "title": "Role Assignment",
+        "state": "",
+        "template": "src/app/partials/role_assignment.tpl.html",
+        "description": ""
+    }, {
+        "id": 7,
+        "name": "network_mapping",
+        "title": "Network Mapping",
+        "state": "",
+        "template": "src/app/partials/network_mapping.tpl.html",
+        "description": ""
+    }, {
+        "id": 8,
+        "name": "review",
+        "title": "Review",
+        "state": "",
+        "template": "src/app/partials/review.tpl.html",
+        "description": "Click a section title to navigate back to that page."
+    }],
+    "os": [{
+        "id": 1,
+        "name": "sv_selection",
+        "title": "Server Selection",
+        "state": "active",
+        "template": "src/app/partials/server_selection.tpl.html",
+        "description": "Select the servers you want to use for your targer system(s)"
+    }, {
+        "id": 2,
+        "name": "os_global",
+        "title": "OS Global Config",
+        "state": "",
+        "template": "src/app/partials/global.tpl.html",
+        "description": ""
+    }, {
+        "id": 3,
+        "name": "network",
+        "title": "Network",
+        "state": "",
+        "template": "src/app/partials/network.tpl.html",
+        "description": ""
+    }, {
+        "id": 4,
+        "name": "partition",
+        "title": "Partition",
+        "state": "",
+        "template": "src/app/partials/partition.tpl.html",
+        "description": ""
+    }, {
+        "id": 5,
+        "name": "review",
+        "title": "Review",
+        "state": "",
+        "template": "src/app/partials/review.tpl.html",
+        "description": "Click a section title to navigate back to that page."
+    }],
+    "ts": [{
+        "id": 1,
+        "title": "Server Selection",
+        "state": "active",
+        "template": "templates/server_selection.html"
+    }, {
+        "id": 2,
+        "title": "Security",
+        "state": "",
+        "template": "templates/security.html"
+    }, {
+        "id": 3,
+        "title": "Role Assignment",
+        "state": "",
+        "template": "templates/role_assignment.html"
+    }, {
+        "id": 4,
+        "title": "Network Mapping",
+        "state": "",
+        "template": "templates/network_mapping.html"
+    }, {
+        "id": 5,
+        "title": "Review",
+        "state": "",
+        "template": "templates/review.html"
+    }]
+}

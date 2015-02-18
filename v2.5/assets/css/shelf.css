@@ -1,0 +1,249 @@
+footer.copyright {
+    color: #777777;
+    float: left;
+    font-family: Open Sans, Helvetica,sans-serif;
+    font-size: 80%;
+    font-style: italic;
+    margin: 1em;
+    text-align: center;
+    width: 100%;
+}
+div .description {
+    color: #777777;
+    float: left;
+    font-family: Open Sans, Helvetica,sans-serif;
+    font-size: 80%;
+    line-height: 1.3;
+    margin: 1em;
+    text-align: center;
+    width: 100%;
+}
+div.logo-nav .compass_logo {
+    background: url("compass-logo.png") no-repeat scroll left bottom / contain rgba(0, 0, 0, 0);
+    float: left;
+    height: 3em;
+    width: 12em;
+}
+div.container {
+    margin: 2em auto;
+    overflow: hidden;
+    width: 880px;
+}
+div.logo-nav {
+    margin: 0 10px;
+}
+div.logo-nav h1 {
+    color: #777;
+    font-family: Open Sans, verdana;
+    font-size: 250%;
+    font-weight: normal;
+}
+div.toc {
+    float: left;
+}
+div.toc ul li {
+    display: block;
+    float: left;
+    padding: 5px;
+    height: 200px;
+    overflow: hidden;
+    width: 860px;
+}
+div.toc ul li a {
+    background-color: rgb(18, 191, 119);
+    background-position: 50% 60%;
+    background-repeat: no-repeat;
+    color: white;
+    display: block;
+    padding: 5px;
+    float: left;
+    font-family: Open Sans, Helvetica,sans-serif;
+    font-size: 120%;
+    font-weight: bold;
+    height: 100%;
+    text-decoration: none;
+    width: 100%;
+}
+div.toc ul li a em {
+    font-size: 500%;
+}
+div.toc ul li:hover {
+    opacity: 0.7;
+}
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-style: normal;
+    font-weight: bold;
+    letter-spacing: -0.1em;
+    opacity: 0.5;
+    padding-right: 0.2em;
+}
+.toc .tiles li:nth-child(1) {
+    width: 600px;
+}
+.toc .tiles li:nth-child(1) a {
+    background-color: #6C9842;
+}
+.toc .tiles li:nth-child(2) {
+    width: 200px;
+}
+.toc .tiles li:nth-child(2) a {
+    background-color: #D6487E;
+}
+.toc .tiles li:nth-child(3) {
+    height: 400px;
+    width: 200px;
+}
+.toc .tiles li:nth-child(3) a {
+    background-color: #FFB752;
+}
+.toc .tiles li:nth-child(4), .toc .tiles li:nth-child(5) {
+    width: 300px;
+}
+.toc .tiles li:nth-child(4) a, .toc .tiles li:nth-child(5) a {
+    background-color: #7B68AF;
+}
+.toc .tiles li:nth-child(6), .toc .tiles li:nth-child(7), .toc .tiles li:nth-child(8) {
+    width: 200px;
+}
+.toc .tiles li:nth-child(6) a, .toc .tiles li:nth-child(7) a, .toc .tiles li:nth-child(8) a {
+    background-color: #A0A0A0;
+}
+.toc .tiles li:nth-child(9), .toc .tiles li:nth-child(10), .toc .tiles li:nth-child(11), .toc .tiles li:nth-child(12) {
+    width: 200px;
+}
+.toc .tiles li:nth-child(9) a, .toc .tiles li:nth-child(10) a, .toc .tiles li:nth-child(11) a, .toc .tiles li:nth-child(12) a {
+    background-color: #6FB3E0;
+}
+@media (max-width: 915px) {
+    div.container {
+        max-width: 720px;
+    }
+    div.logo-nav {
+        margin: 0 5px;
+    }
+    div.logo-nav h1 {
+        font-size: 180%;
+    }
+    div.logo-nav .compass_logo {
+        height: 2.2em;
+        width: 9em;
+    }
+    div.toc {
+        float: left;
+        max-width: 720px;
+    }
+    div.toc ul li {
+        height: 160px;
+        overflow: hidden;
+        padding: 8px;
+        width: 704px;
+    }
+    div.toc ul li a {
+        font-size: 110%;
+        padding: 10px 8px;
+    }
+    .toc .tiles li:nth-child(1) {
+        width: 704px;
+    }
+    .toc .tiles li:nth-child(2) {
+        float: right;
+        width: 464px;
+    }
+    .toc .tiles li:nth-child(3), .toc .tiles li:nth-child(4), .toc .tiles li:nth-child(5), .toc .tiles li:nth-child(6), .toc .tiles li:nth-child(7), .toc .tiles li:nth-child(8) {
+        width: 224px;
+    }
+    .toc .tiles li:nth-child(9), .toc .tiles li:nth-child(10), .toc .tiles li:nth-child(11), .toc .tiles li:nth-child(12) {
+        width: 164px;
+    }
+    .toc .tiles li:nth-child(3) {
+        height: 335px;
+    }
+}
+@media (max-width: 755px) {
+    div.container {
+        max-width: 600px;
+    }
+    div.logo-nav h1 {
+        font-size: 150%;
+    }
+    div.logo-nav .compass_logo {
+        height: 2em;
+        width: 8em;
+    }
+    div.toc ul li {
+        height: 100px;
+        overflow: hidden;
+        padding: 7px;
+        width: 586px;
+    }
+    div.toc ul li a {
+        font-size: 100%;
+        padding: 7px 6px;
+    }
+    div.toc ul li a em {
+        font-size: 300%;
+    }
+    .toc .tiles li:nth-child(1) {
+        width: 586px;
+    }
+    .toc .tiles li:nth-child(2) {
+        width: 586px;
+    }
+    .toc .tiles li:nth-child(3), .toc .tiles li:nth-child(4), .toc .tiles li:nth-child(5) {
+        width: 286px;
+    }
+    .toc .tiles li:nth-child(6), .toc .tiles li:nth-child(7), .toc .tiles li:nth-child(8) {
+        width: 186px;
+    }
+    .toc .tiles li:nth-child(9), .toc .tiles li:nth-child(10), .toc .tiles li:nth-child(11), .toc .tiles li:nth-child(12) {
+        width: 286px;
+    }
+    .toc .tiles li:nth-child(3) {
+        height: 213px;
+    }
+}
+@media (max-width: 635px) {
+    div.container {
+        margin: 2em auto;
+        max-width: 314px;
+    }
+    div.logo-nav .compass_logo {
+        height: 2em;
+        width: 15em;
+    }
+    div.toc ul li {
+        height: 100px;
+        overflow: hidden;
+        padding: 3px;
+        width: 308px;
+    }
+    div.toc ul li a {
+        font-size: 80%;
+        padding: 3px;
+    }
+    .toc .tiles li:nth-child(1) {
+        width: 308px;
+    }
+    .toc .tiles li:nth-child(2) {
+        width: 308px;
+    }
+    .toc .tiles li:nth-child(3), .toc .tiles li:nth-child(4), .toc .tiles li:nth-child(5) {
+        width: 151px;
+    }
+    .toc .tiles li:nth-child(6), .toc .tiles li:nth-child(7), .toc .tiles li:nth-child(8) {
+        width: 98.33px;
+    }
+    .toc .tiles li:nth-child(9), .toc .tiles li:nth-child(10), .toc .tiles li:nth-child(11), .toc .tiles li:nth-child(12) {
+        width: 151px;
+    }
+    .toc .tiles li:nth-child(3) {
+        height: 205px;
+    }
+}
+.chosen-container-multi .chosen-choices{
+    border-radius: 5px;
+}
+.chosen-container-active .chosen-choices{
+    border: 1px solid orange;
+    border-radius: 5px;
+}

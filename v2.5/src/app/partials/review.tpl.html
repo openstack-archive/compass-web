@@ -1,0 +1,271 @@
+<div ng-controller="reviewCtrl">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter" ng-click="returnStep('role_assign')">
+                        <i class="ace-icon fa fa-list"></i>
+                        Hosts
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isHostsCollapsed = !isHostsCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isHostsCollapsed, 'fa-chevron-down': isHostsCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isHostsCollapsed">
+                            <table ng-table="tableParams" class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                   'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                                            <div>{{column.title}}</div>
+                                        </th>
+                                        <th ng-repeat="(key, value) in interfaces">
+                                            {{key}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="server in $data | filter: search">
+                                        <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                                            <span ng-switch on="column.field">
+                                                <span ng-switch-when="os_installed">
+                                                    <span ng-if="server['os']">
+                                                        <label>
+                                                            <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                                            <span class="lbl"></span>
+                                                        </label>
+                                                    </span>
+                                                    <span ng-if="!server['os']">
+                                                        -
+                                                    </span>
+                                                </span>
+                                                <span ng-switch-when="clusters">
+                                                    <span ng-repeat="cluster in server.clusters">
+                                                        {{cluster.name}}&nbsp;
+                                                    </span>
+                                                </span>
+                                                <span ng-switch-when="roles">
+                                                    <span ng-repeat="role in server['roles']" class="role-badge" ng-style="{'background-color': role.color}">
+                                                        {{role.display_name}}
+                                                    </span>
+                                                </span>
+                                                <span ng-switch-default>
+                                                    {{server[column.field]}}
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td ng-repeat="(key, value) in interfaces">
+                                            {{server.networks[key].ip}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="space-16"></div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter" ng-click="returnStep('network_mapping')">
+                        <i class="ace-icon fa fa-sun-o"></i>
+                        Network Mapping
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isMappingCollapsed = !isMappingCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isMappingCollapsed, 'fa-chevron-down': isMappingCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isMappingCollapsed">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Network</th>
+                                        <th>Interface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in network_mapping">
+                                        <td class="capitalize">{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter" ng-click="returnStep('partition')">
+                        <i class="ace-icon fa fa-hdd-o"></i>
+                        Partition
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isPartitionCollapsed = !isPartitionCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isPartitionCollapsed, 'fa-chevron-down': isPartitionCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isPartitionCollapsed">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mount Point</th>
+                                        <th>Size Percentage (%)</th>
+                                        <th>Max Size (G)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in partition">
+                                        <td>{{key}}</td>
+                                        <td>{{value.percentage}}</td>
+                                        <td>{{value.max_size}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="space-16"></div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter" ng-click="returnStep('os_global')">
+                        <i class="ace-icon fa fa-globe"></i>
+                        OS Global Configurations
+                    </h4>
+                    <div class="widget-toolbar">
+                        <a class="action" ng-click="isConfigCollapsed = !isConfigCollapsed">
+                            <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isConfigCollapsed, 'fa-chevron-down': isConfigCollapsed}"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div class="widget-main no-padding" collapse="isConfigCollapsed">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in global_config">
+                                        <td>{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Server Credentials</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username</td>
+                                        <td>{{server_credentials.username}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Password</td>
+                                        <td>{{server_credentials.password}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box transparent margin-top-minus10">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter" ng-click="returnStep('security')">
+                        <i class="ace-icon fa fa-lock"></i>
+                        Target System Configurations
+                    </h4>
+                    <div class="widget-toolbar no-border">
+                        <ul class="nav nav-tabs">
+                            <li ng-repeat="tab in tabs" ng-class="{active:isActiveTab(tab.url)}" ng-click="onClickTab(tab)">
+                                <a href>{{tab.title}}</a>
+                            </li> 
+                            <a class="action margin-right-5" ng-click="isCredCollapsed = !isCredCollapsed">
+                                <i class="ace-icon fa fa-chevron-up" ng-class="{'fa-chevron-up': !isCredCollapsed, 'fa-chevron-down': isCredCollapsed}"></i>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-body-inner" style="display: block;">
+                        <div collapse="isCredCollapsed" class="widget-main no-padding">
+                            <div ng-include="currentTab"></div>
+                            <script type="text/ng-template" id="service.tpl.html">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                    </tr>
+                                </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(key, value) in service_credentials">
+                                            <td>{{key}}</td>
+                                            <td>{{value.username}}</td>
+                                            <td>{{value.password}}</td >
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </script>
+                            <script type="text/ng-template" id="console.tpl.html">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in console_credentials">
+                                        <td>{{key}}</td >
+                                        <td>{{value.username}}</td>
+                                        <td>{{value.password}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </script>
+                            <script type="text/ng-template" id="ceph.tpl.html">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-repeat="(key, value) in cephConfig.global_config">
+                                        <td>{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                    <tr ng-repeat="(key, value) in cephConfig.osd_config">
+                                        <td>{{key}}</td>
+                                        <td>{{value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

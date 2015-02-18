@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+    	<i class="ace-icon fa fa-exclamation-triangle orange"></i>
+    	{{title}}
+    </h3>
+</div>
+<div class="modal-body">
+	<span ng-if = "content">
+    	{{content}}
+    </span>
+    <span ng-if = "content == undefined">
+    	Unknown Error Occurred! No Error Detail Is Sent By Server 
+    </span>
+    <div ng-include="contentURL">
+    </div>
+</div>
+<div class="modal-footer">
+    <!-- <button class="btn btn-primary" ng-click="ok()" ng-disabled="createClusterForm.$invalid">Create</button> -->
+    <button class="btn btn-warning" ng-click="cancel()">OK</button>
+</div>

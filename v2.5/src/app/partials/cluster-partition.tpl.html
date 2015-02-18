@@ -1,0 +1,39 @@
+<div class="page-header">
+    <h1>
+        Partition
+    </h1>
+</div>
+
+<div class="row side-padding-10 padding-top-30">
+    <div class="col-xs-12">
+
+        <div class="col-lg-8">
+            <table class="table table-hover table-striped nowrap">
+                <thead>
+                    <tr>
+                        <th>Mount Point</th>
+                        <th>Size Percentage (%)</th>
+                        <th>Max Size (G)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, data) in configuration.os_config.partition">
+                        <td>
+                            <span>{{key}}</span>
+                        </td>
+                        <td>
+                            <span>{{data.percentage}}</span>
+                        </td>
+                        <td>
+                            <span>{{data.max_size}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4 text-center partition-chart">
+            <piechart piedata="partitionarray"></piechart>
+        </div>
+
+    </div>
+</div>

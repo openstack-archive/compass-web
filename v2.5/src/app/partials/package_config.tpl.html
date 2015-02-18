@@ -1,0 +1,250 @@
+<div ng-controller="packageConfigCtrl">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="accordion-style1 panel-group accordion-style2" id="accordion">
+                <accordion close-others="true">
+
+                    <!--accordion-group is-open="serverAccordion.open" ng-init="serverAccordion.open=true">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> Server Credentials
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">Username</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" id="server-username" ng-model="server_credentials.username">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">Password</label>
+                                        <div class="col-sm-8">
+                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Password" id="server-password" ng-model="server_credentials.password">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">Confirm Password</label>
+                                        <div class="col-sm-8">
+                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Confirm Password">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </accordion-group-->
+
+                    <accordion-group is-open="serviceAccordion.open" ng-if="currentAdapterName != 'ceph_firefly'">
+
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': serviceAccordion.open, 'fa-angle-right': !serviceAccordion.open}"></i> OpenStack Database &amp; Queue Credentials
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-lg-1">
+                            </div>
+                            <div class="col-lg-10">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form name="serviceCredForm">
+                                            <a href="#">
+                                                <tr ng-repeat="(service, credential) in service_credentials">
+                                                    <td>
+                                                        <span>{{service}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-hide="editServiceMode[$index]">{{credential.username}}</span>
+                                                        <input ng-show="editServiceMode[$index]" ng-model="credential.username" placeholder="Username" type="text" ng-required />
+                                                    </td>
+                                                    <td>
+                                                        <span ng-hide="editServiceMode[$index]">{{credential.password}}</span>
+                                                        <input ng-show="editServiceMode[$index]" ng-model="credential.password" placeholder="Password" type="password" ng-required />
+                                                        <input ng-show="editServiceMode[$index]" placeholder="Confirm Password" type="password" ng-required />
+                                                    </td>
+                                                    <td>
+                                                        <!--edit button-->
+                                                        <button ng-hide="editServiceMode[$index]" ng-click="editServiceMode[$index] = true; sEdit($index)" class="btn btn-xs btn-success border-radius-4">
+                                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                        </button>
+                                                        <!--save button -->
+                                                        <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sSave()" class="btn btn-xs btn-primary border-radius-4">
+                                                            <i class="ace-icon fa fa-check bigger-120"></i>
+                                                        </button>
+                                                        <!--cancel button -->
+                                                        <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sReset()" class="btn btn-xs btn-danger border-radius-4">
+                                                            <i class="ace-icon fa fa-times bigger-120"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </a>
+                                        </form>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1">
+                            </div>
+                        </div>
+
+                    </accordion-group>
+
+                    <accordion-group is-open="mgmtAccordion.open" ng-if="currentAdapterName != 'ceph_firefly'">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': mgmtAccordion.open, 'fa-angle-right': !mgmtAccordion.open}"></i> OpenStack Keystone User Credentials
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-lg-1">
+                            </div>
+                            <div class="col-lg-10">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form name="managementCredForm">
+                                            <tr ng-repeat="(service, credential) in console_credentials">
+                                                <td>
+                                                    <span ng-hide="editMgntMode[$index]">{{service}}</span>
+                                                    <input ng-show="editMgntMode[$index]" ng-model="service" placeholder="Service" type="text" ng-required />
+                                                </td>
+                                                <td>
+                                                    <span ng-hide="editMgntMode[$index]">{{credential.username}}</span>
+                                                    <input ng-show="editMgntMode[$index]" ng-model="credential.username" placeholder="Username" type="text" ng-required />
+                                                </td>
+                                                <td>
+                                                    <span ng-hide="editMgntMode[$index]">{{credential.password}}</span>
+                                                    <input ng-show="editMgntMode[$index]" ng-model="credential.password" placeholder="Password" type="password" ng-required />
+                                                    <input ng-show="editMgntMode[$index]" placeholder="Confirm Password" type="password" ng-required />
+                                                </td>
+                                                <td>
+                                                    <!--edit button-->
+                                                    <button ng-hide="editMgntMode[$index]" ng-click="mEdit($index)" class="btn btn-xs btn-success border-radius-4">
+                                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                    </button>
+                                                    <!--save button-->
+                                                    <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mSave()" class="btn btn-xs btn-primary border-radius-4">
+                                                        <i class="ace-icon fa fa-check bigger-120"></i>
+                                                    </button>
+                                                    <!--cancel button-->
+                                                    <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mReset()" class="btn btn-xs btn-default btn-danger border-radius-4">
+                                                        <i class="ace-icon fa fa-times bigger-120"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-1">
+                            </div>
+                        </div>
+                    </accordion-group>
+
+                    <accordion-group is-open="cephAccordion.open" ng-if="currentAdapterName == 'ceph_openstack_icehouse' || currentAdapterName == 'ceph_firefly'">
+                        <accordion-heading>
+                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': cephAccordion.open, 'fa-angle-right': !cephAccordion.open}"></i> Ceph Global Configurations
+                        </accordion-heading>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form id="cephForm" name="cephForm" class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Pool PG Number
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.global_config.osd_pool_pg_num" type="text" class="col-xs-10 col-sm-5" placeholder="OSD Pool PG Number" name="osd_pool_pg_num" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Pool PGP Number
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.global_config.osd_pool_pgp_num" type="text" class="col-xs-10 col-sm-5" placeholder="OSD Pool PGP Number" name="osd_pool_pgp_num" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Pool Size
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.global_config.osd_pool_size" type="text" class="col-xs-10 col-sm-5" placeholder="OSD Pool Size" name="osd_pool_size" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                Journal Size
+                                                <span class="text-danger opacity-zero">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.osd_config.journal_size" type="text" class="col-xs-10 col-sm-5" placeholder="Journal Size" name="journal_size">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OP Threads
+                                                <span class="text-danger opacity-zero">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.osd_config.op_threads" type="number" class="col-xs-10 col-sm-5" placeholder="OP Threads" name="op_threads">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--div class="form-group">
+                                        <div>
+                                            <label class="col-sm-4 control-label no-padding-right">
+                                                OSD Devices
+                                                <span class="text-danger opacity-zero">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input ng-model="cephConfig.osd_devices" type="text" class="col-xs-5 col-sm-2" placeholder="Device" name="device">
+                                                <input ng-model="cephConfig.journals" type="text" class="col-xs-5 col-sm-3" placeholder="Journal" name="journal">
+                                                <span class="col-xs-2 col-sm-3"-->
+                                                    <!--Add Action-->
+                                                    <!--span class="action" ng-click="addValue('dns_servers')">
+                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                    </span-->
+                                                    <!--Remove Action-->
+                                                    <!--span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
+                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                    </span-->
+                                                <!--/span>
+                                            </div>
+                                        </div>
+                                    </div-->
+
+                                </form>
+                            </div>
+                        </div>
+                    </accordion-group>
+
+                </accordion>
+
+            </div>
+        </div>
+    </div>
+
+</div>
