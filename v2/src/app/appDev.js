@@ -664,6 +664,10 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "create_by": "user@someemail.com",
             "create_at": "2014-4-25 12:00:00",
             "updated_at": "2014-2-27 20:00:00",
+            "flavor":{
+                "display_name": "Multi-node Cluster with HA",
+                "name": "HA-multinodes"
+            },
             "links": [{
                 "href": "/clusters/2",
                 "rel": "self"
@@ -683,12 +687,14 @@ compassAppDev.run(function($httpBackend, settings, $http) {
             "id": parseInt(id),
             "name": "Cluster" + id,
             "adapter_id": 6, // 6: ceph_openstack_icehouse, 5: openstack_icehouse, 4: ceph(chef), 2: os_only
+            "adapter_name": "openstack_icehouse",
             "os_id": 1,
             "editable": true,
             "create_by": "user@someemail.com",
             "create_at": "2014-3-25 12:00:00",
             "updated_at": "2014-3-26 13:00:00",
             "flavor": {
+                "name": "HA-multinodes",
                 "roles": [{
                     "display_name": "Compute",
                     "name": "os-compute-worker"

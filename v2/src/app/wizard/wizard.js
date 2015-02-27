@@ -11,6 +11,14 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         'ngAnimate'
     ]);
 
+    function isEmpty(obj) {
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
+                return false;
+        }
+        return true;
+    }
+
     wizardModule.config(function config($stateProvider) {
         $stateProvider
             .state('wizard', {
@@ -71,6 +79,20 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         $scope.currentAdapterName = $scope.cluster.adapter_name;
         $scope.currentFlavor = $scope.cluster.flavor.name;
+
+        // angular.forEach($scope.adapters, function(adapter) {
+        //     if (adapter.id == $scope.cluster.adapter_id) {
+        //         // console.log("hi");
+        //         // console.log(adapter);
+        //         // console.log($scope.cluster.adapter_name);
+        //         $scope.currentAdapterName = adapter.name;
+        //         // if(adapter.flavors!=null)
+        //         $scope.currentFlavor = adapter.flavors.name;
+        //     }
+        // });
+
+        // $scope.currentAdapterName = $scope.cluster.adapter_name;
+        // $scope.currentFlavor = $scope.cluster.flavor.name;
 
         // get pre-config data for wizard and set wizard steps based on different adapters
         var oldConfig = clusterConfigData;
@@ -1269,6 +1291,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
 
         if (!$scope.neutron_config["openvswitch"]) {
             $scope.neutron_config["openvswitch"] = {};
+            $scope.neutron_config["openvswitch"]["tenant_network_type"] = ["gre"];
             $scope.neutron_config["openvswitch"]["tunnel_id_ranges"] = [""];
             $scope.neutron_config["openvswitch"]["network_vlan_ranges"] = [""];
             $scope.neutron_config["openvswitch"]["bridge_mappings"] = [""];
@@ -1290,9 +1313,6 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
             "osd_devices": {}
         };*/
         $scope.cephConfig = wizardFactory.getCephConfig();
-
-
-
         //    $scope.$watch(function() {
         //     return wizardFactory.getCommitState()
         // }, function(newCommitState, oldCommitState) {
@@ -1303,12 +1323,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         //         }
         //     }
         // });
-
-
-
         $scope.form = {};
-
-
         $scope.commit = function(sendRequest) {
             if (!sendRequest) {
                 var commitState = {
@@ -1336,6 +1351,7 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                 }
 
                 if ($scope.currentAdapterName == "openstack_icehouse" && $scope.currentFlavor == "HA-multinodes") {
+                    //  if ($scope.currentAdapterName == "openstack_icehouse"){
                     targetSysConfigData["package_config"]["ha_proxy"] = {};
                     targetSysConfigData["package_config"]["ha_proxy"]["vip"] = $scope.ha_config.ha_proxy.vip;
 
@@ -1780,7 +1796,10 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.service_credentials = wizardFactory.getServiceCredentials();
         $scope.console_credentials = wizardFactory.getConsoleCredentials();
         $scope.global_config = wizardFactory.getGeneralConfig();
+
         $scope.cephConfig = wizardFactory.getCephConfig();
+        $scope.neutronConfig = wizardFactory.getNeutronConfig();
+        $scope.haConfig = wizardFactory.getHighAvailabilityConfig();
 
         dataService.getServerColumns().success(function(data) {
             $scope.server_columns = data.review;
