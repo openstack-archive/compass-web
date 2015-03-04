@@ -326,6 +326,23 @@ define(['./baseService'], ()->
 
             @getServerColumns().success (data) ->
                 $scope.server_columns = data.review
+                for value, index in data.review
+                    if value.title == "Hostname"
+                        temp = $scope.server_columns[0];
+                        $scope.server_columns[0] = value;
+                        $scope.server_columns[index] = temp;
+                    if value.title == "Host MAC Addr"
+                        temp = $scope.server_columns[1];
+                        $scope.server_columns[1] = value;
+                        $scope.server_columns[index] = temp;
+                    if value.title == "Switch IP"
+                        temp = $scope.server_columns[2];
+                        $scope.server_columns[2] = value;
+                        $scope.server_columns[index] = temp;
+                    if value.title == "Port"
+                        temp = $scope.server_columns[3];
+                        $scope.server_columns[3] = value;
+                        $scope.server_columns[index] = temp;
 
             $scope.tabs =[{ 
                     "title": "Database & Queue"
