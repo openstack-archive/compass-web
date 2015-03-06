@@ -277,10 +277,16 @@ define(['./baseController'], ()->
             $scope.commit = (sendRequest) ->
                 wizardService.networkMappingCommit($scope, sendRequest)
     ]
-    .controller 'reviewCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter',
-        ($scope, wizardService, ngTableParams, $filter) ->
+    .controller 'reviewCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter', '$location', '$anchorScroll'
+        ($scope, wizardService, ngTableParams, $filter, $location, $anchorScroll) ->
             wizardService.reviewInit($scope)
             wizardService.watchingTriggeredStep($scope)
+
+            $scope.scrollTo = (id) -> 
+                old = $location.hash();
+                $location.hash(id);
+                $anchorScroll();
+                $location.hash(old);
 
             $scope.commit = (sendRequest) ->
                 wizardService.reviewCommit(sendRequest)

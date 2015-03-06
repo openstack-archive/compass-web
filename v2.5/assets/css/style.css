@@ -1039,6 +1039,7 @@ div.toc ul li a {
     vertical-align: baseline;
     white-space: nowrap;
     margin-right: 2px;
+    width: 120px;
 }
 .autofill-success {
     margin-top: 20px;
@@ -1055,6 +1056,31 @@ h4.widget-title:hover {
 }
 .loadingMask .mask{
     opacity: 0.5;
+}
+.tab-panel {
+    z-index: 10;
+    margin-left: 30px;
+}
+.tab-panel.stick {
+    position: fixed;
+    z-index: 10000;
+    top: 10px;
+}
+.review-padding{
+    padding-left: 60px;
+    padding-right: 60px;
+}
+.review-network-badge{
+    width:130px;
+}
+.review-targetconfig{
+    background:#7E6EB0;
+}
+.review-host{
+    background:#307ECC;
+}
+.review-osconfig{
+    background:#69AA46;
 }
 .centerLoading{
     padding-top: 20%;
