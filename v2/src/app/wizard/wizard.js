@@ -78,8 +78,9 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
         $scope.adapters = adaptersData;
 
         $scope.currentAdapterName = $scope.cluster.adapter_name;
-        $scope.currentFlavor = $scope.cluster.flavor.name;
-
+        if($scope.currentAdapterName != "os_only"){
+                $scope.currentFlavor = $scope.cluster.flavor.name;
+        }
         // angular.forEach($scope.adapters, function(adapter) {
         //     if (adapter.id == $scope.cluster.adapter_id) {
         //         // console.log("hi");
