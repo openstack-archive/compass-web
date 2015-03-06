@@ -82,8 +82,8 @@ define(['./baseController'], ()->
             $scope.commit = (sendRequest) ->
                 wizardService.globalCommit($scope,sendRequest)
     ]
-    .controller 'networkCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter', '$modal',
-        ($scope, wizardService, ngTableParams, $filter, $modal) ->
+    .controller 'networkCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter', '$modal', '$timeout'
+        ($scope, wizardService, ngTableParams, $filter, $modal, $timeout) ->
 
             wizardService.networkInit($scope)
             wizardService.watchingTriggeredStep($scope)
@@ -100,6 +100,13 @@ define(['./baseController'], ()->
 
                 hostname_rule = $("#hostname-rule").val()
                 wizardService.fillHostname($scope, hostname_rule)
+                $scope.networkAlerts = [{
+                    msg: 'Autofill Done!'
+                }]
+                if alertFade
+                    $timeout ->
+                        $scope.networkAlerts = []
+                    , alertFade
 
             $scope.addInterface = (newInterface) ->
                 wizardService.addInterface($scope, newInterface)
@@ -136,6 +143,19 @@ define(['./baseController'], ()->
                     wizardService.setInterfaces($scope.interfaces)
 
                 wizardService.displayDataInTable($scope, $scope.servers)
+    ]
+    .directive 'ngKeypress', [->
+        return (scope, element, attrs) ->
+            element.bind "keydown keypress", (event)->
+                if event.which is 9
+                    current = attrs.position
+                    result = current.split('_')
+                    next = result[0]+"_"+(parseInt(result[1])+1)
+                    if $("input[data-position=" + next + "]").length
+                        $("input[data-position=" + next + "]").focus()
+                    else
+                        $(".btn-next").focus()
+                   event.preventDefault();
     ]
     .controller 'partitionCtrl', ['$scope', 'wizardService',
         ($scope, wizardService) ->
@@ -267,5 +287,16 @@ define(['./baseController'], ()->
 
             wizardService.displayDataInTable($scope, $scope.servers)
     ]
-   
+    .animation '.fade-animation', [->
+        return
+            enter: (element, done) ->
+                element.css('display', 'none')
+                element.fadeIn(500, done)
+                return ->
+                    element.stop()
+            leave: (element,done) ->
+                element.fadeOut(500,done)
+                return ->
+                    element.stop()
+    ]
 )
