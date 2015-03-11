@@ -294,7 +294,7 @@ define(['./baseController'], ()->
             wizardService.displayDataInTable($scope, $scope.servers)
     ]
     .animation '.fade-animation', [->
-        return
+        return{
             enter: (element, done) ->
                 element.css('display', 'none')
                 element.fadeIn(500, done)
@@ -304,5 +304,6 @@ define(['./baseController'], ()->
                 element.fadeOut(500,done)
                 return ->
                     element.stop()
+        }
     ]
 )
