@@ -104,5 +104,17 @@ define(['./baseService'], () ->
         getUserLog: ->
             return @$http.get(@settings.apiUrlBase + '/users/logs')
 
+        getHealthReports: (id) ->
+            return @$http.get(@settings.apiUrlBase + '/clusters/' + id + '/healthreports')
+
+        getIndividualReports: (id, name) ->
+            return @$http.get(@settings.apiUrlBase + '/clusters/' + id + '/healthreports/' + name)
+
+        postHealthCheck: (id, checkHealth) ->
+            return @$http.post(@settings.apiUrlBase + '/clusters/' + id + '/action', angular.toJason(checkHealth))
+
+        startHealthCheck: (id, request) ->
+            return @$http.post(@settings.apiUrlBase + '/clusters/' + id + '/action',angular.toJson(request))
+
     angular.module('compass.services').service('dataService', ['$http', 'settings', ($http,settings) -> new DS($http,settings)])
 )
