@@ -3,6 +3,12 @@ define ['./baseService'], ->
     class Cluster
         constructor: (@dataService, @$state, @wizardFactory, @$timeout, @ngTableParams, @$filter, @$rootScope) ->
 
+        isEmpty = (obj)->
+                for prop of obj
+                    if obj.hasOwnProperty(prop)
+                        return false
+                return true
+
         getClusters: ->
             @dataService.getClusters().success((data) ->
             ).error((response) -> 
@@ -15,6 +21,91 @@ define ['./baseService'], ->
             @dataService.getClusterProgress(cluster.id).success (data) ->
                     cluster.progress = data.status
                     cluster.state = data.state
+
+        startHealthCheck: (id, request, $scope) ->
+            $state = @$state
+            @dataService.startHealthCheck(id, request).success (data)->
+                     $state.go("cluster.report",data)
+            $scope.$emit('activateReportTag', true);
+
+        getHealthReportsCheck: ($scope, id) ->
+            $scope.activeReport = false
+            @dataService.getHealthReports(id).success (reportsData) ->
+                if !isEmpty(reportsData)
+                    $scope.activeReport = true
+                else
+                    $scope.activeReport = false
+            $scope.$on('activateReportTag', (event, data)->
+                $scope.activeReport = true
+            )
+            # console.log($scope.activeReport)
+
+        getReports: ($scope, id)->
+            $scope.reports = ""
+            progressTimer = ""
+            dataService = @dataService
+            dtLength = -1
+            $timeout =  @$timeout
+            $scope.isTimeout = false
+            $scope.showData = false
+            $scope.categories = {}
+            $scope.details = {}
+            $scope.modalId = {}
+            $scope.errorMessage = {}
+            $scope.reportStates = {}
+            $scope.promise = $timeout(()->
+                        $scope.isTimeout = true
+                    , 1200000)
+
+            getIndividualReports = ()->
+                finishedNumbers = 0
+                for individualdt in $scope.reports
+                    if ($scope.reportStates[individualdt.name] is "verifying") or isEmpty($scope.reportStates[individualdt.name])
+                        getIndividualDetails(individualdt)
+                    else
+                        finishedNumbers = finishedNumbers+1
+                if finishedNumbers!=$scope.reports.length
+                    progressTimer = $timeout(getIndividualReports, 3000)
+                else
+                    $timeout.cancel(progressTimer)
+
+            getIndividualDetails = (individualdt) ->
+                (getIndi = () ->
+                    dataService.getIndividualReports(individualdt.cluster_id, individualdt.name).success (indiDetail)->
+                        if !isEmpty(indiDetail.report)
+                            $scope.details[individualdt.name] = indiDetail.report.results.actions
+                            for i in indiDetail.report.results.actions
+                                str = i + individualdt.name
+                                $scope.modalId[i + individualdt.name] = str.replace(".", "-")
+                                $scope.createModalId = (action, name) ->
+                                    return $scope.modalId[action + name]
+                            $scope.reportStates[individualdt.name] = indiDetail.state
+                        else
+                            $scope.reportStates[individualdt.name] = indiDetail.state
+                            $scope.showDetails = false
+                            $timeout(getIndi, 2000)
+                        if indiDetail.state is "error"
+                                $scope.errorMessage[individualdt.name] = indiDetail.error_message
+                )()
+            getAllReports = () ->
+                if !$scope.isTimeout
+                    dataService.getHealthReports(id).success (data) ->
+                        $scope.$emit('activateReportTag', true)
+                        if !isEmpty(data)
+                            if data.length != dtLength
+                                dtLength = data.length
+                                $timeout(getAllReports, 3000)
+                            else
+                                $scope.reports = data
+                                $scope.showData = true
+                                $timeout.cancel($scope.promise)
+                                for reportdt in $scope.reports
+                                    $scope.categories[reportdt.category] = reportdt.category
+                                getIndividualReports()
+                        else
+                            $timeout(getAllReports, 2000)
+                            $scope.showData = false
+            getAllReports()
 
         goToCluster: (id, status)->
             if status=="UNINITIALIZED" then @goToWizardByClusterId(id) else @goToClusterById(id)

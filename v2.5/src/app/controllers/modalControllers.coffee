@@ -64,4 +64,10 @@ define(['./baseController'], ()->
             $scope.cancel = ->
                 $modalInstance.dismiss('cancel')
         ]
+        .controller 'reportErrorCtrl', ['$scope', '$modalInstance', 'detail', ($scope, $modalInstance, detail)->
+            $scope.detail = detail
+            $scope.cancel = ->
+                $modalInstance.dismiss('cancel')
+            console.log($scope.detail)
+        ]
 );
