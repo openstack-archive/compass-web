@@ -7,6 +7,7 @@ define(['./baseDirective'], ->
       	return {
             restrict: 'EAC'
             templateUrl: "src/app/partials/cluster-nav.tpl.html"
+            controller: 'navCtrl'
             # link: (scope, element, attrs) ->
           #           console.log("inside")
           #           $timeout( ->
