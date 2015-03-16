@@ -300,7 +300,7 @@ define(['./baseController'], ()->
                 element.fadeIn(500, done)
                 return ->
                     element.stop()
-            leave: (element,done) ->
+            leave: (element, done) ->
                 element.fadeOut(500,done)
                 return ->
                     element.stop()

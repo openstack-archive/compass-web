@@ -8,6 +8,7 @@ define(['angular'
         # 'app/server/appDev'
         'app/factory/all'
         'app/directives/all'
+        'app/filters/all'
         ],
   (ng)->
     'use strict'
@@ -20,6 +21,7 @@ define(['angular'
                          'compass.factories'
                          'compass.directives'
                          # 'compassAppDev'
+                         'compass.filters'
                        ]
       .config ['$stateProvider','$urlRouterProvider', '$httpProvider', ($stateProvider, $urlRouterProvider, $httpProvider) ->
         $stateProvider
@@ -121,6 +123,11 @@ define(['angular'
           .state 'cluster.config.roles',
             url: '/roles'
             templateUrl: 'src/app/partials/cluster-roles.tpl.html'
+            requireAuthenticated: true
+          .state 'cluster.report',
+            url: '/report',
+            controller: "clusterReportCtrl",
+            templateUrl: 'src/app/partials/cluster-report.tpl.html',
             requireAuthenticated: true
           .state 'serverList',
             url: '/serverlist'

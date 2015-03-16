@@ -76,6 +76,14 @@ define(['./baseController'], ()->
             clusterService.clusterProgressInit($scope, clusterhostsData, $stateParams)
             clusterService.displayDataInTable($scope, $scope.hosts)
 
+            $scope.clusterId = $stateParams.id
+
+            request =
+            "check_health": null
+
+            $scope.startChecking = ->
+                clusterService.startHealthCheck($scope.clusterId, request, $scope)
+
             $scope.selectAllServers = (flag) ->
                 if flag
                     sv.selected = true for sv in $scope.hosts
@@ -89,6 +97,36 @@ define(['./baseController'], ()->
             # clusterService.getClusterConfig(clusterId).success (data) ->
             #     console.log(data)
     ]
-
-
+    .controller 'clusterReportCtrl', ['$scope', '$state', 'clusterService', '$stateParams', '$timeout', '$modal',
+        ($scope, $state, clusterService, $stateParams, $timeout, $modal) ->
+            clusterService.getReports($scope, $stateParams.id)
+            $scope.openModal = (key, reportname) ->
+                # console.log(key)
+                # console.log(reportname)
+                # console.log($scope.details[reportname][key])
+                modalInstance = $modal.open(
+                    templateUrl: 'src/app/partials/ErrorInfo.html'
+                    controller: 'reportErrorCtrl'
+                    resolve:
+                        detail: ->
+                            return $scope.details[reportname][key]
+                )
+    ]
+    .controller 'navCtrl', ['$scope', 'clusterService', '$stateParams'
+    ($scope, clusterService, $stateParams)->
+        $scope.test="hi"
+        clusterService.getHealthReportsCheck($scope, $stateParams.id)
+    ]
+    # .filter 'FilterByCategory', ->
+    #     return (items, categoryName) ->
+    #         filtered = []
+    #         for i in items
+    #             item = i
+    #             if item.category == categoryName
+    #                 filtered.push(item)
+    #         return filtered
+    # .filter 'nl2br', ['$sce', ($sce)->
+    #         return (text)->
+    #             return text = if text then $sce.trustAsHtml(text.replace(/\n/g, '<br/>')) else ''
+    # ]
 )
