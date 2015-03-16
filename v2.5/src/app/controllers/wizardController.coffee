@@ -144,19 +144,6 @@ define(['./baseController'], ()->
 
                 wizardService.displayDataInTable($scope, $scope.servers)
     ]
-    .directive 'ngKeypress', [->
-        return (scope, element, attrs) ->
-            element.bind "keydown keypress", (event)->
-                if event.which is 9
-                    current = attrs.position
-                    result = current.split('_')
-                    next = result[0]+"_"+(parseInt(result[1])+1)
-                    if $("input[data-position=" + next + "]").length
-                        $("input[data-position=" + next + "]").focus()
-                    else
-                        $(".btn-next").focus()
-                    event.preventDefault();
-    ]
     .controller 'partitionCtrl', ['$scope', 'wizardService',
         ($scope, wizardService) ->
 
@@ -300,7 +287,7 @@ define(['./baseController'], ()->
                 element.fadeIn(500, done)
                 return ->
                     element.stop()
-            leave: (element,done) ->
+            leave: (element, done) ->
                 element.fadeOut(500,done)
                 return ->
                     element.stop()

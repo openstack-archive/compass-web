@@ -73,14 +73,16 @@
                                     <a class="action">
                                         <span ng-class="{'opacity-zero': !column.visible}">
                                             <i class="ace-icon fa fa-check blue"></i>
-                                        </span>
-                                        {{column.title}}
+                                        </span> {{column.title}}
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="pull-right">
+                        <button type="button" class="btn btn-info" ng-click="startChecking()" ng-disabled="clusterProgress.state == 'INSTALLING'" style="margin-right: 5px;">
+                            Report
+                        </button>
                         <div class="btn-group" dropdown>
                             <button type="button" class="btn btn-info dropdown-toggle" ng-disabled="clusterProgress.state == 'INSTALLING'" dropdown-toggle>
                                 Actions
@@ -146,13 +148,13 @@
                                             <span ng-repeat="cluster in host.clusters">
                                                 {{cluster.name}}&nbsp;
                                             </span>
-                                        </span>
-                                        <span ng-switch-when="roles">
+                                    </span>
+                                    <span ng-switch-when="roles">
                                             <span ng-repeat="role in host['roles']" class="badge">
                                                 {{role.display_name}}&nbsp;
                                             </span>
-                                        </span>
-                                        <span ng-switch-default>
+                                    </span>
+                                    <span ng-switch-default>
                                             {{host[column.field]}}
                                         </span>
                                     </span>
@@ -171,12 +173,12 @@
                     </table>
                     <script type="text/ng-template" id="deleteHostConfirm.html">
                         <div class="modal-header ng-scope">
-                        <h3 class="modal-title">Create Cluster</h3>
+                            <h3 class="modal-title">Create Cluster</h3>
                         </div>
-                        <div class="modal-body"  style="padding-top: 30px; padding-bottom: 20px;" >
+                        <div class="modal-body" style="padding-top: 30px; padding-bottom: 20px;">
                             Are you sure to delete
                             <strong>{{host.hostname}}</strong>?
-                        </div>                       
+                        </div>
                         <div class="modal-footer">
                             <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                             <button class="btn btn-primary" ng-click="ok()">OK</button>
