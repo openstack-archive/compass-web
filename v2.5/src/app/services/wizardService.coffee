@@ -796,7 +796,7 @@ define(['./baseService'], ()->
                     "state": "error"
                     "message": response
                 )  
-        reviewCommit: (sendRequest) ->
+        reviewCommit: ($scope, sendRequest) ->
             if !sendRequest
                 return @wizardFactory.setCommitState(
                     "name": "review"
@@ -836,13 +836,14 @@ define(['./baseService'], ()->
                     "name": "review"
                     "state": "triggered"
                     "message": ""
+                    "sendRequest": true
                 )
         displayDataInTable: ($scope, data) ->
             ipAddressPre = @ipAddressPre
             $filter = @$filter
             $scope.tableParams = new @ngTableParams({
                 page: 1
-                count: data.length
+                count: data.length+1
             }, {
                 counts: []
                 total: data.length

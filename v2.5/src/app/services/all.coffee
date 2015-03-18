@@ -4,4 +4,4 @@ define([
     './clusterService'
     './wizardService'
     './userService'
-])
+], ()-> )

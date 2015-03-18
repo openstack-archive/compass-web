@@ -1,26 +1,25 @@
 require.config(
     baseUrl: "src"
-    paths: 
-        'jquery': '../vendor/jquery/jquery-1.11.1.min'
-        'twitterBootstrap': '../vendor/bootstrap/js/bootstrap.min'
-        'angular': '../vendor/angular/angular.min'
-        'uiRouter': '../vendor/angular-ui-router/angular-ui-router.min'
-        'angularMocks': '../vendor/angular/angular-mocks'
-        'angularTouch': '../vendor/angular/angular-touch'
-        'uiBootstrap': '../vendor/angular-bootstrap/ui-bootstrap-tpls-0.12.0.min'
-        'angularTable': '../vendor/ng-table/ng-table.min'
+    paths:
+    #bower components 
+        'jquery': '../bower_components/jquery/dist/jquery'
+        'twitterBootstrap': '../bower_components/bootstrap/dist/js/bootstrap'
+        'angular': '../bower_components/angular/angular'
+        'uiRouter': '../bower_components/angular-ui-router/release/angular-ui-router'
+        'angularMocks': '../bower_components/angular-mocks/angular-mocks'
+        'angularTouch': '../bower_components/angular-touch/angular-touch'
+        'uiBootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls'
+        'angularTable': '../bower_components/ng-table/ng-table'
+        'spin': '../bower_components/spin.js/spin'
+        'ngSpinner': '../bower_components/angular-spinner/angular-spinner'
+        'angularAnimate': '../bower_components/angular-animate/angular-animate'
+        'd3': '../bower_components/d3/d3'
+        'nvD3': '../bower_components/nvd3/nv.d3'
+        'moment': '../bower_components/moment/moment'
+        'daterangepicker': '../bower_components/bootstrap-daterangepicker/daterangepicker'
+        'ngBsDaterangepicker': '../bower_components/ng-bs-daterangepicker-plus/src/ng-bs-daterangepicker'
+    #vendor
         'angularDragDrop': '../vendor/angular-dragdrop/draganddrop'
-        'spin': '../vendor/angular-spinner/spin.min'
-        'ngSpinner': '../vendor/angular-spinner/angular-spinner.min'
-        'angularAnimate': '../vendor/angular/angular-animate.min'
-        'd3': '../vendor/d3/d3.min'
-        'nvD3': '../vendor/nvd3/nv.d3.min'
-        'ganttChart':'common/gantt-chart-d3v2'
-        'moment': '../vendor/angular-daterangepicker/moment.min'
-        'daterangepicker': '../vendor/angular-daterangepicker/daterangepicker'
-        'ngBsDaterangepicker': '../vendor/angular-daterangepicker/ng-bs-daterangepicker'
-        'angularUiTree': '../vendor/angular-ui-tree/angular-ui-tree.min'
-        'nvd3Directive': '../vendor/angular-nvd3/angularjs-nvd3-directives.min'
     shim:
        "jquery":
             exports: "jquery"
@@ -62,12 +61,6 @@ require.config(
         "nvD3":
             deps: ["d3"]
             exports: "nvD3"
-        "nvd3Directive":
-            deps: ["nvD3"]
-            exports: "nvd3Directive"
-        "angularUiTree": 
-            deps: ["angular"]
-            exports: "angularUiTree"
         "moment": 
             exports: "moment"
         "daterangepicker":

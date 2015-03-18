@@ -4,4 +4,4 @@ define([
    	'./pieChartDirective'
    	'./enterDirective'
    	'./hostprogressbarDirective'
-])
+], ()-> )
