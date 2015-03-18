@@ -796,7 +796,7 @@ define(['./baseService'], ()->
                     "state": "error"
                     "message": response
                 )  
-        reviewCommit: (sendRequest) ->
+        reviewCommit: ($scope, sendRequest) ->
             if !sendRequest
                 return @wizardFactory.setCommitState(
                     "name": "review"
@@ -836,6 +836,7 @@ define(['./baseService'], ()->
                     "name": "review"
                     "state": "triggered"
                     "message": ""
+                    "sendRequest": true
                 )
         displayDataInTable: ($scope, data) ->
             ipAddressPre = @ipAddressPre

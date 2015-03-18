@@ -5,9 +5,9 @@ define(['angular'
         'angularDragDrop'
         'app/controllers/all'
         'app/services/all'
-        # 'app/server/appDev'
         'app/factory/all'
         'app/directives/all'
+        # 'app/server/appDev'
         ],
   (ng)->
     'use strict'

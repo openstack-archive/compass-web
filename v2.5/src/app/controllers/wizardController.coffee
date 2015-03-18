@@ -155,7 +155,7 @@ define(['./baseController'], ()->
                         $("input[data-position=" + next + "]").focus()
                     else
                         $(".btn-next").focus()
-                   event.preventDefault();
+                    event.preventDefault();
     ]
     .controller 'partitionCtrl', ['$scope', 'wizardService',
         ($scope, wizardService) ->
@@ -289,7 +289,7 @@ define(['./baseController'], ()->
                 $location.hash(old);
 
             $scope.commit = (sendRequest) ->
-                wizardService.reviewCommit(sendRequest)
+                wizardService.reviewCommit($scope, sendRequest)
 
             wizardService.displayDataInTable($scope, $scope.servers)
     ]

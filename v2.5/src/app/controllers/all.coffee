@@ -7,4 +7,5 @@ define([
     './serverController'
     './modalControllers'
     './userController'
-])
+], () ->
+)

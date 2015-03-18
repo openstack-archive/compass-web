@@ -73,7 +73,7 @@
                                     </select>
                                 </td>
                                 <td ng-if="autoFill">
-                                    <input id="{{interface_name}}-ipstart" type="text" class="input-medium" placeholder="IP Start">
+                                    <input id="{{interface_name}}-ipstart" type="text" ng-model="sub.subnet" class="input-medium" placeholder="IP Start">
                                     <select id="{{interface_name}}-increase-num">
                                         <option value="1">Increase by 1</option>
                                         <option value="2">Increase by 2</option>

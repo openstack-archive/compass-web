@@ -2,4 +2,4 @@ define([
     './wizardFactory'
     './userFactory'
     './errorHandlingFactory'
-])
+], ()-> )
