@@ -74,10 +74,13 @@ define(['./baseController'], ()->
         ($scope, wizardService, $q) ->
 
             wizardService.globalConfigInit($scope)
+            wizardService.buildOsGlobalConfigByMetaData($scope)
             wizardService.watchingTriggeredStep($scope)
 
-            $scope.addValue = (key) ->
-                $scope.general[key].push("")
+            $scope.addValue = (category, key) ->
+                scope.os_global_config[category][key] = [] if !$scope.os_global_config[category][key]
+                $scope.os_global_config[category][key].push("")
+                # $scope.general[key].push("")
 
             $scope.commit = (sendRequest) ->
                 wizardService.globalCommit($scope,sendRequest)

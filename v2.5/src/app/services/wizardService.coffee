@@ -141,11 +141,16 @@ define(['./baseService'], ()->
             $scope.pendingStep = 1
 
         globalConfigInit: ($scope) ->
+            $scope.os_global_config = {}
             $scope.cluster = @wizardFactory.getClusterInfo()
-            $scope.general = @wizardFactory.getGeneralConfig()
-            $scope.server_credentials = @wizardFactory.getServerCredentials()
-            @dataService.getTimezones().success (data) ->
-                $scope.timezones = data
+            if @wizardFactory.getOsGlobalConfig() != undefined
+                $scope.os_global_config = @wizardFactory.getOsGlobalConfig() 
+                console.log("test data: ",@wizardFactory.getOsGlobalConfig())
+            # $scope.cluster = @wizardFactory.getClusterInfo()
+            # $scope.general = @wizardFactory.getGeneralConfig()
+            # $scope.server_credentials = @wizardFactory.getServerCredentials()
+            # @dataService.getTimezones().success (data) ->
+            #     $scope.timezones = data
 
         networkInit: ($scope) ->
             $scope.cluster = @wizardFactory.getClusterInfo()
@@ -483,15 +488,18 @@ define(['./baseService'], ()->
                     "message": ""
                 })
             $scope.$emit "loading", true
-            osGlobalConfig = 
-                "os_config": 
-                    "general": $scope.general
-                    "server_credentials": 
-                        "username": $scope.server_credentials.username  
-                        "password": $scope.server_credentials.password
+            # osGlobalConfig = 
+            #     "os_config": 
+            #         "general": $scope.general
+            #         "server_credentials": 
+            #             "username": $scope.server_credentials.username  
+            #             "password": $scope.server_credentials.password
             wizardFactory = @wizardFactory
+            submitData = {}
+            for mdata in $scope.metaData
+                submitData[mdata.name] = $scope.os_global_config[mdata.name]
             if $scope.generalForm.$valid
-                @dataService.updateClusterConfig($scope.cluster.id, osGlobalConfig).success (configData) ->
+                @dataService.updateClusterConfig($scope.cluster.id, submitData).success (configData) ->
                     wizardFactory.setCommitState({
                         "name": "os_global"
                         "state": "success"
@@ -883,6 +891,25 @@ define(['./baseService'], ()->
             return @dataService.postSwitchAction(id, action)
         putSwitches: (id, sw) ->
             return @dataService.putSwitches(id, sw)
+        buildOsGlobalConfigByMetaData: ($scope) ->
+            @dataService.getOsGlobalConfigMetaData($scope.cluster.os_id).success (data) ->
+                $scope.metaData = data.os_global_config
+                for key, values of data
+                    for category in values
+                        if $scope.os_global_config[category.name]
+                            $scope[key][category.name]= $scope.os_global_config[category.name] 
+                        else
+                            $scope[key][category.name] = {}
+                        for content in category.data
+                            if content.default_value and !$scope.os_global_config[category.name][content.name]
+                                $scope.os_global_config[category.name][content.name] = content.default_value
+
+                            if content.display_type is "multitext"
+                                if $scope.os_global_config[category.name][content.name]
+                                    $scope[key][category.name][content.name] = $scope.os_global_config[category.name][content.name]
+                                else
+                                    $scope[key][category.name][content.name] = [""]
+
 
 
     angular.module('compass.services').service 'wizardService',[
