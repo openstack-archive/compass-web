@@ -1358,6 +1358,169 @@ define(['angular', 'angularMocks'], function() {
             return [200, deleteHost, {}];
         });
 
+        $httpBackend.whenGET(/\.*\/oses\/[0-9]\/ui_metadata/).respond(function(method, url, data){
+            console.log(method, url, data);
+            var metaData = {
+                "os_global_config": [
+                    {
+                        "title": "Server Credentials",
+                        "data": [
+                            {
+                                "default_value": "root",
+                                "display_name": "User name",
+                                "name": "username",
+                                "display_type": "text",
+                                "is_required": "true",
+                                "placeholder": "Username",
+                                "order": 1
+                            },
+                            {
+                                "display_name": "Confirm Password",
+                                "name": "confirmPassword",
+                                "display_type": "password",
+                                "is_required": "true",
+                                "placeholder": "Confirm Password",
+                                "datamatch": "password",
+                                "order": 3
+                            },
+                            {
+                                "display_name": "Password",
+                                "name": "password",
+                                "display_type": "password",
+                                "is_required": "true",
+                                "placeholder": "Password",
+                                "order": 2
+                            }
+                        ],
+                        "order": 2,
+                        "name": "sever_credentials"
+                    },
+                    {
+                        "title": "",
+                        "data": [
+                            {
+                                "default_value": "ods.com",
+                                "display_name": "Domain",
+                                "name": "domain",
+                                "display_type": "text",
+                                "is_required": "true",
+                                "placeholder": "Domain",
+                                "order": 9
+                            },
+                            {
+                                "display_name": "DNS Server",
+                                "name": "dns_servers",
+                                "display_type": "multitext",
+                                "is_required": "true",
+                                "placeholder": "DNS Server",
+                                "order": 7
+                            },
+                            {
+                                "default_value": "10.145.88.1",
+                                "display_name": "Default Gateway",
+                                "name": "default_gateway",
+                                "display_type": "text",
+                                "is_required": "true",
+                                "placeholder": "Gateway",
+                                "order": 10
+                            },
+                            {
+                                "display_name": "HTTP Proxy",
+                                "name": "http_proxy",
+                                "display_type": "text",
+                                "is_required": "false",
+                                "placeholder": "HTTP Proxy",
+                                "order": 3
+                            },
+                            {
+                                "default_value": [
+                                    "ods.com"
+                                ],
+                                "display_name": "Search Path",
+                                "name": "search_path",
+                                "display_type": "multitext",
+                                "is_required": "false",
+                                "placeholder": "Search Path",
+                                "order": 8
+                            },
+                            {
+                                "display_name": "Local Repository",
+                                "name": "local_repo",
+                                "display_type": "text",
+                                "is_required": "false",
+                                "placeholder": "Local Repo",
+                                "order": 11
+                            },
+                            {
+                                "default_value": "Los Angeles",
+                                "display_name": "Timezone",
+                                "name": "timezone",
+                                "options": [
+                                    {
+                                        "name": "Los Angeles",
+                                        "value": "Los Angeles"
+                                    },
+                                    {
+                                        "name": "Chicago",
+                                        "value": "Chicago"
+                                    }
+                                ],
+                                "display_type": "dropdown",
+                                "is_required": "true",
+                                "order": 2
+                            },
+                            {
+                                "display_name": "NTP Server",
+                                "name": "ntp_server",
+                                "display_type": "text",
+                                "is_required": "true",
+                                "placeholder": "NTP Server",
+                                "order": 6
+                            },
+                            {
+                                "default_value": "en",
+                                "display_name": "Language",
+                                "name": "language",
+                                "options": [
+                                    {
+                                        "name": "English",
+                                        "value": "en"
+                                    },
+                                    {
+                                        "name": "Chinese",
+                                        "value": "cn"
+                                    }
+                                ],
+                                "display_type": "dropdown",
+                                "is_required": "true",
+                                "order": 1
+                            },
+                            {
+                                "display_name": "No Proxy",
+                                "name": "no_proxy",
+                                "display_type": "multitext",
+                                "is_required": "false",
+                                "placeholder": "No Proxy",
+                                "order": 5
+                            },
+                            {
+                                "display_name": "HTTPS Proxy",
+                                "name": "https_proxy",
+                                "display_type": "text",
+                                "is_required": "false",
+                                "placeholder": "HTTPS Proxy",
+                                "order": 4
+                            }
+                        ],
+                        "order": 1,
+                        "name": "general"
+                    }
+                ]
+            }
+
+            return [200, metaData, {}]
+        });
+
         $httpBackend.whenGET(/\.*\/monit.*clusters\/([0-9]|[1-9][0-9])\/overview/).respond(function(method, url, data) {
             console.log(method, url, data);
             var overviewData = [{

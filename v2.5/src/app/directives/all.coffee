@@ -5,4 +5,5 @@ define([
    	'./enterDirective'
    	'./hostprogressbarDirective'
    	'./wizardDirective'
+    './dataMatchDirective'
 ], ()-> )

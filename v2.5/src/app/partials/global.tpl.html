@@ -2,257 +2,102 @@
     <div class="row">
         <div class="col-xs-12">
             <form id="generalForm" name="generalForm" class="form-horizontal" role="form">
-                <!-- Use metadata to generate the form. might be used later -->
-                <!--<div class="form-group" ng-repeat="(key, data) in os_global_config['general']">
-                        <div ng-if="key!='_self'">
-                            <label class="col-sm-4 control-label no-padding-right">{{data.display}}</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="col-xs-10 col-sm-5" placeholder="{{data.display}}" name="{{key}}" popover-title="Help" popover="{{data.description}}" popover-trigger="focus" popover-placement="right">
+                <div ng-repeat="category in metaData | orderBy: 'order'">
+                    <input ng-model="category.name" user-group-validation="{{category.name}}" target-function="{{category.userGroupValidation}}" response="category.validationResponse"  index="{{$index}}" ng-model="category.name" enable="{{category.userGroupValidation||false}}" ng-hide="true">
+                    <div class="form-group" ng-if="category.title !==''">
+                        <div>
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <h4>{{category.title}}:</h4>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" data-ng-show="category.validationResponse[$index].error">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="alert alert-danger col-sm-5" >
+                            {{category.validationResponse[$index].message}}
+                        </div>
+                    </div>
+                    <div ng-repeat="content in category.data | orderBy: 'order'">
+                        <div class="form-group" ng-if="content.display_type !== 'multitext'">
+                            <!-- ======================text and password========================== -->
+                            <div ng-if="content.display_type == 'text' || content.display_type == 'password'">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    {{content.display_name}}
+                                    <span class="text-danger" ng-if="content.is_required">*</span>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input ng-model="os_global_config[category.name][content.name]" type="{{content.display_type}}" class="col-xs-10 col-sm-5" placeholder="{{content.placeholder}}" name="{{content.name}}" 
+                                    ng-required="{{content.is_required}}"
+                                    enable="{{content.validation||false}}"
+                                    response="content.validationResponse" 
+                                    ng-if="!content.datamatch">
+                                    <input ng-model="os_global_config[category.name][content.name]" 
+                                    type="{{content.display_type}}" 
+                                    class="col-xs-10 col-sm-5"
+                                    placeholder="{{content.placeholder}}"
+                                    name="{{content.name}}" 
+                                    ng-required="{{content.is_required}}"
+                                    enable="{{content.validation||false}}"
+                                    response="content.validationResponse"
+                                    compass-data-match="os_global_config[category.name][content.datamatch]"
+                                    ng-if="content.datamatch">
+                                <!--     <input ng-model="os_global_config[category.name][content.name]" type="{{content.display_type}}" class="col-xs-10 col-sm-5" placeholder="{{content.placeholder}}" name="{{content.name}}" ng-required="{{content.is_required}}" ng-if="!content.validation">  -->
+                                    <div class="margin-left-14 inline">
+                                        <span class="text-danger" data-ng-show="content.validationResponse.error">{{content.validationResponse.message}}</span>
+                                    </div>     
+                                </div>
+                            </div>
+                             <!-- ======================dropdown========================== -->
+                            <div ng-if="content.display_type == 'dropdown'">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    {{content.display_name}}
+                                    <span class="text-danger" ng-if="content.is_required">*</span>
+                                </label>
+                                <div class="col-sm-8">
+                                    <select ng-model="os_global_config[category.name][content.name]" 
+                                            name="{{content.name}}" class="col-xs-10 col-sm-5"
+                                            ng-options="option.value as option.name for option in content.options">
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>-->
-                <!--TODO: use json to generate inputs-->
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Language
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <select ng-model="general.language" name="language" class="col-xs-10 col-sm-5">
-                                <option value="en" ng-selected="general.language == 'en'">English</option>
-                                <option value="cn" ng-selected="general.language == 'cn'">Chinese</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Timezone
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <select ng-model="general.timezone" name="timezone" class="col-xs-10 col-sm-5">
-                                <option ng-repeat="tm in timezones" value="{{tm.value}}" ng-selected="tm.value == general.timezone">{{tm.timezone}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            HTTP Proxy
-                            <span class="text-danger opacity-zero">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.http_proxy" type="text" class="col-xs-10 col-sm-5" placeholder="HTTP Proxy" name="http_proxy">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            HTTPS Proxy
-                            <span class="text-danger opacity-zero">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.https_proxy" type="text" class="col-xs-10 col-sm-5" placeholder="HTTPS Proxy" name="https_proxy">
-                        </div>
-                    </div>
-                </div>
-                <div ng-repeat="no_proxy in general.no_proxy track by $index" class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            <span ng-if="$index==0">
-                                No Proxy
-                                <span class="text-danger opacity-zero">*</span>
-                            </span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.no_proxy[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="No Proxy" name="no_proxy">
-                            <span class="col-xs-2 col-sm-3">
-                                <!--Add Action-->
-                                <span class="action" ng-click="addValue('no_proxy')">
-                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                </span>
-                                <!--Remove Action-->
-                                <span ng-show="general.no_proxy.length > 1" class="action" ng-click="general.no_proxy.splice($index,1)">
-                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            NTP Server
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.ntp_server" type="text" class="col-xs-10 col-sm-5" placeholder="NTP Server" name="ntp_server" required>
-                        </div>
-                    </div>
-                </div>
-                <div ng-repeat="dns_server in general.dns_servers track by $index" class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            <span ng-if="$index==0">
-                                DNS Servers
-                                <span class="text-danger">*</span>
-                            </span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.dns_servers[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="DNS Server" name="dns_servers" required>
-                            <span class="col-xs-2 col-sm-3">
-                                <!--Add Action-->
-                                <span class="action" ng-click="addValue('dns_servers')">
-                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                </span>
-                                <!--Remove Action-->
-                                <span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
-                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div ng-repeat="search_path in general.search_path track by $index" class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            <span ng-if="$index==0">
-                                Search Path
-                                <span class="text-danger">*</span>
-                            </span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.search_path[$index]" type="text" class="col-xs-10 col-sm-5" placeholder="Search Path" name="search_path" required>
-                            <span class="col-xs-2 col-sm-3">
-                                <!--Add Action-->
-                                <span class="action" ng-click="addValue('search_path')">
-                                    <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                </span>
-                                <!--Remove Action-->
-                                <span ng-show="general.search_path.length > 1" class="action" ng-click="general.search_path.splice($index,1)">
-                                    <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Domain
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.domain" type="text" class="col-xs-10 col-sm-5" placeholder="Domain" name="domain" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Default Gateway
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.default_gateway" type="text" class="col-xs-10 col-sm-5" placeholder="Gateway" name="gateway" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Local Repository
-                            <span class="text-danger opacity-zero">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input ng-model="general.local_repo" type="text" class="col-xs-10 col-sm-5" placeholder="Local Repo" name="local_repo">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            <h4> Server Credentials: </h4>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            User Name
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" name="server-username" ng-model="server_credentials.username" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Password
-                            <span class="text-danger">*</span>
-                        </label>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Password" name="server-password" ng-model="server_credentials.password" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div>
-                        <label class="col-sm-4 control-label no-padding-right">
-                            Confirm Password
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-8">
-                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Confirm Password" ng-model="confirmPassword" data-match="server_credentials.password" name="confirmPassword" required>
-                            <div class="margin-left-14 inline">
-                                <span class="text-danger" data-ng-show="generalForm.confirmPassword.$error.match">Passwords do not match</span>
+                        <!-- ======================multiText========================== -->
+                        <div ng-repeat="target in os_global_config[category.name][content.name] track by $index" class="form-group" ng-if="content.display_type == 'multitext'">
+                            <div>
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span ng-if="$index==0">
+                                        {{content.display_name}}
+                                        <span class="text-danger" ng-if="content.is_required">*</span>
+                                    </span>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input ng-model="os_global_config[category.name][content.name][$index]" type="text" class="col-xs-10 col-sm-5" placeholder="{{content.placeholder}}"
+                                           name="content.name"
+                                           ng-required="{{content.is_required}}"
+                                           user-individual-validation="{{content.validation}}" 
+                                           enable="{{content.validation||false}}"
+                                           response="content.validationResponse"
+                                           index="{{$index}}">
+                                    <span class="col-xs-2 col-sm-3">
+                                        
+                                        <span class="action" ng-click="addValue(category.name,content.name)">
+                                            <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                        </span>
+                                        
+                                        <span ng-show="os_global_config[category.name][content.name].length > 1" class="action" ng-click="os_global_config[category.name][content.name].splice($index,1)">
+                                            <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                        </span>
+                                        <div class="margin-left-14 inline">
+                                            <span class="text-danger" data-ng-show="content.validationResponse[$index].error">{{content.validationResponse[$index].message}}</span>
+                                        </div> 
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-
-            <!--table class="table table-hover nowrap">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Subnet</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="sub in subnetworks">
-                        <td>
-                            <input type="text" ng-model="sub.name" placeholder="Name" />
-                        </td>
-                        <td>
-                            <input type="text" ng-model="sub.subnet" placeholder="Subnet" />
-                        </td>
-                        <td>
-
-                            <span class="action" ng-click="addSubnetwork()">
-                                <i class="fa fa-plus-circle bigger-140 blue"></i>
-                            </span>
-
-                            <span ng-show="subnetworks.length > 1" class="action" ng-click="removeSubnetwork($index)">
-                                <i class="fa fa-minus-circle bigger-140 blue"></i>
-                            </span>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table!-->
-
         </div>
     </div>
 </div>
