@@ -18,6 +18,7 @@ define(['./baseFactory'], () ->
             @console_credentials = {}
             @network_mapping = {}
             @ceph_config = {}
+            @os_gloable_config = {}
 
         clean: ->
             @cluster = {}
@@ -62,6 +63,12 @@ define(['./baseFactory'], () ->
 
         setPartition: (partition) ->
             @partition = partition
+
+        setOsGlobalConfig: (os_config) ->
+            @os_gloable_config = os_config
+
+        getOsGlobalConfig: ->
+            return @os_gloable_config
 
         setServerCredentials: (credentials) ->
             @server_credentials = credentials

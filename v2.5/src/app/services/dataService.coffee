@@ -116,5 +116,8 @@ define(['./baseService'], () ->
         startHealthCheck: (id, request) ->
             return @$http.post(@settings.apiUrlBase + '/clusters/' + id + '/action',angular.toJson(request))
 
+        getOsGlobalConfigMetaData: (id) ->
+            return @$http.get(@settings.apiUrlBase + '/oses/'+ id + '/ui_metadata')
+
     angular.module('compass.services').service('dataService', ['$http', 'settings', ($http,settings) -> new DS($http,settings)])
 )
