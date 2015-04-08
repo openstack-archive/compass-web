@@ -123,6 +123,11 @@ define(['uiRouter', 'angularTable', 'angularDragDrop', 'angularTouch', 'ngSpinne
                         $scope.steps = wizardStepsData["os_and_ts"];
                         wizardFactory.setSteps($scope.steps);
                         break;
+                    case "openstack_juno":
+                        preConfigData = data["openstack"];
+                        $scope.steps = wizardStepsData["os_and_ts"];
+                        wizardFactory.setSteps($scope.steps);
+                        break;
                     default:
                         break;
                 }
