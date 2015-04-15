@@ -118,6 +118,7 @@ define(['./baseService'], () ->
 
         getOsGlobalConfigMetaData: (id) ->
             return @$http.get(@settings.apiUrlBase + '/oses/'+ id + '/ui_metadata')
-
+        getPackageConfigUiElements: (id) ->
+            return @$http.get(@settings.apiUrlBase + '/flavors/' + id + '/ui_metadata')
     angular.module('compass.services').service('dataService', ['$http', 'settings', ($http,settings) -> new DS($http,settings)])
 )

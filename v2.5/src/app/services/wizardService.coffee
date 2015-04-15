@@ -52,6 +52,7 @@ define(['./baseService'], ()->
                             wizardFactory.setConsoleCredentials(oldConfig.package_config.security.console_credentials) if oldConfig.package_config.security.console_credentials
                         wizardFactory.setNetworkMapping(oldConfig.package_config.network_mapping) if oldConfig.package_config.network_mapping
                         wizardFactory.setCephConfig(oldConfig.package_config.ceph_config) if oldConfig.package_config.ceph_config
+                        wizardFactory.setPackageConfig(oldConfig.package_config)
 
 
         getClusterInfo: ->
@@ -255,6 +256,48 @@ define(['./baseService'], ()->
             $scope.cluster = @wizardFactory.getClusterInfo()
             $scope.service_credentials = @wizardFactory.getServiceCredentials()
             $scope.console_credentials = @wizardFactory.getConsoleCredentials()
+
+            $scope.package_config = @wizardFactory.getPackageConfig();
+
+            @dataService.getPackageConfigUiElements($scope.cluster.flavor.id).success (data) ->
+                $scope.metaData = data.flavor_config
+                for key,value of $scope.metaData
+                    if value.category isnt "service_credentials" and value.category isnt "console_credentials"
+                        if !$scope.package_config[value.category]
+                            $scope.package_config[value.category] = {};
+
+                    if value.data_structure is "form"
+                        for serialNum, content of value.data
+                            if !$scope.package_config[value.category][content.name]
+                                if !content.default_value
+                                    $scope.package_config[value.category][content.name] = "";
+                                else
+                                    $scope.package_config[value.category][content.name] = content.default_value;
+                            for content_data_key, content_data_value of content.content_data
+                                for details_content_data_key, details_content_data_value of content_data_value                     
+                                    if !$scope.package_config[value.category][details_content_data_value.name]
+                                        $scope.package_config[value.category][details_content_data_value.name] = [""]
+
+                    if value.category is "service_credentials" or value.category is "console_credentials"
+                        if !$scope.package_config["security"]
+                            $scope.package_config["security"] = {}
+                        $scope.package_config["security"][value.category] = value.config
+                        $scope.metaData[key].dataSource = $scope.package_config["security"][value.category]
+                    else
+                        $scope.metaData[key].dataSource = $scope.package_config[value.category]
+
+            $scope.change = (category,name,value) ->
+                for i of $scope.package_config[category]
+                    if i!=name
+                        delete $scope.package_config[category][i]
+                for metaKey, metaValue of $scope.metaData
+                    if metaValue.category is category
+                        for serialNum, content of metaValue.data
+                            for content_data_key, content_data_value of content.content_data
+                                if content_data_key is value
+                                    for i in content_data_value
+                                        if !$scope.package_config[category][i.name]
+                                                $scope.package_config[category][i.name] = [""]
 
             keyLength_service_credentials = Object.keys($scope.service_credentials).length;
             $scope.editServiceMode = []
@@ -676,30 +719,91 @@ define(['./baseService'], ()->
                     "message": ""
                 )
                 return;
+
             $scope.$emit "loading", true
-            targetSysConfigData = 
-                "package_config": 
-                    "security": 
-                        "service_credentials": $scope.service_credentials
-                        "console_credentials": $scope.console_credentials
-            targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig if $scope.currentAdapterName == "ceph_openstack_icehouse"
+            # targetSysConfigData = 
+            #     "package_config": 
+            #         "security": 
+            #             "service_credentials": $scope.service_credentials
+            #             "console_credentials": $scope.console_credentials
+            # targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig if $scope.currentAdapterName == "ceph_openstack_icehouse"
 
             if $scope.currentAdapterName == "ceph_firefly"
                 targetSysConfigData["package_config"]={}
                 targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig
 
-            @dataService.updateClusterConfig($scope.cluster.id, targetSysConfigData).success (data) ->
-                wizardFactory.setCommitState(
-                    "name": "package_config"
-                    "state": "success"
-                    "message": ""
+            if $scope.package_config["neutron_config"]
+                if !$scope.package_config["neutron_config"]["openvswitch"]
+                    $scope.package_config["neutron_config"]["openvswitch"] = {}
+                for key,value of $scope.package_config["neutron_config"]
+                    if key isnt "openvswitch"
+                        if typeof value is "string"
+                            $scope.package_config["neutron_config"]["openvswitch"][key] = value
+                        else
+                            $scope.package_config["neutron_config"]["openvswitch"][key] = []
+                            for num,item of value
+                                $scope.package_config["neutron_config"]["openvswitch"][key].push(item)
+                        delete $scope.package_config["neutron_config"][key]
+
+
+            if $scope.package_config["ceph_config"]
+                if !$scope.package_config["ceph_config"]["osd_config"]
+                    $scope.package_config["ceph_config"]["osd_config"] = {}
+                if !$scope.package_config["ceph_config"]["global_config"]
+                    $scope.package_config["ceph_config"]["global_config"] = {}
+                for key, value of $scope.package_config["ceph_config"]
+                    if key is "op_threads" or key is "journal_size"
+                        if key is "op_threads"
+                            $scope.package_config["ceph_config"]["osd_config"][key] = parseInt(value)
+                        else
+                            $scope.package_config["ceph_config"]["osd_config"][key] = value
+                        delete $scope.package_config["ceph_config"][key]
+                    if key is "osd_pool_size" or key is "osd_pool_pgp_num" or key is "osd_pool_pg_num"
+                        $scope.package_config["ceph_config"]["global_config"][key] = value
+                        delete $scope.package_config["ceph_config"][key]
+
+            targetSysConfigData =
+                "package_config": $scope.package_config
+
+            console.log($scope.package_config)
+
+            if $scope.packageConfigForm.$valid
+                @dataService.updateClusterConfig($scope.cluster.id, targetSysConfigData).success (configData) ->
+                    wizardFactory.setCommitState({
+                        "name": "package_config"
+                        "state": "success"
+                        "message": ""
+                    })
+                .error (response) ->
+                    wizardFactory.setCommitState({
+                        "name": "package_config"
+                        "state": "error"
+                        "message": response
+                    })
+            else
+                if $scope.packageConfigForm.$error.required
+                    message = "The required(*) fields can not be empty !"
+                else if $scope.packageConfigForm.$error.match
+                    message = "The passwords do not match"
+
+                @wizardFactory.setCommitState(
+                    "name": "package_config",
+                    "state": "invalid",
+                    "message": message
                 )
-            .error (response) ->
-                wizardFactory.setCommitState(
-                    "name": "package_config"
-                    "state": "error"
-                    "message": response
-                )
+
+            # @dataService.updateClusterConfig($scope.cluster.id, targetSysConfigData).success (data) ->
+            #     wizardFactory.setCommitState(
+            #         "name": "package_config"
+            #         "state": "success"
+            #         "message": ""
+            #     )
+            # .error (response) ->
+            #     wizardFactory.setCommitState(
+            #         "name": "package_config"
+            #         "state": "error"
+            #         "message": response
+            #     )
         # manually assign roles
         assignRole: ($scope, role) ->
             serverChecked = false
