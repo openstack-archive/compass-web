@@ -19,7 +19,7 @@ define(['./baseFactory'], () ->
             @network_mapping = {}
             @ceph_config = {}
             @os_gloable_config = {}
-
+            @package_config = {}
         clean: ->
             @cluster = {}
             @steps = []
@@ -37,7 +37,7 @@ define(['./baseFactory'], () ->
             @console_credentials = {}
             @network_mapping = {}
             @ceph_config = {}
-
+            @package_config = {}
 
         preConfig: (config) ->
             @setInterfaces(config.interface)
@@ -48,6 +48,7 @@ define(['./baseFactory'], () ->
             @setConsoleCredentials(config.console_credentials)
             @setNetworkMapping(config.network_mapping)
             @setCephConfig(config.ceph_config) if config.ceph_config
+            @setPackageConfig(config.package_config) if config.package_config
 
         setClusterInfo: (cluster) ->
             @cluster = cluster
@@ -131,10 +132,12 @@ define(['./baseFactory'], () ->
             return @commit
         setServers: (servers) ->
             return @servers = servers
-    
 
+        setPackageConfig: (packageConfig) ->
+            @package_config = packageConfig
 
-
+        getPackageConfig: ->
+            return @package_config
 
    angular.module('compass.factories').factory('wizardFactory',[ () -> new WizardFactory()])
 )

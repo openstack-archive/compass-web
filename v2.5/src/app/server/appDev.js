@@ -972,6 +972,7 @@ define(['angular', 'angularMocks'], function() {
                 "create_at": "2014-3-25 12:00:00",
                 "updated_at": "2014-3-26 13:00:00",
                 "flavor": {
+                    "id": 1,
                     "roles": [{
                         "display_name": "Compute",
                         "name": "os-compute-worker"
@@ -1001,6 +1002,171 @@ define(['angular', 'angularMocks'], function() {
                 }]
             };
             return [200, cluster, {}];
+        });
+
+     $httpBackend.whenGET(/\.*\/flavors\/([0-9]|[1-9][0-9])\/ui_metadata$/).respond(function(method,url,data){
+            console.log(method, url);
+            var uiData = {
+                "flavor_config":[{
+                        "category": "service_credentials",
+                        "modifiable_data": ["username","password"],
+                        "table_display_header": ["Service","UserName","Password","Action"],
+                        "accordion_heading": "OpenStack Database and Queue Credentials",
+                        "action": 'true',
+                        "data_structure": "table",
+                        "config": {
+                            "rabbitmq": {
+                                "username": "guest",
+                                "password": "guest"
+                            },
+                            "compute": {
+                                "username": "nova",
+                                "password": "nova"
+                            },
+                            "dashboard": {
+                                "username": "dashboard",
+                                "password": "dashboard"
+                            },
+                            "identity": {
+                                "username": "keystone",
+                                "password": "keystone"
+                            },
+                            "image": {
+                                "username": "glance",
+                                "password": "glance"
+                            },
+                            "metering": {
+                                "username": "ceilometer",
+                                "password": "ceilometer"
+                            },
+                            "mysql": {
+                                "username": "root",
+                                "password": "root"
+                            },
+                            "volume": {
+                                "username": "cinder",
+                                "password": "cinder"
+                            }
+                        }
+                    },{
+                        "category": "console_credentials",
+                        "modifiable_data": ["username","password"],
+                        "table_display_header": ["Service","UserName","Password","Action"],
+                        "accordion_heading": "OpenStack Keystone User Credentials",
+                        "action": 'true',
+                        "data_structure": "table",
+                        "config":{
+                            "admin": {
+                                "username": "admin",
+                                "password": "admin"
+                            },
+                            "compute": {
+                                "username": "nova",
+                                "password": "nova"
+                            },
+                            "dashboard": {
+                                "username": "dashboard",
+                                "password": "dashboard"
+                            },
+                            "image": {
+                                "username": "glance",
+                                "password": "glance"
+                            },
+                            "metering": {
+                                "username": "ceilometer",
+                                "password": "ceilometer"
+                            },
+                            "network": {
+                                "username": "quantum",
+                                "password": "quantum"
+                            },
+                            "object-store": {
+                                "username": "swift",
+                                "password": "swift"
+                            },
+                            "volume": {
+                                "username": "cinder",
+                                "password": "cinder"
+                            }
+                        }
+                    },{
+                        "accordion_heading": "Ceph Global Configurations",
+                        "category": "ceph_config",
+                        "form_name": "cephForm",
+                        "data_structure": "form",
+                        "data":[{
+                            "label": "OP Threads",
+                            "is_required": 'false',
+                            "name": "op_threads",
+                            "default_value": "1",
+                            "display_type": "text"
+                        },{
+                            "label": "Journal Size",
+                            "is_required": 'false',
+                            "default_value": "1",
+                            "name": "journal_size",
+                            "display_type": "text"
+                        },{
+                            "label": "OSD Pool Size",
+                            "is_required": 'true',
+                            "default_value": "1",
+                            "name": "osd_pool_size",
+                            "display_type": "text"
+                        },{
+                            "label": "OSD Pool PG Number",
+                            "is_required": 'true',
+                            "default_value": "1",
+                            "name": "osd_pool_pgp_num",
+                            "display_type": "text"
+                        }]
+                    },{
+                        "accordion_heading": "Neutron Configurations",
+                        "category": "neutron_config",
+                        "form_name": "neutronForm",
+                        "data_structure": "form",
+                        "data":[{
+                            "name": "tenant_network_type",
+                            "input_type": "dropdown",
+                            "label": "Tenant Network Type",
+                            "content_data":{
+                                "gre":[{
+                                        "is_required": 'true',
+                                        "display_type": "dropdown_text_multiple",
+                                        "name": "tunnel_id_ranges",
+                                        "label": "Tunnel ID Ranges",
+                                        "hint": "e.g. 1:1000"
+                                    }],
+                                "vlan":[{
+                                        "is_required": 'true',
+                                        "display_type": "dropdown_text_multiple",
+                                        "name": "vlan_ranges",
+                                        "label": "Network Vlan Ranges",
+                                        "hint": "e.g. physnet1:2700:2999"
+                                    },{
+                                        "is_required": 'true',
+                                        "display_type": "dropdown_text_multiple",
+                                        "name": "bridge",
+                                        "label": "Bridge Mapping",
+                                        "hint": "e.g. physnet1:br-eth1"
+                                    }]
+                            },
+                            "is_required": 'true',
+                            "options":['gre', 'vlan']
+                        }]
+                    },{
+                        "accordion_heading": "High Availability Configurations",
+                        "category": "ha_proxy",
+                        "form_name": "haForm",
+                        "data_structure": "form",
+                        "data":[{
+                            "label": "VIP",
+                            "is_required": 'true',
+                            "name": "vip",
+                            "display_type": "text"
+                        }]
+                    }]
+            };
+            return [200, uiData, {}];
         });
 
         $httpBackend.whenGET(/\.*\/clusters\/([0-9]|[1-9][0-9])*\/config/).respond(function(method, url, data) {

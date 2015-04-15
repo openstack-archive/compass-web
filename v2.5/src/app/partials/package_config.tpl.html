@@ -1,38 +1,118 @@
 <div ng-controller="packageConfigCtrl">
     <div class="row">
         <div class="col-xs-12">
+            <form id="packageConfigForm" name="packageConfigForm" class="form-horizontal" role="form">
+                <div class="accordion-style1 panel-group accordion-style2" id="accordion">
+                    <accordion close-others="true">
+                        <accordion-group ng-repeat="(key,value) in metaData">
+                            <accordion-heading>
+                                <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': cephAccordion.open, 'fa-angle-right': !cephAccordion.open}"></i> {{value.accordion_heading}}
+                            </accordion-heading>
+                            <!-- data-structure:table -->
+                            <div ng-if="value.data_structure=='table'">
+                                <table class="table table-hover nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th ng-repeat="header in value.table_display_header">{{header}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(service, credential) in value.dataSource">
+                                            <td><span>{{service}}</span>
+                                            </td>
+                                            <td ng-repeat="val in value.modifiable_data">
+                                                <span ng-hide="editServiceMode[$parent.$index]">{{credential[val]}}</span>
+                                                <input ng-show="editServiceMode[$parent.$index]" ng-model="credential[val]" placeholder="prop" type="text" ng-required />
+                                                <input ng-show="editServiceMode[$parent.$index] && val=='password'" ng-model="credential[val]" placeholder="Confirm Password" type="password" ng-required />
+                                            </td>
+                                            <td ng-if="value.action=='true'">
+                                                <!--edit button-->
+                                                <button ng-hide="editServiceMode[$index]" ng-click="editServiceMode[$index] = true; sEdit($index)" class="btn btn-xs btn-success border-radius-4">
+                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                </button>
+                                                <!--save button -->
+                                                <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sSave()" class="btn btn-xs btn-primary border-radius-4">
+                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                </button>
+                                                <!--cancel button -->
+                                                <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sReset()" class="btn btn-xs btn-danger border-radius-4">
+                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- data-structure:form -->
+                            <div ng-if="value.data_structure=='form'">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <!--  <form id="packageConfigForm" name="packageConfigForm" class="form-horizontal" role="form"> -->
+                                        <div class="form-group" ng-repeat="val in value.data">
+                                            <div>
+                                                <div class="col-sm-8">
+                                                    <!-- input-type is text or multiple-->
+                                                    <div ng-if="val.display_type=='text'">
+                                                        <label class="col-sm-4 control-label no-padding-right">
+                                                            {{val.label}}
+                                                            <span ng-if="val.is_required=='true'" class="text-danger">*</span>
+                                                        </label>
+                                                        <input ng-model="package_config[value.category][val.name]" type="text" class="col-xs-10 col-sm-5" placeholder="{{val.label}}" name="{{val.name}}" ng-required="val.is_required=='true'">
+                                                    </div>
+                                                    <!-- input-type is drop-down -->
+                                                    <div ng-if="val.input_type=='dropdown'">
+                                                        <label class="col-sm-4 control-label no-padding-right">
+                                                            {{val.label}}
+                                                            <span ng-if="val.is_required=='true'" class="text-danger">*</span>
+                                                        </label>
+                                                        <select ng-model="package_config[value.category][val.name]" name="{{val.name}}" class="col-xs-10 col-sm-5" ng-change="change(value.category,val.name,package_config[value.category][val.name])">
+                                                            <!-- ng-change="change(value.category,val.name,package_config[value.category][val.name])" -->
+                                                            <option ng-repeat="opt in val.options">{{opt}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- input-type is dropdown-text-multiple -->
+                                                    <div ng-if="val.input_type=='dropdown'" ng-repeat="(type,detail) in val.content_data[package_config[value.category][val.name]]">
+                                                        <!-- input-type is dropdown_text_multiple -->
+                                                        <div ng-if="detail.display_type=='dropdown_text_multiple'">
+                                                            <div ng-repeat="x in package_config[value.category][detail.name] track by $index">
+                                                                <label class="col-sm-4 control-label no-padding-right">
+                                                                    {{detail.label}}
+                                                                    <span ng-if="val.is_required=='true'" class="text-danger">*</span>
+                                                                </label>
+                                                                <input ng-model="package_config[value.category][detail.name][$index]" type="text" placeholder="{{val.label}}" name="{{val.name}}" class="col-xs-10 col-sm-5" ng-required="val.is_required=='true'">
+                                                                <span class="col-xs-2 col-sm-3">
+                                                                    <!--Add Action-->
+                                                                    <span class="action" ng-click="addValue(value.category,detail.name)">
+                                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
+                                                                    </span>
+                                                                        <!--Remove Action-->
+                                                                        <!--span ng-show="package_config[value.category][detail.name].length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">-->
+                                                                        <span ng-show="package_config[value.category][detail.name].length > 1" class="action" ng-click="package_config[value.category][detail.name].splice($index,1)">
+                                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- </form> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </accordion-group>
+                    </accordion>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- <div ng-controller="packageConfigCtrl">
+    <div class="row">
+        <div class="col-xs-12">
             <div class="accordion-style1 panel-group accordion-style2" id="accordion">
                 <accordion close-others="true">
-
-                    <!--accordion-group is-open="serverAccordion.open" ng-init="serverAccordion.open=true">
-                        <accordion-heading>
-                            <i class="ace-icon fa fa-angle-right" ng-class="{'fa-angle-down': status1.open, 'fa-angle-right': !status1.open}"></i> Server Credentials
-                        </accordion-heading>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <form class="form-horizontal" role="form">
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label no-padding-right">Username</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="col-xs-10 col-sm-5" placeholder="Username" id="server-username" ng-model="server_credentials.username">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label no-padding-right">Password</label>
-                                        <div class="col-sm-8">
-                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Password" id="server-password" ng-model="server_credentials.password">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label no-padding-right">Confirm Password</label>
-                                        <div class="col-sm-8">
-                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="Confirm Password">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </accordion-group-->
 
                     <accordion-group is-open="serviceAccordion.open" ng-if="currentAdapterName != 'ceph_firefly'">
 
@@ -68,17 +148,17 @@
                                                         <input ng-show="editServiceMode[$index]" ng-model="credential.password" placeholder="Password" type="password" ng-required />
                                                         <input ng-show="editServiceMode[$index]" ng-model="credential.confirmPassword" placeholder="Confirm Password" type="password" ng-required />
                                                     </td>
-                                                    <td>
-                                                        <!--edit button-->
-                                                        <button ng-hide="editServiceMode[$index]" ng-click="editServiceMode[$index] = true; sEdit($index)" class="btn btn-xs btn-success border-radius-4">
+                                                    <td> -->
+<!--edit button-->
+<!-- <button ng-hide="editServiceMode[$index]" ng-click="editServiceMode[$index] = true; sEdit($index)" class="btn btn-xs btn-success border-radius-4">
                                                             <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                        </button>
-                                                        <!--save button -->
-                                                        <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sSave()" class="btn btn-xs btn-primary border-radius-4">
+                                                        </button> -->
+<!--save button -->
+<!-- <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sSave()" class="btn btn-xs btn-primary border-radius-4">
                                                             <i class="ace-icon fa fa-check bigger-120"></i>
-                                                        </button>
-                                                        <!--cancel button -->
-                                                        <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sReset()" class="btn btn-xs btn-danger border-radius-4">
+                                                        </button> -->
+<!--cancel button -->
+<!-- <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sReset()" class="btn btn-xs btn-danger border-radius-4">
                                                             <i class="ace-icon fa fa-times bigger-120"></i>
                                                         </button>
                                                     </td>
@@ -127,17 +207,17 @@
                                                     <input ng-show="editMgntMode[$index]" ng-model="credential.password" placeholder="Password" type="password" ng-required />
                                                     <input ng-show="editMgntMode[$index]" ng-model="credential.confirmPassword" placeholder="Confirm Password" type="password" ng-required />
                                                 </td>
-                                                <td>
-                                                    <!--edit button-->
-                                                    <button ng-hide="editMgntMode[$index]" ng-click="mEdit($index)" class="btn btn-xs btn-success border-radius-4">
+                                                <td> -->
+<!--edit button-->
+<!-- <button ng-hide="editMgntMode[$index]" ng-click="mEdit($index)" class="btn btn-xs btn-success border-radius-4">
                                                         <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                    </button>
-                                                    <!--save button-->
-                                                    <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mSave()" class="btn btn-xs btn-primary border-radius-4">
+                                                    </button> -->
+<!--save button-->
+<!--  <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mSave()" class="btn btn-xs btn-primary border-radius-4">
                                                         <i class="ace-icon fa fa-check bigger-120"></i>
-                                                    </button>
-                                                    <!--cancel button-->
-                                                    <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mReset()" class="btn btn-xs btn-default btn-danger border-radius-4">
+                                                    </button> -->
+<!--cancel button-->
+<!-- <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mReset()" class="btn btn-xs btn-default btn-danger border-radius-4">
                                                         <i class="ace-icon fa fa-times bigger-120"></i>
                                                     </button>
                                                 </td>
@@ -213,29 +293,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--div class="form-group">
-                                        <div>
-                                            <label class="col-sm-4 control-label no-padding-right">
-                                                OSD Devices
-                                                <span class="text-danger opacity-zero">*</span>
-                                            </label>
-                                            <div class="col-sm-8">
-                                                <input ng-model="cephConfig.osd_devices" type="text" class="col-xs-5 col-sm-2" placeholder="Device" name="device">
-                                                <input ng-model="cephConfig.journals" type="text" class="col-xs-5 col-sm-3" placeholder="Journal" name="journal">
-                                                <span class="col-xs-2 col-sm-3"-->
-                                                    <!--Add Action-->
-                                                    <!--span class="action" ng-click="addValue('dns_servers')">
-                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
-                                                    </span-->
-                                                    <!--Remove Action-->
-                                                    <!--span ng-show="general.dns_servers.length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">
-                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
-                                                    </span-->
-                                                <!--/span>
-                                            </div>
-                                        </div>
-                                    </div-->
-
+                                   
                                 </form>
                             </div>
                         </div>
@@ -247,4 +305,4 @@
         </div>
     </div>
 
-</div>
+</div> -->
