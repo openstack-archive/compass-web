@@ -43,9 +43,10 @@ define(['./baseService'], ()->
                 if preConfigData 
                     wizardFactory.preConfig(data[name])
                     if oldConfig.os_config
-                        wizardFactory.setGeneralConfig(oldConfig.os_config.general) if oldConfig.os_config.general
+                        # wizardFactory.setGeneralConfig(oldConfig.os_config.general) if oldConfig.os_config.general
                         wizardFactory.setPartition(oldConfig.os_config.partition) if oldConfig.os_config.partition
-                        wizardFactory.setServerCredentials(oldConfig.os_config.server_credentials) if oldConfig.os_config.server_credentials
+                        # wizardFactory.setServerCredentials(oldConfig.os_config.server_credentials) if oldConfig.os_config.server_credentials
+                        wizardFactory.setOsGlobalConfig(oldConfig.os_config)
                     if oldConfig.package_config
                         if oldConfig.package_config.security
                             wizardFactory.setServiceCredentials(oldConfig.package_config.security.service_credentials) if oldConfig.package_config.security.service_credentials
@@ -81,7 +82,7 @@ define(['./baseService'], ()->
         setSubnetworks: ->
             wizardFactory = @wizardFactory
             @dataService.getSubnetConfig().success (data) ->
-                wizardFactory.setSubnetworks data
+                wizardFactory.setSubnetworks(data)
 
         getServerColumns: ->
             @dataService.getServerColumns()
@@ -181,12 +182,21 @@ define(['./baseService'], ()->
                     updateSubnetConfig = @dataService.putSubnetConfig(subnet.id, requestData)
                 promises.push(updateSubnetConfig)
 
-            @$q.all(promises).then ->
-                $modalInstance.close $scope.subnetworks
+            findNewSubnetId = @findNewSubnetId
+
+            @$q.all(promises).then (data)->
+                for subnet in $scope.subnetworks
+                    if !subnet["id"]
+                        id = findNewSubnetId(subnet.subnet, data)
+                        subnet["id"] = id
+                $modalInstance.close($scope.subnetworks)
 
             (response) ->
                 console.log "promises error", response
-
+        findNewSubnetId: (ip, data) ->
+            for sub in data
+                return sub.data.id if sub.data.subnet is ip
+            return null
         fillHostname: ($scope, rule) ->
             switch rule
                 when "host"
@@ -494,9 +504,18 @@ define(['./baseService'], ()->
             #             "username": $scope.server_credentials.username  
             #             "password": $scope.server_credentials.password
             wizardFactory = @wizardFactory
-            submitData = {}
+            submitData =
+                os_config: {}
             for mdata in $scope.metaData
-                submitData[mdata.name] = $scope.os_global_config[mdata.name]
+                submitData.os_config[mdata.name] = $scope.os_global_config[mdata.name]
+
+            # get rid of redundant field (ex: comfirm password should not be sent back to server)
+            for category in $scope.metaData
+                console.log("category", category)
+                for content in category.data
+                    if content.datamatch
+                        delete submitData.os_config[category.name][content.name]
+
             if $scope.generalForm.$valid
                 @dataService.updateClusterConfig($scope.cluster.id, submitData).success (configData) ->
                     wizardFactory.setCommitState({
@@ -908,8 +927,11 @@ define(['./baseService'], ()->
                                     $scope[key][category.name][content.name] = $scope.os_global_config[category.name][content.name]
                                 else
                                     $scope[key][category.name][content.name] = [""]
-
-
+        copyWithHashKey: (target, source) ->
+            index = 0
+            for s in source
+                target[index]["$$hashKey"] = source[index]["$$hashKey"]
+                index++
 
     angular.module('compass.services').service 'wizardService',[
         'dataService'
