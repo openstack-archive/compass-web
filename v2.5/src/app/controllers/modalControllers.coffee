@@ -21,6 +21,7 @@ define(['./baseController'], ()->
         .controller 'addSubnetModalInstanceCtrl',['$scope','$modalInstance','wizardService','subnets',
             ($scope, $modalInstance, wizardService, subnets) ->
                 $scope.subnetworks = angular.copy(subnets)
+                wizardService.copyWithHashKey($scope.subnetworks, subnets)
                 $scope.subnetAllValid = true
 
                 subnet['valid'] = true for subnet in $scope.subnetworks
