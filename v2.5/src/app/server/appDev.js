@@ -1134,20 +1134,20 @@ define(['angular', 'angularMocks'], function() {
                                         "display_type": "dropdown_text_multiple",
                                         "name": "tunnel_id_ranges",
                                         "label": "Tunnel ID Ranges",
-                                        "hint": "e.g. 1:1000"
+                                        "hint": "1:1000"
                                     }],
                                 "vlan":[{
                                         "is_required": 'true',
                                         "display_type": "dropdown_text_multiple",
                                         "name": "vlan_ranges",
                                         "label": "Network Vlan Ranges",
-                                        "hint": "e.g. physnet1:2700:2999"
+                                        "hint": "physnet1:2700:2999"
                                     },{
                                         "is_required": 'true',
                                         "display_type": "dropdown_text_multiple",
                                         "name": "bridge",
                                         "label": "Bridge Mapping",
-                                        "hint": "e.g. physnet1:br-eth1"
+                                        "hint": "physnet1:br-eth1"
                                     }]
                             },
                             "is_required": 'true',

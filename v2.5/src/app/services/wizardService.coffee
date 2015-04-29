@@ -274,19 +274,22 @@ define(['./baseService'], ()->
                 for key,value of $scope.metaData
                     if value.category isnt "service_credentials" and value.category isnt "console_credentials"
                         if !$scope.package_config[value.category]
-                            $scope.package_config[value.category] = {};
+                            $scope.package_config[value.category] = {}
 
                     if value.data_structure is "form"
                         for serialNum, content of value.data
                             if !$scope.package_config[value.category][content.name]
                                 if !content.default_value
-                                    $scope.package_config[value.category][content.name] = "";
+                                    $scope.package_config[value.category][content.name] = ""
                                 else
-                                    $scope.package_config[value.category][content.name] = content.default_value;
+                                    $scope.package_config[value.category][content.name] = content.default_value
                             for content_data_key, content_data_value of content.content_data
                                 for details_content_data_key, details_content_data_value of content_data_value
                                     if !$scope.package_config[value.category][details_content_data_value.name]
-                                        $scope.package_config[value.category][details_content_data_value.name] = [""]
+                                        if !details_content_data_value.hint
+                                            $scope.package_config[value.category][details_content_data_value.name] = [""]
+                                        else
+                                            $scope.package_config[value.category][details_content_data_value.name] = [details_content_data_value.hint]
 
                     if value.category is "service_credentials" or value.category is "console_credentials"
                         if !$scope.package_config["security"]
@@ -307,8 +310,10 @@ define(['./baseService'], ()->
                                 if content_data_key is value
                                     for i in content_data_value
                                         if !$scope.package_config[category][i.name]
+                                            if !i.hint
                                                 $scope.package_config[category][i.name] = [""]
-
+                                            else
+                                                $scope.package_config[category][i.name] = [i.hint]
             keyLength_service_credentials = Object.keys($scope.service_credentials).length;
             $scope.editServiceMode = []
             $scope.editServiceMode.length = keyLength_service_credentials

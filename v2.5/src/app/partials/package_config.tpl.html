@@ -61,11 +61,11 @@
                                                     </div>
                                                     <!-- input-type is drop-down -->
                                                     <div ng-if="val.input_type=='dropdown'">
-                                                        <label class="col-sm-4 control-label no-padding-right">
+                                                        <label class="col-sm-4 control-label no-padding-right input-spacing">
                                                             {{val.label}}
                                                             <span ng-if="val.is_required=='true'" class="text-danger">*</span>
                                                         </label>
-                                                        <select ng-model="package_config[value.category][val.name]" name="{{val.name}}" class="col-xs-10 col-sm-5" ng-change="change(value.category,val.name,package_config[value.category][val.name])">
+                                                        <select ng-model="package_config[value.category][val.name]" name="{{val.name}}" class="col-xs-10 col-sm-5 input-spacing" ng-change="change(value.category,val.name,package_config[value.category][val.name])">
                                                             <!-- ng-change="change(value.category,val.name,package_config[value.category][val.name])" -->
                                                             <option ng-repeat="opt in val.options">{{opt}}</option>
                                                         </select>
@@ -75,20 +75,24 @@
                                                         <!-- input-type is dropdown_text_multiple -->
                                                         <div ng-if="detail.display_type=='dropdown_text_multiple'">
                                                             <div ng-repeat="x in package_config[value.category][detail.name] track by $index">
-                                                                <label class="col-sm-4 control-label no-padding-right">
+                                                                <label class="col-sm-4 control-label no-padding-right input-spacing">
+                                                                    <span ng-show="$index==0">
                                                                     {{detail.label}}
                                                                     <span ng-if="val.is_required=='true'" class="text-danger">*</span>
-                                                                </label>
-                                                                <input ng-model="package_config[value.category][detail.name][$index]" type="text" placeholder="{{val.label}}" name="{{val.name}}" class="col-xs-10 col-sm-5" ng-required="val.is_required=='true'">
-                                                                <span class="col-xs-2 col-sm-3">
-                                                                    <!--Add Action-->
-                                                                    <span class="action" ng-click="addValue(value.category,detail.name)">
-                                                                        <i class="fa fa-plus-circle bigger-140 blue"></i>
                                                                     </span>
+                                                                </label>
+                                                                <span>
+                                                                    <input ng-model="package_config[value.category][detail.name][$index]" type="text" name="{{val.name}}" class="col-xs-10 col-sm-5 input-spacing" ng-required="val.is_required=='true'">
+                                                                    <span class="col-xs-2 col-sm-3">
+                                                                        <!--Add Action-->
+                                                                        <span class="action input-spacing" ng-click="addValue(value.category,detail.name)">
+                                                                            <i class="fa fa-plus-circle bigger-140 blue input-spacing"></i>
+                                                                        </span>
                                                                         <!--Remove Action-->
                                                                         <!--span ng-show="package_config[value.category][detail.name].length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">-->
-                                                                        <span ng-show="package_config[value.category][detail.name].length > 1" class="action" ng-click="package_config[value.category][detail.name].splice($index,1)">
-                                                                        <i class="fa fa-minus-circle bigger-140 blue"></i>
+                                                                        <span ng-show="package_config[value.category][detail.name].length > 1" class="action input-spacing" ng-click="package_config[value.category][detail.name].splice($index,1)">
+                                                                            <i class="fa fa-minus-circle bigger-140 blue input-spacing"></i>
+                                                                        </span>
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -96,19 +100,18 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- </form> -->
                                         </div>
-                                        <!-- </form> -->
                                     </div>
                                 </div>
-                            </div>
                         </accordion-group>
                     </accordion>
-                </div>
+                    </div>
             </form>
+            </div>
         </div>
     </div>
-</div>
-<!-- <div ng-controller="packageConfigCtrl">
+    <!-- <div ng-controller="packageConfigCtrl">
     <div class="row">
         <div class="col-xs-12">
             <div class="accordion-style1 panel-group accordion-style2" id="accordion">
@@ -149,16 +152,16 @@
                                                         <input ng-show="editServiceMode[$index]" ng-model="credential.confirmPassword" placeholder="Confirm Password" type="password" ng-required />
                                                     </td>
                                                     <td> -->
-<!--edit button-->
-<!-- <button ng-hide="editServiceMode[$index]" ng-click="editServiceMode[$index] = true; sEdit($index)" class="btn btn-xs btn-success border-radius-4">
+    <!--edit button-->
+    <!-- <button ng-hide="editServiceMode[$index]" ng-click="editServiceMode[$index] = true; sEdit($index)" class="btn btn-xs btn-success border-radius-4">
                                                             <i class="ace-icon fa fa-pencil bigger-120"></i>
                                                         </button> -->
-<!--save button -->
-<!-- <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sSave()" class="btn btn-xs btn-primary border-radius-4">
+    <!--save button -->
+    <!-- <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sSave()" class="btn btn-xs btn-primary border-radius-4">
                                                             <i class="ace-icon fa fa-check bigger-120"></i>
                                                         </button> -->
-<!--cancel button -->
-<!-- <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sReset()" class="btn btn-xs btn-danger border-radius-4">
+    <!--cancel button -->
+    <!-- <button ng-show="editServiceMode[$index]" ng-click="editServiceMode[$index] = false; sReset()" class="btn btn-xs btn-danger border-radius-4">
                                                             <i class="ace-icon fa fa-times bigger-120"></i>
                                                         </button>
                                                     </td>
@@ -208,16 +211,16 @@
                                                     <input ng-show="editMgntMode[$index]" ng-model="credential.confirmPassword" placeholder="Confirm Password" type="password" ng-required />
                                                 </td>
                                                 <td> -->
-<!--edit button-->
-<!-- <button ng-hide="editMgntMode[$index]" ng-click="mEdit($index)" class="btn btn-xs btn-success border-radius-4">
+    <!--edit button-->
+    <!-- <button ng-hide="editMgntMode[$index]" ng-click="mEdit($index)" class="btn btn-xs btn-success border-radius-4">
                                                         <i class="ace-icon fa fa-pencil bigger-120"></i>
                                                     </button> -->
-<!--save button-->
-<!--  <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mSave()" class="btn btn-xs btn-primary border-radius-4">
+    <!--save button-->
+    <!--  <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mSave()" class="btn btn-xs btn-primary border-radius-4">
                                                         <i class="ace-icon fa fa-check bigger-120"></i>
                                                     </button> -->
-<!--cancel button-->
-<!-- <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mReset()" class="btn btn-xs btn-default btn-danger border-radius-4">
+    <!--cancel button-->
+    <!-- <button ng-show="editMgntMode[$index]" ng-click="editMgntMode[$index] = false; mReset()" class="btn btn-xs btn-default btn-danger border-radius-4">
                                                         <i class="ace-icon fa fa-times bigger-120"></i>
                                                     </button>
                                                 </td>
