@@ -1092,3 +1092,6 @@ h4.widget-title:hover {
 .yellow{
     color: #FEE188 !important;
 }
+.input-spacing{
+    margin-top: 8px;
+}
