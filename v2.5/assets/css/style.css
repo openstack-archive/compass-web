@@ -1095,3 +1095,33 @@ h4.widget-title:hover {
 .input-spacing{
     margin-top: 8px;
 }
+.uploadContainer{
+    width: 25px;
+    height: 25px;
+    background-color: #6FB3E0;
+    display: inline-block;
+    line-height: 25px;
+    margin-top: 10px;
+    margin-right: -35px;
+    border-radius: 20px;
+}
+.uploadContainer:hover {
+    background-color: #EBEBEB;
+    cursor:pointer;
+}
+.uploadFile{
+    margin-left: 6px;
+    color: #fff;
+}
+.col1{
+    margin-top:10px;
+    float: left;
+    width: 46%;
+}
+.col2{
+    margin-top: 10px;
+    margin-left: 8%;
+    float: left;
+    position: relative;
+    width: 46%;
+}

@@ -111,7 +111,7 @@ define(['./baseService'], () ->
             return @$http.get(@settings.apiUrlBase + '/clusters/' + id + '/healthreports/' + name)
 
         postHealthCheck: (id, checkHealth) ->
-            return @$http.post(@settings.apiUrlBase + '/clusters/' + id + '/action', angular.toJason(checkHealth))
+            return @$http.post(@settings.apiUrlBase + '/clusters/' + id + '/action', angular.toJson(checkHealth))
 
         startHealthCheck: (id, request) ->
             return @$http.post(@settings.apiUrlBase + '/clusters/' + id + '/action',angular.toJson(request))
@@ -120,5 +120,9 @@ define(['./baseService'], () ->
             return @$http.get(@settings.apiUrlBase + '/oses/'+ id + '/ui_metadata')
         getPackageConfigUiElements: (id) ->
             return @$http.get(@settings.apiUrlBase + '/flavors/' + id + '/ui_metadata')
+        uploadSwitches: (data) ->
+            return @$http.post(@settings.apiUrlBase + '/switchesbatch', angular.toJson(data))
+        uploadMachines: (data) ->
+            return @$http.post(@settings.apiUrlBase + '/switches/machines', angular.toJson(data))
     angular.module('compass.services').service('dataService', ['$http', 'settings', ($http,settings) -> new DS($http,settings)])
 )

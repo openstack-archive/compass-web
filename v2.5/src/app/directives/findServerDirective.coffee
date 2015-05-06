@@ -3,19 +3,19 @@ define(['./baseDirective'], ->
 
   angular.module('compass.directives')
     .directive 'findservers', ['wizardService','$modal', (wizardService, $modal) ->
-    	return {
-    		restrict: 'E'
-    		scope: {
+        return {
+            restrict: 'E'
+            scope: {
+                newFoundServers: '=results'
+                switches: '='
+            }
+            templateUrl: "src/app/partials/find-new-servers.tpl.html"
 
-    			newFoundServers: '=results'
-    		}
-    		templateUrl: "src/app/partials/find-new-servers.tpl.html"
-
-    		link: (scope, element, attrs) ->
-    			scope.switches = []
-    			scope.newFoundServers = []
-    			scope.isFindingNewServers = false
-    			wizardService.getSwitches().success (data) ->
+            link: (scope, element, attrs) ->
+                # scope.switches = []
+                scope.newFoundServers = []
+                scope.isFindingNewServers = false
+                wizardService.getSwitches().success (data) ->
                     scope.switches = data
 
                 scope.findServers = ->

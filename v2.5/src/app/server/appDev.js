@@ -674,6 +674,79 @@ define(['angular', 'angularMocks'], function() {
             return [200, switchData, {}];
         });
 
+        $httpBackend.whenPOST(settings.apiUrlBase + '/switchesbatch').respond(function(method, url, data) {
+            console.log(method, url, data);
+            var returnData = {
+                'switches': [{
+                    'vendor': 'Huawei', 
+                    'ip': '172.29.8.30', 
+                    'created_at': '2015-05-04 11:49:00', 
+                    'updated_at': '2015-05-04 11:49:00', 
+                    'state': 'initialized', 
+                    'filters': 'u', 
+                    'credentials': {
+                        'version': '2c', 
+                        'community': 'public'
+                    }, 
+                    'id': 4
+                }], 
+                'fail_switches': [{
+                    'ip': '172.29.8.40'
+                }]
+            };
+            return [200, returnData, {}];
+        });
+
+        $httpBackend.whenPOST(settings.apiUrlBase + '/switches/machines').respond(function(method, url, data) {
+            console.log(method, url, data);
+            var returnData = {
+                'switches_machines': [
+                    {
+                        'machine_id': 3, 
+                        'created_at': '2015-05-04 11:50:29', 
+                        'updated_at': '2015-05-04 11:50:29', 
+                        'switch_id': 1, 
+                        'port': '100', 
+                        'mac': '1a:2b:3c:4d:5e:6f', 
+                        'tag': {}, 
+                        'location': {}, 
+                        'switch_ip': '0.0.0.0', 
+                        'ipmi_credentials': {}, 
+                        'vlans': [], 
+                        'id': 3, 
+                        'switch_machine_id': 3
+                    }, {
+                        'machine_id': 4, 
+                        'created_at': '2015-05-04 11:50:29', 
+                        'updated_at': '2015-05-04 11:50:29', 
+                        'switch_id': 1, 
+                        'port': '101', 
+                        'mac': 'a1:b2:c3:d4:e5:f6', 
+                        'tag': {}, 
+                        'location': {}, 
+                        'switch_ip': '0.0.0.0', 
+                        'ipmi_credentials': {}, 
+                        'vlans': [], 
+                        'id': 4, 
+                        'switch_machine_id': 4
+                    }
+                ], 
+                'duplicate_switches_machies': [
+                    {
+                        'mac': 'a1:b2:c3:d4:e5:f6', 
+                        'port': '101'
+                    }
+                ],
+                'fail_switches_machines': [
+                    {
+                        'mac': 'a1:b2:c3:d4:e5:f6', 
+                        'port': '103'
+                    }
+                ]
+            };
+            return [200, returnData, {}];
+        });
+
         $httpBackend.whenPOST(/\.*\/switches\/([0-9]|[1-9][0-9])\/action$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var switchState = {

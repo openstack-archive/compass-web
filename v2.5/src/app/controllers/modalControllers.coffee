@@ -71,4 +71,26 @@ define(['./baseController'], ()->
                 $modalInstance.dismiss('cancel')
             console.log($scope.detail)
         ]
+        .controller 'uploadFileModalInstanceCtrl', ['$scope', '$modalInstance', 'wizardService','allSwitches','allMachines',
+         ($scope, $modalInstance, wizardService, allSwitches, allMachines) ->
+            $scope.switchLoading = false
+            $scope.machineLoading = false
+
+            $scope.switchFileNameChanged = ->
+                wizardService.readDataFromFile($scope, '#switchInput', 'switchFile')
+
+            $scope.machineFileNameChanged = ->
+                wizardService.readDataFromFile($scope, '#machineInput', 'machineFile')
+
+            $scope.ok = ->
+                $scope.result = 'ok'
+                if $scope.switchFile
+                    wizardService.addUploadSwitches($scope, allSwitches, allMachines)
+
+                if !$scope.switchFile and $scope.machineFile
+                    wizardService.addUploadMachines($scope, allMachines, wizardService.getDataService())
+            
+            $scope.cancel = ->
+                $modalInstance.dismiss('cancel')
+        ]
 );

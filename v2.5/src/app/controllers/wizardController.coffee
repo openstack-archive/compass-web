@@ -8,7 +8,6 @@ define(['./baseController'], ()->
             wizardService.wizardInit($scope, $stateParams.id, clusterData, adaptersData, wizardStepsData, machinesHostsData, clusterConfigData)
 
             $scope.skipForward = (nextStepId) ->
-                console.log("next", nextStepId)
                 if $scope.currentStep != nextStepId
                     $scope.pendingStep = nextStepId
                     wizardService.triggerCommitByStepById($scope,$scope.currentStep ,nextStepId)
@@ -34,12 +33,13 @@ define(['./baseController'], ()->
 
             wizardService.watchingCommittedStatus($scope)
     ]
-    .controller 'svSelectCtrl', ['$scope', 'wizardService', '$filter', 'ngTableParams'
-        ($scope, wizardService, $filter, ngTableParams) ->
+    .controller 'svSelectCtrl', ['$scope', 'wizardService', '$filter', 'ngTableParams', '$modal'
+        ($scope, wizardService, $filter, ngTableParams, $modal) ->
             $scope.hideunselected = ''
             $scope.search = {}
             $scope.cluster = wizardService.getClusterInfo()
             $scope.allservers = wizardService.getAllMachinesHost()
+            $scope.allAddedSwitches = []
             wizardService.getServerColumns().success (data) ->
                 $scope.server_columns = data.showall
 
@@ -63,6 +63,17 @@ define(['./baseController'], ()->
                     sv.selected = true for sv in $scope.allservers  when !sv.disabled
                 else
                     sv.selected = false for sv in $scope.allservers
+
+            $scope.uploadFile = ->
+                modalInstance = $modal.open(
+                    templateUrl: "src/app/partials/modalUploadFiles.html"
+                    controller: "uploadFileModalInstanceCtrl"
+                    resolve:
+                        allSwitches: ->
+                            return $scope.allAddedSwitches
+                        allMachines: ->
+                            return $scope.foundResults
+                )
 
             #watch and add newly found servers to allservers array
             wizardService.watchAndAddNewServers($scope)

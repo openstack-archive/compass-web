@@ -1,0 +1,46 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+    	<i class="ace-icon fa fa-upload light-green"></i>
+    	Upload File
+    </h3>
+</div>
+<div class="modal-body" >
+    <div class="col1">
+        <h5>Switch Files:</h5>
+        <input type="file" id="switchInput" ng-model="switchInput" onchange="angular.element(this).scope().switchFileNameChanged()">
+        <br>
+        <h5> Results: <i class="ace-icon fa fa-spinner fa-spin bigger-160 orange" ng-if="switchLoading"></i></h5>
+        <accordion close-others="oneAtATime">
+            <accordion-group heading="Failed Switches: {{uploadSwitchesReturn.fail_switches.length}}">
+                <div style="float:left">
+                    <div class="col-lg-5" ng-repeat="s in uploadSwitchesReturn.fail_switches">{{s.ip}}</div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
+    <div class="col2">
+        <h5>Machine File:</h5>
+        <input type="file" id="machineInput" ng-model="machineInput" onchange="angular.element(this).scope().machineFileNameChanged()">
+        <br>
+        <h5> Results: <i class="ace-icon fa fa-spinner fa-spin bigger-160 orange" ng-if="machineLoading"></i></h5>
+        <accordion close-others="oneAtATime">
+            <accordion-group heading="Duplicated Machines: {{uploadMachinesReturn.duplicate_switches_machies.length}}">
+            <div style="float:left">
+                <div style="float:left">
+                    <div class="col-lg-5" ng-repeat="m in uploadMachinesReturn.duplicate_switches_machies">{{m.mac}}</div>
+                </div>
+            </div>
+            </accordion-group>
+            <accordion-group heading="Failed Machines: {{uploadMachinesReturn.fail_switches_machines.length}}">
+                <div style="float:left">
+                    <div class="col-lg-5" ng-repeat="m in uploadMachinesReturn.fail_switches_machines">{{m.mac}}</div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
+</div>
+<div class="modal-footer" style="clear:both;">
+    <!-- <button class="btn btn-primary" ng-click="ok()" ng-disabled="createClusterForm.$invalid">Create</button> -->
+    <button class="btn btn-primary" ng-click="ok()">Upload</button>
+    <button class="btn btn-grey" ng-click="cancel()">Close</button>
+</div>

@@ -1041,6 +1041,60 @@ define(['./baseService'], ()->
             for s in source
                 target[index]["$$hashKey"] = source[index]["$$hashKey"]
                 index++
+        getDataService: ()->
+            @dataService
+
+        addUploadSwitches: ($scope, allSwitches, allMachines) ->
+            $scope.switchLoading = true
+            addUploadMachines = @addUploadMachines
+            dataService = @dataService
+            switches =$scope.switchFile.split("\n")
+            postData = []
+            for s in switches
+                componets = s.split(',')
+                temp = {}
+                temp.credentials = {}
+                temp.ip = componets[0] if componets[0]
+                temp.vendor = componets[1] if componets[1]
+                temp.credentials.version = componets[2] if componets[2]
+                temp.credentials.community = componets[3] if componets[3]
+                postData.push(temp)
+            dataService.uploadSwitches(postData).success (data) ->
+                $scope.uploadSwitchesReturn = data #show in the template
+                for s in data.switches
+                    allSwitches.push(s)
+                $scope.switchLoading = false
+                if $scope.machineFile
+                    addUploadMachines($scope, allMachines, dataService)
+        addUploadMachines: ($scope, allMachines, dataService) ->
+            $scope.machineLoading = true
+            machines = $scope.machineFile.split("\n")
+            postData = []
+            for m in machines
+                componets = m.split(',')
+                temp = {}
+                temp.mac = componets[0] if componets[0]
+                temp.port = componets[1] if componets[1]
+                temp.switch_ip = componets[2] if componets[2]
+                postData.push(temp)
+            dataService.uploadMachines(postData).success (data) ->
+                $scope.uploadMachinesReturn = data
+                for m in data.switches_machines
+                    temp = {}
+                    temp.id = m.machine_id
+                    temp.mac = m.mac
+                    temp.port = m.port
+                    temp.switch_ip = m.switch_ip
+                    temp.vlan = m.vlan
+                    allMachines.push(temp)
+                $scope.machineLoading = false
+        readDataFromFile: ($scope, selector, target) ->
+            selectedFile = $(selector).get(0).files[0]
+            if selectedFile
+                reader = new FileReader()
+                reader.readAsText(selectedFile, "UTF-8")
+                reader.onload = (e) ->
+                    $scope[target] = reader.result
 
     angular.module('compass.services').service 'wizardService',[
         'dataService'
