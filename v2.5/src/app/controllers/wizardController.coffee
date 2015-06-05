@@ -74,6 +74,16 @@ define(['./baseController'], ()->
                         allMachines: ->
                             return $scope.foundResults
                 )
+            $scope.addNewMachines = ->
+                modalInstance = $modal.open(
+                    templateUrl: "src/app/partials/modalAddNewServers.html"
+                    controller: "addMachineModalInstanceCtrl"
+                    resolve:
+                        allSwitches: ->
+                            return $scope.allAddedSwitches
+                        allMachines: ->
+                            return $scope.foundResults
+                )
 
             #watch and add newly found servers to allservers array
             wizardService.watchAndAddNewServers($scope)

@@ -798,6 +798,18 @@ define(['angular', 'angularMocks'], function() {
             }];
             return [200, machines, {}];
         });
+        $httpBackend.whenPOST(/\.*\/switches\/([0-9]|[1-9][0-9])\/machines$/).respond(function(method, url, data) {
+            console.log(method, url, data);
+            var index = url.indexOf("switches/");
+            var switchId = url.substring(index).split("/")[1];
+            var machines =  {
+                  "id": 1,
+                  "mac": "28:6e:d4:47:c8:6c",
+                  "vlan": 1,
+                  "port": "10",
+            }
+            return [200, machines, {}];
+        });
 
         /*
         $httpBackend.whenPOST(settings.apiUrlBase + '/switch-filters').respond(function(method, url, data) {

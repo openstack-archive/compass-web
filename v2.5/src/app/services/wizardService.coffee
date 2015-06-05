@@ -1096,6 +1096,17 @@ define(['./baseService'], ()->
                 reader.onload = (e) ->
                     $scope[target] = reader.result
 
+        addSingMachine: ($scope, $modalInstance, allMachines) ->
+            request = {}
+            request.mac = $scope.newMac
+            request.port = "0"
+            @dataService.postSigleMachine($scope.selected_switch.id, request).success (data) ->
+                data.switch_ip = $scope.selected_switch.ip
+                allMachines.push(data)
+                $modalInstance.dismiss('ok')
+
+
+
     angular.module('compass.services').service 'wizardService',[
         'dataService'
         '$state'

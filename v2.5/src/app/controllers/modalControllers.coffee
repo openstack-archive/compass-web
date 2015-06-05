@@ -93,4 +93,15 @@ define(['./baseController'], ()->
             $scope.cancel = ->
                 $modalInstance.dismiss('cancel')
         ]
+        .controller 'addMachineModalInstanceCtrl', ['$scope', '$modalInstance', 'wizardService','allSwitches','allMachines',
+         ($scope, $modalInstance, wizardService, allSwitches, allMachines) ->
+
+            $scope.switchOptions = allSwitches
+            $scope.selected_switch = allSwitches[0]
+            $scope.ok = ->
+                wizardService.addSingMachine($scope, $modalInstance, allMachines)
+
+            $scope.cancel = ->
+                $modalInstance.dismiss('cancel')
+        ]
 );

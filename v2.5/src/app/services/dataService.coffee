@@ -118,11 +118,17 @@ define(['./baseService'], () ->
 
         getOsGlobalConfigMetaData: (id) ->
             return @$http.get(@settings.apiUrlBase + '/oses/'+ id + '/ui_metadata')
+
         getPackageConfigUiElements: (id) ->
             return @$http.get(@settings.apiUrlBase + '/flavors/' + id + '/ui_metadata')
+
         uploadSwitches: (data) ->
             return @$http.post(@settings.apiUrlBase + '/switchesbatch', angular.toJson(data))
+
         uploadMachines: (data) ->
             return @$http.post(@settings.apiUrlBase + '/switches/machines', angular.toJson(data))
+
+        postSigleMachine: (switch_id, request) ->
+            return @$http.post(@settings.apiUrlBase + '/switches/'+ switch_id+'/machines', angular.toJson(request))
     angular.module('compass.services').service('dataService', ['$http', 'settings', ($http,settings) -> new DS($http,settings)])
 )
