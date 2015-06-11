@@ -343,7 +343,7 @@ define(['./baseService'], ()->
                     $scope.realRole.push(role_key)
 
                 for key, value of $scope.servers
-                    $scope.existingRoles.push($scope.realRole)
+                    $scope.existingRoles.push(angular.copy($scope.realRole))
                     $scope.servers[key].dropChannel = $scope.existingRoles[key].toString()
                     for server_role_key, server_role of $scope.servers[key].roles
                         $scope.server_role = ""
@@ -474,6 +474,9 @@ define(['./baseService'], ()->
                 else
                     @updateStepProgress($scope, $scope.pendingStep, $scope.currentStep, goToPreviousStep)
                     $scope.currentStep = $scope.pendingStep
+            else
+                @showErrorMessage(@$modal, "Error","Please complete previous steps first")
+                $scope.pendingStep = $scope.currentStep
 
         updateStepProgress: ($scope, newStep, oldStep, goToPreviousStep) ->
             $scope.steps[newStep - 1].state = "active"
