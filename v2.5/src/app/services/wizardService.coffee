@@ -343,7 +343,7 @@ define(['./baseService'], ()->
                     $scope.realRole.push(role_key)
 
                 for key, value of $scope.servers
-                    $scope.existingRoles.push($scope.realRole)
+                    $scope.existingRoles.push(angular.copy($scope.realRole))
                     $scope.servers[key].dropChannel = $scope.existingRoles[key].toString()
                     for server_role_key, server_role of $scope.servers[key].roles
                         $scope.server_role = ""
