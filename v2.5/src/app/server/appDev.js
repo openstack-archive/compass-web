@@ -1180,63 +1180,75 @@ define(['angular', 'angularMocks'], function() {
                         "form_name": "cephForm",
                         "data_structure": "form",
                         "data":[{
-                            "label": "OP Threads",
-                            "is_required": 'false',
-                            "name": "op_threads",
-                            "default_value": "1",
-                            "display_type": "text"
-                        },{
-                            "label": "Journal Size",
-                            "is_required": 'false',
-                            "default_value": "1",
-                            "name": "journal_size",
-                            "display_type": "text"
-                        },{
-                            "label": "OSD Pool Size",
-                            "is_required": 'true',
-                            "default_value": "1",
-                            "name": "osd_pool_size",
-                            "display_type": "text"
-                        },{
-                            "label": "OSD Pool PG Number",
-                            "is_required": 'true',
-                            "default_value": "1",
-                            "name": "osd_pool_pgp_num",
-                            "display_type": "text"
-                        }]
+                            "name":"global_config",
+                            "content":[ 
+                                {
+                                    "label": "OP Threads",
+                                    "is_required": 'false',
+                                    "name": "op_threads",
+                                    "default_value": "1",
+                                    "display_type": "text"
+                                },{
+                                    "label": "Journal Size",
+                                    "is_required": 'false',
+                                    "default_value": "1",
+                                    "name": "journal_size",
+                                    "display_type": "text"
+                                }]
+                            },{
+                            "name":"osd_config",
+                            "content":[
+                                {         
+                                    "label": "OSD Pool Size",
+                                    "is_required": 'true',
+                                    "default_value": "1",
+                                    "name": "osd_pool_size",
+                                    "display_type": "text"
+                                },{
+                                    "label": "OSD Pool PG Number",
+                                    "is_required": 'true',
+                                    "default_value": "1",
+                                    "name": "osd_pool_pgp_num",
+                                    "display_type": "text"
+                                }]
+                            }]
                     },{
                         "accordion_heading": "Neutron Configurations",
                         "category": "neutron_config",
                         "form_name": "neutronForm",
                         "data_structure": "form",
                         "data":[{
-                            "name": "tenant_network_type",
-                            "input_type": "dropdown",
-                            "label": "Tenant Network Type",
-                            "content_data":{
-                                "gre":[{
-                                        "is_required": 'true',
-                                        "display_type": "dropdown_text_multiple",
-                                        "name": "tunnel_id_ranges",
-                                        "label": "Tunnel ID Ranges",
-                                        "hint": "1:1000"
-                                    }],
-                                "vlan":[{
-                                        "is_required": 'true',
-                                        "display_type": "dropdown_text_multiple",
-                                        "name": "vlan_ranges",
-                                        "label": "Network Vlan Ranges",
-                                        "hint": "physnet1:2700:2999"
-                                    },{
-                                        "is_required": 'true',
-                                        "display_type": "dropdown_text_multiple",
-                                        "name": "bridge",
-                                        "label": "Bridge Mapping",
-                                        "hint": "physnet1:br-eth1"
-                                    }]
-                            },
-                            "is_required": 'true',
-                            "options":['gre', 'vlan']
+                            "name":"openvswitch",
+                            "content":[{
+                                "name": "tenant_network_type",
+                                "input_type": "dropdown",
+                                "label": "Tenant Network Type",
+                                "default_value": "gre",
+                                "content_data":{
+                                    "gre":[{
+                                            "is_required": 'true',
+                                            "display_type": "dropdown_text_multiple",
+                                            "name": "tunnel_id_ranges",
+                                            "label": "Tunnel ID Ranges",
+                                            "hint": "1:1000"
+                                        }],
+                                    "vlan":[{
+                                            "is_required": 'true',
+                                            "display_type": "dropdown_text_multiple",
+                                            "name": "vlan_ranges",
+                                            "label": "Network Vlan Ranges",
+                                            "hint": "physnet1:2700:2999"
+                                        },{
+                                            "is_required": 'true',
+                                            "display_type": "dropdown_text_multiple",
+                                            "name": "bridge",
+                                            "label": "Bridge Mapping",
+                                            "hint": "physnet1:br-eth1"
+                                        }]
+                                },
+                                "is_required": 'true',
+                                "options":['gre', 'vlan']
+                            }]
                         }]
                     },{
                         "accordion_heading": "High Availability Configurations",
@@ -1644,7 +1656,7 @@ define(['angular', 'angularMocks'], function() {
                             }
                         ],
                         "order": 2,
-                        "name": "sever_credentials"
+                        "name": "server_credentials"
                     },
                     {
                         "title": "",

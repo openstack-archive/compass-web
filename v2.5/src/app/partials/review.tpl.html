@@ -42,7 +42,7 @@
                             </div>
                             <table class="table table-striped table-border-grey">
                                 <tbody>
-                                    <tr ng-repeat="(key, value) in global_config">
+                                    <tr ng-repeat="(key, value) in os_global_config.general">
                                         <td class="table-review-padding"><strong>{{key}}</strong>
                                         </td>
                                         <td>{{value}}</td>
@@ -55,12 +55,12 @@
                                     <tr>
                                         <td class="table-review-padding"><strong>Username</strong>
                                         </td>
-                                        <td>{{server_credentials.username}}</td>
+                                        <td>{{os_global_config.server_credentials.username}}</td>
                                     </tr>
                                     <tr>
                                         <td class="table-review-padding"><strong>Password</strong>
                                         </td>
-                                        <td>{{server_credentials.password}}</td>
+                                        <td>{{os_global_config.server_credentials.password}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -80,7 +80,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="(key, value) in partition">
+                                    <tr ng-repeat="(key, value) in os_global_config.partition">
                                         <td class="table-review-padding">{{key}}</td>
                                         <td>{{value.percentage}}</td>
                                         <td>{{value.max_size}}</td>
@@ -117,6 +117,8 @@
                                    'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')" ng-if="column.title!='Roles'">
                                                 <div>{{column.title}}</div>
                                             </th>
+                                            <th>
+                                            </th>
                                             <th ng-repeat="(key, value) in interfaces">
                                                 {{key}}
                                             </th>
@@ -126,30 +128,30 @@
                                         <tr ng-repeat="server in $data | filter: search">
                                             <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
                                                 <span ng-switch on="column.field">
-                                                <span ng-switch-when="os_installed">
-                                                    <span ng-if="server['os']">
-                                                        <label>
-                                                            <input ng-model="server.reinstallos" type="checkbox" class="ace">
-                                                            <span class="lbl"></span>
-                                                </label>
-                                                </span>
-                                                <span ng-if="!server['os']">
-                                                        -
+                                                    <span ng-switch-when="os_installed">
+                                                        <span ng-if="server['os']">
+                                                            <label>
+                                                                <input ng-model="server.reinstallos" type="checkbox" class="ace">
+                                                                <span class="lbl"></span>
+                                                            </label>
+                                                        </span>
+                                                        <span ng-if="!server['os']">
+                                                            -
+                                                        </span>
                                                     </span>
-                                                </span>
-                                                <span ng-switch-when="clusters">
-                                                    <span ng-repeat="cluster in server.clusters">
-                                                        {{cluster.name}}&nbsp;
+                                                    <span ng-switch-when="clusters">
+                                                        <span ng-repeat="cluster in server.clusters">
+                                                            {{cluster.name}}&nbsp;
+                                                        </span>
                                                     </span>
-                                                </span>
                                                 <!--  <span ng-switch-when="roles">
                                                     <span ng-repeat="role in server['roles']" class="role-badge" ng-style="{'background-color': role.color}">
                                                         {{role.display_name}}
                                                     </span>
                                                 </span> -->
-                                                <span ng-switch-default ng-if="column.field!='roles'">
-                                                    {{server[column.field]}}
-                                                </span>
+                                                    <span ng-switch-default ng-if="column.field!='roles'">
+                                                        {{server[column.field]}}
+                                                    </span>
                                                 </span>
                                             </td>
                                             <td ng-repeat="(key, value) in interfaces">
@@ -215,18 +217,18 @@
                                 <table class="table table-striped table-border-grey">
                                     <thead>
                                         <tr>
-                                            <th>Network</th>
                                             <th>Interface</th>
+                                            <th>Network</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="(key, value) in network_mapping">
+                                            <td>{{value}}</td>
                                             <td class="capitalize">
                                                 <div class="label review-network-badge" ng-class="{'label-pink': key == 'management', 'label-success': key == 'tenant', 'label-purple': key == 'external', 'label-warning': key == 'storage', 'label-info': key == 'public_network', 'label-red': key == 'cluster_network'}">
                                                     {{key}}
                                                 </div>
                                             </td>
-                                            <td>{{value}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -269,11 +271,11 @@
                                             <td>tunnel_id_ranges_{{key}}</td>
                                             <td>{{value}}</td>
                                         </tr>
-                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='vlan'" ng-repeat="(key, value) in neutronConfig.openvswitch.network_vlan_ranges">
+                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='vlan'" ng-repeat="(key, value) in neutronConfig.openvswitch.vlan_ranges">
                                             <td>network_vlan_ranges_{{key}}</td>
                                             <td>{{value}}</td>
                                         </tr>
-                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='vlan'" ng-repeat="(key, value) in neutronConfig.openvswitch.bridge_mappings">
+                                        <tr ng-if="neutronConfig.openvswitch.tenant_network_type=='vlan'" ng-repeat="(key, value) in neutronConfig.openvswitch.bridge">
                                             <td>bridge_mappins_{{key}}</td>
                                             <td>{{value}}</td>
                                         </tr>
