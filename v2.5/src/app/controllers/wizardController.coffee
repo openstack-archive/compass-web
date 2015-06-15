@@ -232,10 +232,10 @@ define(['./baseController'], ()->
             $scope.commit = (sendRequest) ->
                 wizardService.targetSystemConfigCommit($scope, sendRequest)
 
-            $scope.addValue = (key1,key2) ->
-                if !$scope.package_config[key1][key2]
-                    $scope.package_config[key1][key2] = []
-                $scope.package_config[key1][key2].push ""
+            $scope.addValue = (key1,key2,key3) ->
+                if !$scope.package_config[key1][key2][key3]
+                    $scope.package_config[key1][key2][key3] = []
+                $scope.package_config[key1][key2][key3].push ""
     ]
     .controller 'roleAssignCtrl', ['$scope', 'wizardService', '$filter', 'ngTableParams',
         ($scope, wizardService, $filter, ngTableParams) ->

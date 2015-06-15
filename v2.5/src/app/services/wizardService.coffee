@@ -267,7 +267,14 @@ define(['./baseService'], ()->
             $scope.service_credentials = @wizardFactory.getServiceCredentials()
             $scope.console_credentials = @wizardFactory.getConsoleCredentials()
 
-            $scope.package_config = @wizardFactory.getPackageConfig();
+            $scope.package_config = @wizardFactory.getPackageConfig()
+
+            if $scope.package_config["neutron_config"]
+                if $scope.package_config["neutron_config"]["openvswitch"]
+                    for key,value of $scope.package_config["neutron_config"]["openvswitch"]
+                        $scope.package_config["neutron_config"][key] = value
+
+            typeIsArray = Array.isArray || ( value ) -> return {}.toString.call( value ) is '[object Array]'
 
             @dataService.getPackageConfigUiElements($scope.cluster.flavor.id).success (data) ->
                 $scope.metaData = data.flavor_config
@@ -279,18 +286,31 @@ define(['./baseService'], ()->
                     if value.data_structure is "form"
                         for serialNum, content of value.data
                             if !$scope.package_config[value.category][content.name]
-                                if !content.default_value
-                                    $scope.package_config[value.category][content.name] = ""
+                                if !content.content
+                                    if !content.default_value
+                                        $scope.package_config[value.category][content.name] = ""
+                                    else
+                                        $scope.package_config[value.category][content.name] = content.default_value
                                 else
-                                    $scope.package_config[value.category][content.name] = content.default_value
-                            for content_data_key, content_data_value of content.content_data
-                                for details_content_data_key, details_content_data_value of content_data_value
-                                    if !$scope.package_config[value.category][details_content_data_value.name]
-                                        if !details_content_data_value.hint
-                                            $scope.package_config[value.category][details_content_data_value.name] = [""]
+                                    $scope.package_config[value.category][content.name] = {}
+                            if content.content
+                                for content_data_serialNum, content_data_value of content.content
+                                    if !$scope.package_config[value.category][content.name][content_data_value.name]
+                                        if !content_data_value.default_value
+                                            if !content_data_value.content_data
+                                                $scope.package_config[value.category][content.name][content_data_value.name] = ""
+                                            else 
+                                                $scope.package_config[value.category][content.name][content_data_value.name] = {}
                                         else
-                                            $scope.package_config[value.category][details_content_data_value.name] = [details_content_data_value.hint]
-
+                                            $scope.package_config[value.category][content.name][content_data_value.name] = content_data_value.default_value
+                                    for details_content_data_key, details_content_data_value of content_data_value.content_data
+                                        if details_content_data_key is content_data_value.default_value
+                                            for details_key, details_value of details_content_data_value
+                                                if !$scope.package_config[value.category][content.name][details_value.name]
+                                                    if !details_value.hint
+                                                        $scope.package_config[value.category][content.name][details_value.name] = [""]
+                                                    else
+                                                        $scope.package_config[value.category][content.name][details_value.name] = [details_value.hint]
                     if value.category is "service_credentials" or value.category is "console_credentials"
                         if !$scope.package_config["security"]
                             $scope.package_config["security"] = {}
@@ -299,21 +319,23 @@ define(['./baseService'], ()->
                     else
                         $scope.metaData[key].dataSource = $scope.package_config[value.category]
 
-            $scope.change = (category,name,value) ->
-                for i of $scope.package_config[category]
-                    if i!=name
-                        delete $scope.package_config[category][i]
-                for metaKey, metaValue of $scope.metaData
-                    if metaValue.category is category
-                        for serialNum, content of metaValue.data
-                            for content_data_key, content_data_value of content.content_data
-                                if content_data_key is value
-                                    for i in content_data_value
-                                        if !$scope.package_config[category][i.name]
-                                            if !i.hint
-                                                $scope.package_config[category][i.name] = [""]
-                                            else
-                                                $scope.package_config[category][i.name] = [i.hint]
+            $scope.change = (category,subname,name,value) ->
+                for i of $scope.package_config[category][subname]
+                    if i isnt name
+                        delete $scope.package_config[category][subname][i]
+                    for metaKey, metaValue of $scope.metaData
+                        if metaValue.category is category
+                            for serialNum, content of metaValue.data
+                                for content_data_key, content_data_value of content.content
+                                    for detail_data_key, detail_data_value of content_data_value.content_data
+                                        if detail_data_key is value
+                                            for i in detail_data_value
+                                                if !$scope.package_config[category][subname][i.name]
+                                                    if !i.hint
+                                                        $scope.package_config[category][subname][i.name] = [""]
+                                                    else
+                                                        $scope.package_config[category][subname][i.name] = [i.hint]
+
             keyLength_service_credentials = Object.keys($scope.service_credentials).length;
             $scope.editServiceMode = []
             $scope.editServiceMode.length = keyLength_service_credentials
@@ -384,10 +406,18 @@ define(['./baseService'], ()->
             $scope.service_credentials = @wizardFactory.getServiceCredentials()
             $scope.console_credentials = @wizardFactory.getConsoleCredentials()
             $scope.global_config = @wizardFactory.getGeneralConfig()
-            $scope.cephConfig = @wizardFactory.getCephConfig()
+            
+            $scope.os_global_config = @wizardFactory.getOsGlobalConfig()          
+            $scope.packageConfig = @wizardFactory.getPackageConfig()
+
+            if $scope.packageConfig.ceph_config
+                $scope.cephConfig = $scope.packageConfig.ceph_config
+            if $scope.packageConfig.neutron_config
+                $scope.neutronConfig = $scope.packageConfig.neutron_config
 
             @getServerColumns().success (data) ->
                 $scope.server_columns = data.review
+                console.log(data.review)
                 for value, index in data.review
                     if value.title == "Hostname"
                         temp = $scope.server_columns[0];
@@ -562,7 +592,7 @@ define(['./baseService'], ()->
 
             # get rid of redundant field (ex: comfirm password should not be sent back to server)
             for category in $scope.metaData
-                console.log("category", category)
+                # console.log("category", category)
                 for content in category.data
                     if content.datamatch
                         delete submitData.os_config[category.name][content.name]
@@ -748,46 +778,6 @@ define(['./baseService'], ()->
                 return;
 
             $scope.$emit "loading", true
-            # targetSysConfigData =
-            #     "package_config":
-            #         "security":
-            #             "service_credentials": $scope.service_credentials
-            #             "console_credentials": $scope.console_credentials
-            # targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig if $scope.currentAdapterName == "ceph_openstack_icehouse"
-
-            if $scope.currentAdapterName == "ceph_firefly"
-                targetSysConfigData["package_config"]={}
-                targetSysConfigData["package_config"]["ceph_config"] = $scope.cephConfig
-
-            if $scope.package_config["neutron_config"]
-                if !$scope.package_config["neutron_config"]["openvswitch"]
-                    $scope.package_config["neutron_config"]["openvswitch"] = {}
-                for key,value of $scope.package_config["neutron_config"]
-                    if key isnt "openvswitch"
-                        if typeof value is "string"
-                            $scope.package_config["neutron_config"]["openvswitch"][key] = value
-                        else
-                            $scope.package_config["neutron_config"]["openvswitch"][key] = []
-                            for num,item of value
-                                $scope.package_config["neutron_config"]["openvswitch"][key].push(item)
-                        delete $scope.package_config["neutron_config"][key]
-
-
-            if $scope.package_config["ceph_config"]
-                if !$scope.package_config["ceph_config"]["osd_config"]
-                    $scope.package_config["ceph_config"]["osd_config"] = {}
-                if !$scope.package_config["ceph_config"]["global_config"]
-                    $scope.package_config["ceph_config"]["global_config"] = {}
-                for key, value of $scope.package_config["ceph_config"]
-                    if key is "op_threads" or key is "journal_size"
-                        if key is "op_threads"
-                            $scope.package_config["ceph_config"]["osd_config"][key] = parseInt(value)
-                        else
-                            $scope.package_config["ceph_config"]["osd_config"][key] = value
-                        delete $scope.package_config["ceph_config"][key]
-                    if key is "osd_pool_size" or key is "osd_pool_pgp_num" or key is "osd_pool_pg_num"
-                        $scope.package_config["ceph_config"]["global_config"][key] = value
-                        delete $scope.package_config["ceph_config"][key]
 
             targetSysConfigData =
                 "package_config": $scope.package_config
@@ -818,19 +808,6 @@ define(['./baseService'], ()->
                     "state": "invalid",
                     "message": message
                 )
-
-            # @dataService.updateClusterConfig($scope.cluster.id, targetSysConfigData).success (data) ->
-            #     wizardFactory.setCommitState(
-            #         "name": "package_config"
-            #         "state": "success"
-            #         "message": ""
-            #     )
-            # .error (response) ->
-            #     wizardFactory.setCommitState(
-            #         "name": "package_config"
-            #         "state": "error"
-            #         "message": response
-            #     )
         # manually assign roles
         assignRole: ($scope, role) ->
             serverChecked = false

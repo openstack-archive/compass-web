@@ -43,6 +43,73 @@
                                     </tbody>
                                 </table>
                             </div>
+
+
+                            <div ng-if="value.data_structure=='form'">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group" style="margin-bottom:0px" ng-repeat="val in value.data">
+                                            <div ng-if="val.content!=null" ng-repeat="vcontent in val.content">
+                                                    <div ng-if="vcontent.display_type=='text'">
+                                                            <label style="margin-top:10px" class="col-sm-4 control-label no-padding-right">
+                                                                {{vcontent.label}}
+                                                                <span ng-if="vcontent.is_required=='true'" class="text-danger">
+                                                                *
+                                                                </span>
+                                                            </label>
+                                                            <input style="margin-top:10px" ng-model="package_config[value.category][val.name][vcontent.name]" type="text" class="col-xs-10 col-sm-5" placeholder="{{vcontent.label}}" name="{{vcontent.name}}" ng-required="vcontent.is_required=='true'">
+                                                    </div>
+
+                                                    <!-- input-type is drop-down -->
+                                                    <div ng-if="vcontent.input_type=='dropdown'">
+                                                        <label class="col-sm-4 control-label no-padding-right" style="padding-top: 14px;">
+                                                            {{vcontent.label}}
+                                                            <span ng-if="vcontent.is_required=='true'" class="text-danger">*</span>
+                                                        </label>
+                                                        <select ng-model="package_config[value.category][val.name][vcontent.name]" name="{{vcontent.name}}" class="col-xs-10 col-sm-5 input-spacing" ng-change="change(value.category,val.name,vcontent.name,package_config[value.category][val.name][vcontent.name])">
+                                                            <option ng-repeat="opt in vcontent.options">{{opt}}</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- input-type is dropdown-text-multiple -->
+                                                    <div ng-if="vcontent.input_type=='dropdown'" ng-repeat="(type,detail) in vcontent.content_data[package_config[value.category][val.name][vcontent.name]]">
+                                                        <!-- input-type is dropdown_text_multiple -->
+                                                        <div ng-if="detail.display_type=='dropdown_text_multiple'">
+                                                            <div ng-repeat="x in package_config[value.category][val.name][detail.name] track by $index">
+                                                                <label class="col-sm-4 control-label no-padding-right" style="padding-top: 14px;">
+                                                                    <span ng-show="$index==0">
+                                                                    {{detail.label}}
+                                                                    <span ng-if="val.is_required=='true'" class="text-danger">*</span>
+                                                                    </span>
+                                                                </label>
+                                                                <span>
+                                                                    <input ng-model="package_config[value.category][val.name][detail.name][$index]" type="text" name="{{detail.name}}" class="col-xs-10 col-sm-5 input-spacing" ng-required="detail.is_required=='true'">
+                                                                    <span class="col-xs-2 col-sm-3">
+                                                                        <!--Add Action-->
+                                                                        <span class="action input-spacing" ng-click="addValue(value.category,val.name,detail.name)">
+                                                                            <i class="fa fa-plus-circle bigger-140 blue input-spacing"></i>
+                                                                        </span>
+                                                                        <!--Remove Action-->
+                                                                        <!--span ng-show="package_config[value.category][detail.name].length > 1" class="action" ng-click="general.dns_servers.splice($index,1)">-->
+                                                                        <span ng-show="package_config[value.category][val.name][detail.name].length > 1" class="action input-spacing" ng-click="package_config[value.category][val.name][detail.name].splice($index,1)">
+                                                                            <i class="fa fa-minus-circle bigger-140 blue input-spacing"></i>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                             <!-- data-structure:form -->
                             <div ng-if="value.data_structure=='form'">
                                 <div class="row">
