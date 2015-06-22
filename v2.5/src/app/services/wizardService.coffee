@@ -269,11 +269,6 @@ define(['./baseService'], ()->
 
             $scope.package_config = @wizardFactory.getPackageConfig()
 
-            if $scope.package_config["neutron_config"]
-                if $scope.package_config["neutron_config"]["openvswitch"]
-                    for key,value of $scope.package_config["neutron_config"]["openvswitch"]
-                        $scope.package_config["neutron_config"][key] = value
-
             typeIsArray = Array.isArray || ( value ) -> return {}.toString.call( value ) is '[object Array]'
 
             @dataService.getPackageConfigUiElements($scope.cluster.flavor.id).success (data) ->
@@ -282,7 +277,6 @@ define(['./baseService'], ()->
                     if value.category isnt "service_credentials" and value.category isnt "console_credentials"
                         if !$scope.package_config[value.category]
                             $scope.package_config[value.category] = {}
-
                     if value.data_structure is "form"
                         for serialNum, content of value.data
                             if !$scope.package_config[value.category][content.name]
@@ -311,6 +305,7 @@ define(['./baseService'], ()->
                                                         $scope.package_config[value.category][content.name][details_value.name] = [""]
                                                     else
                                                         $scope.package_config[value.category][content.name][details_value.name] = [details_value.hint]
+
                     if value.category is "service_credentials" or value.category is "console_credentials"
                         if !$scope.package_config["security"]
                             $scope.package_config["security"] = {}
