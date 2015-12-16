@@ -1,4 +1,4 @@
-define(['./baseController'], ()-> 
+define(['./baseController'], ()->
   'use strict';
 
   angular.module('compass.controllers')
@@ -44,7 +44,7 @@ define(['./baseController'], ()->
                 $scope.server_columns = data.showall
 
             wizardService.displayDataInTable($scope, $scope.allservers)
-            
+
             wizardService.watchingTriggeredStep($scope)
 
             $scope.hideUnselected = ->
@@ -52,7 +52,7 @@ define(['./baseController'], ()->
 
             $scope.ifPreSelect = (server) ->
                 server.disable = false
-                if server.clusters 
+                if server.clusters
                     server.disabled = true if server.clusters.length > 0
                     for svCluster in server.clusters
                         if svCluster.id == $scope.cluster.id
@@ -89,7 +89,7 @@ define(['./baseController'], ()->
             wizardService.watchAndAddNewServers($scope)
 
             $scope.commit = (sendRequest) ->
-                wizardService.svSelectonCommit($scope)       
+                wizardService.svSelectonCommit($scope)
     ]
     .controller 'globalCtrl', ['$scope', 'wizardService', '$q',
         ($scope, wizardService, $q) ->
@@ -106,8 +106,8 @@ define(['./baseController'], ()->
             $scope.commit = (sendRequest) ->
                 wizardService.globalCommit($scope,sendRequest)
     ]
-    .controller 'networkCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter', '$modal', '$timeout'
-        ($scope, wizardService, ngTableParams, $filter, $modal, $timeout) ->
+    .controller 'networkCtrl', ['$rootScope', '$scope', 'wizardService', 'ngTableParams', '$filter', '$modal', '$timeout', '$cookieStore',
+        ($rootScope, $scope, wizardService, ngTableParams, $filter, $modal, $timeout, $cookieStore) ->
 
             wizardService.networkInit($scope)
             wizardService.watchingTriggeredStep($scope)
@@ -139,6 +139,16 @@ define(['./baseController'], ()->
                 delete $scope.interfaces[delInterface]
                 delete sv.networks[delInterface] for sv in $scope.servers
 
+            $scope.selectAsInstallInterface = (evt, name) ->
+                checkbox = evt.target
+                if !checkbox.checked
+                    return
+
+                for n of $scope.interfaces
+                    if n != name
+                        $scope.interfaces[n].is_mgmt = false
+                return
+
             $scope.openAddSubnetModal = ->
                 modalInstance = $modal.open(
                     templateUrl: "src/app/partials/modalAddSubnet.tpl.html"
@@ -157,6 +167,15 @@ define(['./baseController'], ()->
                 )
 
             $scope.commit = (sendRequest) ->
+                installInterface = {}; # the physical interface to install os
+                $rootScope.networkMappingInterfaces = {}; # the interface name are needed to map openstack componets
+                for name, value of $scope.interfaces
+                    if value.is_mgmt
+                        installInterface[name] = value
+                    else
+                        $rootScope.networkMappingInterfaces[name] = value
+                $scope.interfaces = installInterface # only need to store install interface
+                $cookieStore.put('networkMappingInterfaces', $rootScope.networkMappingInterfaces)
                 wizardService.networkCommit($scope, sendRequest)
 
             # display data in the table
@@ -164,6 +183,10 @@ define(['./baseController'], ()->
                 $scope.servers = data
                 if $scope.servers[0].networks and Object.keys($scope.servers[0].networks).length != 0
                     $scope.interfaces = $scope.servers[0].networks
+                    # retrive saved network mapping interfaces
+                    savedNetworkMappingInterfaces = $cookieStore.get('networkMappingInterfaces');
+                    for name, value of savedNetworkMappingInterfaces
+                        $scope.interfaces[name] = value
                     wizardService.setInterfaces($scope.interfaces)
 
                 wizardService.displayDataInTable($scope, $scope.servers)
@@ -284,6 +307,151 @@ define(['./baseController'], ()->
             wizardService.networkMappingInit($scope)
             wizardService.watchingTriggeredStep($scope)
 
+            $scope.nics = {
+              external: 'eth1',
+              mgmt: 'eth1',
+              storage: 'eth1'
+            };
+
+            $scope.vlanTags = {
+              mgmt: '101',
+              storage: '102'
+            };
+
+            $scope.ips = {
+              mgmt: {
+                start: '172.16.1.10',
+                end: '172.16.1.255',
+                cidr: '127.16.1.0/24',
+                internal_vip: '172.16.1.222'
+              },
+              external: {
+                start: '10.145.250.10',
+                end: '10.145.250.255',
+                cidr: '10.145.250.0/24',
+                gw_ip: '10.145.250.1',
+                public_vip: '10.145.250.221'
+              },
+              storage: {
+                start: '172.16.2.10',
+                end: '172.16.2.255',
+                cidr: '172.16.2.0/24'
+              },
+              ha_proxy: {
+                vip: '10.1.0.222'
+              }
+            };
+
+            configureNeutronCfg = ->
+                neutronCfg = {
+                    'openvswitch': {
+                        'tenant_network_type': 'vxlan',
+                        'network_vlan_ranges': ['physnet:1:4094'],
+                        'bridge_mappings': ['physnet:br-prv']
+                    }
+                }
+                return neutronCfg
+
+            configureNetworkCfg = ->
+                #configure the packageConfig.network_cfg
+                networkCfg = {
+                    'bond_mappings': [],
+                    'sys_intf_mappings': [{
+                        'interface': $scope.nics.mgmt,
+                        'role': ['controller', 'compute'],
+                        'vlan_tag': $scope.vlanTags.mgmt,
+                        'type': 'vlan',
+                        'name': 'mgmt'
+                    }, {
+                        'interface': $scope.nics.storage,
+                        'role': ['controller', 'compute'],
+                        'vlan_tag': $scope.vlanTags.storage,
+                        'type': 'vlan',
+                        'name': 'storage'
+                    }, {
+                        'interface': 'br-prv',
+                        'role': ['controller', 'compute'],
+                        'type': 'ovs',
+                        'name': 'external'
+                    }],
+                    'nic_mappings': [],
+                    'public_net_info': {
+                        'no_gateway': 'False',
+                        'external_gw': $scope.ips.external.ip,
+                        'enable': 'False',
+                        'floating_ip_cidr': $scope.ips.external.cidr,
+                        'floating_ip_start': $scope.ips.external.start,
+                        'floating_ip_end': $scope.ips.external.end,
+                        'provider_network': 'physnet',
+                        'subnet': 'ext-subnet',
+                        'network': 'ext-net',
+                        'enable_dhcp': 'False',
+                        'segment_id': 1000,
+                        'router': 'router-ext',
+                        'type': 'vlan'
+                    },
+                    'internal_vip': {
+                        'interface': 'mgmt',
+                        'ip': $scope.ips.mgmt.internal_vip,
+                        'netmask': wizardService.getNetMaskFromCIDR($scope.ips.mgmt.cidr)
+                    },
+                    'public_vip': {
+                        'interface': 'external',
+                        'ip': $scope.ips.external.public_vip,
+                        'netmask': wizardService.getNetMaskFromCIDR($scope.ips.external.cidr)
+                    },
+                    'provider_net_mappings': [{
+                        'interface': $scope.interfaces.external,
+                        'role': ['controller', 'compute'],
+                        'type': 'ovs',
+                        'name': 'br-prv',
+                        'network': 'physnet'
+                    }],
+                    'ip_settings': [{
+                        'cidr': $scope.ips.mgmt.cidr,
+                        'role': ['controller', 'compute'],
+                        'name': 'mgmt',
+                        'ip_ranges': [[$scope.ips.mgmt.start, $scope.ips.mgmt.end]]
+                    }, {
+                        'cidr': $scope.ips.storage.cidr,
+                        'role': ['controller', 'compute'],
+                        'name': 'storage',
+                        'ip_ranges': [[$scope.ips.storage.start, $scope.ips.storage.end]]
+                    }, {
+                        'gw': $scope.ips.external.gw_ip,
+                        'cidr': $scope.ips.external.cidr,
+                        'role': ['controller', 'compute'],
+                        'name': 'external',
+                        'ip_ranges': [[$scope.ips.external.start, $scope.ips.external.end]]
+                    }]
+                }
+                return networkCfg
+
+            configureNetworkMapping = ->
+                installNic = {}
+                nicName = ''
+                # somehow the interfaces are stored from previous step
+                # use it to configure the install network for networkMapping
+                for nic, value of $scope.interfaces
+                    installNic = value if value.is_mgmt
+                    nicName = nic if value.is_mgmt
+                $scope.networkMapping = {
+                    'install': {
+                        'interface': nicName,
+                        'subnet': installNic.subnet
+                    }
+                }
+                return
+
+            configureHAProxyCfg = ->
+                haCfg = {
+                  'vip': $scope.ips.ha_proxy.vip
+                }
+                return haCfg
+
+            # locate the install network, it is used to setup networkMapping and HAProxy
+            configureNetworkMapping()
+
             $scope.onDrop = ($event, key) ->
                 $scope.pendingInterface = key
 
@@ -291,14 +459,18 @@ define(['./baseController'], ()->
                 dict[key].mapping_interface = $scope.pendingInterface
 
             $scope.commit = (sendRequest) ->
-                wizardService.networkMappingCommit($scope, sendRequest)
+                networkCfg = configureNetworkCfg()
+                neutronCfg = configureNeutronCfg()
+                haCfg = configureHAProxyCfg()
+                wizardService.networkMappingCommit($scope, networkCfg, $scope.networkMapping,
+                  neutronCfg, haCfg, sendRequest)
     ]
     .controller 'reviewCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter', '$location', '$anchorScroll'
         ($scope, wizardService, ngTableParams, $filter, $location, $anchorScroll) ->
             wizardService.reviewInit($scope)
             wizardService.watchingTriggeredStep($scope)
 
-            $scope.scrollTo = (id) -> 
+            $scope.scrollTo = (id) ->
                 old = $location.hash();
                 $location.hash(id);
                 $anchorScroll();

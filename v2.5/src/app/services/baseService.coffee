@@ -2,7 +2,7 @@ define(['angular'
         'angularTable'
         'uiRouter'
    		'uiBootstrap'
-], (ng)-> 
+], (ng)->
     'use strict';
 
     ng.module('compass.services', ['ngTable','ui.router','ui.bootstrap']).constant('settings',{

@@ -1,0 +1,31 @@
+[{
+    "name": "cluster.monitoring.overview",
+    "url": "/overview",
+    "display": "Overview",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.topology",
+    "url": "/topology",
+    "display": "Topologies",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.alerts",
+    "url": "/alerts",
+    "display": "Alerts",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.metrics",
+    "url": "/metrics",
+    "display": "Metrics",
+    "controller": "",
+    "templateUrl": ""
+}, {
+    "name": "cluster.monitoring.charts",
+    "url": "/charts",
+    "display": "Dashboards",
+    "controller": "",
+    "templateUrl": ""
+}]

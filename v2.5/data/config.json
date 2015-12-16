@@ -16,38 +16,17 @@
                 "max_size": "20G"
             }
         },
-        "interface": {
-            "eth0": {
-                "subnet_id": 1,
-                "is_mgmt": true,
-                "is_promiscuous": false
-            },
-            "eth1": {
-                "subnet_id": 2,
-                "is_mgmt": false,
-                "is_promiscuous": true
-            },
-            "eth2": {
-                "subnet_id": 1,
-                "is_mgmt": false,
-                "is_promiscuous": false
-            },
-            "eth3": {
-                "subnet_id": 2,
-                "is_mgmt": false,
-                "is_promiscuous": false
-            }
-        },
+        "interface": { },
         "general": {
             "timezone": "America/Los_Angeles",
             "language": "en",
             "http_proxy": "",
             "https_proxy": "",
             "no_proxy": [""],
-            "ntp_server": "",
-            "dns_servers": [""],
+            "ntp_server": "127.0.0.1",
+            "dns_servers": ["ods.com"],
             "search_path": ["ods.com"],
-            "domain": "ods.com",
+            "domain": ["ods.com"],
             "default_gateway": "10.145.88.1",
             "local_repo": ""
         },
@@ -124,8 +103,7 @@
             }
         },
         "network_mapping": {
-            "management": "",
-            "tenant": "",
+            "mgmt": "",
             "storage": "",
             "external": ""
         }

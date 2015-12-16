@@ -1,0 +1,28 @@
+<!doctype html>
+<html11>
+
+<head>
+    <title>Compass</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="assets/css/compass.min.css">
+    
+    <script data-main="src/main.js" src="requirejs/require.js"></script>
+
+</head>
+
+<body ng-controller="appController">
+    <div ng-if="isAuthenticated">
+        <div ng-controller="topnavCtrl">
+            <div ng-include="'src/app/partials/topnav.tpl.html'"></div>
+        </div>
+    </div>
+    <div class="main-container no-skin">
+
+        <div ui-view></div>
+
+    </div>
+
+</body>
+
+</html>

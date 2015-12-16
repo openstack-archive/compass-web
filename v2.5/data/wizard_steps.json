@@ -15,38 +15,38 @@
         "description": ""
     }, {
         "id": 3,
-        "name": "network",
-        "title": "Network",
-        "state": "",
-        "template": "src/app/partials/network.tpl.html",
-        "description": ""
-    }, {
-        "id": 4,
         "name": "partition",
         "title": "Partition",
         "state": "",
         "template": "src/app/partials/partition.tpl.html",
         "description": ""
     }, {
+        "id": 4,
+        "name": "network",
+        "title": "Network",
+        "state": "",
+        "template": "src/app/partials/network.tpl.html",
+        "description": ""
+    }, {
         "id": 5,
+        "name": "network_mapping",
+        "title": "Network Mapping",
+        "state": "",
+        "template": "src/app/partials/network_mapping.tpl.html",
+        "description": ""
+    }, {
+        "id": 6,
         "name": "package_config",
         "title": "Target System Config",
         "state": "",
         "template": "src/app/partials/package_config.tpl.html",
         "description": ""
     }, {
-        "id": 6,
+        "id": 7,
         "name": "role_assign",
         "title": "Role Assignment",
         "state": "",
         "template": "src/app/partials/role_assignment.tpl.html",
-        "description": ""
-    }, {
-        "id": 7,
-        "name": "network_mapping",
-        "title": "Network Mapping",
-        "state": "",
-        "template": "src/app/partials/network_mapping.tpl.html",
         "description": ""
     }, {
         "id": 8,
