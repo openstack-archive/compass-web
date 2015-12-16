@@ -1,0 +1,474 @@
+{
+    "openstack": {
+        "cluster": {
+            "id": 1,
+            "name": "demo",
+            "adapter_id": 1,
+            "os_id": 1
+        },
+        "partition": {
+            "/var": {
+                "percentage": 30,
+                "max_size": "10G"
+            },
+            "/usr": {
+                "percentage": 30,
+                "max_size": "20G"
+            }
+        },
+        "interface": {
+            "eth0": {
+                "subnet_id": 1,
+                "is_mgmt": true,
+                "is_promiscuous": false
+            },
+            "eth1": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": true
+            },
+            "eth2": {
+                "subnet_id": 1,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            },
+            "eth3": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            }
+        },
+        "general": {
+            "timezone": "America/Los_Angeles",
+            "language": "en",
+            "http_proxy": "",
+            "https_proxy": "",
+            "no_proxy": [""],
+            "ntp_server": "",
+            "dns_servers": [""],
+            "search_path": ["ods.com"],
+            "domain": "ods.com",
+            "default_gateway": "10.145.88.1",
+            "local_repo": ""
+        },
+        "server_credentials": {
+            "username": "",
+            "password": ""
+        },
+        "service_credentials": {
+            "rabbitmq": {
+                "username": "guest",
+                "password": "guest"
+            },
+            "compute": {
+                "username": "nova",
+                "password": "nova"
+            },
+            "dashboard": {
+                "username": "dashboard",
+                "password": "dashboard"
+            },
+            "identity": {
+                "username": "keystone",
+                "password": "keystone"
+            },
+            "image": {
+                "username": "glance",
+                "password": "glance"
+            },
+            "metering": {
+                "username": "ceilometer",
+                "password": "ceilometer"
+            },
+            "mysql": {
+                "username": "root",
+                "password": "root"
+            },
+            "volume": {
+                "username": "cinder",
+                "password": "cinder"
+            }
+        },
+        "console_credentials": {
+            "admin": {
+                "username": "admin",
+                "password": "admin"
+            },
+            "compute": {
+                "username": "nova",
+                "password": "nova"
+            },
+            "dashboard": {
+                "username": "dashboard",
+                "password": "dashboard"
+            },
+            "image": {
+                "username": "glance",
+                "password": "glance"
+            },
+            "metering": {
+                "username": "ceilometer",
+                "password": "ceilometer"
+            },
+            "network": {
+                "username": "quantum",
+                "password": "quantum"
+            },
+            "object-store": {
+                "username": "swift",
+                "password": "swift"
+            },
+            "volume": {
+                "username": "cinder",
+                "password": "cinder"
+            }
+        },
+        "network_mapping": {
+            "management": "",
+            "tenant": "",
+            "storage": "",
+            "external": ""
+        }
+    },
+    "openstack_ceph": {
+        "cluster": {
+            "id": 1,
+            "name": "demo",
+            "adapter_id": 1,
+            "os_id": 1
+        },
+        "partition": {
+            "/var": {
+                "percentage": 30,
+                "max_size": "10G"
+            },
+            "/usr": {
+                "percentage": 30,
+                "max_size": "20G"
+            }
+        },
+        "interface": {
+            "eth0": {
+                "subnet_id": 1,
+                "is_mgmt": true,
+                "is_promiscuous": false
+            },
+            "eth1": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": true
+            },
+            "eth2": {
+                "subnet_id": 1,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            },
+            "eth3": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            }
+        },
+        "general": {
+            "timezone": "America/Los_Angeles",
+            "language": "en",
+            "http_proxy": "",
+            "https_proxy": "",
+            "no_proxy": [""],
+            "ntp_server": "",
+            "dns_servers": [""],
+            "search_path": ["ods.com"],
+            "domain": "ods.com",
+            "default_gateway": "10.145.88.1",
+            "local_repo": ""
+        },
+        "server_credentials": {
+            "username": "",
+            "password": ""
+        },
+        "service_credentials": {
+            "rabbitmq": {
+                "username": "guest",
+                "password": "guest"
+            },
+            "compute": {
+                "username": "nova",
+                "password": "nova"
+            },
+            "dashboard": {
+                "username": "dashboard",
+                "password": "dashboard"
+            },
+            "identity": {
+                "username": "keystone",
+                "password": "keystone"
+            },
+            "image": {
+                "username": "glance",
+                "password": "glance"
+            },
+            "metering": {
+                "username": "ceilometer",
+                "password": "ceilometer"
+            },
+            "mysql": {
+                "username": "root",
+                "password": "root"
+            },
+            "volume": {
+                "username": "cinder",
+                "password": "cinder"
+            }
+        },
+        "console_credentials": {
+            "admin": {
+                "username": "admin",
+                "password": "admin"
+            },
+            "compute": {
+                "username": "nova",
+                "password": "nova"
+            },
+            "dashboard": {
+                "username": "dashboard",
+                "password": "dashboard"
+            },
+            "image": {
+                "username": "glance",
+                "password": "glance"
+            },
+            "metering": {
+                "username": "ceilometer",
+                "password": "ceilometer"
+            },
+            "network": {
+                "username": "quantum",
+                "password": "quantum"
+            },
+            "object-store": {
+                "username": "swift",
+                "password": "swift"
+            },
+            "volume": {
+                "username": "cinder",
+                "password": "cinder"
+            }
+        },
+        "network_mapping": {
+            "management": "",
+            "tenant": "",
+            "storage": "",
+            "external": "",
+            "public_network": "",
+            "cluster_network": ""
+        },
+        "ceph_config": {
+            "global_config": {
+                "osd_pool_pg_num": "1024",
+                "osd_pool_pgp_num": "1024",
+                "osd_pool_size": "3"
+            },
+            "osd_config": {
+                "journal_size": "10000",
+                "op_threads": 10
+            }
+        }
+    },
+    "os_only": {
+        "cluster": {
+            "id": 1,
+            "name": "demo",
+            "adapter_id": 1,
+            "os_id": 1
+        },
+        "partition": {
+            "/var": {
+                "percentage": 30,
+                "max_size": "10G"
+            },
+            "/usr": {
+                "percentage": 30,
+                "max_size": "20G"
+            }
+        },
+        "interface": {
+            "eth0": {
+                "subnet_id": 1,
+                "is_mgmt": true,
+                "is_promiscuous": false
+            },
+            "eth1": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": true
+            },
+            "eth2": {
+                "subnet_id": 1,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            },
+            "eth3": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            }
+        },
+        "general": {
+            "timezone": "America/Los_Angeles",
+            "language": "en",
+            "http_proxy": "",
+            "https_proxy": "",
+            "no_proxy": [""],
+            "ntp_server": "",
+            "dns_servers": [""],
+            "search_path": ["ods.com"],
+            "domain": "ods.com",
+            "default_gateway": "10.145.88.1",
+            "local_repo": ""
+        },
+        "server_credentials": {
+            "username": "",
+            "password": ""
+        }
+    },
+    "ceph_firefly": {
+        "cluster": {
+            "id": 1,
+            "name": "demo",
+            "adapter_id": 1,
+            "os_id": 1
+        },
+        "partition": {
+            "/var": {
+                "percentage": 30,
+                "max_size": "10G"
+            },
+            "/usr": {
+                "percentage": 30,
+                "max_size": "20G"
+            }
+        },
+        "interface": {
+            "eth0": {
+                "subnet_id": 1,
+                "is_mgmt": true,
+                "is_promiscuous": false
+            },
+            "eth1": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": true
+            },
+            "eth2": {
+                "subnet_id": 1,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            },
+            "eth3": {
+                "subnet_id": 2,
+                "is_mgmt": false,
+                "is_promiscuous": false
+            }
+        },
+        "general": {
+            "timezone": "America/Los_Angeles",
+            "language": "en",
+            "http_proxy": "",
+            "https_proxy": "",
+            "no_proxy": [""],
+            "ntp_server": "",
+            "dns_servers": [""],
+            "search_path": ["ods.com"],
+            "domain": "ods.com",
+            "default_gateway": "10.145.88.1",
+            "local_repo": ""
+        },
+        "server_credentials": {
+            "username": "",
+            "password": ""
+        },
+        "service_credentials": {
+            "rabbitmq": {
+                "username": "guest",
+                "password": "guest"
+            },
+            "compute": {
+                "username": "nova",
+                "password": "nova"
+            },
+            "dashboard": {
+                "username": "dashboard",
+                "password": "dashboard"
+            },
+            "identity": {
+                "username": "keystone",
+                "password": "keystone"
+            },
+            "image": {
+                "username": "glance",
+                "password": "glance"
+            },
+            "metering": {
+                "username": "ceilometer",
+                "password": "ceilometer"
+            },
+            "mysql": {
+                "username": "root",
+                "password": "root"
+            },
+            "volume": {
+                "username": "cinder",
+                "password": "cinder"
+            }
+        },
+        "console_credentials": {
+            "admin": {
+                "username": "admin",
+                "password": "admin"
+            },
+            "compute": {
+                "username": "nova",
+                "password": "nova"
+            },
+            "dashboard": {
+                "username": "dashboard",
+                "password": "dashboard"
+            },
+            "image": {
+                "username": "glance",
+                "password": "glance"
+            },
+            "metering": {
+                "username": "ceilometer",
+                "password": "ceilometer"
+            },
+            "network": {
+                "username": "quantum",
+                "password": "quantum"
+            },
+            "object-store": {
+                "username": "swift",
+                "password": "swift"
+            },
+            "volume": {
+                "username": "cinder",
+                "password": "cinder"
+            }
+        },
+        "network_mapping": {
+            "public_network": "",
+            "cluster_network": ""
+        },
+        "ceph_config": {
+            "global_config": {
+                "osd_pool_pg_num": "1024",
+                "osd_pool_pgp_num": "1024",
+                "osd_pool_size": "3"
+            },
+            "osd_config": {
+                "journal_size": "10000",
+                "op_threads": 10
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-define(['./baseService'], ()-> 
+define(['./baseService'], ()->
     'use strict';
     class WizardService
         constructor: (@dataService, @$state, @wizardFactory, @$filter, @$q, @ngTableParams, @$modal) ->
@@ -21,26 +21,24 @@ define(['./baseService'], ()->
         getCurrentAdapterName: (adapters, adapterId) ->
             currentAdapterName = adapter.name for adapter in  adapters when adapter.id is adapterId
 
+        # distinguish between os_only and other adaper types
         getSteps: (currentAdapterName, wizardStepsData) ->
             switch currentAdapterName[0]
-                when "openstack_icehouse"      then wizardStepsData["os_and_ts"]
                 when "os_only"                 then wizardStepsData["os"]
-                when "ceph_openstack_icehouse" then wizardStepsData["os_and_ts"] 
-                when "ceph_firefly"            then wizardStepsData["os_and_ts"]
+                else wizardStepsData["os_and_ts"]
 
+        # support only openstack and os_only in config.json
         setWizardPreConfig: (currentAdapterName, clusterConfigData) ->
             switch currentAdapterName[0]
-                when "openstack_icehouse"      then @getWizardPreConfig("openstack", clusterConfigData)
                 when "os_only"                 then @getWizardPreConfig("os_only", clusterConfigData)
-                when "ceph_openstack_icehouse" then @getWizardPreConfig("openstack_ceph", clusterConfigData)
-                when "ceph_firefly"            then @getWizardPreConfig("ceph_firefly", clusterConfigData)
+                else @getWizardPreConfig("openstack", clusterConfigData)
 
         getWizardPreConfig: (name, clusterConfigData)->
             wizardFactory = @wizardFactory
             oldConfig = clusterConfigData
             @dataService.getWizardPreConfig().success (data) ->
                 preConfigData = data[name]
-                if preConfigData 
+                if preConfigData
                     wizardFactory.preConfig(data[name])
                     if oldConfig.os_config
                         # wizardFactory.setGeneralConfig(oldConfig.os_config.general) if oldConfig.os_config.general
@@ -75,7 +73,7 @@ define(['./baseService'], ()->
                     x += "00" + item
                 else if item.length is 2
                     x += "0" + item
-                else 
+                else
                     x += item
             ipAddressPreHelper i for i in [0..m.length-1]
             return x
@@ -146,7 +144,7 @@ define(['./baseService'], ()->
             $scope.os_global_config = {}
             $scope.cluster = @wizardFactory.getClusterInfo()
             if @wizardFactory.getOsGlobalConfig() != undefined
-                $scope.os_global_config = @wizardFactory.getOsGlobalConfig() 
+                $scope.os_global_config = @wizardFactory.getOsGlobalConfig()
             # $scope.cluster = @wizardFactory.getClusterInfo()
             # $scope.general = @wizardFactory.getGeneralConfig()
             # $scope.server_credentials = @wizardFactory.getServerCredentials()
@@ -227,15 +225,18 @@ define(['./baseService'], ()->
                 if ipParts[1] > 255
                     ipParts[1] = ipParts[1] - 256
                     ipParts[0]++
-                
+
                 if ipParts[0] > 255
                     server.networks[key].ip = ""
                     return;
-                else 
+                else
                     ip = ipParts[0] + "." + ipParts[1] + "." + ipParts[2] + "." + ipParts[3]
                     server.networks[key].ip = ip
                     ipParts[3] = ipParts[3] + interval
-                
+
+        getNetMaskFromCIDR: (cidr) ->
+            parts = cidr.split('/')
+            if parts.length == 2 then parts[1] else '24'
 
         getClusterHosts: (clusterId) ->
             @dataService.getClusterHosts clusterId
@@ -293,7 +294,7 @@ define(['./baseService'], ()->
                                         if !content_data_value.default_value
                                             if !content_data_value.content_data
                                                 $scope.package_config[value.category][content.name][content_data_value.name] = ""
-                                            else 
+                                            else
                                                 $scope.package_config[value.category][content.name][content_data_value.name] = {}
                                         else
                                             $scope.package_config[value.category][content.name][content_data_value.name] = content_data_value.default_value
@@ -378,19 +379,21 @@ define(['./baseService'], ()->
             for key, value of $scope.interfaces
                 $scope.interfaces[key].dropChannel = "others"
 
-            # drag options for networks
+            ### drag options for networks
             $scope.networking = {}
             for key, value of $scope.original_networking
                 $scope.networking[key] = {}
                 $scope.networking[key].mapping_interface = value
-                if key == "external" then $scope.networking[key].dragChannel = "external" else $scope.networking[key].dragChannel = "others"
+                $scope.networking[key].dragChannel = "others"
+                #if key == "external" then $scope.networking[key].dragChannel = "external" else $scope.networking[key].dragChannel = "others"
             # set the interface with promisc mode to be external network  [required]
             for key, value of $scope.interfaces
                 if value.is_promiscuous
                     $scope.networking["external"].mapping_interface = key
                     $scope.interfaces[key].dropChannel = "external"
                 if value.is_mgmt
-                    $scope.networking["management"].mapping_interface = key
+                    $scope.networking["mgmt"].mapping_interface = key
+            ###
         reviewInit: ($scope) ->
             $scope.cluster = @wizardFactory.getClusterInfo()
             $scope.servers = @wizardFactory.getServers()
@@ -401,8 +404,8 @@ define(['./baseService'], ()->
             $scope.service_credentials = @wizardFactory.getServiceCredentials()
             $scope.console_credentials = @wizardFactory.getConsoleCredentials()
             $scope.global_config = @wizardFactory.getGeneralConfig()
-            
-            $scope.os_global_config = @wizardFactory.getOsGlobalConfig()          
+
+            $scope.os_global_config = @wizardFactory.getOsGlobalConfig()
             $scope.packageConfig = @wizardFactory.getPackageConfig()
 
             if $scope.packageConfig.ceph_config
@@ -431,7 +434,7 @@ define(['./baseService'], ()->
                         $scope.server_columns[3] = value;
                         $scope.server_columns[index] = temp;
 
-            $scope.tabs =[{ 
+            $scope.tabs =[{
                     "title": "Database & Queue"
                     "url": "service.tpl.html"
                 },{
@@ -459,14 +462,14 @@ define(['./baseService'], ()->
             $state = @$state
             $modal = @$modal
             showErrorMessage = @showErrorMessage
-            $scope.$watch((-> return wizardFactory.getCommitState()), (newCommitState, oldCommitState) ->         
+            $scope.$watch((-> return wizardFactory.getCommitState()), (newCommitState, oldCommitState) ->
                 if newCommitState.state is "success"
                     console.warn("### catch success in wizardCtrl ###", newCommitState, oldCommitState)
                     if newCommitState.name == "review"
                         console.log("### go to overview ###")
-                        $state.go("cluster.overview",'id': $scope.cluster.id) 
+                        $state.go("cluster.overview",'id': $scope.cluster.id)
 
-                    $scope.stepControl(goToPreviousStep = false) 
+                    $scope.stepControl(goToPreviousStep = false)
                     $scope.maxStep = $scope.currentStep if $scope.currentStep > $scope.maxStep
                 else if newCommitState.state is "invalid"
                     showErrorMessage($modal,"Error Message", newCommitState.message)
@@ -483,7 +486,7 @@ define(['./baseService'], ()->
             $modal.open {
                 templateUrl: 'src/app/partials/modalErrorMessage.html'
                 controller: 'errorMessageCtrl'
-                resolve: 
+                resolve:
                   title: ->
                     return showTitle
                   content: ->
@@ -512,7 +515,7 @@ define(['./baseService'], ()->
                     $scope.steps[$scope.networkStep].state = "incomplete"
                 if $scope.maxStep > $scope.roleAssignStep
                     $scope.steps[$scope.roleAssignStep].state = "incomplete"
-                
+
                 if $scope.maxStep > $scope.networkMappingStep
                     $scope.steps[$scope.networkMappingStep].state = "incomplete"
             $scope.steps[$scope.networkMappingStep].state = "incomplete" if newStep == $scope.networkStep + 1 and $scope.maxStep > $scope.networkMappingStep
@@ -522,9 +525,9 @@ define(['./baseService'], ()->
 
 
         watchingTriggeredStep: ($scope) ->
-                
+
             wizardFactory = @wizardFactory
-            $scope.$watch (-> return wizardFactory.getCommitState()), (newCommitState, oldCommitState) ->       
+            $scope.$watch (-> return wizardFactory.getCommitState()), (newCommitState, oldCommitState) ->
                 $scope.commit(newCommitState.sendRequest) if newCommitState.state is "triggered"
 
         svSelectonCommit: ($scope) ->
@@ -548,8 +551,8 @@ define(['./baseService'], ()->
                 )
             else
                 wizardFactory = @wizardFactory
-                addHostsAction = 
-                    "add_hosts": 
+                addHostsAction =
+                    "add_hosts":
                         "machines": []
                 addHostsAction.add_hosts.machines.push(buildMachineObjectHelper(server)) for server in $scope.allservers when server.selected
                 @dataService.postClusterActions($scope.cluster.id, addHostsAction).success (data) ->
@@ -573,11 +576,11 @@ define(['./baseService'], ()->
                     "message": ""
                 })
             $scope.$emit "loading", true
-            # osGlobalConfig = 
-            #     "os_config": 
+            # osGlobalConfig =
+            #     "os_config":
             #         "general": $scope.general
-            #         "server_credentials": 
-            #             "username": $scope.server_credentials.username  
+            #         "server_credentials":
+            #             "username": $scope.server_credentials.username
             #             "password": $scope.server_credentials.password
             wizardFactory = @wizardFactory
             submitData =
@@ -624,9 +627,9 @@ define(['./baseService'], ()->
                         isExist = true
                         alert("This interface already exists. Please try another one")
                 if !isExist
-                    $scope.interfaces[newInterface.name] = 
+                    $scope.interfaces[newInterface.name] =
                         "subnet_id": parseInt(newInterface.subnet_id)
-                        "is_mgmt": false
+                        "is_mgmt": if Object.keys($scope.interfaces).length == 0 then true else false
                 $scope.newInterface = {}
 
         networkCommit: ($scope, sendRequest) ->
@@ -654,7 +657,9 @@ define(['./baseService'], ()->
                 hostnamePromises.push(updateHostnamePromise)
 
                 for key, value of server.networks
-                    network = 
+                    # do not need to save other than the install network
+                    continue if !$scope.interfaces[key]
+                    network =
                         "interface": key
                         "ip": value.ip
                         "subnet_id": parseInt($scope.interfaces[key].subnet_id)
@@ -663,7 +668,7 @@ define(['./baseService'], ()->
                     if value.id == undefined
                         updateNetworkPromise = @dataService.postHostNetwork(server.id, network).success (networkData) ->
                             server.networks[networkData.interface].id = networkData.id
-                    else 
+                    else
 
                         updateNetworkPromise = @dataService.putHostNetwork(server.id, value.id, network)
 
@@ -707,7 +712,7 @@ define(['./baseService'], ()->
 
                 @wizardFactory.setPartition(newPartition)
 
-                os_partition = 
+                os_partition =
                     "os_config":
                         "partition": newPartition
                 @dataService.updateClusterConfig($scope.cluster.id, os_partition).success (configData) ->
@@ -811,7 +816,7 @@ define(['./baseService'], ()->
                 alert("Please select at least one server")
             else
                 server.roles.push(role) for server in $scope.servers when server.checked and !@checkRoleExist(server.roles, role)
-             
+
 
         #check if the role is already in a server (can the drop area)
         checkRoleExist: (existingRoles, newRole) ->
@@ -859,7 +864,7 @@ define(['./baseService'], ()->
                 promises.push(updateRoles)
 
             if $scope.ha_vip
-                config = 
+                config =
                     "package_config":
                         "ha_vip": $scope.ha_vip
                 updateHAVIP = dataService.updateClusterConfig($scope.cluster.id, config)
@@ -878,7 +883,7 @@ define(['./baseService'], ()->
                     "message": response.data
                 )
             )
-        networkMappingCommit: ($scope, sendRequest) ->
+        networkMappingCommit: ($scope, networkCfg, networkMapping, neutronCfg, haCfg, sendRequest) ->
             wizardFactory = @wizardFactory
             if !sendRequest
                 wizardFactory.setCommitState(
@@ -889,9 +894,18 @@ define(['./baseService'], ()->
             $scope.$emit "loading", true
             networks = {}
             networks[key] = value.mapping_interface for key, value of $scope.networking
+            #network_mapping =
+            #    "package_config":
+            #        "network_mapping": networks
             network_mapping =
                 "package_config":
-                    "network_mapping": networks
+                    "network_cfg": networkCfg
+                    "network_mapping": networkMapping
+                    "neutron_config": neutronCfg
+                    "ha_proxy": haCfg
+                    "enable_vpnaas": "False"
+                    "enable_fwaas": "False"
+                    "enable_secgroup": "False"
 
             @dataService.updateClusterConfig($scope.cluster.id, network_mapping).success (data) ->
                 wizardFactory.setNetworkMapping(networks)
@@ -905,7 +919,7 @@ define(['./baseService'], ()->
                     "name": "network_mapping"
                     "state": "error"
                     "message": response
-                )  
+                )
         reviewCommit: ($scope, sendRequest) ->
             if !sendRequest
                 return @wizardFactory.setCommitState(
@@ -915,11 +929,11 @@ define(['./baseService'], ()->
                 )
             dataService = @dataService
             wizardFactory = @wizardFactory
-            reviewAction = 
+            reviewAction =
                 "review":
                     "hosts": []
             deployAction =
-                "deploy": 
+                "deploy":
                     "hosts": []
             for server in $scope.servers
                 reviewAction.review.hosts.push(server.id)
@@ -935,12 +949,12 @@ define(['./baseService'], ()->
                 .error (data) ->
                     console.warn("Deploy hosts error: ", data)
             .error (data) ->
-                console.warn("Review hosts error: ", data)     
+                console.warn("Review hosts error: ", data)
 
         deploy: ($scope) ->
             wizard_complete = true
             wizard_complete = false for step in $scope.steps when step.name !="review" and step.state != "complete"
-            
+
             if wizard_complete
                 @wizardFactory.setCommitState(
                     "name": "review"
@@ -957,7 +971,7 @@ define(['./baseService'], ()->
             }, {
                 counts: []
                 total: data.length
-                getData: ($defer, params)-> 
+                getData: ($defer, params)->
                     reverse = false
                     orderBy = params.orderBy()[0]
                     orderBySort = ""
@@ -999,7 +1013,7 @@ define(['./baseService'], ()->
                 for key, values of data
                     for category in values
                         if $scope.os_global_config[category.name]
-                            $scope[key][category.name]= $scope.os_global_config[category.name] 
+                            $scope[key][category.name]= $scope.os_global_config[category.name]
                         else
                             $scope[key][category.name] = {}
                         for content in category.data
@@ -1026,6 +1040,8 @@ define(['./baseService'], ()->
             switches =$scope.switchFile.split("\n")
             postData = []
             for s in switches
+                if s.indexOf(',') == -1 # this is invalid line
+                    continue
                 componets = s.split(',')
                 temp = {}
                 temp.credentials = {}
@@ -1046,6 +1062,8 @@ define(['./baseService'], ()->
             machines = $scope.machineFile.split("\n")
             postData = []
             for m in machines
+                if m.indexOf(',') == -1 # this is invalid line
+                    continue
                 componets = m.split(',')
                 temp = {}
                 temp.mac = componets[0] if componets[0]
@@ -1060,6 +1078,7 @@ define(['./baseService'], ()->
                     temp.mac = m.mac
                     temp.port = m.port
                     temp.switch_ip = m.switch_ip
+                    temp.switch_id = m.switch_id
                     temp.vlan = m.vlan
                     allMachines.push(temp)
                 $scope.machineLoading = false

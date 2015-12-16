@@ -1,10 +1,11 @@
 require.config(
     baseUrl: "src"
     paths:
-    #bower components 
+    #bower components
         'jquery': '../bower_components/jquery/dist/jquery'
         'twitterBootstrap': '../bower_components/bootstrap/dist/js/bootstrap'
-        'angular': '../bower_components/angular/angular'
+        'angular': '../bower_components/angular/angular',
+        'angularCookies': '../bower_components/angular-cookies/angular-cookies',
         'uiRouter': '../bower_components/angular-ui-router/release/angular-ui-router'
         'angularMocks': '../bower_components/angular-mocks/angular-mocks'
         'angularTouch': '../bower_components/angular-touch/angular-touch'
@@ -32,6 +33,9 @@ require.config(
         "angularTable":
             deps: ["angular"],
             exports: "angularTable"
+        "angularCookies":
+            deps: ["angular"]
+            exports: "angularCookies"
         "angularMocks":
             deps: ["angular"]
             exports: "angularMocks"
@@ -53,7 +57,7 @@ require.config(
         "ngSpinner":
             deps: ["angular", "spin"]
             exports: "ngSpinner"
-        "angularAnimate": 
+        "angularAnimate":
             deps: ["angular"]
             exports: "angularAnimate"
         "d3":
@@ -61,7 +65,7 @@ require.config(
         "nvD3":
             deps: ["d3"]
             exports: "nvD3"
-        "moment": 
+        "moment":
             exports: "moment"
         "daterangepicker":
             deps: ["twitterBootstrap", "moment"],

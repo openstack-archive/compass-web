@@ -1,6 +1,7 @@
 define(['angular'
         'uiRouter'
         'angularTable'
+        'angularCookies'
         'uiBootstrap'
         'angularDragDrop'
         'app/controllers/all'
@@ -16,6 +17,7 @@ define(['angular'
                          'ngTable'
                          'ui.bootstrap'
                          'ngDragDrop'
+                         'ngCookies'
                          'compass.controllers'
                          'compass.services'
                          'compass.factories'
@@ -47,21 +49,21 @@ define(['angular'
             controller: 'wizardCtrl'
             templateUrl: 'src/app/partials/wizard.tpl.html'
             requireAuthenticated: true
-            resolve: 
+            resolve:
               clusterData: ['$stateParams', '$q', 'wizardService', ($stateParams, $q, wizardService) ->
                 clusterId = $stateParams.id
                 deferred = $q.defer()
                 wizardService.getClusterById(clusterId).success (data) ->
                     deferred.resolve(data)
-                
+
                 return deferred.promise;
               ]
 
-              machinesHostsData: ['$q', 'wizardService', ($q, wizardService) -> 
+              machinesHostsData: ['$q', 'wizardService', ($q, wizardService) ->
                 deferred = $q.defer()
                 wizardService.getAllMachineHosts().success (data) ->
                     deferred.resolve(data)
-                
+
                 return deferred.promise
               ]
               wizardStepsData: ['$q', 'wizardService', ($q, wizardService) ->  # get the create-cluster-wizard steps
@@ -71,7 +73,7 @@ define(['angular'
                   );
                   return deferred.promise
               ]
-              clusterConfigData: ['$stateParams', '$q', 'wizardService', ($stateParams, $q, wizardService) -> 
+              clusterConfigData: ['$stateParams', '$q', 'wizardService', ($stateParams, $q, wizardService) ->
                   clusterId = $stateParams.id
                   deferred = $q.defer()
                   wizardService.getClusterConfig(clusterId).success((data) ->
