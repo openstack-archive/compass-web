@@ -2,7 +2,7 @@
 *.swp
 .DS_Store
 node_modules
-bower_components
+v2.5/bower_components/
 .remote-sync.json
 venv
 
