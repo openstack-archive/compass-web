@@ -63,6 +63,14 @@
                 "username": "root",
                 "password": "root"
             },
+            "network": {
+                "username": "neutron",
+                "password": "neutron"
+            },
+            "heat": {
+                "username": "heat",
+                "password": "heat"
+            },
             "volume": {
                 "username": "cinder",
                 "password": "cinder"
@@ -72,6 +80,10 @@
             "admin": {
                 "username": "admin",
                 "password": "admin"
+            },
+            "demo": {
+                "username": "demo",
+                "password": "demo"
             },
             "compute": {
                 "username": "nova",
@@ -85,6 +97,10 @@
                 "username": "glance",
                 "password": "glance"
             },
+            "identity": {
+                "username": "keystone",
+                "password": "keystone"
+            },
             "metering": {
                 "username": "ceilometer",
                 "password": "ceilometer"
@@ -96,6 +112,10 @@
             "object-store": {
                 "username": "swift",
                 "password": "swift"
+            },
+            "heat": {
+                "username": "heat",
+                "password": "heat"
             },
             "volume": {
                 "username": "cinder",
