@@ -221,7 +221,7 @@
           });
         };
         $scope.commit = function(sendRequest) {
-          var installInterface, name, value, _ref;
+          var installInterface, name, subnet, value, _i, _len, _ref, _ref1;
           installInterface = {};
           $rootScope.networkMappingInterfaces = {};
           _ref = $scope.interfaces;
@@ -229,26 +229,25 @@
             value = _ref[name];
             if (value.is_mgmt) {
               installInterface[name] = value;
-            } else {
-              $rootScope.networkMappingInterfaces[name] = value;
             }
+            _ref1 = $scope.subnetworks;
+            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+              subnet = _ref1[_i];
+              if (('' + subnet.id) === ('' + value.subnet_id)) {
+                $rootScope.networkMappingInterfaces[name] = subnet;
+              }
+            }
+            $rootScope.networkMappingInterfaces[name].subnet_id = value.subnet_id;
+            $rootScope.networkMappingInterfaces[name].is_mgmt = value.is_mgmt;
           }
           $scope.interfaces = installInterface;
           $cookieStore.put('networkMappingInterfaces', $rootScope.networkMappingInterfaces);
           return wizardService.networkCommit($scope, sendRequest);
         };
         return wizardService.getClusterHosts($scope.cluster.id).success(function(data) {
-          var name, savedNetworkMappingInterfaces, value;
           $scope.servers = data;
-          if ($scope.servers[0].networks && Object.keys($scope.servers[0].networks).length !== 0) {
-            $scope.interfaces = $scope.servers[0].networks;
-            savedNetworkMappingInterfaces = $cookieStore.get('networkMappingInterfaces');
-            for (name in savedNetworkMappingInterfaces) {
-              value = savedNetworkMappingInterfaces[name];
-              $scope.interfaces[name] = value;
-            }
-            wizardService.setInterfaces($scope.interfaces);
-          }
+          $scope.interfaces = $cookieStore.get('networkMappingInterfaces');
+          wizardService.setInterfaces($scope.interfaces);
           return wizardService.displayDataInTable($scope, $scope.servers);
         });
       }
@@ -383,47 +382,117 @@
         $scope.autoAssignRoles = function() {
           return wizardService.autoAssignRoles($scope);
         };
+        $scope.haMultipleNodeAssignRoles = function() {
+          var i, role, rolesHash, _i, _j, _k, _len, _ref, _ref1;
+          rolesHash = {};
+          _ref = $scope.roles;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            role = _ref[_i];
+            rolesHash[role.name] = role;
+          }
+          for (i = _j = 0; _j < 3; i = ++_j) {
+            $scope.servers[i].roles = [];
+            $scope.servers[i].roles.push(rolesHash['controller']);
+            $scope.servers[i].roles.push(rolesHash['ha']);
+            $scope.servers[i].roles.push(rolesHash['ceph-mon']);
+            if (i === 0) {
+              $scope.servers[i].roles.push(rolesHash['odl']);
+              $scope.servers[i].roles.push(rolesHash['onos']);
+              $scope.servers[i].roles.push(rolesHash['ceph-adm']);
+            }
+          }
+          for (i = _k = 3, _ref1 = $scope.servers.length; 3 <= _ref1 ? _k < _ref1 : _k > _ref1; i = 3 <= _ref1 ? ++_k : --_k) {
+            $scope.servers[i].roles = [];
+            $scope.servers[i].roles.push(rolesHash['compute']);
+            $scope.servers[i].roles.push(rolesHash['ceph-osd']);
+          }
+        };
         $scope.commit = function(sendRequest) {
           return wizardService.roleAssignCommit($scope, sendRequest);
         };
         return wizardService.displayDataInTable($scope, $scope.servers);
       }
     ]).controller('networkMappingCtrl', [
-      '$scope', 'wizardService', function($scope, wizardService) {
-        var configureHAProxyCfg, configureNetworkCfg, configureNetworkMapping, configureNeutronCfg;
+      '$scope', 'wizardService', '$cookieStore', function($scope, wizardService, $cookieStore) {
+        var configureNetworkCfg, configureNetworkMapping, configureNeutronCfg, defaultCfg, readCfg, saveCfg;
         wizardService.networkMappingInit($scope);
         wizardService.watchingTriggeredStep($scope);
-        $scope.nics = {
-          external: 'eth1',
-          mgmt: 'eth1',
-          storage: 'eth1'
-        };
-        $scope.vlanTags = {
-          mgmt: '101',
-          storage: '102'
-        };
-        $scope.ips = {
-          mgmt: {
-            start: '172.16.1.10',
-            end: '172.16.1.255',
-            cidr: '127.16.1.0/24',
-            internal_vip: '172.16.1.222'
-          },
-          external: {
-            start: '10.145.250.10',
-            end: '10.145.250.255',
-            cidr: '10.145.250.0/24',
-            gw_ip: '10.145.250.1',
-            public_vip: '10.145.250.221'
-          },
-          storage: {
-            start: '172.16.2.10',
-            end: '172.16.2.255',
-            cidr: '172.16.2.0/24'
-          },
-          ha_proxy: {
-            vip: '10.1.0.222'
+        $scope.updateInternalNetwork = function(network_name) {
+          if ($scope.ips[network_name].cidr.split('.') < 4) {
+            return;
           }
+          $scope.ips[network_name].start = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].start.split('.')[3];
+          $scope.ips[network_name].end = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].end.split('.')[3];
+          if (network_name === 'mgmt') {
+            $scope.ips.mgmt.internal_vip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.mgmt.internal_vip.split('.')[3];
+          }
+        };
+        $scope.updateExternalNetwork = function(network_name) {
+          var nic;
+          nic = $scope.external[network_name];
+          $scope.ips[network_name].cidr = $scope.interfaces[nic].subnet;
+          $scope.ips[network_name].start = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].start.split('.')[3];
+          $scope.ips[network_name].end = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].end.split('.')[3];
+          if (network_name === 'external') {
+            $scope.ips.external.public_vip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.external.public_vip.split('.')[3];
+            $scope.ips.external.gw_ip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.external.gw_ip.split('.')[3];
+          }
+        };
+        defaultCfg = function() {
+          $scope.internal = {
+            mgmt: 'eth1',
+            storage: 'eth1'
+          };
+          $scope.external = {
+            external: 'eth2'
+          };
+          $scope.vlanTags = {
+            mgmt: '101',
+            storage: '102'
+          };
+          $scope.ips = {
+            mgmt: {
+              start: '172.16.1.1',
+              end: '172.16.1.254',
+              cidr: '172.16.1.0/24',
+              internal_vip: '172.16.1.222'
+            },
+            external: {
+              start: '10.145.250.210',
+              end: '10.145.250.220',
+              cidr: '10.145.250.0/24',
+              gw_ip: '10.145.250.1',
+              public_vip: '10.145.250.222'
+            },
+            storage: {
+              start: '172.16.2.1',
+              end: '172.16.2.254',
+              cidr: '172.16.2.0/24'
+            }
+          };
+          $scope.updateExternalNetwork('external');
+        };
+        saveCfg = function() {
+          var networkMapping;
+          networkMapping = {
+            internal: $scope.internal,
+            external: $scope.external,
+            vlanTags: $scope.vlanTags,
+            ips: $scope.ips
+          };
+          $cookieStore.put('networkMapping', networkMapping);
+        };
+        readCfg = function() {
+          var networkMapping;
+          $scope.interfaces = $cookieStore.get('networkMappingInterfaces');
+          networkMapping = $cookieStore.get('networkMapping');
+          if (!networkMapping) {
+            return defaultCfg();
+          }
+          $scope.internal = networkMapping.internal;
+          $scope.external = networkMapping.external;
+          $scope.vlanTags = networkMapping.vlanTags;
+          $scope.ips = networkMapping.ips;
         };
         configureNeutronCfg = function() {
           var neutronCfg;
@@ -442,13 +511,13 @@
             'bond_mappings': [],
             'sys_intf_mappings': [
               {
-                'interface': $scope.nics.mgmt,
+                'interface': $scope.internal.mgmt,
                 'role': ['controller', 'compute'],
                 'vlan_tag': $scope.vlanTags.mgmt,
                 'type': 'vlan',
                 'name': 'mgmt'
               }, {
-                'interface': $scope.nics.storage,
+                'interface': $scope.internal.storage,
                 'role': ['controller', 'compute'],
                 'vlan_tag': $scope.vlanTags.storage,
                 'type': 'vlan',
@@ -463,7 +532,7 @@
             'nic_mappings': [],
             'public_net_info': {
               'no_gateway': 'False',
-              'external_gw': $scope.ips.external.ip,
+              'external_gw': $scope.ips.external.gw_ip,
               'enable': 'False',
               'floating_ip_cidr': $scope.ips.external.cidr,
               'floating_ip_start': $scope.ips.external.start,
@@ -488,7 +557,7 @@
             },
             'provider_net_mappings': [
               {
-                'interface': $scope.interfaces.external,
+                'interface': $scope.internal.mgmt,
                 'role': ['controller', 'compute'],
                 'type': 'ovs',
                 'name': 'br-prv',
@@ -538,26 +607,14 @@
             }
           };
         };
-        configureHAProxyCfg = function() {
-          var haCfg;
-          haCfg = {
-            'vip': $scope.ips.ha_proxy.vip
-          };
-          return haCfg;
-        };
         configureNetworkMapping();
-        $scope.onDrop = function($event, key) {
-          return $scope.pendingInterface = key;
-        };
-        $scope.dropSuccessHandler = function($event, key, dict) {
-          return dict[key].mapping_interface = $scope.pendingInterface;
-        };
+        readCfg();
         return $scope.commit = function(sendRequest) {
-          var haCfg, networkCfg, neutronCfg;
+          var networkCfg, neutronCfg;
           networkCfg = configureNetworkCfg();
           neutronCfg = configureNeutronCfg();
-          haCfg = configureHAProxyCfg();
-          return wizardService.networkMappingCommit($scope, networkCfg, $scope.networkMapping, neutronCfg, haCfg, sendRequest);
+          saveCfg();
+          return wizardService.networkMappingCommit($scope, networkCfg, $scope.networkMapping, neutronCfg, sendRequest);
         };
       }
     ]).controller('reviewCtrl', [
@@ -574,7 +631,10 @@
         $scope.commit = function(sendRequest) {
           return wizardService.reviewCommit($scope, sendRequest);
         };
-        return wizardService.displayDataInTable($scope, $scope.servers);
+        wizardService.displayDataInTable($scope, $scope.servers);
+        return $scope.reload = function() {
+          return wizardService.displayDataInTable($scope, $scope.servers);
+        };
       }
     ]).animation('.fade-animation', [
       function() {

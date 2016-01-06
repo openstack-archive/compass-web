@@ -1,5 +1,5 @@
 <div ng-controller="roleAssignCtrl">
-    <div class="row">
+    <div class="row" ng-init="autoAssignRoles.isCollapsed = true;">
         <div collapse="autoAssignRoles.isCollapsed" class="dashed-panel" style="background-color: rgba(224, 226, 227, 0.25);">
             <span class="action pull-right" ng-click="autoAssignRoles.isCollapsed = true;">
                 <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
@@ -58,12 +58,17 @@
                     <span style="display: none">
                         <input type="text" placeholder="HA VIP" ng-model="ha_vip">
                     </span>
+                    <!--
                     <button class="btn btn-sm btn-info" ng-init="autoAssignRoles.isCollapsed = true;" ng-click="autoAssignRoles.isCollapsed = !autoAssignRoles.isCollapsed">
                         Auto Assign&nbsp;
                         <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !autoAssignRoles.isCollapsed}"></i>
                     </button>
-
-
+                    -->
+                    <button class="btn btn-sm btn-success" ng-click="haMultipleNodeAssignRoles()"
+                      ng-show="servers.length > 4">
+                        HA 3+N Mode Assign&nbsp;
+                        <i class="ace-icon fa fa-plus"></i>
+                    </button>
 
                     <div class="btn-group" dropdown>
                         <button type="button" style="border-bottom-width: 3px; border-top-width: 3px;" class="btn btn-sm btn-info dropdown-toggle" dropdown-toggle ng-disabled="disabled">

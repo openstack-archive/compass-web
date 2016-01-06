@@ -883,7 +883,7 @@ define(['./baseService'], ()->
                     "message": response.data
                 )
             )
-        networkMappingCommit: ($scope, networkCfg, networkMapping, neutronCfg, haCfg, sendRequest) ->
+        networkMappingCommit: ($scope, networkCfg, networkMapping, neutronCfg, sendRequest) ->
             wizardFactory = @wizardFactory
             if !sendRequest
                 wizardFactory.setCommitState(
@@ -902,13 +902,14 @@ define(['./baseService'], ()->
                     "network_cfg": networkCfg
                     "network_mapping": networkMapping
                     "neutron_config": neutronCfg
-                    "ha_proxy": haCfg
+                    #"ha_proxy": haCfg
                     "enable_vpnaas": "False"
                     "enable_fwaas": "False"
                     "enable_secgroup": "False"
 
             @dataService.updateClusterConfig($scope.cluster.id, network_mapping).success (data) ->
                 wizardFactory.setNetworkMapping(networks)
+                wizardFactory.setPackageConfig(network_mapping.package_config)
                 wizardFactory.setCommitState(
                     "name": "network_mapping"
                     "state": "success"

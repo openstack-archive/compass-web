@@ -23,21 +23,21 @@
     }, {
         "id": 4,
         "name": "network",
-        "title": "Network",
+        "title": "Physical Network",
         "state": "",
         "template": "src/app/partials/network.tpl.html",
         "description": ""
     }, {
         "id": 5,
         "name": "network_mapping",
-        "title": "Network Mapping",
+        "title": "Virtual Network",
         "state": "",
         "template": "src/app/partials/network_mapping.tpl.html",
         "description": ""
     }, {
         "id": 6,
         "name": "package_config",
-        "title": "Target System Config",
+        "title": "System Credentials",
         "state": "",
         "template": "src/app/partials/package_config.tpl.html",
         "description": ""
