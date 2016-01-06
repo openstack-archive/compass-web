@@ -1325,7 +1325,7 @@
         });
       };
 
-      WizardService.prototype.networkMappingCommit = function($scope, networkCfg, networkMapping, neutronCfg, haCfg, sendRequest) {
+      WizardService.prototype.networkMappingCommit = function($scope, networkCfg, networkMapping, neutronCfg, sendRequest) {
         var key, network_mapping, networks, value, wizardFactory, _ref;
         wizardFactory = this.wizardFactory;
         if (!sendRequest) {
@@ -1347,7 +1347,6 @@
             "network_cfg": networkCfg,
             "network_mapping": networkMapping,
             "neutron_config": neutronCfg,
-            "ha_proxy": haCfg,
             "enable_vpnaas": "False",
             "enable_fwaas": "False",
             "enable_secgroup": "False"
@@ -1355,6 +1354,7 @@
         };
         return this.dataService.updateClusterConfig($scope.cluster.id, network_mapping).success(function(data) {
           wizardFactory.setNetworkMapping(networks);
+          wizardFactory.setPackageConfig(network_mapping.package_config);
           return wizardFactory.setCommitState({
             "name": "network_mapping",
             "state": "success",

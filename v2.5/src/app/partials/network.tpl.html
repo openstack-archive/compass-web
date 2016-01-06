@@ -1,5 +1,13 @@
 <div ng-controller="networkCtrl">
   <div class="row">
+    <div class="alert alert-info">
+      <span>Please provide 3 subnets.</span><br/>
+      <span>Check one as OS install network and use Autofill to assign ips. This is used to install OS.</span><br/>
+      <span>The other 2 subnets are used in the next step to configure openstack network.</span>
+    </div>
+  </div>
+  <div class="space-10"></div>
+  <div class="row">
     <div collapse="autoFillPanel.isCollapsed" class="dashed-panel" style="height: auto; background-color: rgba(224, 226, 227, 0.25);">
       <span class="action pull-right" ng-click="autoFillPanel.isCollapsed = true;">
         <i class="ace-icon fa fa-times-circle bigger-120 networkDeleteButton"></i>
@@ -8,8 +16,8 @@
       <div class="row">
         <div class="col-sm-12">
           <h4>
-            Autofill IP Address for Each Interface
-            <button class="btn btn-sm btn-info pull-right" ng-click="openAddSubnetModal()" >Add Subnet</button>
+            Autofill IP Address for All Interfaces
+            <button class="btn btn-sm btn-success pull-right" ng-click="openAddSubnetModal()" >Add Subnet</button>
             <button class="btn btn-sm btn-info pull-right" ng-model="autoFill" style="margin-right:15px;" ng-click="autoFillManage()">{{autoFillButtonDisplay}}</button>
           </h4>
           <table class="table table-hover nowrap">
@@ -68,7 +76,7 @@
                   </label>
                 </td>
                 <td>
-                  <select ng-model="value.subnet_id" class="max-width-200" ng-show="value.is_mgmt">
+                  <select ng-model="value.subnet_id" class="max-width-200">
                     <option ng-repeat="sub in subnetworks" value="{{sub.id}}" ng-selected="sub.id == value.subnet_id">
                       {{sub.subnet}}
                     </option>
