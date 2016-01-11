@@ -545,8 +545,6 @@ define(['./baseController'], ()->
 
             wizardService.displayDataInTable($scope, $scope.servers)
 
-            $scope.reload = ->
-                wizardService.displayDataInTable($scope, $scope.servers)
     ]
     .animation '.fade-animation', [->
         return{

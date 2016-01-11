@@ -945,6 +945,9 @@
       WizardService.prototype.addInterface = function($scope, newInterface) {
         var isExist, key, value, _ref;
         isExist = false;
+        if (!$scope.interfaces) {
+          $scope.interfaces = {};
+        }
         if (newInterface) {
           _ref = $scope.interfaces;
           for (key in _ref) {

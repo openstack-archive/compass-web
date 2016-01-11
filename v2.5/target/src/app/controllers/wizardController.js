@@ -631,10 +631,7 @@
         $scope.commit = function(sendRequest) {
           return wizardService.reviewCommit($scope, sendRequest);
         };
-        wizardService.displayDataInTable($scope, $scope.servers);
-        return $scope.reload = function() {
-          return wizardService.displayDataInTable($scope, $scope.servers);
-        };
+        return wizardService.displayDataInTable($scope, $scope.servers);
       }
     ]).animation('.fade-animation', [
       function() {
