@@ -621,6 +621,8 @@ define(['./baseService'], ()->
                 )
         addInterface: ($scope, newInterface) ->
             isExist = false
+            if !$scope.interfaces
+                $scope.interfaces = {}
             if newInterface
                 for key, value of $scope.interfaces
                     if key == newInterface.name
