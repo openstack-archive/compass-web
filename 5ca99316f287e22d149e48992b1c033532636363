@@ -1,0 +1,8 @@
+Code-Review+2: Xicheng Chang <xicheng.chang@huawei.com>
+Workflow+1: Xicheng Chang <xicheng.chang@huawei.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 12 Jan 2016 02:41:24 +0000
+Reviewed-on: https://review.openstack.org/266101
+Project: openstack/compass-web
+Branch: refs/heads/master
