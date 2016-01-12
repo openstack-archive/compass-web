@@ -428,14 +428,21 @@
           }
         };
         $scope.updateExternalNetwork = function(network_name) {
-          var nic;
+          var error, nic;
           nic = $scope.external[network_name];
-          $scope.ips[network_name].cidr = $scope.interfaces[nic].subnet;
-          $scope.ips[network_name].start = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].start.split('.')[3];
-          $scope.ips[network_name].end = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].end.split('.')[3];
-          if (network_name === 'external') {
-            $scope.ips.external.public_vip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.external.public_vip.split('.')[3];
-            $scope.ips.external.gw_ip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.external.gw_ip.split('.')[3];
+          try {
+            if ($scope.interfaces[nic]) {
+              $scope.ips[network_name].cidr = $scope.interfaces[nic].subnet;
+            }
+            $scope.ips[network_name].start = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].start.split('.')[3];
+            $scope.ips[network_name].end = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips[network_name].end.split('.')[3];
+            if (network_name === 'external') {
+              $scope.ips.external.public_vip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.external.public_vip.split('.')[3];
+              $scope.ips.external.gw_ip = $scope.ips[network_name].cidr.split('.').slice(0, 3).join('.') + '.' + $scope.ips.external.gw_ip.split('.')[3];
+            }
+          } catch (_error) {
+            error = _error;
+            console.log(error);
           }
         };
         defaultCfg = function() {
