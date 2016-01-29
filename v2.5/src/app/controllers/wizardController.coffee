@@ -443,7 +443,7 @@ define(['./baseController'], ()->
                     'public_net_info': {
                         'no_gateway': 'False',
                         'external_gw': $scope.ips.external.gw_ip,
-                        'enable': 'False',
+                        'enable': 'True',
                         'floating_ip_cidr': $scope.ips.external.cidr,
                         'floating_ip_start': $scope.ips.external.start,
                         'floating_ip_end': $scope.ips.external.end,
@@ -453,7 +453,7 @@ define(['./baseController'], ()->
                         'enable_dhcp': 'False',
                         'segment_id': 1000,
                         'router': 'router-ext',
-                        'type': 'vlan'
+                        'type': 'flat'
                     },
                     'internal_vip': {
                         'interface': 'mgmt',
@@ -492,6 +492,21 @@ define(['./baseController'], ()->
                 }
                 return networkCfg
 
+            configurePackageCfg = ->
+                networkCfg = configureNetworkCfg()
+                neutronCfg = configureNeutronCfg()
+                packageCfg = {
+                    "network_cfg": networkCfg
+                    "network_mapping": $scope.networkMapping
+                    "neutron_config": neutronCfg
+                    #"ha_proxy": haCfg
+                    "enable_vpnaas": "False"
+                    "enable_fwaas": "False"
+                    "enable_secgroup": "True"
+                }
+                saveCfg() # save changes to cookie
+                return packageCfg
+
             configureNetworkMapping = ->
                 installNic = {}
                 nicName = ''
@@ -526,12 +541,9 @@ define(['./baseController'], ()->
             #     dict[key].mapping_interface = $scope.pendingInterface
 
             $scope.commit = (sendRequest) ->
-                networkCfg = configureNetworkCfg()
-                neutronCfg = configureNeutronCfg()
-                saveCfg() # save changes to cookie
+                packageCfg = configurePackageCfg()
                 # haCfg = configureHAProxyCfg()
-                wizardService.networkMappingCommit($scope, networkCfg, $scope.networkMapping,
-                  neutronCfg, sendRequest)
+                wizardService.networkMappingCommit($scope, packageCfg, sendRequest)
     ]
     .controller 'reviewCtrl', ['$scope', 'wizardService', 'ngTableParams', '$filter', '$location', '$anchorScroll'
         ($scope, wizardService, ngTableParams, $filter, $location, $anchorScroll) ->
@@ -549,6 +561,8 @@ define(['./baseController'], ()->
 
             wizardService.displayDataInTable($scope, $scope.servers)
 
+            $scope.reload = ->
+                wizardService.displayDataInTable($scope, $scope.servers)
     ]
     .animation '.fade-animation', [->
         return{

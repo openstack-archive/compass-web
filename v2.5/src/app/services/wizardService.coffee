@@ -885,7 +885,7 @@ define(['./baseService'], ()->
                     "message": response.data
                 )
             )
-        networkMappingCommit: ($scope, networkCfg, networkMapping, neutronCfg, sendRequest) ->
+        networkMappingCommit: ($scope, packageCfg, sendRequest) ->
             wizardFactory = @wizardFactory
             if !sendRequest
                 wizardFactory.setCommitState(
@@ -900,14 +900,7 @@ define(['./baseService'], ()->
             #    "package_config":
             #        "network_mapping": networks
             network_mapping =
-                "package_config":
-                    "network_cfg": networkCfg
-                    "network_mapping": networkMapping
-                    "neutron_config": neutronCfg
-                    #"ha_proxy": haCfg
-                    "enable_vpnaas": "False"
-                    "enable_fwaas": "False"
-                    "enable_secgroup": "False"
+                "package_config": packageCfg
 
             @dataService.updateClusterConfig($scope.cluster.id, network_mapping).success (data) ->
                 wizardFactory.setNetworkMapping(networks)
@@ -971,9 +964,11 @@ define(['./baseService'], ()->
             $scope.tableParams = new @ngTableParams({
                 page: 1
                 count: data.length+1
+                sorting: { mac: 'desc' }
             }, {
                 counts: []
                 total: data.length
+                sorting: { mac: 'desc' }
                 getData: ($defer, params)->
                     reverse = false
                     orderBy = params.orderBy()[0]

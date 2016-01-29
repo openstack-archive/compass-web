@@ -1328,7 +1328,7 @@
         });
       };
 
-      WizardService.prototype.networkMappingCommit = function($scope, networkCfg, networkMapping, neutronCfg, sendRequest) {
+      WizardService.prototype.networkMappingCommit = function($scope, packageCfg, sendRequest) {
         var key, network_mapping, networks, value, wizardFactory, _ref;
         wizardFactory = this.wizardFactory;
         if (!sendRequest) {
@@ -1346,14 +1346,7 @@
           networks[key] = value.mapping_interface;
         }
         network_mapping = {
-          "package_config": {
-            "network_cfg": networkCfg,
-            "network_mapping": networkMapping,
-            "neutron_config": neutronCfg,
-            "enable_vpnaas": "False",
-            "enable_fwaas": "False",
-            "enable_secgroup": "False"
-          }
+          "package_config": packageCfg
         };
         return this.dataService.updateClusterConfig($scope.cluster.id, network_mapping).success(function(data) {
           wizardFactory.setNetworkMapping(networks);
@@ -1440,10 +1433,16 @@
         $filter = this.$filter;
         return $scope.tableParams = new this.ngTableParams({
           page: 1,
-          count: data.length + 1
+          count: data.length + 1,
+          sorting: {
+            mac: 'desc'
+          }
         }, {
           counts: [],
           total: data.length,
+          sorting: {
+            mac: 'desc'
+          },
           getData: function($defer, params) {
             var orderBy, orderByColumn, orderBySort, orderedData, reverse;
             reverse = false;

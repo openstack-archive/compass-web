@@ -414,7 +414,7 @@
       }
     ]).controller('networkMappingCtrl', [
       '$scope', 'wizardService', '$cookieStore', function($scope, wizardService, $cookieStore) {
-        var configureNetworkCfg, configureNetworkMapping, configureNeutronCfg, defaultCfg, readCfg, saveCfg;
+        var configureNetworkCfg, configureNetworkMapping, configureNeutronCfg, configurePackageCfg, defaultCfg, readCfg, saveCfg;
         wizardService.networkMappingInit($scope);
         wizardService.watchingTriggeredStep($scope);
         $scope.updateInternalNetwork = function(network_name) {
@@ -540,7 +540,7 @@
             'public_net_info': {
               'no_gateway': 'False',
               'external_gw': $scope.ips.external.gw_ip,
-              'enable': 'False',
+              'enable': 'True',
               'floating_ip_cidr': $scope.ips.external.cidr,
               'floating_ip_start': $scope.ips.external.start,
               'floating_ip_end': $scope.ips.external.end,
@@ -550,7 +550,7 @@
               'enable_dhcp': 'False',
               'segment_id': 1000,
               'router': 'router-ext',
-              'type': 'vlan'
+              'type': 'flat'
             },
             'internal_vip': {
               'interface': 'mgmt',
@@ -593,6 +593,21 @@
           };
           return networkCfg;
         };
+        configurePackageCfg = function() {
+          var networkCfg, neutronCfg, packageCfg;
+          networkCfg = configureNetworkCfg();
+          neutronCfg = configureNeutronCfg();
+          packageCfg = {
+            "network_cfg": networkCfg,
+            "network_mapping": $scope.networkMapping,
+            "neutron_config": neutronCfg,
+            "enable_vpnaas": "False",
+            "enable_fwaas": "False",
+            "enable_secgroup": "True"
+          };
+          saveCfg();
+          return packageCfg;
+        };
         configureNetworkMapping = function() {
           var installNic, nic, nicName, value, _ref;
           installNic = {};
@@ -617,11 +632,9 @@
         configureNetworkMapping();
         readCfg();
         return $scope.commit = function(sendRequest) {
-          var networkCfg, neutronCfg;
-          networkCfg = configureNetworkCfg();
-          neutronCfg = configureNeutronCfg();
-          saveCfg();
-          return wizardService.networkMappingCommit($scope, networkCfg, $scope.networkMapping, neutronCfg, sendRequest);
+          var packageCfg;
+          packageCfg = configurePackageCfg();
+          return wizardService.networkMappingCommit($scope, packageCfg, sendRequest);
         };
       }
     ]).controller('reviewCtrl', [
@@ -638,7 +651,10 @@
         $scope.commit = function(sendRequest) {
           return wizardService.reviewCommit($scope, sendRequest);
         };
-        return wizardService.displayDataInTable($scope, $scope.servers);
+        wizardService.displayDataInTable($scope, $scope.servers);
+        return $scope.reload = function() {
+          return wizardService.displayDataInTable($scope, $scope.servers);
+        };
       }
     ]).animation('.fade-animation', [
       function() {

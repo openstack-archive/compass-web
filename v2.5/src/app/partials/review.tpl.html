@@ -1,5 +1,14 @@
 <div ng-controller="reviewCtrl" data-spy="scroll" data-target="#side-nav">
 
+    <div class="row" ng-hide="packageConfig['network_mapping'].install"><div class="col-sm-12">
+      <div class="alert alert-danger">
+        <strong>
+          Can not find OS Install Network!
+          Please go back to Physical Network, check everything and click Next.
+        </strong>
+      </div>
+    </div></div>
+
     <div id="side-nav">
         <ul class="nav nav-list affix" id="myTab">
             <li>
