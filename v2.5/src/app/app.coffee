@@ -126,6 +126,10 @@ define(['angular'
             url: '/roles'
             templateUrl: 'src/app/partials/cluster-roles.tpl.html'
             requireAuthenticated: true
+          .state 'cluster.log',
+            url: '/log'
+            templateUrl: 'src/app/partials/cluster-log.tpl.html'
+            requireAuthenticated: true 
           .state 'cluster.report',
             url: '/report',
             controller: "clusterReportCtrl",
