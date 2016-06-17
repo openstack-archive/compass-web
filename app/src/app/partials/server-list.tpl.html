@@ -1,0 +1,127 @@
+<div class="main-content">
+    <div class="side-padding-40 top-padding-10">
+        <div class="row">
+            <div collapse="findNewServersPanel.isCollapsed">
+                <div class="space-20"></div>
+                <div class="dashed-panel">
+                    <span class="action pull-right" ng-click="findNewServersPanel.isCollapsed = true;">
+                        <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
+                    </span>
+                    <div class="clearfix"></div>
+                    <findservers results="foundResults"></findservers>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 no-padding-left search-badge-adjustment">
+                <h1 class="blue-header margin-right-7">
+                    Servers
+                </h1>
+                <div class="badge-adjustment">
+                    <span class="badge badge-yellow skinny-badge">{{allservers.length}}</span>
+                        <span class="no-border-search search-small">
+                            <span class="input-icon">
+                                <input class="no-border" type="text" placeholder="Search" ng-model="search">
+                                <i class="ace-icon fa fa-search"></i>
+                            </span>
+                        </span>
+                </div>
+            </div>
+            <div class="col-md-7 no-padding-right">
+                <div class="pull-right top-margin-17 center-align">
+                    <!-- Column Show / Hide button -->
+                    <div class="btn-group dropdown" dropdown>
+                        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            Columns
+                            <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                                <a class="action">
+                                    <span ng-class="{'opacity-zero': !column.visible}">
+                                        <i class="ace-icon fa fa-check blue"></i>
+                                    </span>
+                                    {{column.title}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-success border-radius-4 reload-servers-border" ng-click="reloadServers()">
+                        <i class="ace-icon fa fa-refresh"></i>
+                    </button>
+                    <!--div class="btn-group" dropdown>
+                        <button type="button" class="btn btn-info btn-default dropdown-toggle">
+                            Actions
+                            <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li ng-click="column.visible=!column.visible">
+                                <a class="action">
+                                    <span ng-class="{'opacity-zero': !column.visible}">
+                                        <i class="ace-icon fa fa-check blue"></i>
+                                    </span>
+                                    Additional Actions
+                                </a>
+                            </li>
+                        </ul>
+                    </div-->
+                    <button class="btn btn-info border-radius-4" ng-click="findNewServersPanel.isCollapsed = !findNewServersPanel.isCollapsed" ng-init="findNewServersPanel.isCollapsed = true;">
+                        Discover Servers&nbsp;&nbsp;
+                        <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !findNewServersPanel.isCollapsed}"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+
+        <div class="space-10"></div>
+        <div class="row">
+            <div class="table-responsive">
+                <table ng-table="tableParams" class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <!--th>
+                                <label>
+                                    <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                                    <span class="lbl"></span>
+                                </label>
+                            </th-->
+                            <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'), 'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                                <div>{{column.title}}</div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-show="$data.length==0">
+                            <td colspan="7" class="center">No servers yet. Please click Discover Servers to discover available servers.</td>
+                        </tr>
+                        <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new}">
+                            <!--td>
+                                <label>
+                                    <input ng-model="server.selected" type="checkbox" class="ace">
+                                    <span class="lbl"></span>
+                                </label>
+                            </td-->
+                            <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                                <span ng-switch on="column.field">
+                                    <span ng-switch-when="clusters">
+                                        <span ng-repeat="cluster in server.clusters">
+                                            {{cluster.name}}&nbsp;
+                                        </span>
+                                    </span>
+                                    <span ng-switch-default>
+                                        {{server[column.field]}}
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="space-10"></div>
+    </div>
+</div>

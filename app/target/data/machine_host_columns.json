@@ -1,0 +1,237 @@
+{
+    "showall": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": true
+    }, {
+        "title": "OS",
+        "field": "os_name",
+        "visible": true
+    }, {
+        "title": "OS Reinstall",
+        "field": "os_installed",
+        "visible": true
+    }, {
+        "title": "State",
+        "field": "state",
+        "visible": true
+    }],
+    "showless": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "OS",
+        "field": "os_name",
+        "visible": false
+    }, {
+        "title": "State",
+        "field": "state",
+        "visible": false
+    }],
+    "review": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "OS",
+        "field": "os_name",
+        "visible": false
+    }, {
+        "title": "OS Reinstall",
+        "field": "os_installed",
+        "visible": false
+    }, {
+        "title": "Roles",
+        "field": "roles",
+        "visible": true
+    }, {
+        "title": "State",
+        "field": "state",
+        "visible": false
+    }],
+    "progress": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": false
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "Mgmt IP",
+        "field": "ip",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "OS",
+        "field": "os_name",
+        "visible": false
+    }, {
+        "title": "Roles",
+        "field": "roles",
+        "visible": false
+    }],
+    "machines_hosts": [{
+        "title": "Host MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Clusters",
+        "field": "clusters",
+        "visible": false
+    }, {
+        "title": "OS",
+        "field": "os_name",
+        "visible": true
+    }, {
+        "title": "State",
+        "field": "state",
+        "visible": false
+    }, {
+        "title": "Date Created",
+        "field": "created_at",
+        "visible": true
+    }, {
+        "title": "Date Updated",
+        "field": "updated_at",
+        "visible": true
+    }],
+    "machines": [{
+        "title": "MAC Addr",
+        "field": "mac",
+        "visible": true
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "VLAN",
+        "field": "vlan",
+        "visible": false
+    }, {
+        "title": "Date Created",
+        "field": "created_at",
+        "visible": true
+    }, {
+        "title": "Date Updated",
+        "field": "updated_at",
+        "visible": true
+    }],
+    "roles": [{
+        "title": "MAC Addr",
+        "field": "mac",
+        "visible": false
+    }, {
+        "title": "Switch IP",
+        "field": "switch_ip",
+        "visible": true
+    }, {
+        "title": "Port",
+        "field": "port",
+        "visible": true
+    }, {
+        "title": "Hostname",
+        "field": "hostname",
+        "visible": true
+    }, {
+        "title": "Roles",
+        "field": "roles",
+        "visible": true
+    }]
+}

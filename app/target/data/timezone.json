@@ -1,0 +1,34 @@
+[{
+    "value": "America/New_York",
+    "timezone": "New York"
+}, {
+    "value": "America/Chicago",
+    "timezone": "Chicago"
+}, {
+    "value": "America/Los_Angeles",
+    "timezone": "Los Angeles"
+}, {
+    "value": "Asia/Shanghai",
+    "timezone": "Beijing, Guangdong, Shanghai"
+}, {
+    "value": "Asia/Tokyo",
+    "timezone": "Tokyo"
+}, {
+    "value": "Europe/Paris",
+    "timezone": "Paris"
+}, {
+    "value": "Europe/London",
+    "timezone": "London"
+}, {
+    "value": "Europe/Moscow",
+    "timezone": "Moscow"
+}, {
+    "value": "Europe/Rome",
+    "timezone": "Rome"
+}, {
+    "value": "Europe/Madrid",
+    "timezone": "Madrid"
+}, {
+    "value": "Europe/Berlin",
+    "timezone": "Berlin"
+}]

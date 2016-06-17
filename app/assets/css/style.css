@@ -1082,18 +1082,46 @@ h4.widget-title:hover {
 .review-osconfig{
     background:#69AA46;
 }
-.table-border-green{
-    border-bottom: 1px solid #69AA46;
+.centerLoading{
+    padding-top: 20%;
+    padding-left: 45%;
 }
-.table-border-blue{
-    border-bottom: 1px solid #307ECC;
+.popover-title{
+    background: #F2DEDE;
 }
-.table-border-purple{
-    border-bottom: 1px solid #7E6EB0;
+.yellow{
+    color: #FEE188 !important;
 }
-.table-border-grey{
-    border-bottom: 1px solid #DDD;
+.input-spacing{
+    margin-top: 8px;
 }
-.table-review-padding{
-    padding-left:20px;
+.uploadContainer{
+    width: 25px;
+    height: 25px;
+    background-color: #6FB3E0;
+    display: inline-block;
+    line-height: 25px;
+    margin-top: 10px;
+    margin-right: -35px;
+    border-radius: 20px;
+}
+.uploadContainer:hover {
+    background-color: #EBEBEB;
+    cursor:pointer;
+}
+.uploadFile{
+    margin-left: 6px;
+    color: #fff;
+}
+.col1{
+    margin-top:10px;
+    float: left;
+    width: 46%;
+}
+.col2{
+    margin-top: 10px;
+    margin-left: 8%;
+    float: left;
+    position: relative;
+    width: 46%;
 }

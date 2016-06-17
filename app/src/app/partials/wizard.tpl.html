@@ -1,0 +1,55 @@
+<div class="main-content">
+    <!--div class="page-content"-->
+    <div class="page-content" ng-swipe-disable-mouse ng-swipe-right="stepForward()" ng-swipe-left="stepBackward()" >
+        <div class="page-header">
+            <h1>Create Cluster Wizard</h1>
+            <!-- <span us-spinner="{radius:30, length: 20, lines:13, width:10}" spinner-key="spinner-1"></span> -->
+        </div>
+        <div id="create-cluster-wizard">
+            <ul class="wizard-steps">
+                <li ng-repeat="step in steps" class="{{step.state}}" ng-click="skipForward(step.id)">
+                    <span class="step">
+                        <img ng-src="assets/img/{{step.name}}.png" width="50px" height="50px" style="margin-left: -4.5px; margin-top: -5px;">
+                    </span>
+                    <span class="title" style="margin-top: 18px;">{{step.title}}</span>
+                </li>
+            </ul>
+            <div class="space-10"></div>
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        {{steps[currentStep-1].title}}
+                        <small ng-if="steps[currentStep-1].description"><i class="ace-icon fa fa-angle-double-right"></i> {{steps[currentStep-1].description}}</small>
+                    </h5>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-32">
+                        <span us-spinner ng-if="loading == true" style="position: relative !important; left: 47%"></span>
+                        <div ng-hide="loading == true" ng-include="steps[currentStep-1].template"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-10"></div>
+            <div class="wizard-actions">
+                <button ng-click="stepBackward()" ng-disabled="currentStep == 1" class="btn btn-grey btn-prev-spacing" ng-class="{'btn-light' : currentStep == 1}">
+                    <i class="ace-icon fa fa-arrow-left"></i>
+                    Prev
+                </button>
+
+                <span ng-if="currentStep < steps.length">
+                    <button ng-click="stepForward()" class="btn btn-success btn-next">
+                        Next
+                        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                    </button>
+                </span>
+
+                <span ng-if="currentStep == steps.length">
+                    <button ng-click="deploy()" class="btn btn-success btn-next">
+                        <span>Deploy</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
