@@ -25,7 +25,7 @@
           "mode": "html",
           "content": "<div style=\"box-shadow: 8px 8px 5px #888888;border-color: #6fb3e0; background-color: #6fb3e0; color:#ffffff; border: 5px; border-radius: 8px; margin: 5px;\"><img width=\"100\" height=\"100\" style=\"margin-left: 4px; margin-bottom: 40px; margin-top: 5px\" src=\"/assets/img/network.png\"><h3 style=\"color:#ffffff;margin: 7px;\">OpenStack Networking</h3><p style=\"margin-left: 7px; margin-bottom: 40px; margin-top: 5px\">Find various information about Neutron processes running on OpenStack cluster in this dashboard.  <br/><br/><br/></p></div>",
           "style": {},
-          "title": "Nuetron Dashboard"
+          "title": "Neutron Dashboard"
         },
         {
           "span": 4,
