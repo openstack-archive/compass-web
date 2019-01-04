@@ -333,7 +333,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "version": "2c",
                 "community":"public"
             },
-            "state": "under_mointoring"
+            "state": "under_monitoring"
         }, {
             "id": 2,
             "ip": "172.29.8.41",
@@ -342,7 +342,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "version": "2c",
                 "community":"public"
             },
-            "state": "under_mointoring"
+            "state": "under_monitoring"
         }, {
             "id": 3,
             "ip": "172.29.8.42",
@@ -351,7 +351,7 @@ compassAppDev.run(function($httpBackend, settings, $http) {
                 "version": "2c",
                 "community":"public"
             },
-            "state": "under_mointoring"
+            "state": "under_monitoring"
         }];
         return [200, switches, {}];
     });
