@@ -20702,7 +20702,7 @@
             Default: false
 
             @member ejs.ScriptField
-            @param {Boolean} trueFalse if execptions should be ignored
+            @param {Boolean} trueFalse if exceptions should be ignored
             @returns {Object} returns <code>this</code> so that calls can be chained.
             */
       ignoreFailure: function (trueFalse) {
