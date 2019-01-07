@@ -145,7 +145,7 @@ Read this for more info:
 
 ### Fixes:
 - #94 Fix for bug that caused dashboard settings to sometimes not contain timepicker tab.
-- #110 Graph with many many metrics caused legend to push down graph editor below screen. You can now scroll in edit mode & full screen mode for graphs with lots of series & legends.
+- #110 Graph with many metrics caused legend to push down graph editor below screen. You can now scroll in edit mode & full screen mode for graphs with lots of series & legends.
 - #104 Improvement to graphite target editor, select wildcard now gives you a "select metric" link for the next node.
 - #105 Added zero as a possible node value in groupByAlias function
 
