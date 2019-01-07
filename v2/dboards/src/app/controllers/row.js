@@ -161,7 +161,7 @@ function (angular, app, _) {
          */
         span    : _as < defaultSpan && _as > 0 ? _as : defaultSpan,
         /** @scratch /panels/1
-         * editable:: Enable or disable the edit button the the panel
+         * editable:: Enable or disable the edit button the panel
          */
         editable: true,
         /** @scratch /panels/1
