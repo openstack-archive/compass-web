@@ -366,7 +366,7 @@
     },
 
     /**
-     * Removes all tagsinput behaviour and unregsiter all event handlers
+     * Removes all tagsinput behaviour and unregister all event handlers
      */
     destroy: function() {
       var self = this;
